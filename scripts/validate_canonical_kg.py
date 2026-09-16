@@ -5,6 +5,7 @@ and referential integrity specified in docs/RDSO_Knowledge_Graph_Improvement_Blu
 """
 
 import json
+import os
 import sys
 
 # Controlled Entity Vocabularies from Blueprint Section 5
@@ -33,11 +34,16 @@ def validate():
     print("RDSO CANONICAL KNOWLEDGE CORE SCHEMA & INTEGRITY AUDITOR")
     print("================================================================================")
 
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    target_path = os.path.join(repo_root, "data", "rdso_canonical_kg.json")
+    if not os.path.exists(target_path):
+        target_path = "rdso_canonical_kg.json"
+
     try:
-        with open("rdso_canonical_kg.json", "r", encoding="utf-8") as f:
+        with open(target_path, "r", encoding="utf-8") as f:
             data = json.load(f)
     except Exception as e:
-        print(f"[FATAL] Failed to read rdso_canonical_kg.json: {e}")
+        print(f"[FATAL] Failed to read {target_path}: {e}")
         sys.exit(1)
 
     entities = data.get("entities", [])

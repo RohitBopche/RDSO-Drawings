@@ -140,27 +140,65 @@ This platform is a dedicated **RDSO Railway Track Knowledge Graph Studio & Intel
 
 ---
 
-## 4. Quick Start & Offline Usage
+## 4. Modular Repository Architecture
 
-### Running the Digital Twin Dashboard
+The repository is organized into dedicated enterprise directories:
+
+```text
+F:\git\RDSO-Drawings\
+├── drawings/                   # All 59 official RDSO PDF blueprints
+├── data/                       # Canonical & extracted datasets (JSON & Cypher)
+│   ├── rdso_canonical_kg.json
+│   ├── rdso_extracted_knowledge.json
+│   ├── rdso_drawing_catalog.json
+│   ├── rdso_knowledge_graph.json
+│   └── rdso_knowledge_graph.cypher
+├── scripts/                    # Ingestion, extraction, compilation, and validation tools
+│   ├── analyze_rdso_drawing.py
+│   ├── build_updated_app.py
+│   ├── extract_drawing_knowledge.py
+│   ├── generate_canonical_kg.py
+│   ├── validate_canonical_kg.py
+│   └── visual_diff_engine.py
+├── tests/                      # Automated browser and CDP test suites
+│   ├── verify_kg_app.js
+│   └── verify_kg_interlinking.js
+├── crops/                      # High-resolution blueprint crops (used directly by index.html)
+├── docs/                       # Blueprints & documentation
+│   └── RDSO_Knowledge_Graph_Improvement_Blueprint.md
+├── lib/                        # Offline vendor libraries (Three.js, OrbitControls.js)
+├── index.html                  # Main Studio web application (kept at root for 1-click opening)
+└── README.md                   # Complete system documentation
+```
+
+---
+
+## 5. Quick Start & Offline Usage
+
+### Running the Digital Twin & Knowledge Graph Studio
 1. Simply double-click `index.html` or open it in any modern web browser:
    ```bash
    # Windows PowerShell:
    start index.html
    ```
-2. **100% Offline:** The suite uses self-contained Three.js and OrbitControls libraries in `./lib/`. No internet connection or external CDN is required.
+2. **100% Offline:** The studio uses self-contained Three.js and OrbitControls libraries in `./lib/`. No internet connection or external CDN is required.
 
-### Running Automated Drawing Ingestion
+### Validating the Canonical Knowledge Core
 ```bash
-# Ingest single drawing:
-python analyze_rdso_drawing.py 2025-01-28-RDSO_T_6155_ALT_13.pdf
-
-# Batch ingest all drawings in directory:
-python analyze_rdso_drawing.py --all
+python scripts/validate_canonical_kg.py
 ```
 
-### Generating Visual Side-by-Side Panels
+### Compiling the Standalone Web App
 ```bash
-python visual_diff_engine.py
+python scripts/build_updated_app.py
 ```
-Outputs high-resolution comparative panels to the `./crops/` directory.
+
+### Running Automated Drawing Knowledge Extraction
+```bash
+python scripts/extract_drawing_knowledge.py
+```
+
+### Running Automated CDP Browser Test Suite
+```bash
+node tests/verify_kg_interlinking.js
+```

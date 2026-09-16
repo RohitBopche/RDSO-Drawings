@@ -15,12 +15,17 @@ import sys
 import json
 import pymupdf
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CROPS_DIR = os.path.join(BASE_DIR, "crops")
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DRAWINGS_DIR = os.path.join(REPO_ROOT, "drawings")
+CROPS_DIR = os.path.join(REPO_ROOT, "crops")
+DATA_DIR = os.path.join(REPO_ROOT, "data")
 os.makedirs(CROPS_DIR, exist_ok=True)
+os.makedirs(DATA_DIR, exist_ok=True)
 
 def crop_pdf_region(pdf_name, rel_coords, out_filename, dpi=180):
-    pdf_path = os.path.join(BASE_DIR, pdf_name)
+    pdf_path = os.path.join(DRAWINGS_DIR, pdf_name)
+    if not os.path.exists(pdf_path):
+        pdf_path = os.path.join(REPO_ROOT, pdf_name)
     if not os.path.exists(pdf_path):
         print(f"[!] Warning: File {pdf_name} not found.")
         return None
@@ -279,11 +284,12 @@ def build_extracted_database():
       }
     }
 
-    out_json = os.path.join(BASE_DIR, "rdso_extracted_knowledge.json")
+    out_json = os.path.join(DATA_DIR, "rdso_extracted_knowledge.json")
     with open(out_json, "w", encoding="utf-8") as f:
         json.dump(knowledge, f, indent=2)
 
     print(f"\n[+] Successfully generated rdso_extracted_knowledge.json with {len(knowledge)} comprehensive drawing dossiers!")
+    print(f"    Target: {out_json}")
 
 if __name__ == "__main__":
     build_extracted_database()

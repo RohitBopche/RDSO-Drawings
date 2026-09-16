@@ -7,9 +7,15 @@ in strict accordance with docs/RDSO_Knowledge_Graph_Improvement_Blueprint.md.
 import json
 import os
 
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 def build_canonical_knowledge_graph():
+    input_path = os.path.join(REPO_ROOT, "data", "rdso_extracted_knowledge.json")
+    if not os.path.exists(input_path):
+        input_path = "rdso_extracted_knowledge.json"
+
     # Load extracted raw/intermediate dossier data
-    with open("rdso_extracted_knowledge.json", "r", encoding="utf-8") as f:
+    with open(input_path, "r", encoding="utf-8") as f:
         dossiers = json.load(f)
 
     entities = []
@@ -568,7 +574,7 @@ def build_canonical_knowledge_graph():
         "facts": facts
     }
 
-    output_path = "rdso_canonical_kg.json"
+    output_path = os.path.join(REPO_ROOT, "data", "rdso_canonical_kg.json")
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(canonical_data, f, indent=2)
 

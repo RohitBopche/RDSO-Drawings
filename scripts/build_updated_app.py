@@ -8,10 +8,15 @@ Engineering Answer Cards in full compliance with the Knowledge Graph Improvement
 import json
 import os
 
-with open("rdso_extracted_knowledge.json", "r", encoding="utf-8") as f:
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+data_dir = os.path.join(REPO_ROOT, "data")
+ext_path = os.path.join(data_dir, "rdso_extracted_knowledge.json")
+can_path = os.path.join(data_dir, "rdso_canonical_kg.json")
+
+with open(ext_path, "r", encoding="utf-8") as f:
     extracted_knowledge = json.load(f)
 
-with open("rdso_canonical_kg.json", "r", encoding="utf-8") as f:
+with open(can_path, "r", encoding="utf-8") as f:
     canonical_kg = json.load(f)
 
 extracted_json_str = json.dumps(extracted_knowledge)
@@ -2473,7 +2478,9 @@ html_template = r'''<!DOCTYPE html>
 
 final_html = html_template.replace("__EXTRACTED_KNOWLEDGE_JSON__", extracted_json_str).replace("__CANONICAL_KG_JSON__", canonical_json_str)
 
-with open("index.html", "w", encoding="utf-8") as f:
+output_html_path = os.path.join(REPO_ROOT, "index.html")
+with open(output_html_path, "w", encoding="utf-8") as f:
     f.write(final_html)
 
 print(f"[+] Successfully compiled index.html with Canonical Knowledge Core! Size: {len(final_html)} bytes")
+print(f"    Target: {output_html_path}")
