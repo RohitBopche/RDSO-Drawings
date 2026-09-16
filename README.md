@@ -34,23 +34,40 @@ Indian Railways operates one of the densest and heaviest railway networks in the
 
 ## 2. What This Project Does: The Solution Architecture
 
-This platform is **not merely a turnout simulator**. It is a **Universal Railway Track Asset Digital Twin & Cross-Drawing Assembly Engine** capable of generating high-precision 3D twins of all railway track components, interlinking them into functional sub-assemblies, and connecting them through a **Living 3D Knowledge Graph** that continuously expands and learns.
+This platform is a dedicated **RDSO Railway Track Knowledge Graph Studio & Intelligent Asset Twin Platform**. Built around an enterprise-grade 3D/2D Knowledge Graph core, it provides holistic structural and operational intelligence by mapping drawings, standards, components, tolerances, interlocking interfaces, failure modes, and maintenance SOPs into a unified, interactive semantic network.
 
 ```
 +------------------------------------------------------------------------------------------------+
-|                         UNIVERSAL TRACK ASSET DIGITAL TWIN PLATFORM                           |
+|                    RDSO RAILWAY TRACK KNOWLEDGE GRAPH STUDIO & DIGITAL TWIN                    |
 +------------------------------------+-----------------------------------+-----------------------+
-|        3D DIGITAL TWIN SUITE       |     LIVING 3D KNOWLEDGE GRAPH     | AUTOMATED INGESTION   |
-| - Component Studio (Macro 360)     | - Three.js WebGL Constellation    | - Generic PyMuPDF CLI |
-| - Sub-Assembly Interlinking        | - Continuous Learning Engine      | - Batch Parser (--all)|
-| - Full 64-Sleeper Infrastructure   | - Multi-Layer Railway Taxonomy    | - Master Catalog JSON |
-| - 4D Revision Lineage Scrubber     | - Live Impact Analysis & Export   | - Spares Estimator    |
+|    HERO 3D/2D KNOWLEDGE GRAPH      |   EMBEDDED 3D ASSET DIGITAL TWIN  |   INTELLIGENCE TOOLS  |
+| - Full-screen WebGL Viewport       | - Real-time 3D CAD Twin Viewer    | - Failure Simulator   |
+| - 3D Cosmic Force Numerical Engine | - Interactive 360° Orbit Mini-CAD | - Global Fuzzy Search |
+| - 2D Planar Topological Layout     | - Cast Slide Chairs & Tie Bars    | - Alteration Scrubber |
+| - Hierarchical Dependency DAG      | - SSD & Monoblock CMS Crossings   | - Live Node Ingestion |
+| - Concentric Radial Orbit Layout   | - Fasteners, Rails & PSC Sleepers | - W3C JSON-LD/Cypher  |
 +------------------------------------+-----------------------------------+-----------------------+
 ```
 
 ### Key Architectural Capabilities:
 
-### 1. Multi-Level Visualization Hierarchy
+### 1. Dedicated Full-Screen Knowledge Graph Studio
+- **Full-Screen 3D & 2D Graph Hero Canvas:** The entire viewport is an interactive, responsive Three.js graph universe with celestial starfields, multi-tiered node geometries (planetary drawings, machined components, S&T prisms, warning octahedrons), and auto-facing 3D billboard text sprites.
+- **Dynamic Multi-Mode Layout Engine:**
+  - **3D Cosmic Force:** Numerical Coulomb-Hooke physics simulation with charge repulsion, spring tension, and damping.
+  - **2D Planar Topological:** Forces physics into planar space for clear schematic reading.
+  - **Hierarchical Dependency DAG:** Tiered architectural layout organizing entities from Master Layouts down to Components, Tolerances, and Failure Modes.
+  - **Concentric Radial Orbit:** Concentric 1-hop and 2-hop radius rings centered on any selected entity.
+- **Embedded 3D Physical Digital Twin Inspector:**
+  - Selecting any physical component in the graph opens the slide-in **Entity Intelligence Drawer**, which embeds a dedicated interactive Three.js mini-viewport rendering the exact physical 3D asset (Slide Chair, Detail 'B' Bent Tie Bar, SSD, CMS Crossing, Check Rail, ERC Mk-V, PSC Sleeper) with full 360° orbit, pan, and zoom controls.
+- **Failure Mode Stress Propagation Simulator:**
+  - Selecting any defect (e.g. *Tongue Rail Chipping*, *10 mm GRSP Pad Crushing*, *Tie Bar Collision*) triggers dynamic cascading red shockwaves radiating outward along connected edges to highlight critical derailment risk pathways.
+- **Global Fuzzy Search & Quick Jump (`Ctrl+K` or `/`):**
+  - Instant autocomplete search for all 32+ entities with instant camera animation to target nodes.
+- **Alteration Time-Travel Scrubber:**
+  - Dragging the revision slider (Alt 1 to Alt 13) filters graph entities based on the revision level that introduced them.
+- **Continuous Learning & Live Ingestion:**
+  - Form allowing field engineers to inject new defect reports or proposals directly into the 3D physics loop, attaching structural springs and exporting to Neo4j Cypher or W3C JSON-LD.
 - **Level 1: Component Studio (Macro Isolated 360° Inspection)**
   - View individual track components in macro 3D isolation with dedicated lighting and turntable controls:
     - **Cast Steel Slide Chair (`RDSO/T-9616`):** Machined slide table, stock rail check stop, plate screw holes.
