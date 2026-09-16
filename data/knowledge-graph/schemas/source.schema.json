@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RDSOSourceDocumentRegistryRecord",
+  "description": "Schema for source registration records as mandated by Section 4 Phase A of COMPLETE_MANUALS_KNOWLEDGE_GRAPH_PLAN.md",
+  "type": "object",
+  "required": [
+    "id",
+    "filename",
+    "file_path",
+    "sha256",
+    "size_bytes",
+    "mime_type",
+    "page_count",
+    "document_family",
+    "category",
+    "text_extractable",
+    "ingestion_timestamp"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique stable identifier for document, e.g. DOC:IRPWM:2024 or DOC:RDSO_T_6155:ALT_13"
+    },
+    "filename": {
+      "type": "string",
+      "description": "Base filename on disk"
+    },
+    "file_path": {
+      "type": "string",
+      "description": "Repository-relative path, e.g. manuals/IRPWM 2024.pdf"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Cryptographic SHA-256 hash of the binary file"
+    },
+    "size_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "mime_type": {
+      "type": "string",
+      "default": "application/pdf"
+    },
+    "page_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "document_family": {
+      "type": "string",
+      "enum": [
+        "PERMANENT_WAY_MANUAL",
+        "ULTRASONIC_TESTING_MANUAL",
+        "RAIL_WELDING_MANUAL",
+        "TRACK_MACHINES_MANUAL",
+        "SMALL_TRACK_MACHINES_MANUAL",
+        "TURNOUT_ASSEMBLY_DRAWING",
+        "SWITCH_ASSEMBLY_DRAWING",
+        "CROSSING_ASSEMBLY_DRAWING",
+        "FASTENER_COMPONENT_DRAWING",
+        "SLEEPER_COMPONENT_DRAWING",
+        "SPECIAL_BEARING_PLATE_DRAWING",
+        "STANDARD_SPECIFICATION",
+        "OTHER_TRACK_DRAWING"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "enum": ["MANUAL", "DRAWING", "SPECIFICATION", "STANDARD"]
+    },
+    "issuing_authority": {
+      "type": "string",
+      "description": "Issuing directorate or body (Railway Board, RDSO Track, RDSO M&C, etc.)"
+    },
+    "edition_or_revision": {
+      "type": "string",
+      "description": "Identified edition, correction slip, or alteration level"
+    },
+    "text_extractable": {
+      "type": "boolean",
+      "description": "True if digital text stream is present; false if raster/scanned requiring OCR"
+    },
+    "sample_text_length": {
+      "type": "integer",
+      "description": "Number of characters extracted in first 5 sample pages"
+    },
+    "companion_documents": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Related or companion drawing/manual IDs"
+    },
+    "duplicate_of": {
+      "type": ["string", "null"],
+      "description": "Reference to primary document ID if this file is a byte-duplicate or near-duplicate"
+    },
+    "ingestion_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true
+}

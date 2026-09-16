@@ -1,0 +1,3471 @@
+{
+  "metadata": {
+    "title": "RDSO Complete Manuals & Drawings Knowledge Graph",
+    "version": "2.0.0",
+    "blueprint": "docs/COMPLETE_MANUALS_KNOWLEDGE_GRAPH_PLAN.md",
+    "total_nodes": 127,
+    "total_edges": 163
+  },
+  "nodes": [
+    {
+      "id": "drg_6154",
+      "type": "DRAWING",
+      "label": "RDSO/T-6154 (1:12 Turnout)",
+      "domain": "drawing",
+      "color": "#00f0ff",
+      "desc": "Master Layout of 1 in 12 Turnout 60 kg (UIC) on PSC Sleepers (64 sleepers total).",
+      "specs": {
+        "Standard": "IRS: T 10",
+        "Gauge": "1673 mm",
+        "Radius": "441.36 m",
+        "Speed (Main)": "160 km/h",
+        "Speed (Loop)": "50 km/h"
+      },
+      "twinAsset": "full_turnout",
+      "x": 0,
+      "y": 7,
+      "z": 0,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "drg_6155",
+      "type": "DRAWING",
+      "label": "RDSO/T-6155 (Curved Switch)",
+      "domain": "drawing",
+      "color": "#00f0ff",
+      "desc": "10125 mm Curved Switch with ZU-1-60/60E1A1 Thick-Web Tongue Rails on PSC Sleepers.",
+      "specs": {
+        "Specification": "IRS: T 10",
+        "Switch Length": "10125 mm",
+        "Stock Rail": "13000 mm",
+        "Tongue Rail": "12480 mm",
+        "Throw at Toe": "160 mm"
+      },
+      "twinAsset": "curved_switch",
+      "x": -8,
+      "y": 5,
+      "z": 3,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "drg_6216",
+      "type": "DRAWING",
+      "label": "RDSO/T-6216 (SSD Assembly)",
+      "domain": "drawing",
+      "color": "#3a86ff",
+      "desc": "Spring Setting Device (SSD) for Thick-Web Switches at Sleeper 13 (JOH).",
+      "specs": {
+        "Standard": "IRS: T 10 / S-3454",
+        "Location": "Sleeper 13 (JOH)",
+        "Nominal Gap": "60 mm",
+        "Stroke": "160 mm"
+      },
+      "twinAsset": "ssd_unit",
+      "x": -4,
+      "y": 4,
+      "z": -6,
+      "alt": 5,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "drg_6280",
+      "type": "DRAWING",
+      "label": "RDSO/T-6280 (CMS Crossing)",
+      "domain": "drawing",
+      "color": "#00f0ff",
+      "desc": "1 in 12 Cast Manganese Steel (CMS) Crossing assembly with special bearing plates.",
+      "specs": {
+        "Specification": "IRS: T 29",
+        "Angle": "1 in 12 (4° 45' 49\")",
+        "Length": "4350 mm",
+        "TNC Station": "Sleeper 48"
+      },
+      "twinAsset": "cms_crossing",
+      "x": 8,
+      "y": 5,
+      "z": 3,
+      "alt": 4,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "drg_6275",
+      "type": "DRAWING",
+      "label": "RDSO/T-6275 (Check Rails)",
+      "domain": "drawing",
+      "color": "#ff9d00",
+      "desc": "Check Rail arrangement (5000 mm) with flared ends for 60 kg UIC turnout.",
+      "specs": {
+        "Length": "5000 mm",
+        "Flangeway": "44 mm (41-45 mm)",
+        "Flare Openings": "89 mm",
+        "Mounting": "Check blocks with HT bolts"
+      },
+      "twinAsset": "check_rail",
+      "x": 5,
+      "y": 4,
+      "z": -6,
+      "alt": 4,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "drg_9010",
+      "type": "DRAWING",
+      "label": "RDSO/T-9010 (Detail 'B' Forging)",
+      "domain": "drawing",
+      "color": "#00f0ff",
+      "desc": "Detail 'B' Bent Tie Bar manufacturing and forging drawing clearing S&T Clamp Lock.",
+      "specs": {
+        "Specification": "IS: 2062",
+        "Drop Bend": "222 mm",
+        "Bottom Span": "485 mm",
+        "Mandated Revision": "Alt 11"
+      },
+      "twinAsset": "bent_tiebar",
+      "x": -7,
+      "y": 1,
+      "z": 8,
+      "alt": 11,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "rev_6155_alt10",
+      "type": "REVISION",
+      "label": "RDSO/T-6155 Alt 10 (Welded Joint W)",
+      "domain": "revision",
+      "color": "#a2d2ff",
+      "desc": "Eliminated fatigue-prone Machined Joint 'M' and standardized Welded Joint 'W' for thick web tongue rails.",
+      "specs": {
+        "Effective Date": "2010-04",
+        "Key Upgrade": "Welded Joint 'W'",
+        "Root Cause": "Fatigue cracking under 25t axle load"
+      },
+      "twinAsset": null,
+      "x": -12,
+      "y": 6,
+      "z": 6,
+      "alt": 10,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "rev_6155_alt11",
+      "type": "REVISION",
+      "label": "RDSO/T-6155 Alt 11 (222 mm Drop)",
+      "domain": "revision",
+      "color": "#a2d2ff",
+      "desc": "Mandated 222 mm drop bend on Detail 'B' Bent Tie Bar to clear S&T Clamp Point Lock drive rod.",
+      "specs": {
+        "Effective Date": "2014-08",
+        "Key Upgrade": "Detail 'B' 222 mm drop",
+        "Interface": "Clamp Point Lock S-3454"
+      },
+      "twinAsset": null,
+      "x": -10,
+      "y": 3,
+      "z": 9,
+      "alt": 11,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "rev_6155_alt12",
+      "type": "REVISION",
+      "label": "RDSO/T-6155 Alt 12 (Note 25/26 Dowels)",
+      "domain": "revision",
+      "color": "#a2d2ff",
+      "desc": "Standardized epoxy retrofit protocol for sleeper dowel hole repairs at Sleepers 3 and 4.",
+      "specs": {
+        "Effective Date": "2018-02",
+        "Key Upgrade": "Epoxy L-100 dowel repair",
+        "Specification": "IS: 12994"
+      },
+      "twinAsset": null,
+      "x": -12,
+      "y": 1,
+      "z": 3,
+      "alt": 12,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "rev_6155_alt13",
+      "type": "REVISION",
+      "label": "RDSO/T-6155 Alt 13 (LIST-A 10% Spares)",
+      "domain": "revision",
+      "color": "#a2d2ff",
+      "desc": "Mandated 10% inventory procurement buffer across all 24 wear and breakage components in LIST-A.",
+      "specs": {
+        "Effective Date": "2021-11",
+        "Key Upgrade": "LIST-A 10% Spares buffer",
+        "Coverage": "24 wear components"
+      },
+      "twinAsset": null,
+      "x": -11,
+      "y": 8,
+      "z": 0,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "rev_6154_alt06",
+      "type": "REVISION",
+      "label": "RDSO/T-6154 Alt 06 (Turnout Layout)",
+      "domain": "revision",
+      "color": "#a2d2ff",
+      "desc": "Master layout harmonization matching 60 kg UIC 64-sleeper schedule with thick-web switch and CMS crossing.",
+      "specs": {
+        "Effective Date": "2020-05",
+        "Key Upgrade": "Harmonized 64 sleepers with thick-web switch"
+      },
+      "twinAsset": null,
+      "x": 1,
+      "y": 9,
+      "z": -2,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "note_6155_01",
+      "type": "NOTE",
+      "label": "NOTE 1: Switch Design Scope",
+      "domain": "specification",
+      "color": "#ffbe0b",
+      "desc": "Specifies that drawing covers 10125 mm curved switch with thick web tongue rails for 1 in 12 turnout on PSC sleepers.",
+      "specs": {
+        "Governing Standard": "IRS: T 10",
+        "Target Rail": "ZU-1-60 / 60E1A1"
+      },
+      "twinAsset": null,
+      "x": -6,
+      "y": 7,
+      "z": 5,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "note_6155_04",
+      "type": "NOTE",
+      "label": "NOTE 4: Rail Lengths & Throw",
+      "domain": "specification",
+      "color": "#ffbe0b",
+      "desc": "Mandates stock rail length 13000 mm, tongue rail length 12480 mm, and 160 mm throw of switch at toe (sleeper 3).",
+      "specs": {
+        "Stock Rail": "13000 mm",
+        "Tongue Rail": "12480 mm",
+        "Nominal Throw": "160 mm"
+      },
+      "twinAsset": null,
+      "x": -4,
+      "y": 6,
+      "z": 7,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "note_6155_12",
+      "type": "NOTE",
+      "label": "NOTE 12: Welded Joint 'W'",
+      "domain": "specification",
+      "color": "#ffbe0b",
+      "desc": "Mandates Welded Joint 'W' for thick web tongue rails, explicitly eradicating failure-prone Machined Joint 'M'.",
+      "specs": {
+        "Mandated Joint": "Welded Joint 'W'",
+        "Eliminated Joint": "Machined Joint 'M'",
+        "Revision": "Alt 10"
+      },
+      "twinAsset": null,
+      "x": -8,
+      "y": 4,
+      "z": 7,
+      "alt": 10,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "note_6155_21",
+      "type": "NOTE",
+      "label": "NOTE 21: Detail 'B' 222 mm Drop",
+      "domain": "specification",
+      "color": "#ffbe0b",
+      "desc": "Mandates that Detail 'B' Bent Tie Bar must have 222 mm drop bend to clear Point Machine locking rods.",
+      "specs": {
+        "Drop Dimension": "222 mm",
+        "Clearance": "12 mm over sleeper",
+        "Revision": "Alt 11"
+      },
+      "twinAsset": null,
+      "x": -6,
+      "y": 2,
+      "z": 9,
+      "alt": 11,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "note_6155_25",
+      "type": "NOTE",
+      "label": "NOTE 25: Dowel Hole Core Repair",
+      "domain": "specification",
+      "color": "#ffbe0b",
+      "desc": "Specifies procedure for drilling 35 mm dia x 165 mm depth core hole in concrete sleeper when inserts are missing.",
+      "specs": {
+        "Hole Dia": "35 mm",
+        "Hole Depth": "165 mm",
+        "Application": "Sleepers 3 and 4"
+      },
+      "twinAsset": null,
+      "x": -10,
+      "y": 0,
+      "z": 5,
+      "alt": 12,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "note_6155_26",
+      "type": "NOTE",
+      "label": "NOTE 26: Epoxy L-100 Injection",
+      "domain": "specification",
+      "color": "#ffbe0b",
+      "desc": "Mandates injection of Epoxy L-100 (IS:12994) for dowel bonding with mandatory 24-hour curing time before load.",
+      "specs": {
+        "Resin": "Epoxy L-100",
+        "Standard": "IS: 12994",
+        "Cure Period": "24 Hours Mandatory"
+      },
+      "twinAsset": null,
+      "x": -10,
+      "y": -2,
+      "z": 3,
+      "alt": 12,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "note_6155_28",
+      "type": "NOTE",
+      "label": "NOTE 28: LIST-A 10% Spares Buffer",
+      "domain": "specification",
+      "color": "#ffbe0b",
+      "desc": "Mandates 10% quantity procurement buffer across all 24 wear/breakage spare parts listed in LIST-A table.",
+      "specs": {
+        "Buffer Rate": "10% of PO quantity",
+        "Parts Covered": "24 Wear/Breakage Items",
+        "Revision": "Alt 13"
+      },
+      "twinAsset": null,
+      "x": -9,
+      "y": 6,
+      "z": -1,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "note_6154_01",
+      "type": "NOTE",
+      "label": "NOTE 6154-1: 64 Sleeper Arrangement",
+      "domain": "specification",
+      "color": "#ffbe0b",
+      "desc": "Layout encompasses 64 prestressed concrete turnout sleepers spaced at nominal 600 mm centers.",
+      "specs": {
+        "Total Sleepers": "64",
+        "Nominal Spacing": "600 mm",
+        "Sleeper Type": "T-4219"
+      },
+      "twinAsset": null,
+      "x": 2,
+      "y": 8,
+      "z": 2,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "note_6154_07",
+      "type": "NOTE",
+      "label": "NOTE 6154-7: Site Curve Checking",
+      "domain": "specification",
+      "color": "#ffbe0b",
+      "desc": "Mandates pre-laying versine verification over 12480 mm chord: 33 mm at C/4, 44 mm at mid-point C/2, 33 mm at 3C/4.",
+      "specs": {
+        "Chord": "12480 mm",
+        "Mid Versine": "44 mm",
+        "Quarter Versines": "33 mm"
+      },
+      "twinAsset": null,
+      "x": 4,
+      "y": 7,
+      "z": 4,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "note_6154_11",
+      "type": "NOTE",
+      "label": "NOTE 6154-11: Fastener Quantities",
+      "domain": "specification",
+      "color": "#ffbe0b",
+      "desc": "Specifies exact turnout fastener counts: 347 Elastic Rail Clips Mk-V and 146 Grooved Rubber Sole Plates (10 mm).",
+      "specs": {
+        "ERC Mk-V": "347 Nos.",
+        "GRSP 10mm": "146 Nos."
+      },
+      "twinAsset": null,
+      "x": 2,
+      "y": 6,
+      "z": -4,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_tongue_rail",
+      "type": "COMPONENT",
+      "label": "ZU-1-60 Thick-Web Tongue Rail",
+      "domain": "component",
+      "color": "#00ff88",
+      "desc": "Asymmetric thick-web curved tongue rail (12480 mm) providing robust flange guidance.",
+      "specs": {
+        "Profile": "ZU-1-60 / 60E1A1",
+        "Length": "12480 mm",
+        "Web Thickness": "34 mm",
+        "Throw": "160 mm"
+      },
+      "twinAsset": "curved_switch",
+      "x": -5,
+      "y": 3,
+      "z": 4,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_stock_rail",
+      "type": "COMPONENT",
+      "label": "60 kg (UIC) Stock Rail (13000 mm)",
+      "domain": "component",
+      "color": "#00ff88",
+      "desc": "Full section 60 kg UIC standard stock rail machined to receive thick-web tongue rail toe.",
+      "specs": {
+        "Profile": "60 kg UIC / 60E1",
+        "Length": "13000 mm",
+        "Grade": "880 MPa / 1080 Head Hardened"
+      },
+      "twinAsset": "curved_switch",
+      "x": -4,
+      "y": 3,
+      "z": 2,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_chair",
+      "type": "COMPONENT",
+      "label": "Cast Steel Slide Chair (T-9616)",
+      "domain": "component",
+      "color": "#00ff88",
+      "desc": "Elevated machined slide table supporting ZU-1-60 tongue rail across Sleepers 4 to 20.",
+      "specs": {
+        "Drawing": "RDSO/T-9616",
+        "Material": "Cast Steel Gr 230-450W",
+        "Quantity": "34 Nos.",
+        "Fasteners": "4 Plate Screws T-3913"
+      },
+      "twinAsset": "slide_chair",
+      "x": -7,
+      "y": 1,
+      "z": 3,
+      "alt": 10,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_detailb",
+      "type": "COMPONENT",
+      "label": "Detail 'B' Bent Tie Bar (T-9010)",
+      "domain": "component",
+      "color": "#00ff88",
+      "desc": "Forged M.S. tie bar connecting tongue rail to Point Machine with 222 mm drop bend.",
+      "specs": {
+        "Drawing": "RDSO/T-9010",
+        "Material": "Mild Steel IS: 2062",
+        "Drop Bend": "222 mm",
+        "Bottom Span": "485 mm"
+      },
+      "twinAsset": "bent_tiebar",
+      "x": -6,
+      "y": 0,
+      "z": 7,
+      "alt": 11,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_cpl",
+      "type": "COMPONENT",
+      "label": "Clamp Point Lock Machine (S-3454)",
+      "domain": "signaling",
+      "color": "#ff3366",
+      "desc": "S&T interlocking point machine locking tongue rail directly to stock rail with SIL-4 integrity.",
+      "specs": {
+        "Specification": "IRS: S 3454",
+        "Safety Integrity": "SIL 4",
+        "Throw Stroke": "220 mm",
+        "Drive Rod Clearance": "222 mm mandated"
+      },
+      "twinAsset": "clamp_lock",
+      "x": -7,
+      "y": -2,
+      "z": 9,
+      "alt": 8,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_ssd_unit",
+      "type": "COMPONENT",
+      "label": "Spring Setting Device (T-6216)",
+      "domain": "component",
+      "color": "#00ff88",
+      "desc": "Helical pre-compressed spring mechanism maintaining 60 mm dynamic heel clearance at JOH (Sleeper 13).",
+      "specs": {
+        "Drawing": "RDSO/T-6216",
+        "Pre-compression": "35 mm",
+        "Spring Material": "Cr-V Spring Steel",
+        "Turnbuckle": "M24 L/R thread"
+      },
+      "twinAsset": "ssd_unit",
+      "x": -3,
+      "y": 1,
+      "z": -6,
+      "alt": 5,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_cms_unit",
+      "type": "COMPONENT",
+      "label": "1 in 12 CMS Monoblock Crossing (T-6279)",
+      "domain": "component",
+      "color": "#00ff88",
+      "desc": "Austenitic 12-14% manganese steel monoblock body with work-hardening wear properties.",
+      "specs": {
+        "Drawing": "RDSO/T-6279",
+        "Metallurgy": "12-14% Mn, 1.2% C",
+        "Initial Hardness": "220 BHN",
+        "Work Hardened": "350 BHN"
+      },
+      "twinAsset": "cms_crossing",
+      "x": 8,
+      "y": 1,
+      "z": 3,
+      "alt": 4,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_checkrail",
+      "type": "COMPONENT",
+      "label": "Check Rail Flangeway Guard (T-6275)",
+      "domain": "component",
+      "color": "#00ff88",
+      "desc": "5000 mm machined check rail with 89 mm flared ends maintaining 44 mm flangeway gap.",
+      "specs": {
+        "Drawing": "RDSO/T-6275",
+        "Length": "5000 mm",
+        "Flangeway": "44 mm",
+        "Torque": "380 N-m"
+      },
+      "twinAsset": "check_rail",
+      "x": 5,
+      "y": 0,
+      "z": -5,
+      "alt": 4,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_erc",
+      "type": "COMPONENT",
+      "label": "Elastic Rail Clip Mk-V (T-5919)",
+      "domain": "component",
+      "color": "#00ff88",
+      "desc": "Heavy duty 23 mm diameter spring steel elastic rail clip delivering 1200-1500 kgf toe load.",
+      "specs": {
+        "Drawing": "RDSO/T-5919",
+        "Diameter": "23 mm",
+        "Material": "55Si7 Spring Steel",
+        "Toe Load": "1200 - 1500 kgf"
+      },
+      "twinAsset": "erc_clip",
+      "x": -2,
+      "y": 2,
+      "z": -1,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_grsp",
+      "type": "COMPONENT",
+      "label": "10 mm Grooved Rubber Sole Plate (T-3711)",
+      "domain": "component",
+      "color": "#00ff88",
+      "desc": "High-attenuation 10 mm grooved elastomeric pad insulating rails and damping 25t dynamic impacts.",
+      "specs": {
+        "Drawing": "RDSO/T-3711",
+        "Thickness": "10 mm",
+        "Resistivity": "10^8 ohm-cm",
+        "Tensile": "> 12 MPa"
+      },
+      "twinAsset": "grsp_pad",
+      "x": -1,
+      "y": 1,
+      "z": 1,
+      "alt": 7,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "comp_sleeper",
+      "type": "COMPONENT",
+      "label": "PSC Turnout Sleeper (T-4219)",
+      "domain": "component",
+      "color": "#00ff88",
+      "desc": "High-strength prestressed concrete turnout sleeper with recessed canted rail seats and SGCI dowels.",
+      "specs": {
+        "Drawing": "RDSO/T-4219",
+        "Grade": "M60 Concrete",
+        "Prestress": "18 x 3 mm HTS wires",
+        "Weight": "285 kg"
+      },
+      "twinAsset": "psc_sleeper",
+      "x": 0,
+      "y": -1,
+      "z": 0,
+      "alt": 8,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "zone_approach",
+      "type": "ZONE",
+      "label": "Approach Zone (Sleepers 1-3)",
+      "domain": "turnout_layout",
+      "color": "#72efdd",
+      "desc": "Lead-in track section transitioning from standard open track into switch toe.",
+      "specs": {
+        "Sleepers": "1 to 3",
+        "Length": "2750 mm",
+        "Sleeper Spacing": "600 mm"
+      },
+      "twinAsset": null,
+      "x": -9,
+      "y": -1,
+      "z": 1,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "zone_switch",
+      "type": "ZONE",
+      "label": "Switch Zone (Sleepers 4-20)",
+      "domain": "turnout_layout",
+      "color": "#72efdd",
+      "desc": "Curved switch zone equipped with 34 slide chairs and SSD at Sleeper 13.",
+      "specs": {
+        "Sleepers": "4 to 20",
+        "Slide Chairs": "34 Nos.",
+        "SSD Location": "Sleeper 13"
+      },
+      "twinAsset": null,
+      "x": -5,
+      "y": -1,
+      "z": 1,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "zone_intermediate",
+      "type": "ZONE",
+      "label": "Intermediate Lead Curve (Sleepers 21-42)",
+      "domain": "turnout_layout",
+      "color": "#72efdd",
+      "desc": "Lead curve track zone transitioning switch radius (441.36 m) towards crossing.",
+      "specs": {
+        "Sleepers": "21 to 42",
+        "Lengths": "2850 mm to 3750 mm",
+        "Versine": "IRPWM Table 4"
+      },
+      "twinAsset": null,
+      "x": 1,
+      "y": -1,
+      "z": 1,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "zone_crossing",
+      "type": "ZONE",
+      "label": "CMS Crossing Zone (Sleepers 43-55)",
+      "domain": "turnout_layout",
+      "color": "#72efdd",
+      "desc": "Crossing assembly zone housing 1:12 CMS crossing and 5000 mm check rails.",
+      "specs": {
+        "Sleepers": "43 to 55",
+        "Lengths": "3850 mm to 4120 mm",
+        "TNC": "Sleeper 48"
+      },
+      "twinAsset": null,
+      "x": 6,
+      "y": -1,
+      "z": 1,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "zone_exit",
+      "type": "ZONE",
+      "label": "Exit Transition Zone (Sleepers 56-64)",
+      "domain": "turnout_layout",
+      "color": "#72efdd",
+      "desc": "Exit diverging and straight track zone returning to standard track sleeper length.",
+      "specs": {
+        "Sleepers": "56 to 64",
+        "Lengths": "4120 mm tapering to 2550 mm"
+      },
+      "twinAsset": null,
+      "x": 9,
+      "y": -1,
+      "z": 1,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sleeper_03_toe",
+      "type": "SLEEPER",
+      "label": "Sleeper 03 (Toe & Point Machine)",
+      "domain": "turnout_layout",
+      "color": "#48cae4",
+      "desc": "Point machine mounting station supporting switch toe and Detail 'B' bent tie bar.",
+      "specs": {
+        "Station": "Sleeper 03",
+        "Length": "2750 mm",
+        "Interface": "Point Machine S-3454"
+      },
+      "twinAsset": null,
+      "x": -8,
+      "y": -2,
+      "z": 6,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sleeper_13_joh",
+      "type": "SLEEPER",
+      "label": "Sleeper 13 (Junction of Head - JOH)",
+      "domain": "turnout_layout",
+      "color": "#48cae4",
+      "desc": "JOH station housing Spring Setting Device (SSD) maintaining 60 mm flangeway gap.",
+      "specs": {
+        "Station": "Sleeper 13",
+        "Length": "2750 mm",
+        "Nominal Gap": "60 mm"
+      },
+      "twinAsset": null,
+      "x": -3,
+      "y": -2,
+      "z": -6,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sleeper_48_tnc",
+      "type": "SLEEPER",
+      "label": "Sleeper 48 (Theoretical Nose of Crossing)",
+      "domain": "turnout_layout",
+      "color": "#48cae4",
+      "desc": "TNC station where turnout gauge lines intersect; maximum axle dynamic impact location.",
+      "specs": {
+        "Station": "Sleeper 48",
+        "Length": "4050 mm",
+        "Feature": "TNC intersection"
+      },
+      "twinAsset": null,
+      "x": 7,
+      "y": -2,
+      "z": 4,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "dim_throw_160",
+      "type": "DIMENSION",
+      "label": "Switch Throw: 160 mm at Toe",
+      "domain": "specification",
+      "color": "#ffd60a",
+      "desc": "Mandatory opening stroke of tongue rail at toe (Sleeper 3) ensuring unobstructed wheel flange clearance.",
+      "specs": {
+        "Nominal": "160 mm",
+        "Governing Note": "Note 4 (RDSO/T-6155)",
+        "Tolerance": "± 2.0 mm"
+      },
+      "twinAsset": null,
+      "x": -3,
+      "y": 5,
+      "z": 9,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "dim_joh_gap_60",
+      "type": "DIMENSION",
+      "label": "JOH Heel Flangeway Gap: 60 mm",
+      "domain": "specification",
+      "color": "#ffd60a",
+      "desc": "Minimum dynamic gap between tongue rail and stock rail at Junction of Head (Sleeper 13).",
+      "specs": {
+        "Nominal": "60 mm",
+        "Permissible Range": "+2 mm / -3 mm (57 to 62 mm)",
+        "Governing Component": "SSD (T-6216)"
+      },
+      "twinAsset": null,
+      "x": -2,
+      "y": 3,
+      "z": -8,
+      "alt": 5,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "dim_tiebar_drop_222",
+      "type": "DIMENSION",
+      "label": "Tie Bar Drop: 222 mm",
+      "domain": "specification",
+      "color": "#ffd60a",
+      "desc": "Downward forged offset on Detail 'B' bent tie bar clearing S&T Clamp Lock drive rods.",
+      "specs": {
+        "Nominal": "222 mm",
+        "Tolerance": "± 2.0 mm",
+        "Mandated Revision": "Alt 11 (Note 21)"
+      },
+      "twinAsset": null,
+      "x": -6,
+      "y": 2,
+      "z": 11,
+      "alt": 11,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "dim_check_flange_44",
+      "type": "DIMENSION",
+      "label": "Check Rail Flangeway: 44 mm",
+      "domain": "specification",
+      "color": "#ffd60a",
+      "desc": "Critical safety flangeway clearance between running rail and check rail guarding the crossing nose.",
+      "specs": {
+        "Nominal": "44 mm",
+        "Min Permissible": "41 mm",
+        "Max Permissible": "45 mm",
+        "Flared Ends": "89 mm"
+      },
+      "twinAsset": null,
+      "x": 6,
+      "y": 2,
+      "z": -7,
+      "alt": 4,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "dim_toe_load",
+      "type": "DIMENSION",
+      "label": "Fastener Toe Load: 1200-1500 kgf",
+      "domain": "specification",
+      "color": "#ffd60a",
+      "desc": "Clamping force exerted by ERC Mk-V spring clip preventing longitudinal rail creep and gauge widening.",
+      "specs": {
+        "Min Toe Load": "1200 kgf",
+        "Max Toe Load": "1500 kgf",
+        "Deflection": "13.5 mm"
+      },
+      "twinAsset": null,
+      "x": -2,
+      "y": 4,
+      "z": -3,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "dim_dowel_hole",
+      "type": "DIMENSION",
+      "label": "Epoxy Core Hole: 35 mm Dia x 165 mm",
+      "domain": "specification",
+      "color": "#ffd60a",
+      "desc": "Precision cored hole dimensions for in-situ sleeper dowel retrofit specified in Note 25.",
+      "specs": {
+        "Diameter": "35 mm",
+        "Depth": "165 mm",
+        "Governing Note": "Note 25"
+      },
+      "twinAsset": null,
+      "x": -11,
+      "y": -1,
+      "z": 7,
+      "alt": 12,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "mat_zu1_60",
+      "type": "MATERIAL",
+      "label": "ZU-1-60 / 60E1A1 Thick-Web Steel",
+      "domain": "materials",
+      "color": "#b5179e",
+      "desc": "High-tensile asymmetric pearlitic rail steel with 880 MPa UTS and deep web inertia.",
+      "specs": {
+        "UTS": "880 MPa min",
+        "Profile": "Asymmetric",
+        "Standard": "IRS: T 10"
+      },
+      "twinAsset": null,
+      "x": -6,
+      "y": 5,
+      "z": 1,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "mat_cast_steel",
+      "type": "MATERIAL",
+      "label": "Cast Steel Grade 230-450W (IS: 1030)",
+      "domain": "materials",
+      "color": "#b5179e",
+      "desc": "Weldable cast carbon steel providing impact toughness and wear resistance for slide chairs.",
+      "specs": {
+        "Yield": "230 MPa min",
+        "Tensile": "450-600 MPa",
+        "Elongation": "22% min"
+      },
+      "twinAsset": null,
+      "x": -8,
+      "y": 1,
+      "z": 1,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "mat_ms_tiebar",
+      "type": "MATERIAL",
+      "label": "Forged Mild Steel Grade E250 (IS: 2062)",
+      "domain": "materials",
+      "color": "#b5179e",
+      "desc": "Ductile structural steel allowing hot-forging of 222 mm drop bend without brittle fracture.",
+      "specs": {
+        "Yield": "250 MPa",
+        "UTS": "410 MPa",
+        "Standard": "IS: 2062 Gr A"
+      },
+      "twinAsset": null,
+      "x": -5,
+      "y": 0,
+      "z": 9,
+      "alt": 11,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "mat_epoxy_l100",
+      "type": "MATERIAL",
+      "label": "Epoxy Resin L-100 (IS: 12994)",
+      "domain": "materials",
+      "color": "#b5179e",
+      "desc": "Two-part structural epoxy mortar achieving >65 kN tensile pull-out strength in 24 hours.",
+      "specs": {
+        "Pull-out": "> 65 kN",
+        "Cure Time": "24 Hours",
+        "Compressive Strength": "> 70 MPa"
+      },
+      "twinAsset": null,
+      "x": -12,
+      "y": -2,
+      "z": 5,
+      "alt": 12,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "mat_cms_manganese",
+      "type": "MATERIAL",
+      "label": "Austenitic Manganese Steel (IRS: T 29)",
+      "domain": "materials",
+      "color": "#b5179e",
+      "desc": "Hadfield steel (12-14% Mn, 1.2% C) work-hardening from 220 BHN to 350 BHN under wheel impact.",
+      "specs": {
+        "Mn Content": "12.0 - 14.0%",
+        "Carbon": "1.05 - 1.35%",
+        "Hardening": "Work hardening"
+      },
+      "twinAsset": null,
+      "x": 9,
+      "y": 1,
+      "z": 5,
+      "alt": 4,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "std_irs_t10",
+      "type": "STANDARD",
+      "label": "IRS: T 10 (Curved Switches Specification)",
+      "domain": "standards",
+      "color": "#7209b7",
+      "desc": "Indian Railway Standard specification governing manufacturing, tolerances, and inspection of curved switches.",
+      "specs": {
+        "Scope": "Curved Switches & Thick-Web Rails",
+        "Authority": "RDSO Track Directorate"
+      },
+      "twinAsset": null,
+      "x": -7,
+      "y": 8,
+      "z": 4,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "std_irs_t29",
+      "type": "STANDARD",
+      "label": "IRS: T 29 (CMS Crossings Specification)",
+      "domain": "standards",
+      "color": "#7209b7",
+      "desc": "Indian Railway Standard specification governing cast manganese steel crossings, radiographic tests, and metallurgy.",
+      "specs": {
+        "Scope": "Cast Manganese Steel Crossings",
+        "Testing": "Radiographic Class 1"
+      },
+      "twinAsset": null,
+      "x": 7,
+      "y": 8,
+      "z": 4,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "bom_erc_mkv",
+      "type": "BOM_ITEM",
+      "label": "BOM Item: 347x ERC Mk-V (T-5919)",
+      "domain": "procurement",
+      "color": "#f72585",
+      "desc": "Bill of Materials entry for 347 elastic rail clips securing turnout running rails.",
+      "specs": {
+        "Quantity": "347 Nos.",
+        "Part No.": "RDSO/T-5919",
+        "Unit": "Nos."
+      },
+      "twinAsset": null,
+      "x": 1,
+      "y": 4,
+      "z": -4,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "bom_grsp_10mm",
+      "type": "BOM_ITEM",
+      "label": "BOM Item: 146x GRSP 10mm (T-3711)",
+      "domain": "procurement",
+      "color": "#f72585",
+      "desc": "Bill of Materials entry for 146 grooved rubber sole plates cushioning turnout rail seats.",
+      "specs": {
+        "Quantity": "146 Nos.",
+        "Part No.": "RDSO/T-3711",
+        "Unit": "Nos."
+      },
+      "twinAsset": null,
+      "x": 1,
+      "y": 3,
+      "z": -1,
+      "alt": 6,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "spare_bolt_25x310",
+      "type": "SPARE_PART",
+      "label": "LIST-A Spare: Bolts 25x310 (T-11526)",
+      "domain": "procurement",
+      "color": "#f72585",
+      "desc": "Item 1 of LIST-A: 25 mm dia x 310 mm high-tensile bolt subject to dynamic shear in switch.",
+      "specs": {
+        "Item No.": "1",
+        "Drg No.": "T-11526",
+        "Nominal PO Buffer": "10% mandatory"
+      },
+      "twinAsset": null,
+      "x": -10,
+      "y": 7,
+      "z": -3,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "spare_split_pin",
+      "type": "SPARE_PART",
+      "label": "LIST-A Spare: Split Pins 6.3x50 (T-10672)",
+      "domain": "procurement",
+      "color": "#f72585",
+      "desc": "Item 12 of LIST-A: 6.3 mm split cotter pin preventing tie bar pin loss under vibration.",
+      "specs": {
+        "Item No.": "12",
+        "Drg No.": "T-10672",
+        "Criticality": "High vibration fallout risk"
+      },
+      "twinAsset": null,
+      "x": -10,
+      "y": 5,
+      "z": -3,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "spare_nylon_bush",
+      "type": "SPARE_PART",
+      "label": "LIST-A Spare: Nylon Bush (T-11516)",
+      "domain": "procurement",
+      "color": "#f72585",
+      "desc": "Item 19 of LIST-A: electrical insulating nylon sleeve isolating track circuit signaling current.",
+      "specs": {
+        "Item No.": "19",
+        "Drg No.": "T-11516",
+        "Function": "Signaling track circuit insulation"
+      },
+      "twinAsset": null,
+      "x": -10,
+      "y": 3,
+      "z": -3,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "defect_joint_fatigue",
+      "type": "FAILURE_MODE",
+      "label": "Machined Joint 'M' Fatigue Crack",
+      "domain": "defect",
+      "color": "#ff3366",
+      "desc": "High stress-concentration fracture at machined rail web notch under 25t heavy freight axle hunting loads.",
+      "specs": {
+        "Root Cause": "Machining stress notch",
+        "Consequence": "Tongue rail fracture",
+        "Mitigated By": "Alt 10 Welded Joint 'W'"
+      },
+      "twinAsset": null,
+      "x": -7,
+      "y": -4,
+      "z": 5,
+      "alt": 9,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "defect_toe_chipping",
+      "type": "FAILURE_MODE",
+      "label": "Tongue Rail Toe Chipping",
+      "domain": "defect",
+      "color": "#ff3366",
+      "desc": "Wheel flange back-strike chipping thin toe profile when throw is <160 mm or slide chairs lack lubrication.",
+      "specs": {
+        "Permissible Limit": "200 mm length x 6 mm depth",
+        "Hazard": "Wheel climb derailment"
+      },
+      "twinAsset": null,
+      "x": -5,
+      "y": -5,
+      "z": 7,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "defect_cms_batter",
+      "type": "FAILURE_MODE",
+      "label": "CMS Crossing Nose Flow & Battering",
+      "domain": "defect",
+      "color": "#ff3366",
+      "desc": "Plastic deformation and metal flow at Actual Nose of Crossing (ANC) under dynamic wheel transfer impact.",
+      "specs": {
+        "Wear Limit": "10 mm vertical wear",
+        "Rectification": "Robotic translamatic welding"
+      },
+      "twinAsset": null,
+      "x": 8,
+      "y": -4,
+      "z": 5,
+      "alt": 3,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "defect_dowel_stripping",
+      "type": "FAILURE_MODE",
+      "label": "Sleeper Dowel Insert Stripping",
+      "domain": "defect",
+      "color": "#ff3366",
+      "desc": "SGCI dowel thread stripping in concrete sleepers under tie bar vertical vibration.",
+      "specs": {
+        "Rectification": "Note 25/26 Epoxy Retrofit",
+        "Pullout Loss": "> 50% loss of anchor load"
+      },
+      "twinAsset": null,
+      "x": -11,
+      "y": -3,
+      "z": 1,
+      "alt": 12,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "hazard_derailment_split",
+      "type": "HAZARD",
+      "label": "Facing Point Wheel Flange Splitting",
+      "domain": "defect",
+      "color": "#d90429",
+      "desc": "Catastrophic derailment hazard where wheel flange enters between stock rail and tongue rail toe.",
+      "specs": {
+        "Severity": "CATASTROPHIC DERAILMENT",
+        "Safety Integrity": "SIL 4 compliance required"
+      },
+      "twinAsset": null,
+      "x": -6,
+      "y": -7,
+      "z": 7,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "hazard_rod_fouling",
+      "type": "HAZARD",
+      "label": "Point Machine Drive Rod Collision",
+      "domain": "defect",
+      "color": "#d90429",
+      "desc": "Physical mechanical collision between straight tie bar and S&T Clamp Lock drive rod preventing point detection.",
+      "specs": {
+        "Severity": "SIGNAL FAILURE / DERAILMENT",
+        "Eliminated By": "Alt 11 Detail 'B' 222 mm Drop"
+      },
+      "twinAsset": null,
+      "x": -8,
+      "y": -5,
+      "z": 10,
+      "alt": 11,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sop_epoxy_retrofit",
+      "type": "SOP",
+      "label": "SOP: Sleeper Dowel Epoxy Retrofit",
+      "domain": "sop",
+      "color": "#9d4edd",
+      "desc": "Standard operating procedure for core drilling 35x165 mm hole, Epoxy L-100 injection, and 24-hour curing.",
+      "specs": {
+        "Standard": "IS: 12994 / Note 25-26",
+        "Cure": "24 Hours",
+        "Quality Audit": "Pull-out test >65 kN"
+      },
+      "twinAsset": null,
+      "x": -12,
+      "y": -4,
+      "z": 3,
+      "alt": 12,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sop_lista_procurement",
+      "type": "SOP",
+      "label": "SOP: LIST-A 10% Spares Inventory Audit",
+      "domain": "sop",
+      "color": "#9d4edd",
+      "desc": "Mandatory procurement procedure verifying that 10% wear/breakage spares buffer is physically verified in store.",
+      "specs": {
+        "Governing Note": "Note 28",
+        "Audit Timing": "Pre-commissioning"
+      },
+      "twinAsset": null,
+      "x": -11,
+      "y": 4,
+      "z": -4,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sop_versine_check",
+      "type": "SOP",
+      "label": "SOP: Site Pre-Laying Curve Versine Audit",
+      "domain": "sop",
+      "color": "#9d4edd",
+      "desc": "Pre-installation field inspection measuring 33mm, 44mm, 33mm versines on 12480 mm chord.",
+      "specs": {
+        "Manual Ref": "IRPWM Annexure 4/6",
+        "Tolerance": "± 2.0 mm"
+      },
+      "twinAsset": null,
+      "x": 4,
+      "y": 5,
+      "z": 6,
+      "alt": 1,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "doc_irpwm_2024",
+      "type": "DOCUMENT",
+      "label": "Indian Railways Permanent Way Manual (IRPWM 2024)",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Comprehensive statutory regulations for track maintenance, turnout tolerances, inspection schedules, switch and crossing maintenance. (Reprint 2024 incorporating Advance Correction Slips up to ACS 14 (29-07-2026))",
+      "specs": {
+        "Authority": "Railway Board, Ministry of Railways, Government of India",
+        "Pages": 530,
+        "File": "IRPWM 2024 Corrected Up To ACS - 14 (29-07-2026)-1.pdf"
+      },
+      "twinAsset": null,
+      "x": -14,
+      "y": 10,
+      "z": 0,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "doc_usfd_2026",
+      "type": "DOCUMENT",
+      "label": "Manual for Ultrasonic Testing of Rails and Welds (USFD 2026)",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Ultrasonic flaw detection protocols for rails, switches, CMS crossings, and thermit welds, defining probe configurations and defect classifications (IMR, OBS, DFWN, DFWO, DFWR). (Revised Edition 2026 with ACS 1 to 4)",
+      "specs": {
+        "Authority": "Track Design Directorate / Metallurgical & Chemical Directorate, RDSO Lucknow",
+        "Pages": 157,
+        "File": "usfd_new 24-2-26.pdf"
+      },
+      "twinAsset": null,
+      "x": 14,
+      "y": 10,
+      "z": -4,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "doc_atweld_2022",
+      "type": "DOCUMENT",
+      "label": "Manual for Fusion Welding of Rails by Alumino-Thermic Process (2022)",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Field execution parameters, joint gaps, preheating, trimming, finishing tolerances, and acceptance testing of Alumino-Thermic (Thermit) rail welds. (Edition 2022)",
+      "specs": {
+        "Authority": "Metallurgical & Chemical Directorate, RDSO Lucknow",
+        "Pages": 49,
+        "File": "ATWeld_Manual-2022.pdf"
+      },
+      "twinAsset": null,
+      "x": 12,
+      "y": 10,
+      "z": 8,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "doc_fbw_2022",
+      "type": "DOCUMENT",
+      "label": "Manual for Flash Butt Welding of Rails (FBW 2022)",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Procedures, parameters, finishing tolerances, and testing protocols for stationary and mobile flash butt welding of rails. (Reprint 2022 incorporating Correction Slips up to CS 5)",
+      "specs": {
+        "Authority": "Track Design Directorate, RDSO Lucknow",
+        "Pages": 69,
+        "File": "FBW Manual-Reprint 2022- Incorporated up to CS5.pdf"
+      },
+      "twinAsset": null,
+      "x": 6,
+      "y": 11,
+      "z": -10,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "doc_tmm_2020",
+      "type": "DOCUMENT",
+      "label": "Indian Railways Track Machine Manual (TMM)",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Mechanized track maintenance guidelines, UNIMAT points & crossing tamping machine operation, S&T coordination, tamping cycles, lift and slew limits. (Revised Edition incorporating Advance Correction Slips up to ACS 10)",
+      "specs": {
+        "Authority": "Track Machines Directorate, RDSO Lucknow",
+        "Pages": 458,
+        "File": "INDIAN RAILWAYS TRACK MACHINE MANUAL (INCORPORATED UPTO ACS 10)_FINAL.pdf"
+      },
+      "twinAsset": null,
+      "x": -8,
+      "y": 11,
+      "z": -10,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "doc_stmm_2024",
+      "type": "DOCUMENT",
+      "label": "Small Track Machine Manual (STMM 2024)",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Specifications, maintenance, and operating SOPs for small track machines including bolt hole chamfering kits, abrasive rail cutters, and hydraulic rail tensors. (Second Edition (Updated May 2024))",
+      "specs": {
+        "Authority": "Track Machines & Monitoring Directorate, RDSO Lucknow",
+        "Pages": 222,
+        "File": "STMM-date  27.05.24.pdf"
+      },
+      "twinAsset": null,
+      "x": -10,
+      "y": 10,
+      "z": 8,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "spec_irpwm_para429_switch",
+      "type": "SPECIFICATION",
+      "label": "Maintenance of Switches & Tongue Rails",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "A tongue rail shall be classified as worn/damaged when: (i) it is chipped/cracked over small lengths aggregating to 200 mm within a distance of 1000 mm from ATS for 1 in 8.5 switches and within 2000 mm from ATS for 1 in 12 and 1 in 16 switches. Chipped length is defined as portio...",
+      "specs": {
+        "Manual Ref": "IRPWM Para 429(2)",
+        "Chapter": "Chapter 4: Curves, Points and Crossings (Part B)",
+        "Page": "Page 196",
+        "Key Rule": "Max aggregate chipping: 200 mm within 2000 mm from ATS (1:12 switch)"
+      },
+      "twinAsset": null,
+      "x": -12,
+      "y": 8,
+      "z": 2,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "spec_irpwm_para429_stretcher",
+      "type": "SPECIFICATION",
+      "label": "Stretcher Bar Clearance & Interlocking Interface",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "The Stretcher bar connected to the pull rod shall be maintained jointly by the Permanent Way Staff and the Signalling Staff. The gap between the top of the leading stretcher bar and the bottom of the stock rail should be maintained between 1.5 mm to 5.0 mm. All other stretcher ba...",
+      "specs": {
+        "Manual Ref": "IRPWM Para 429(2)(j)",
+        "Chapter": "Chapter 4: Curves, Points and Crossings (Part B)",
+        "Page": "Page 197",
+        "Key Rule": "Vertical clearance between top of leading stretcher bar and bottom of stock rail: 1.5 mm to 5.0 mm"
+      },
+      "twinAsset": null,
+      "x": -10,
+      "y": 8,
+      "z": 5,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "spec_irpwm_para429_crossing",
+      "type": "SPECIFICATION",
+      "label": "Maintenance of Crossings & Check Rail Clearances",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "(a) If any damage to nose of crossing is noticed, its cause must be traced, which might be due to tight gauge or due to excessive clearance at the checkrail. (b) To avoid hitting of nose, it shall be ensured that the checkrail clearance should be between 41 to 45 mm for fan-shape...",
+      "specs": {
+        "Manual Ref": "IRPWM Para 429(3)",
+        "Chapter": "Chapter 4: Curves, Points and Crossings (Part B)",
+        "Page": "Page 197",
+        "Key Rule": "Check rail clearance: 41 mm (min) to 45 mm (max) for fan-shaped turnout"
+      },
+      "twinAsset": null,
+      "x": 10,
+      "y": 8,
+      "z": 4,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "spec_irpwm_para429_lead",
+      "type": "SPECIFICATION",
+      "label": "Maintenance of Lead Portion & Versine Tolerances",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "At the time of laying, the correct sleeper spacing should be ensured to achieve correct alignment of the lead curve. During maintenance, stations at 3.0 m intervals should be marked, versines checked, and track attended as necessary. The versine at each station in lead curve and ...",
+      "specs": {
+        "Manual Ref": "IRPWM Para 429(4)",
+        "Chapter": "Chapter 4: Curves, Points and Crossings (Part B)",
+        "Page": "Page 198",
+        "Key Rule": "Versine measurement station spacing: 3.0 m intervals"
+      },
+      "twinAsset": null,
+      "x": 6,
+      "y": 8,
+      "z": 2,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "spec_irpwm_para430_reconditioning",
+      "type": "SOP",
+      "label": "Reconditioning of Points & Crossings by Welding",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "Only skilled/highly skilled welder trained and certified by RDSO or nominated Railway Chemist & Metallurgist shall be engaged. Welding Electrodes: Class H3B (minimum 35 GMT service life) and Class H3C (minimum 50 GMT service life), 4 mm diameter from RDSO approved vendors. Electr...",
+      "specs": {
+        "Manual Ref": "IRPWM Para 430 & 432",
+        "Chapter": "Chapter 4: Curves, Points and Crossings (Part B)",
+        "Page": "Page 200",
+        "Key Rule": "Electrode Class: H3B (35 GMT) and H3C (50 GMT), 4 mm diameter"
+      },
+      "twinAsset": null,
+      "x": 12,
+      "y": 7,
+      "z": -2,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sop_usfd_switch_testing",
+      "type": "SOP",
+      "label": "Ultrasonic Testing of Tongue Rails in Points & Crossings",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "Testing of tongue rails of points and crossings shall be divided into 3 zones: Zone-1: Part of tongue rail where full width of rail head is available; covered in normal rail testing using double/single rail tester. Zone-2: Region where scanning by 70° probe is feasible (up to wid...",
+      "specs": {
+        "Manual Ref": "USFD Manual Chapter 10 (Para 10.6)",
+        "Chapter": "Chapter 10: Ultrasonic Testing of Rails for Fabrication of Points & Crossings",
+        "Page": "Page 46",
+        "Key Rule": "Zone-1 (Full Head): Double Rail Tester (DRT) / Single Rail Tester (SRT) periodic run"
+      },
+      "twinAsset": null,
+      "x": 13,
+      "y": 8,
+      "z": -6,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sop_usfd_crossing_testing",
+      "type": "SOP",
+      "label": "Ultrasonic Examination of Worn-Out Point & Splice Rails",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "Prior to reclamation by welding in depot, worn out point and splice rails of 1 in 12 BG crossing shall be ultrasonically tested in dismantled condition (Fig. 26a). Zone-I: Tested using probes in USFD trolley. Zone-II & III: Hand probing with 0° and 70° probes. Acceptance standard...",
+      "specs": {
+        "Manual Ref": "USFD Manual Chapter 11 (Para 11.2 - 11.7)",
+        "Chapter": "Chapter 11: Ultrasonic Testing Technique of Worn Out Point & Splice Rails",
+        "Page": "Page 47",
+        "Key Rule": "Inspection mode: Dismantled condition prior to hard-facing deposition"
+      },
+      "twinAsset": null,
+      "x": 11,
+      "y": 7,
+      "z": -8,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sop_usfd_atweld_testing",
+      "type": "SOP",
+      "label": "Ultrasonic Flaw Detection in Alumino-Thermic Welds",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "Hand probing of AT welds utilizes: 0° 2 MHz (Head/Web), 70° 2 MHz (Head/Foot), 70° 2 MHz SL (Foot Half-Moon defect), 45° 2 MHz (Foot micro-porosity), and 45° Tandem Rig (Lack of fusion). Defect Classification: Initial testing: Flaw echo >= 30% FSH declared DFWN. Periodic testing:...",
+      "specs": {
+        "Manual Ref": "USFD Manual Chapter 8 (Para 8.10 - 8.15)",
+        "Chapter": "Chapter 8: Procedure for Ultrasonic Testing of AT Welded Rail Joints",
+        "Page": "Page 36",
+        "Key Rule": "Probe suite: 0° 2 MHz, 70° 2 MHz, 70° SL, 45° 2 MHz, 45° Tandem Rig"
+      },
+      "twinAsset": null,
+      "x": 15,
+      "y": 7,
+      "z": 2,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sop_atweld_execution",
+      "type": "SOP",
+      "label": "Site Execution Parameters for Alumino-Thermic Welding",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "Joint gap between rail ends shall be maintained at 25 +/- 1 mm (75 mm for wide gap). Rail ends must be square cut with abrasive rail cutter. Mould alignment: Preheating using compressed air petrol / LPG burner to achieve 950°C to 1000°C. Preheating time: 10 to 12 minutes for 60 k...",
+      "specs": {
+        "Manual Ref": "AT Weld Manual Para 4",
+        "Chapter": "Section 4: Execution of Joints at Site",
+        "Page": "Page 10",
+        "Key Rule": "Rail gap: 25 +/- 1 mm"
+      },
+      "twinAsset": null,
+      "x": 11,
+      "y": 8,
+      "z": 10,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "spec_atweld_tolerances",
+      "type": "SPECIFICATION",
+      "label": "Finishing Alignment Tolerances for AT Welded Joints",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "Vertical alignment: +1.0 mm to -0.0 mm at centre of 1.0 m straight edge; +0.4 mm to -0.0 mm at centre of 10 cm straight edge. Lateral alignment: +/- 0.5 mm at centre of 1.0 m straight edge; +/- 0.3 mm at centre of 10 cm straight edge. Finishing of joint top table: +0.3 mm to -0.0...",
+      "specs": {
+        "Manual Ref": "AT Weld Manual Table 1 & Table 2",
+        "Chapter": "Finishing Tolerances for Welds",
+        "Page": "Page 8",
+        "Key Rule": "Vertical tolerance (1 m straight edge): +1.0 mm / -0.0 mm"
+      },
+      "twinAsset": null,
+      "x": 13,
+      "y": 8,
+      "z": 8,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sop_unimat_switch_tamping",
+      "type": "SOP",
+      "label": "Mechanized Switch Tamping Protocol (UNIMAT)",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "UNIMAT Points and Crossing Tamping Machine features independent tilting tamping tools and 3-rail lift hooks. Pre-tamping: Joint inspection by SSE/P.Way and SSE/Signal. Disconnect switch rodding and lock bars. Tamping operation: Squeeze pressure maintained at 110 to 120 bar. Maxim...",
+      "specs": {
+        "Manual Ref": "Track Machine Manual Chapter 2 (Para 206)",
+        "Chapter": "Chapter 2: Tamping of Plain Track and Points & Crossings",
+        "Page": "Page 81",
+        "Key Rule": "Machine type: UNIMAT 2S / 3S / 4S Switch Tamping Machine"
+      },
+      "twinAsset": null,
+      "x": -6,
+      "y": 9,
+      "z": -8,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "sop_stmm_bolt_chamfering",
+      "type": "SOP",
+      "label": "Bolt Hole Chamfering SOP for Eliminating Star Cracks",
+      "domain": "manual",
+      "color": "#00f5d4",
+      "desc": "Chamfering kit is utilized to chamfer the edges of drilled bolt holes in rail web at 45° angle to a depth of 1.5 to 2.0 mm. This work-hardens the hole periphery, smooths stress concentration points, and prevents star cracking (USFD defect type 135/235). All newly drilled holes in...",
+      "specs": {
+        "Manual Ref": "STMM 2024 Table-I (Item 2)",
+        "Chapter": "Chapter 1: Organization Structure & Machine Specifications",
+        "Page": "Page 23",
+        "Key Rule": "Chamfer angle: 45°"
+      },
+      "twinAsset": null,
+      "x": -9,
+      "y": 8,
+      "z": 10,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "tol_checkrail_clearance",
+      "type": "TOLERANCE",
+      "label": "Check Rail Clearance: 41 - 45 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "Ensures wheel flange does not strike nose of crossing in fan-shaped turnout",
+      "specs": {
+        "Value": "41 - 45 mm",
+        "Min": "41.0 mm",
+        "Max": "45.0 mm",
+        "Clause": "IRPWM Para 429(3)(b)"
+      },
+      "twinAsset": null,
+      "x": 10,
+      "y": 6,
+      "z": 6,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "tol_lead_versine",
+      "type": "TOLERANCE",
+      "label": "Lead Curve Versine: +/- 3 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "Maintains curvature smoothness on lead curve at 3.0 m stations",
+      "specs": {
+        "Value": "+/- 3 mm",
+        "Min": "-3.0 mm",
+        "Max": "3.0 mm",
+        "Clause": "IRPWM Para 429(4)(a)"
+      },
+      "twinAsset": null,
+      "x": 4,
+      "y": 6,
+      "z": 4,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "tol_stretcher_gap",
+      "type": "TOLERANCE",
+      "label": "Leading Stretcher Bar Clearance: 1.5 - 5.0 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "Prevents mechanical binding between stretcher bar and stock rail foot",
+      "specs": {
+        "Value": "1.5 - 5.0 mm",
+        "Min": "1.5 mm",
+        "Max": "5.0 mm",
+        "Clause": "IRPWM Para 429(2)(j)"
+      },
+      "twinAsset": null,
+      "x": -8,
+      "y": 6,
+      "z": 7,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "tol_cms_wear_max",
+      "type": "TOLERANCE",
+      "label": "CMS Crossing Max Vertical Wear: 10 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "Defines absolute service wear limit for CMS crossing wing rails and nose",
+      "specs": {
+        "Value": "10 mm",
+        "Min": "0.0 mm",
+        "Max": "10.0 mm",
+        "Clause": "IRPWM Para 429(3)(e)"
+      },
+      "twinAsset": null,
+      "x": 12,
+      "y": 6,
+      "z": 2,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "tol_cms_wear_rajdhani",
+      "type": "TOLERANCE",
+      "label": "CMS Reconditioning Wear Limit: 8 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "Reconditioning threshold on Rajdhani and Shatabdi passenger routes",
+      "specs": {
+        "Value": "8 mm",
+        "Min": "0.0 mm",
+        "Max": "8.0 mm",
+        "Clause": "IRPWM Para 429(3)(e)"
+      },
+      "twinAsset": null,
+      "x": 14,
+      "y": 6,
+      "z": 0,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "tol_atweld_gap",
+      "type": "TOLERANCE",
+      "label": "AT Weld Joint Gap: 25 +/- 1 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "Standard gap required for mould clamping and fusion collar formation",
+      "specs": {
+        "Value": "25 +/- 1 mm",
+        "Min": "24.0 mm",
+        "Max": "26.0 mm",
+        "Clause": "AT Weld Manual Para 4"
+      },
+      "twinAsset": null,
+      "x": 9,
+      "y": 6,
+      "z": 11,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "tol_crossing_gauge",
+      "type": "TOLERANCE",
+      "label": "Crossing Gauge: -3 mm to +1 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "Tight track gauge tolerance through crossing portion for smooth high-speed transit",
+      "specs": {
+        "Value": "-3 mm to +1 mm (1673 - 1677 mm)",
+        "Min": "-3.0 mm",
+        "Max": "1.0 mm",
+        "Clause": "IRPWM Para 429(8)(b)"
+      },
+      "twinAsset": null,
+      "x": 8,
+      "y": 6,
+      "z": -2,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "equip_usfd_tester",
+      "type": "EQUIPMENT",
+      "label": "Digital USFD Flaw Detector (0°, 70°, 45°)",
+      "domain": "equipment",
+      "color": "#f15bb5",
+      "desc": "Digital Ultrasonic Rail & Weld Flaw Detector equipped with 0° (normal), 70° (head/flange), 45° (weld foot), and Tandem Rig probes.",
+      "specs": {
+        "Standard": "IS: 12666 / RDSO M&C",
+        "Display": "A-scan Digital",
+        "Probes": "0° 2MHz, 70° 2MHz, 45° 2MHz"
+      },
+      "twinAsset": null,
+      "x": 16,
+      "y": 8,
+      "z": -4,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "equip_unimat_tamper",
+      "type": "EQUIPMENT",
+      "label": "UNIMAT Points & Crossing Tamper",
+      "domain": "equipment",
+      "color": "#f15bb5",
+      "desc": "Heavy mechanized tamping machine with 3-rail lift and tilting tines for packing turnouts, switches, and CMS crossings.",
+      "specs": {
+        "Type": "UNIMAT 2S/3S/4S",
+        "Squeeze Pressure": "110 - 120 bar",
+        "Max Lift": "25 mm"
+      },
+      "twinAsset": null,
+      "x": -6,
+      "y": 7,
+      "z": -12,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "equip_chamfering_kit",
+      "type": "EQUIPMENT",
+      "label": "Rail Hole Chamfering Equipment",
+      "domain": "equipment",
+      "color": "#f15bb5",
+      "desc": "Hydraulic/mechanical bolt hole chamfering tool creating 45° work-hardened bevel to prevent bolt hole star cracks.",
+      "specs": {
+        "Angle": "45°",
+        "Depth": "1.5 - 2.0 mm",
+        "Compliance": "STMM 2024 Table-I"
+      },
+      "twinAsset": null,
+      "x": -11,
+      "y": 7,
+      "z": 12,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "equip_atweld_kit",
+      "type": "EQUIPMENT",
+      "label": "Compressed Air Petrol Preheating Kit",
+      "domain": "equipment",
+      "color": "#f15bb5",
+      "desc": "High-efficiency preheating burner system and mould shoes for Alumino-Thermic weld execution achieving 1000°C flame.",
+      "specs": {
+        "Preheat Time": "10 - 12 min",
+        "Flame Temp": "950 - 1000°C",
+        "Fuel": "Petrol / LPG"
+      },
+      "twinAsset": null,
+      "x": 14,
+      "y": 7,
+      "z": 12,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "fail_star_crack",
+      "type": "FAILURE_MODE",
+      "label": "Bolt Hole Star Cracking (Defect 135/235)",
+      "domain": "defect",
+      "color": "#ff0055",
+      "desc": "Radial fatigue cracking emanating from unchamfered fishbolt holes in rail web under heavy impact dynamics.",
+      "specs": {
+        "USFD Code": "135 / 235",
+        "Classification": "IMR (Immediate Removal)",
+        "Remedy": "Joggled fishplating + Hole chamfering"
+      },
+      "twinAsset": null,
+      "x": -7,
+      "y": -5,
+      "z": 12,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "fail_dfwr_weld",
+      "type": "FAILURE_MODE",
+      "label": "Defective Thermit Weld (Category DFWR)",
+      "domain": "defect",
+      "color": "#ff0055",
+      "desc": "Severe ultrasonic defect echo exceeding 60% vertical height in rail head, web, or foot of AT weld joint.",
+      "specs": {
+        "Echo Height": "> 60% FSH",
+        "Marking": "Two Red Crosses",
+        "Action": "SR 30 km/h + Replace within 3 months"
+      },
+      "twinAsset": null,
+      "x": 13,
+      "y": -5,
+      "z": 8,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "fail_nose_hitting",
+      "type": "FAILURE_MODE",
+      "label": "Wheel Flange Striking CMS Nose",
+      "domain": "defect",
+      "color": "#ff0055",
+      "desc": "Wheel flange impacts acute nose of crossing caused by excessive check rail clearance (> 45 mm) or tight gauge.",
+      "specs": {
+        "Root Cause": "Check rail gap > 45 mm",
+        "Risk": "Nose fracture / Derailment",
+        "Standard": "IRPWM Para 429(3)"
+      },
+      "twinAsset": null,
+      "x": 9,
+      "y": -5,
+      "z": 6,
+      "alt": 13,
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "DOC:IRPWM:2024:ACS14",
+      "type": "DOCUMENT",
+      "label": "Indian Railways Permanent Way Manual (IRPWM 2024)",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Indian Railways Permanent Way Manual (IRPWM 2024)",
+      "specs": {
+        "family": "PERMANENT_WAY_MANUAL",
+        "pages": 530,
+        "authority": "Railway Board"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 1,
+        "section": "Cover",
+        "quote": "Indian Railways Permanent Way Manual (IRPWM 2024)"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "DOC:USFD:2026:ACS4",
+      "type": "DOCUMENT",
+      "label": "Manual for Ultrasonic Testing of Rails and Welds (USFD 2026)",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Manual for Ultrasonic Testing of Rails and Welds (USFD 2026)",
+      "specs": {
+        "family": "ULTRASONIC_TESTING_MANUAL",
+        "pages": 157,
+        "authority": "RDSO Track & M&C"
+      },
+      "source": {
+        "document_id": "DOC:USFD:2026:ACS4",
+        "page": 1,
+        "section": "Cover",
+        "quote": "Manual for Ultrasonic Testing of Rails and Welds (USFD 2026)"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "DOC:AT_WELD:2022",
+      "type": "DOCUMENT",
+      "label": "Manual for Fusion Welding of Rails by Alumino-Thermic Process",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Manual for Fusion Welding of Rails by Alumino-Thermic Process",
+      "specs": {
+        "family": "RAIL_WELDING_MANUAL",
+        "pages": 49,
+        "authority": "RDSO M&C"
+      },
+      "source": {
+        "document_id": "DOC:AT_WELD:2022",
+        "page": 1,
+        "section": "Cover",
+        "quote": "Manual for Fusion Welding of Rails by Alumino-Thermic Process"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "DOC:FBW:2022:CS5",
+      "type": "DOCUMENT",
+      "label": "Manual for Flash Butt Welding of Rails",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Manual for Flash Butt Welding of Rails",
+      "specs": {
+        "family": "RAIL_WELDING_MANUAL",
+        "pages": 69,
+        "authority": "RDSO Track"
+      },
+      "source": {
+        "document_id": "DOC:FBW:2022:CS5",
+        "page": 1,
+        "section": "Cover",
+        "quote": "Manual for Flash Butt Welding of Rails"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "DOC:TMM:2020:ACS10",
+      "type": "DOCUMENT",
+      "label": "Indian Railways Track Machine Manual",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Indian Railways Track Machine Manual",
+      "specs": {
+        "family": "TRACK_MACHINES_MANUAL",
+        "pages": 458,
+        "authority": "RDSO Track Machines"
+      },
+      "source": {
+        "document_id": "DOC:TMM:2020:ACS10",
+        "page": 1,
+        "section": "Cover",
+        "quote": "Indian Railways Track Machine Manual"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "DOC:STMM:2024",
+      "type": "DOCUMENT",
+      "label": "Small Track Machine Manual",
+      "domain": "manual",
+      "color": "#ff007f",
+      "desc": "Small Track Machine Manual",
+      "specs": {
+        "family": "SMALL_TRACK_MACHINES_MANUAL",
+        "pages": 222,
+        "authority": "RDSO TM&M"
+      },
+      "source": {
+        "document_id": "DOC:STMM:2024",
+        "page": 1,
+        "section": "Cover",
+        "quote": "Small Track Machine Manual"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:IRPWM:2024:PARA_428",
+      "type": "CLAUSE",
+      "label": "LWR through Points and Crossings",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Isolation & continuous welded rail transit",
+      "specs": {
+        "Chapter": "Chapter 4 Part B",
+        "Scope": "Isolation & continuous welded rail transit"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 195,
+        "section": "Para 428",
+        "quote": "The turnouts shall be isolated from LWR..."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:IRPWM:2024:PARA_429_2",
+      "type": "CLAUSE",
+      "label": "Maintenance of Switches & Tongue Rails",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Housing, chipping criteria, slide chair bearing, lubrication",
+      "specs": {
+        "Chapter": "Chapter 4 Part B",
+        "Scope": "Housing, chipping criteria, slide chair bearing, lubrication"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 196,
+        "section": "Para 429(2)",
+        "quote": "A tongue rail shall be classified as worn/damaged..."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "REQ:IRPWM:2024:TONGUE_CHIPPING",
+      "type": "REQUIREMENT",
+      "label": "Tongue Rail Chipping Limit: 200 mm aggregate",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Tongue Rail Chipping Limit: 200 mm aggregate",
+      "specs": {
+        "Threshold": "Depth > 10 mm over continuous 10 mm length",
+        "Zone": "Within 2000 mm from ATS (1:12 switch)",
+        "Action": "Reconditioning by welding"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 196,
+        "section": "Para 429(2)(c)(i)",
+        "quote": "chipped/cracked over small lengths aggregating to 200 mm within 2000 mm from ATS"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "REQ:IRPWM:2024:TOE_GAP_LIMIT",
+      "type": "REQUIREMENT",
+      "label": "Maximum Permissible Toe Housing Gap: < 5 mm",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Maximum Permissible Toe Housing Gap: < 5 mm",
+      "specs": {
+        "Limit": "5 mm gap at toe indicates bent/twisted switch rail",
+        "Mitigation": "Immediate joint rectification with S&T"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 196,
+        "section": "Para 429(2)(c)(ii)",
+        "quote": "does not house properly against the stock rail causing a gap of 5 mm or more at the toe"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:IRPWM:2024:PARA_429_2J",
+      "type": "CLAUSE",
+      "label": "Stretcher Bar Clearance to Stock Rail",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Vertical clearance between leading stretcher bar top and stock rail bottom",
+      "specs": {
+        "Chapter": "Chapter 4 Part B",
+        "Scope": "Vertical clearance between leading stretcher bar top and stock rail bottom"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 197,
+        "section": "Para 429(2)(j)",
+        "quote": "The gap between the top of the leading stretcher bar and bottom of stock rail should be between 1.5 mm to 5 mm."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "TOL:IRPWM:2024:STRETCHER_GAP",
+      "type": "TOLERANCE",
+      "label": "Leading Stretcher Bar Clearance: 1.5 - 5.0 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "Leading Stretcher Bar Clearance: 1.5 - 5.0 mm",
+      "specs": {
+        "Nominal": "1.5 to 5.0 mm",
+        "Safety Risk": "Mechanical binding of lock rod"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 197,
+        "section": "Para 429(2)(j)",
+        "quote": "between 1.5 mm to 5 mm"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:IRPWM:2024:PARA_429_3",
+      "type": "CLAUSE",
+      "label": "Maintenance of Crossings & Check Rails",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Check rail clearance 41-45 mm, vertical wear 10 mm max, cant deductions",
+      "specs": {
+        "Chapter": "Chapter 4 Part B",
+        "Scope": "Check rail clearance 41-45 mm, vertical wear 10 mm max, cant deductions"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 197,
+        "section": "Para 429(3)",
+        "quote": "To avoid hitting of nose, it shall be ensured that the checkrail clearance should be between 41 to 45 mm for fan-shaped turnout."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "TOL:IRPWM:2024:CHECKRAIL_CLEARANCE",
+      "type": "TOLERANCE",
+      "label": "Check Rail Flangeway Clearance: 41 - 45 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "Check Rail Flangeway Clearance: 41 - 45 mm",
+      "specs": {
+        "Nominal": "41 - 45 mm",
+        "Applicability": "Fan-shaped turnout BG",
+        "Safety Risk": "Wheel flange collision with crossing nose"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 197,
+        "section": "Para 429(3)(b)",
+        "quote": "checkrail clearance should be between 41 to 45 mm for fan-shaped turnout"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "TOL:IRPWM:2024:CMS_WEAR_MAX",
+      "type": "TOLERANCE",
+      "label": "CMS Crossing Max Vertical Wear: 10 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "CMS Crossing Max Vertical Wear: 10 mm",
+      "specs": {
+        "Absolute Limit": "10 mm",
+        "Rajdhani/Shatabdi Limit": "8 mm",
+        "Reconditioning": "Depot/in-situ robotic welding"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 197,
+        "section": "Para 429(3)(e)",
+        "quote": "Maximum permissible vertical wear on wing rails or nose of crossing shall be 10 mm"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:IRPWM:2024:PARA_429_4",
+      "type": "CLAUSE",
+      "label": "Maintenance of Lead Portion & Versines",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Maintenance of Lead Portion & Versines",
+      "specs": {
+        "Chapter": "Chapter 4 Part B",
+        "Station Spacing": "3.0 m",
+        "Tolerance": "+/- 3 mm"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 198,
+        "section": "Para 429(4)",
+        "quote": "stations at 3.0 m intervals should be marked, versines checked... should not be beyond 3 mm from design value"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "TOL:IRPWM:2024:LEAD_VERSINE",
+      "type": "TOLERANCE",
+      "label": "Lead Curve Versine Tolerance: +/- 3 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "Lead Curve Versine Tolerance: +/- 3 mm",
+      "specs": {
+        "Interval": "3.0 m stations on 6.0 m chord",
+        "Max Deviation": "+/- 3 mm"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 198,
+        "section": "Para 429(4)(a)",
+        "quote": "versine at each station in lead curve and turn in curve should not be beyond 3 mm"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:IRPWM:2024:PARA_430",
+      "type": "CLAUSE",
+      "label": "Reconditioning of Points & Crossings by Welding",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Reconditioning of Points & Crossings by Welding",
+      "specs": {
+        "Electrodes": "Class H3B (35 GMT) & Class H3C (50 GMT)",
+        "Dia": "4 mm",
+        "Baking": "130-170°C for >= 1 hour"
+      },
+      "source": {
+        "document_id": "DOC:IRPWM:2024:ACS14",
+        "page": 200,
+        "section": "Para 430",
+        "quote": "Only skilled or highly skilled welder who has been trained and certified... Electrodes of H3B and H3C class..."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:USFD:2026:CH_10",
+      "type": "CLAUSE",
+      "label": "Ultrasonic Testing of Points & Crossings (Chapter 10)",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "3-Zone scanning of tongue rails",
+      "specs": {
+        "Scope": "3-Zone scanning of tongue rails",
+        "Probes": "Double rail tester (Zone 1), 70° 2MHz (Zone 2), visual (Zone 3)"
+      },
+      "source": {
+        "document_id": "DOC:USFD:2026:ACS4",
+        "page": 46,
+        "section": "Para 10.6",
+        "quote": "Testing of tongue rails of points and crossings shall be divided into 3 zones..."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "PROC:USFD:2026:TONGUE_RAIL_SCAN",
+      "type": "PROCEDURE",
+      "label": "SOP: 3-Zone Tongue Rail Ultrasonic Scanning",
+      "domain": "sop",
+      "color": "#00f5d4",
+      "desc": "SOP: 3-Zone Tongue Rail Ultrasonic Scanning",
+      "specs": {
+        "Zone 1": "Full head width covered by Double/Single Rail Tester",
+        "Zone 2": "Manual probing using 70° 2MHz single crystal probe (20 mm crystal)",
+        "Zone 3": "Visual examination by SSE/JE P.Way"
+      },
+      "source": {
+        "document_id": "DOC:USFD:2026:ACS4",
+        "page": 46,
+        "section": "Para 10.6.2",
+        "quote": "Zone-1... Zone-2... Zone-3..."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:USFD:2026:CH_8",
+      "type": "CLAUSE",
+      "label": "Ultrasonic Testing of AT Welds (Chapter 8)",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Ultrasonic Testing of AT Welds (Chapter 8)",
+      "specs": {
+        "Probes": "0° 2MHz, 70° 2MHz, 70° SL, 45° 2MHz, Tandem Rig",
+        "Defect Classes": "DFWN, DFWO, DFWR"
+      },
+      "source": {
+        "document_id": "DOC:USFD:2026:ACS4",
+        "page": 36,
+        "section": "Para 8.10 - 8.15",
+        "quote": "Hand probing of AT welded joints... DFWN... DFWO... DFWR..."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "FAIL:USFD:DFWR_WELD",
+      "type": "FAILUREMODE",
+      "label": "Defective AT Weld (Category DFWR: > 60% FSH)",
+      "domain": "defect",
+      "color": "#fee440",
+      "desc": "Defective AT Weld (Category DFWR: > 60% FSH)",
+      "specs": {
+        "Echo Height": "> 60% FSH",
+        "Marking": "Two Red Crosses",
+        "Mandatory Action": "Speed restriction 30 km/h, joggled fishplate with 2 far-end tight bolts, replace within 3 months"
+      },
+      "source": {
+        "document_id": "DOC:USFD:2026:ACS4",
+        "page": 37,
+        "section": "Para 8.14",
+        "quote": "In case of DFWR... speed restriction of 30 kmph... replace within three months"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:AT_WELD:2022:SEC_4",
+      "type": "CLAUSE",
+      "label": "Execution of AT Joints at Site",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Execution of AT Joints at Site",
+      "specs": {
+        "Rail Gap": "25 +/- 1 mm",
+        "Preheat": "950-1000°C for 10-12 min",
+        "Trimming": "Hydraulic weld trimmer only"
+      },
+      "source": {
+        "document_id": "DOC:AT_WELD:2022",
+        "page": 10,
+        "section": "Section 4",
+        "quote": "Joint gap between rail ends shall be maintained at 25 +/- 1 mm..."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "TOL:AT_WELD:2022:JOINT_GAP",
+      "type": "TOLERANCE",
+      "label": "AT Weld Joint Gap: 25 +/- 1 mm",
+      "domain": "tolerance",
+      "color": "#fee440",
+      "desc": "AT Weld Joint Gap: 25 +/- 1 mm",
+      "specs": {
+        "Nominal": "25 +/- 1 mm",
+        "Wide Gap Variant": "75 mm",
+        "Tool": "Abrasive rail cutter square cut"
+      },
+      "source": {
+        "document_id": "DOC:AT_WELD:2022",
+        "page": 10,
+        "section": "Para 4.1",
+        "quote": "gap between rail ends shall be 25 +/- 1 mm"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:TMM:2020:CH_2",
+      "type": "CLAUSE",
+      "label": "Switch Tamping Machine Parameters (UNIMAT)",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Switch Tamping Machine Parameters (UNIMAT)",
+      "specs": {
+        "Machine": "UNIMAT 2S / 3S / 4S",
+        "Squeeze Pressure": "110-120 bar",
+        "Max Lift": "25 mm",
+        "Design Lift": "10 mm"
+      },
+      "source": {
+        "document_id": "DOC:TMM:2020:ACS10",
+        "page": 81,
+        "section": "Chapter 2 Para 206",
+        "quote": "UNIMAT Points and Crossing Tamping Machine..."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "EQUIP:TMM:UNIMAT_TAMPER",
+      "type": "EQUIPMENT",
+      "label": "UNIMAT Points & Crossing Tamping Machine",
+      "domain": "equipment",
+      "color": "#fee440",
+      "desc": "UNIMAT Points & Crossing Tamping Machine",
+      "specs": {
+        "Type": "Heavy Mechanized Track Tamper",
+        "Features": "3-Rail lift, independent tilting tamping tools",
+        "Squeeze Pressure": "110-120 bar"
+      },
+      "source": {
+        "document_id": "DOC:TMM:2020:ACS10",
+        "page": 81,
+        "section": "Chapter 2",
+        "quote": "UNIMAT machine"
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "CLAUSE:STMM:2024:ITEM_2",
+      "type": "CLAUSE",
+      "label": "Bolt Hole Chamfering SOP & Equipment",
+      "domain": "specification",
+      "color": "#00f5d4",
+      "desc": "Bolt Hole Chamfering SOP & Equipment",
+      "specs": {
+        "Angle": "45°",
+        "Depth": "1.5 - 2.0 mm",
+        "Purpose": "Eliminates bolt hole star cracks (USFD 135/235)"
+      },
+      "source": {
+        "document_id": "DOC:STMM:2024",
+        "page": 23,
+        "section": "Table-I Item 2",
+        "quote": "Chamfering kit is utilized to chamfer the edges of drilled bolt holes..."
+      },
+      "canonical_status": "VERIFIED"
+    },
+    {
+      "id": "FAIL:TRACK:BOLT_HOLE_STAR_CRACK",
+      "type": "FAILUREMODE",
+      "label": "Bolt Hole Star Cracking (USFD Type 135/235)",
+      "domain": "defect",
+      "color": "#fee440",
+      "desc": "Bolt Hole Star Cracking (USFD Type 135/235)",
+      "specs": {
+        "USFD Code": "135 (upper half) / 235 (lower half)",
+        "Severity": "High Risk Rail Break",
+        "Prevention": "45° Chamfering kit immediately after drilling"
+      },
+      "source": {
+        "document_id": "DOC:STMM:2024",
+        "page": 23,
+        "section": "Item 2",
+        "quote": "star cracking"
+      },
+      "canonical_status": "VERIFIED"
+    }
+  ],
+  "edges": [
+    {
+      "from": "drg_6155",
+      "to": "rev_6155_alt10",
+      "rel": "HAS_REVISION",
+      "rationale": "Drawing revision history"
+    },
+    {
+      "from": "rev_6155_alt10",
+      "to": "rev_6155_alt11",
+      "rel": "SUPERSEDES",
+      "rationale": "Alt 11 supersedes Alt 10"
+    },
+    {
+      "from": "rev_6155_alt11",
+      "to": "rev_6155_alt12",
+      "rel": "SUPERSEDES",
+      "rationale": "Alt 12 supersedes Alt 11"
+    },
+    {
+      "from": "rev_6155_alt12",
+      "to": "rev_6155_alt13",
+      "rel": "SUPERSEDES",
+      "rationale": "Alt 13 is current governing revision"
+    },
+    {
+      "from": "drg_6154",
+      "to": "rev_6154_alt06",
+      "rel": "HAS_REVISION",
+      "rationale": "Drawing revision history"
+    },
+    {
+      "from": "drg_6154",
+      "to": "drg_6155",
+      "rel": "REFERENCES",
+      "rationale": "Master layout incorporates 10125 mm curved switch"
+    },
+    {
+      "from": "drg_6154",
+      "to": "drg_6216",
+      "rel": "REFERENCES",
+      "rationale": "Master layout integrates SSD mechanism"
+    },
+    {
+      "from": "drg_6154",
+      "to": "drg_6280",
+      "rel": "REFERENCES",
+      "rationale": "Master layout incorporates 1:12 CMS crossing"
+    },
+    {
+      "from": "drg_6154",
+      "to": "drg_6275",
+      "rel": "REFERENCES",
+      "rationale": "Master layout incorporates check rail arrangement"
+    },
+    {
+      "from": "drg_6155",
+      "to": "drg_9010",
+      "rel": "REFERENCES",
+      "rationale": "Switch assembly mandates Detail 'B' forging drawing"
+    },
+    {
+      "from": "drg_6155",
+      "to": "note_6155_01",
+      "rel": "HAS_NOTE",
+      "rationale": "General Note 1 of RDSO/T-6155"
+    },
+    {
+      "from": "drg_6155",
+      "to": "note_6155_04",
+      "rel": "HAS_NOTE",
+      "rationale": "General Note 4 of RDSO/T-6155"
+    },
+    {
+      "from": "drg_6155",
+      "to": "note_6155_12",
+      "rel": "HAS_NOTE",
+      "rationale": "General Note 12 of RDSO/T-6155"
+    },
+    {
+      "from": "drg_6155",
+      "to": "note_6155_21",
+      "rel": "HAS_NOTE",
+      "rationale": "General Note 21 of RDSO/T-6155"
+    },
+    {
+      "from": "drg_6155",
+      "to": "note_6155_25",
+      "rel": "HAS_NOTE",
+      "rationale": "General Note 25 of RDSO/T-6155"
+    },
+    {
+      "from": "drg_6155",
+      "to": "note_6155_26",
+      "rel": "HAS_NOTE",
+      "rationale": "General Note 26 of RDSO/T-6155"
+    },
+    {
+      "from": "drg_6155",
+      "to": "note_6155_28",
+      "rel": "HAS_NOTE",
+      "rationale": "General Note 28 of RDSO/T-6155"
+    },
+    {
+      "from": "drg_6154",
+      "to": "note_6154_01",
+      "rel": "HAS_NOTE",
+      "rationale": "General Note 1 of RDSO/T-6154"
+    },
+    {
+      "from": "drg_6154",
+      "to": "note_6154_07",
+      "rel": "HAS_NOTE",
+      "rationale": "General Note 7 of RDSO/T-6154"
+    },
+    {
+      "from": "drg_6154",
+      "to": "note_6154_11",
+      "rel": "HAS_NOTE",
+      "rationale": "General Note 11 of RDSO/T-6154"
+    },
+    {
+      "from": "rev_6155_alt10",
+      "to": "note_6155_12",
+      "rel": "INTRODUCED_IN",
+      "rationale": "Note 12 introduced in Alt 10"
+    },
+    {
+      "from": "rev_6155_alt11",
+      "to": "note_6155_21",
+      "rel": "INTRODUCED_IN",
+      "rationale": "Note 21 introduced in Alt 11"
+    },
+    {
+      "from": "rev_6155_alt12",
+      "to": "note_6155_25",
+      "rel": "INTRODUCED_IN",
+      "rationale": "Note 25 introduced in Alt 12"
+    },
+    {
+      "from": "rev_6155_alt12",
+      "to": "note_6155_26",
+      "rel": "INTRODUCED_IN",
+      "rationale": "Note 26 introduced in Alt 12"
+    },
+    {
+      "from": "rev_6155_alt13",
+      "to": "note_6155_28",
+      "rel": "INTRODUCED_IN",
+      "rationale": "Note 28 introduced in Alt 13"
+    },
+    {
+      "from": "drg_6155",
+      "to": "comp_tongue_rail",
+      "rel": "CONTAINS",
+      "rationale": "Switch incorporates thick web tongue rail"
+    },
+    {
+      "from": "drg_6155",
+      "to": "comp_stock_rail",
+      "rel": "CONTAINS",
+      "rationale": "Switch incorporates 13000 mm stock rail"
+    },
+    {
+      "from": "drg_6155",
+      "to": "comp_chair",
+      "rel": "CONTAINS",
+      "rationale": "Switch assembly mounts on slide chairs"
+    },
+    {
+      "from": "drg_6155",
+      "to": "comp_detailb",
+      "rel": "CONTAINS",
+      "rationale": "Switch integrates Detail 'B' bent tie bar"
+    },
+    {
+      "from": "drg_6216",
+      "to": "comp_ssd_unit",
+      "rel": "CONTAINS",
+      "rationale": "Drawing details SSD mechanism"
+    },
+    {
+      "from": "drg_6280",
+      "to": "comp_cms_unit",
+      "rel": "CONTAINS",
+      "rationale": "Crossing drawing specifies CMS body"
+    },
+    {
+      "from": "drg_6275",
+      "to": "comp_checkrail",
+      "rel": "CONTAINS",
+      "rationale": "Check rail drawing specifies guard arrangement"
+    },
+    {
+      "from": "comp_tongue_rail",
+      "to": "comp_stock_rail",
+      "rel": "INTERFACES_WITH",
+      "rationale": "Tongue rail closes snugly against stock rail machined housing"
+    },
+    {
+      "from": "comp_tongue_rail",
+      "to": "comp_chair",
+      "rel": "INSTALLED_ON",
+      "rationale": "Tongue rail glides horizontally over machined slide chair tables"
+    },
+    {
+      "from": "comp_detailb",
+      "to": "comp_tongue_rail",
+      "rel": "CONNECTED_TO",
+      "rationale": "Detail 'B' bent tie bar attaches to tongue rail toe"
+    },
+    {
+      "from": "comp_detailb",
+      "to": "comp_cpl",
+      "rel": "INTERFACES_WITH",
+      "rationale": "222 mm drop bend clears S&T Clamp Lock drive rod"
+    },
+    {
+      "from": "comp_ssd_unit",
+      "to": "comp_tongue_rail",
+      "rel": "CONNECTED_TO",
+      "rationale": "SSD spring arm maintains JOH opening on tongue rail"
+    },
+    {
+      "from": "comp_chair",
+      "to": "comp_sleeper",
+      "rel": "INSTALLED_ON",
+      "rationale": "Slide chairs anchored into concrete sleepers with plate screws"
+    },
+    {
+      "from": "comp_stock_rail",
+      "to": "comp_grsp",
+      "rel": "FASTENED_BY",
+      "rationale": "Stock rail cushioned by 10 mm GRSP pad"
+    },
+    {
+      "from": "comp_stock_rail",
+      "to": "comp_erc",
+      "rel": "FASTENED_BY",
+      "rationale": "Stock rail clamped by Elastic Rail Clip Mk-V"
+    },
+    {
+      "from": "drg_6154",
+      "to": "zone_approach",
+      "rel": "CONTAINS",
+      "rationale": "Master turnout encompasses approach zone"
+    },
+    {
+      "from": "drg_6154",
+      "to": "zone_switch",
+      "rel": "CONTAINS",
+      "rationale": "Master turnout encompasses switch zone"
+    },
+    {
+      "from": "drg_6154",
+      "to": "zone_intermediate",
+      "rel": "CONTAINS",
+      "rationale": "Master turnout encompasses intermediate lead zone"
+    },
+    {
+      "from": "drg_6154",
+      "to": "zone_crossing",
+      "rel": "CONTAINS",
+      "rationale": "Master turnout encompasses crossing zone"
+    },
+    {
+      "from": "drg_6154",
+      "to": "zone_exit",
+      "rel": "CONTAINS",
+      "rationale": "Master turnout encompasses exit transition zone"
+    },
+    {
+      "from": "zone_approach",
+      "to": "sleeper_03_toe",
+      "rel": "CONTAINS_SLEEPER",
+      "rationale": "Sleeper 3 is at the boundary of approach and toe"
+    },
+    {
+      "from": "zone_switch",
+      "to": "sleeper_13_joh",
+      "rel": "CONTAINS_SLEEPER",
+      "rationale": "Sleeper 13 is located in the switch zone"
+    },
+    {
+      "from": "zone_crossing",
+      "to": "sleeper_48_tnc",
+      "rel": "CONTAINS_SLEEPER",
+      "rationale": "Sleeper 48 is located in the crossing zone"
+    },
+    {
+      "from": "sleeper_03_toe",
+      "to": "comp_detailb",
+      "rel": "INSTALLED_ON",
+      "rationale": "Detail 'B' tie bar anchored across Sleeper 3"
+    },
+    {
+      "from": "sleeper_03_toe",
+      "to": "comp_cpl",
+      "rel": "INSTALLED_ON",
+      "rationale": "Clamp Point Lock mounted on extended Sleeper 3/4"
+    },
+    {
+      "from": "zone_switch",
+      "to": "comp_chair",
+      "rel": "INSTALLED_ON",
+      "rationale": "Slide chairs mounted continuously from Sleeper 4 to 20"
+    },
+    {
+      "from": "sleeper_13_joh",
+      "to": "comp_ssd_unit",
+      "rel": "INSTALLED_ON",
+      "rationale": "SSD unit mounted at Sleeper 13"
+    },
+    {
+      "from": "zone_crossing",
+      "to": "comp_cms_unit",
+      "rel": "INSTALLED_ON",
+      "rationale": "CMS crossing monoblock sits across Sleepers 46 to 52"
+    },
+    {
+      "from": "zone_crossing",
+      "to": "comp_checkrail",
+      "rel": "INSTALLED_ON",
+      "rationale": "Check rails mounted across Sleepers 43 to 54"
+    },
+    {
+      "from": "note_6155_04",
+      "to": "dim_throw_160",
+      "rel": "SPECIFIES",
+      "rationale": "Note 4 specifies 160 mm throw at toe"
+    },
+    {
+      "from": "dim_throw_160",
+      "to": "comp_tongue_rail",
+      "rel": "APPLIES_TO",
+      "rationale": "Throw dimension applies to tongue rail toe stroke"
+    },
+    {
+      "from": "drg_6216",
+      "to": "dim_joh_gap_60",
+      "rel": "SPECIFIES",
+      "rationale": "Drawing 6216 specifies 60 mm JOH clearance"
+    },
+    {
+      "from": "dim_joh_gap_60",
+      "to": "comp_ssd_unit",
+      "rel": "APPLIES_TO",
+      "rationale": "SSD unit must maintain 60 mm gap"
+    },
+    {
+      "from": "note_6155_21",
+      "to": "dim_tiebar_drop_222",
+      "rel": "SPECIFIES",
+      "rationale": "Note 21 mandates 222 mm drop bend"
+    },
+    {
+      "from": "dim_tiebar_drop_222",
+      "to": "comp_detailb",
+      "rel": "APPLIES_TO",
+      "rationale": "Drop bend dimension forged into Detail 'B'"
+    },
+    {
+      "from": "drg_6275",
+      "to": "dim_check_flange_44",
+      "rel": "SPECIFIES",
+      "rationale": "Drawing specifies 44 mm flangeway clearance"
+    },
+    {
+      "from": "dim_check_flange_44",
+      "to": "comp_checkrail",
+      "rel": "APPLIES_TO",
+      "rationale": "Check rail maintains 44 mm flangeway"
+    },
+    {
+      "from": "note_6154_11",
+      "to": "dim_toe_load",
+      "rel": "SPECIFIES",
+      "rationale": "Specifies 1200-1500 kgf toe load"
+    },
+    {
+      "from": "dim_toe_load",
+      "to": "comp_erc",
+      "rel": "APPLIES_TO",
+      "rationale": "Toe load exerted by ERC Mk-V"
+    },
+    {
+      "from": "note_6155_25",
+      "to": "dim_dowel_hole",
+      "rel": "SPECIFIES",
+      "rationale": "Note 25 specifies 35x165 mm core hole"
+    },
+    {
+      "from": "dim_dowel_hole",
+      "to": "comp_sleeper",
+      "rel": "APPLIES_TO",
+      "rationale": "Core hole drilled into concrete sleeper"
+    },
+    {
+      "from": "comp_tongue_rail",
+      "to": "mat_zu1_60",
+      "rel": "REQUIRES",
+      "rationale": "Tongue rail manufactured from ZU-1-60 rail profile"
+    },
+    {
+      "from": "comp_chair",
+      "to": "mat_cast_steel",
+      "rel": "REQUIRES",
+      "rationale": "Slide chairs cast from IS: 1030 Grade 230-450W steel"
+    },
+    {
+      "from": "comp_detailb",
+      "to": "mat_ms_tiebar",
+      "rel": "REQUIRES",
+      "rationale": "Tie bar forged from IS: 2062 Grade E250 steel"
+    },
+    {
+      "from": "note_6155_26",
+      "to": "mat_epoxy_l100",
+      "rel": "REQUIRES",
+      "rationale": "Note 26 mandates Epoxy L-100"
+    },
+    {
+      "from": "comp_cms_unit",
+      "to": "mat_cms_manganese",
+      "rel": "REQUIRES",
+      "rationale": "Crossing cast from austenitic manganese steel"
+    },
+    {
+      "from": "drg_6155",
+      "to": "std_irs_t10",
+      "rel": "GOVERNS",
+      "rationale": "Switch drawing complies with IRS: T 10"
+    },
+    {
+      "from": "drg_6280",
+      "to": "std_irs_t29",
+      "rel": "GOVERNS",
+      "rationale": "CMS crossing drawing complies with IRS: T 29"
+    },
+    {
+      "from": "drg_6154",
+      "to": "bom_erc_mkv",
+      "rel": "HAS_BOM_ITEM",
+      "rationale": "Turnout layout BOM specifies 347 ERC Mk-V"
+    },
+    {
+      "from": "drg_6154",
+      "to": "bom_grsp_10mm",
+      "rel": "HAS_BOM_ITEM",
+      "rationale": "Turnout layout BOM specifies 146 GRSP pads"
+    },
+    {
+      "from": "bom_erc_mkv",
+      "to": "comp_erc",
+      "rel": "APPLIES_TO",
+      "rationale": "BOM item supplies physical ERC clip"
+    },
+    {
+      "from": "bom_grsp_10mm",
+      "to": "comp_grsp",
+      "rel": "APPLIES_TO",
+      "rationale": "BOM item supplies physical GRSP pad"
+    },
+    {
+      "from": "note_6155_28",
+      "to": "spare_bolt_25x310",
+      "rel": "HAS_SPARE",
+      "rationale": "Note 28 mandates 10% inventory of T-11526 bolts"
+    },
+    {
+      "from": "note_6155_28",
+      "to": "spare_split_pin",
+      "rel": "HAS_SPARE",
+      "rationale": "Note 28 mandates 10% inventory of split pins"
+    },
+    {
+      "from": "note_6155_28",
+      "to": "spare_nylon_bush",
+      "rel": "HAS_SPARE",
+      "rationale": "Note 28 mandates 10% inventory of nylon bushes"
+    },
+    {
+      "from": "defect_joint_fatigue",
+      "to": "hazard_derailment_split",
+      "rel": "CAN_CAUSE",
+      "rationale": "Tongue rail fatigue fracture leads to facing point derailment"
+    },
+    {
+      "from": "defect_toe_chipping",
+      "to": "hazard_derailment_split",
+      "rel": "CAN_CAUSE",
+      "rationale": "Chipped toe permits wheel flange to climb switch rail"
+    },
+    {
+      "from": "comp_detailb",
+      "to": "hazard_rod_fouling",
+      "rel": "MITIGATED_BY",
+      "rationale": "222 mm drop bend eliminates rod collision hazard"
+    },
+    {
+      "from": "hazard_rod_fouling",
+      "to": "comp_cpl",
+      "rel": "INTERFACES_WITH",
+      "rationale": "Collision hazard directly affects Clamp Point Lock drive rod"
+    },
+    {
+      "from": "note_6155_12",
+      "to": "defect_joint_fatigue",
+      "rel": "SUPERSEDES",
+      "rationale": "Welded Joint 'W' eliminated Machined Joint 'M' fatigue defect"
+    },
+    {
+      "from": "note_6155_21",
+      "to": "hazard_rod_fouling",
+      "rel": "MITIGATED_BY",
+      "rationale": "Note 21 mandates 222 mm drop to prevent rod fouling"
+    },
+    {
+      "from": "defect_dowel_stripping",
+      "to": "sop_epoxy_retrofit",
+      "rel": "MITIGATED_BY",
+      "rationale": "Epoxy retrofit restores stripped dowel holding power"
+    },
+    {
+      "from": "sop_epoxy_retrofit",
+      "to": "note_6155_25",
+      "rel": "GOVERNS",
+      "rationale": "SOP enforces Note 25/26 procedure"
+    },
+    {
+      "from": "sop_lista_procurement",
+      "to": "note_6155_28",
+      "rel": "GOVERNS",
+      "rationale": "SOP enforces Note 28 10% inventory buffer"
+    },
+    {
+      "from": "sop_versine_check",
+      "to": "note_6154_07",
+      "rel": "GOVERNS",
+      "rationale": "SOP enforces Note 7 curve checking"
+    },
+    {
+      "from": "doc_irpwm_2024",
+      "to": "drg_6154",
+      "rel": "GOVERNS",
+      "rationale": "IRPWM Chapter 4 governs turnout geometric layout, sleeper spacing, and tolerances"
+    },
+    {
+      "from": "doc_irpwm_2024",
+      "to": "drg_6155",
+      "rel": "GOVERNS",
+      "rationale": "IRPWM Para 429(2) governs curved switch tongue rail wear limits, slide chair bearing, and housing"
+    },
+    {
+      "from": "doc_irpwm_2024",
+      "to": "drg_6280",
+      "rel": "GOVERNS",
+      "rationale": "IRPWM Para 429(3) governs CMS crossing wear limits, cant slope deductions, and check rail gaps"
+    },
+    {
+      "from": "doc_fbw_2022",
+      "to": "drg_6154",
+      "rel": "GOVERNS",
+      "rationale": "FBW Manual governs flash butt welding of rails in turnout approaches"
+    },
+    {
+      "from": "doc_irpwm_2024",
+      "to": "spec_irpwm_para429_switch",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 429(2) defines switch maintenance rules and wear limits"
+    },
+    {
+      "from": "doc_irpwm_2024",
+      "to": "spec_irpwm_para429_stretcher",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 429(2)(j) defines leading stretcher bar clearance"
+    },
+    {
+      "from": "doc_irpwm_2024",
+      "to": "spec_irpwm_para429_crossing",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 429(3) defines check rail clearances and CMS wear limits"
+    },
+    {
+      "from": "doc_irpwm_2024",
+      "to": "spec_irpwm_para429_lead",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 429(4) defines lead curve versine stations and limits"
+    },
+    {
+      "from": "doc_irpwm_2024",
+      "to": "spec_irpwm_para430_reconditioning",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 430/432 defines welding reconditioning of crossings"
+    },
+    {
+      "from": "doc_usfd_2026",
+      "to": "sop_usfd_switch_testing",
+      "rel": "SPECIFIES",
+      "rationale": "USFD Chapter 10 defines 3-zone ultrasonic scanning of tongue rails"
+    },
+    {
+      "from": "doc_usfd_2026",
+      "to": "sop_usfd_crossing_testing",
+      "rel": "SPECIFIES",
+      "rationale": "USFD Chapter 11 defines testing of worn-out point and splice rails"
+    },
+    {
+      "from": "doc_usfd_2026",
+      "to": "sop_usfd_atweld_testing",
+      "rel": "SPECIFIES",
+      "rationale": "USFD Chapter 8 defines hand probing and classification of AT welds"
+    },
+    {
+      "from": "doc_atweld_2022",
+      "to": "sop_atweld_execution",
+      "rel": "SPECIFIES",
+      "rationale": "AT Weld Manual Para 4 defines joint execution, preheating, and trimming"
+    },
+    {
+      "from": "doc_atweld_2022",
+      "to": "spec_atweld_tolerances",
+      "rel": "SPECIFIES",
+      "rationale": "AT Weld Manual Table 1 & 2 defines weld finishing tolerances"
+    },
+    {
+      "from": "doc_tmm_2020",
+      "to": "sop_unimat_switch_tamping",
+      "rel": "SPECIFIES",
+      "rationale": "Track Machine Manual defines UNIMAT turnout tamping cycle"
+    },
+    {
+      "from": "doc_stmm_2024",
+      "to": "sop_stmm_bolt_chamfering",
+      "rel": "SPECIFIES",
+      "rationale": "STMM Table-I Item 2 defines bolt hole chamfering SOP"
+    },
+    {
+      "from": "spec_irpwm_para429_crossing",
+      "to": "tol_checkrail_clearance",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 429(3)(b) mandates 41-45 mm check rail clearance"
+    },
+    {
+      "from": "tol_checkrail_clearance",
+      "to": "comp_checkrail",
+      "rel": "APPLIES_TO",
+      "rationale": "Clearance applies between check rail and running rail"
+    },
+    {
+      "from": "spec_irpwm_para429_crossing",
+      "to": "tol_cms_wear_max",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 429(3)(e) mandates 10 mm max vertical wear on CMS crossing"
+    },
+    {
+      "from": "tol_cms_wear_max",
+      "to": "comp_cms_unit",
+      "rel": "APPLIES_TO",
+      "rationale": "Wear limit applies to CMS crossing wing rails and nose"
+    },
+    {
+      "from": "spec_irpwm_para429_crossing",
+      "to": "tol_cms_wear_rajdhani",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 429(3)(e) mandates 8 mm wear limit on Rajdhani routes"
+    },
+    {
+      "from": "tol_cms_wear_rajdhani",
+      "to": "comp_cms_unit",
+      "rel": "APPLIES_TO",
+      "rationale": "Rajdhani reconditioning limit applies to CMS crossing"
+    },
+    {
+      "from": "spec_irpwm_para429_crossing",
+      "to": "tol_crossing_gauge",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 429(8)(b) mandates -3 mm to +1 mm gauge in crossing portion"
+    },
+    {
+      "from": "tol_crossing_gauge",
+      "to": "comp_cms_unit",
+      "rel": "APPLIES_TO",
+      "rationale": "Track gauge tolerance enforced across crossing"
+    },
+    {
+      "from": "spec_irpwm_para429_stretcher",
+      "to": "tol_stretcher_gap",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 429(2)(j) mandates 1.5 to 5.0 mm clearance"
+    },
+    {
+      "from": "tol_stretcher_gap",
+      "to": "comp_detailb",
+      "rel": "APPLIES_TO",
+      "rationale": "Clearance between leading stretcher bar and stock rail bottom"
+    },
+    {
+      "from": "spec_irpwm_para429_lead",
+      "to": "tol_lead_versine",
+      "rel": "SPECIFIES",
+      "rationale": "IRPWM Para 429(4)(a) mandates +/- 3 mm versine tolerance on 3 m stations"
+    },
+    {
+      "from": "tol_lead_versine",
+      "to": "drg_6154",
+      "rel": "APPLIES_TO",
+      "rationale": "Lead curve versine tolerance applies to turnout curve"
+    },
+    {
+      "from": "sop_atweld_execution",
+      "to": "tol_atweld_gap",
+      "rel": "SPECIFIES",
+      "rationale": "AT Weld Manual Para 4 mandates 25 +/- 1 mm rail gap"
+    },
+    {
+      "from": "spec_irpwm_para429_switch",
+      "to": "comp_tongue_rail",
+      "rel": "APPLIES_TO",
+      "rationale": "Wear limits and housing rules apply to tongue rail"
+    },
+    {
+      "from": "spec_irpwm_para429_switch",
+      "to": "comp_chair",
+      "rel": "APPLIES_TO",
+      "rationale": "Even bearing and lubrication rules apply to slide chairs"
+    },
+    {
+      "from": "spec_irpwm_para429_stretcher",
+      "to": "comp_cpl",
+      "rel": "INTERFACES_WITH",
+      "rationale": "Stretcher bar gap interfaces with Clamp Point Lock drive rod"
+    },
+    {
+      "from": "sop_usfd_switch_testing",
+      "to": "comp_tongue_rail",
+      "rel": "APPLIES_TO",
+      "rationale": "USFD tongue rail testing applies to switch rail"
+    },
+    {
+      "from": "sop_usfd_crossing_testing",
+      "to": "comp_cms_unit",
+      "rel": "APPLIES_TO",
+      "rationale": "USFD point and splice testing applies to crossing assembly"
+    },
+    {
+      "from": "sop_unimat_switch_tamping",
+      "to": "comp_chair",
+      "rel": "MAINTAINED_BY",
+      "rationale": "Slide chairs and bearers tamped by UNIMAT machine"
+    },
+    {
+      "from": "sop_unimat_switch_tamping",
+      "to": "comp_sleeper",
+      "rel": "MAINTAINED_BY",
+      "rationale": "Special PSC turnout sleepers tamped by UNIMAT"
+    },
+    {
+      "from": "spec_irpwm_para430_reconditioning",
+      "to": "comp_cms_unit",
+      "rel": "APPLIES_TO",
+      "rationale": "Reconditioning by H3B/H3C electrodes applies to CMS crossing"
+    },
+    {
+      "from": "sop_usfd_switch_testing",
+      "to": "equip_usfd_tester",
+      "rel": "REQUIRES",
+      "rationale": "Ultrasonic inspection requires digital flaw detector"
+    },
+    {
+      "from": "sop_usfd_crossing_testing",
+      "to": "equip_usfd_tester",
+      "rel": "REQUIRES",
+      "rationale": "Depot ultrasonic inspection requires digital flaw detector"
+    },
+    {
+      "from": "sop_usfd_atweld_testing",
+      "to": "equip_usfd_tester",
+      "rel": "REQUIRES",
+      "rationale": "Thermit weld testing requires 0°, 70°, 45° probes"
+    },
+    {
+      "from": "sop_unimat_switch_tamping",
+      "to": "equip_unimat_tamper",
+      "rel": "REQUIRES",
+      "rationale": "Mechanized tamping requires UNIMAT machine"
+    },
+    {
+      "from": "sop_atweld_execution",
+      "to": "equip_atweld_kit",
+      "rel": "REQUIRES",
+      "rationale": "Joint preheating requires air-petrol burner kit"
+    },
+    {
+      "from": "sop_stmm_bolt_chamfering",
+      "to": "equip_chamfering_kit",
+      "rel": "REQUIRES",
+      "rationale": "Hole chamfering requires 45° chamfering tool"
+    },
+    {
+      "from": "fail_star_crack",
+      "to": "hazard_derailment_split",
+      "rel": "CAN_CAUSE",
+      "rationale": "Bolt hole star crack propagation causes rail break and derailment"
+    },
+    {
+      "from": "fail_star_crack",
+      "to": "sop_stmm_bolt_chamfering",
+      "rel": "MITIGATED_BY",
+      "rationale": "45° chamfering relieves stress concentration and prevents star cracks"
+    },
+    {
+      "from": "fail_nose_hitting",
+      "to": "hazard_derailment_split",
+      "rel": "CAN_CAUSE",
+      "rationale": "Flange striking nose can cause wheel climb and derailment"
+    },
+    {
+      "from": "fail_nose_hitting",
+      "to": "tol_checkrail_clearance",
+      "rel": "MITIGATED_BY",
+      "rationale": "Maintaining check rail clearance 41-45 mm prevents nose collision"
+    },
+    {
+      "from": "fail_dfwr_weld",
+      "to": "hazard_derailment_split",
+      "rel": "CAN_CAUSE",
+      "rationale": "Unattended DFWR weld fracture can cause sudden rail break under high axle loads"
+    },
+    {
+      "from": "fail_dfwr_weld",
+      "to": "sop_usfd_atweld_testing",
+      "rel": "MITIGATED_BY",
+      "rationale": "USFD detection and immediate joggled fishplate protection mitigates failure"
+    },
+    {
+      "from": "note_6154_07",
+      "to": "spec_irpwm_para429_lead",
+      "rel": "REFERENCES",
+      "rationale": "Note 7 versines directly align with IRPWM Para 429(4) versine rules"
+    },
+    {
+      "from": "note_6155_21",
+      "to": "spec_irpwm_para429_stretcher",
+      "rel": "REFERENCES",
+      "rationale": "Note 21 tie bar drop directly corresponds to IRPWM Para 429(2)(j) stretcher bar clearance"
+    },
+    {
+      "from": "DOC:IRPWM:2024:ACS14",
+      "to": "CLAUSE:IRPWM:2024:PARA_428",
+      "rel": "CONTAINS",
+      "rationale": "IRPWM Chapter 4 Part B contains Para 428",
+      "source": "DOC:IRPWM:2024:ACS14"
+    },
+    {
+      "from": "DOC:IRPWM:2024:ACS14",
+      "to": "CLAUSE:IRPWM:2024:PARA_429_2",
+      "rel": "CONTAINS",
+      "rationale": "IRPWM Chapter 4 Part B contains Para 429(2)",
+      "source": "DOC:IRPWM:2024:ACS14"
+    },
+    {
+      "from": "CLAUSE:IRPWM:2024:PARA_429_2",
+      "to": "REQ:IRPWM:2024:TONGUE_CHIPPING",
+      "rel": "SPECIFIES",
+      "rationale": "Para 429(2) specifies tongue rail wear limit",
+      "source": "CLAUSE:IRPWM:2024:PARA_429_2"
+    },
+    {
+      "from": "CLAUSE:IRPWM:2024:PARA_429_2",
+      "to": "REQ:IRPWM:2024:TOE_GAP_LIMIT",
+      "rel": "SPECIFIES",
+      "rationale": "Para 429(2) defines toe gap limit",
+      "source": "CLAUSE:IRPWM:2024:PARA_429_2"
+    },
+    {
+      "from": "DOC:IRPWM:2024:ACS14",
+      "to": "CLAUSE:IRPWM:2024:PARA_429_2J",
+      "rel": "CONTAINS",
+      "rationale": "IRPWM Chapter 4 Part B contains Para 429(2)(j)",
+      "source": "DOC:IRPWM:2024:ACS14"
+    },
+    {
+      "from": "CLAUSE:IRPWM:2024:PARA_429_2J",
+      "to": "TOL:IRPWM:2024:STRETCHER_GAP",
+      "rel": "SPECIFIES",
+      "rationale": "Specifies leading stretcher bar gap",
+      "source": "CLAUSE:IRPWM:2024:PARA_429_2J"
+    },
+    {
+      "from": "DOC:IRPWM:2024:ACS14",
+      "to": "CLAUSE:IRPWM:2024:PARA_429_3",
+      "rel": "CONTAINS",
+      "rationale": "IRPWM Chapter 4 Part B contains Para 429(3)",
+      "source": "DOC:IRPWM:2024:ACS14"
+    },
+    {
+      "from": "CLAUSE:IRPWM:2024:PARA_429_3",
+      "to": "TOL:IRPWM:2024:CHECKRAIL_CLEARANCE",
+      "rel": "SPECIFIES",
+      "rationale": "Mandates check rail clearance",
+      "source": "CLAUSE:IRPWM:2024:PARA_429_3"
+    },
+    {
+      "from": "CLAUSE:IRPWM:2024:PARA_429_3",
+      "to": "TOL:IRPWM:2024:CMS_WEAR_MAX",
+      "rel": "SPECIFIES",
+      "rationale": "Mandates max vertical wear on CMS crossing",
+      "source": "CLAUSE:IRPWM:2024:PARA_429_3"
+    },
+    {
+      "from": "DOC:IRPWM:2024:ACS14",
+      "to": "CLAUSE:IRPWM:2024:PARA_429_4",
+      "rel": "CONTAINS",
+      "rationale": "IRPWM Chapter 4 Part B contains Para 429(4)",
+      "source": "DOC:IRPWM:2024:ACS14"
+    },
+    {
+      "from": "CLAUSE:IRPWM:2024:PARA_429_4",
+      "to": "TOL:IRPWM:2024:LEAD_VERSINE",
+      "rel": "SPECIFIES",
+      "rationale": "Mandates lead curve versine tolerance",
+      "source": "CLAUSE:IRPWM:2024:PARA_429_4"
+    },
+    {
+      "from": "DOC:IRPWM:2024:ACS14",
+      "to": "CLAUSE:IRPWM:2024:PARA_430",
+      "rel": "CONTAINS",
+      "rationale": "IRPWM Chapter 4 Part B contains Para 430",
+      "source": "DOC:IRPWM:2024:ACS14"
+    },
+    {
+      "from": "DOC:USFD:2026:ACS4",
+      "to": "CLAUSE:USFD:2026:CH_10",
+      "rel": "CONTAINS",
+      "rationale": "USFD Manual contains Chapter 10",
+      "source": "DOC:USFD:2026:ACS4"
+    },
+    {
+      "from": "CLAUSE:USFD:2026:CH_10",
+      "to": "PROC:USFD:2026:TONGUE_RAIL_SCAN",
+      "rel": "SPECIFIES",
+      "rationale": "Chapter 10 specifies 3-Zone procedure",
+      "source": "CLAUSE:USFD:2026:CH_10"
+    },
+    {
+      "from": "DOC:USFD:2026:ACS4",
+      "to": "CLAUSE:USFD:2026:CH_8",
+      "rel": "CONTAINS",
+      "rationale": "USFD Manual contains Chapter 8",
+      "source": "DOC:USFD:2026:ACS4"
+    },
+    {
+      "from": "CLAUSE:USFD:2026:CH_8",
+      "to": "FAIL:USFD:DFWR_WELD",
+      "rel": "SPECIFIES",
+      "rationale": "Defines DFWR weld classification",
+      "source": "CLAUSE:USFD:2026:CH_8"
+    },
+    {
+      "from": "DOC:AT_WELD:2022",
+      "to": "CLAUSE:AT_WELD:2022:SEC_4",
+      "rel": "CONTAINS",
+      "rationale": "AT Weld Manual contains Section 4",
+      "source": "DOC:AT_WELD:2022"
+    },
+    {
+      "from": "CLAUSE:AT_WELD:2022:SEC_4",
+      "to": "TOL:AT_WELD:2022:JOINT_GAP",
+      "rel": "SPECIFIES",
+      "rationale": "Mandates rail gap",
+      "source": "CLAUSE:AT_WELD:2022:SEC_4"
+    },
+    {
+      "from": "DOC:TMM:2020:ACS10",
+      "to": "CLAUSE:TMM:2020:CH_2",
+      "rel": "CONTAINS",
+      "rationale": "Track Machine Manual contains Chapter 2",
+      "source": "DOC:TMM:2020:ACS10"
+    },
+    {
+      "from": "CLAUSE:TMM:2020:CH_2",
+      "to": "EQUIP:TMM:UNIMAT_TAMPER",
+      "rel": "REQUIRES",
+      "rationale": "Specifies UNIMAT machine for turnout tamping",
+      "source": "CLAUSE:TMM:2020:CH_2"
+    },
+    {
+      "from": "DOC:STMM:2024",
+      "to": "CLAUSE:STMM:2024:ITEM_2",
+      "rel": "CONTAINS",
+      "rationale": "STMM contains Table-I Item 2",
+      "source": "DOC:STMM:2024"
+    },
+    {
+      "from": "FAIL:TRACK:BOLT_HOLE_STAR_CRACK",
+      "to": "CLAUSE:STMM:2024:ITEM_2",
+      "rel": "MITIGATED_BY",
+      "rationale": "Chamfering eliminates stress raisers",
+      "source": "FAIL:TRACK:BOLT_HOLE_STAR_CRACK"
+    }
+  ]
+}

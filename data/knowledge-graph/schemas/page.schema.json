@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RDSOPageExtractionRecord",
+  "description": "Schema for segmented page records as mandated by Section 4 Phase B of COMPLETE_MANUALS_KNOWLEDGE_GRAPH_PLAN.md",
+  "type": "object",
+  "required": [
+    "page_id",
+    "document_id",
+    "page_number",
+    "text_length",
+    "is_extractable",
+    "detected_headings",
+    "detected_clauses",
+    "detected_tables",
+    "text_content"
+  ],
+  "properties": {
+    "page_id": {
+      "type": "string",
+      "description": "Stable identifier, e.g. PAGE:DOC:IRPWM:2024:ACS14:196"
+    },
+    "document_id": {
+      "type": "string"
+    },
+    "page_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "text_length": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "is_extractable": {
+      "type": "boolean"
+    },
+    "detected_headings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "detected_clauses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "detected_tables": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "text_content": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}
