@@ -47,10 +47,19 @@ if os.path.exists(all_ch_path):
             } for ch in m["chapters"]]
         })
 
-extracted_json_str = json.dumps(extracted_knowledge)
-canonical_json_str = json.dumps(canonical_kg)
-manuals_json_str = json.dumps(manuals_knowledge)
-tree_json_str = json.dumps(compacted_tree)
+# Generate data/rdso_kg_data.js bundle if needed
+import subprocess
+try:
+    export_script = os.path.join(REPO_ROOT, "scripts", "export_kg_bundle.py")
+    if os.path.exists(export_script):
+        subprocess.run(["python", export_script], check=True)
+except Exception as e:
+    print(f"[!] Warning updating bundle: {e}")
+
+extracted_json_str = "{}"
+canonical_json_str = "{}"
+manuals_json_str = "{}"
+tree_json_str = "[]"
 
 html_template = r'''<!DOCTYPE html>
 <html lang="en">
@@ -1130,19 +1139,64 @@ html_template = r'''<!DOCTYPE html>
   </style>
   <script src="./lib/three.min.js"></script>
   <script src="./lib/OrbitControls.js"></script>
+  <script src="./data/rdso_kg_data.js"></script>
+  <style>
+    #kg-hover-hud {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(8, 14, 26, 0.94);
+      border: 1px solid var(--border-glow);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 14px rgba(0, 240, 255, 0.3);
+      backdrop-filter: blur(12px);
+      border-radius: 8px;
+      padding: 8px 14px;
+      color: #fff;
+      font-size: 12px;
+      z-index: 1000;
+      display: none;
+      transition: opacity 0.15s ease;
+      max-width: 320px;
+    }
+    #kg-hover-hud .hud-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    #kg-hover-hud .hud-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: #ffffff;
+      margin-bottom: 3px;
+    }
+    #kg-hover-hud .hud-metric {
+      font-size: 11px;
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+    }
+  </style>
 </head>
 <body>
 
   <!-- Fullscreen 3D Knowledge Graph Viewport -->
   <div id="kg-canvas-container"></div>
+  <div id="kg-hover-hud">
+    <div class="hud-tag" id="hud-tag">DOMAIN</div>
+    <div class="hud-title" id="hud-title">Entity Title</div>
+    <div class="hud-metric" id="hud-metric">Quick Parameter</div>
+  </div>
 
   <!-- Command Header -->
   <header>
     <div class="brand-section">
       <div class="brand-icon">🌐</div>
       <div class="brand-titles">
-        <h1>RDSO Track Knowledge Graph Studio <span class="badge-ver">v3.5 CANONICAL</span></h1>
-        <p>Revision-Aware Ontology & Deep Blueprint Extraction</p>
+        <h1>RDSO Railway Engineering Knowledge Operating System (REKG) <span class="badge-ver">v3.5 CANONICAL</span></h1>
+        <p>Document Layer · Engineering Domain Graph · Evidence & Provenance</p>
       </div>
     </div>
 
@@ -1442,15 +1496,19 @@ html_template = r'''<!DOCTYPE html>
   <!-- APPLICATION LOGIC & CANONICAL KNOWLEDGE GRAPH -->
   <script>
     // Injected Canonical Knowledge Core, Extracted Dossiers, and Railway Manuals
-    const RDSO_EXTRACTED_KNOWLEDGE = __EXTRACTED_KNOWLEDGE_JSON__;
-    const CANONICAL_DATA = __CANONICAL_KG_JSON__;
-    const RDSO_MANUALS_KNOWLEDGE = __MANUALS_KNOWLEDGE_JSON__;
+    // =========================================================================
+    // RAILWAY ENGINEERING KNOWLEDGE OPERATING SYSTEM (REKG) - CORE ENGINE
+    // Decoupled Data Loader, Level-of-Detail (LOD) & 60 FPS High Performance Graph
+    // =========================================================================
+    const RDSO_EXTRACTED_KNOWLEDGE = window.RDSO_EXTRACTED_KNOWLEDGE || __EXTRACTED_KNOWLEDGE_JSON__ || {};
+    const CANONICAL_DATA = window.RDSO_CANONICAL_KG || __CANONICAL_KG_JSON__ || { entities: [], edges: [], facts: [] };
+    const RDSO_MANUALS_KNOWLEDGE = window.RDSO_MANUALS_KNOWLEDGE || __MANUALS_KNOWLEDGE_JSON__ || {};
     window.RDSO_MANUALS_KNOWLEDGE = RDSO_MANUALS_KNOWLEDGE;
-    const RDSO_MANUALS_TREE = __MANUALS_TREE_JSON__;
+    const RDSO_MANUALS_TREE = window.RDSO_COMPACTED_TREE || __MANUALS_TREE_JSON__ || [];
     window.RDSO_MANUALS_TREE = RDSO_MANUALS_TREE;
 
-    const rawKGNodes = CANONICAL_DATA.entities;
-    const rawKGEdges = CANONICAL_DATA.edges;
+    const rawKGNodes = CANONICAL_DATA.entities || [];
+    const rawKGEdges = CANONICAL_DATA.edges || [];
     const rawKGFacts = CANONICAL_DATA.facts || [];
 
     const DOMAIN_METADATA = {
@@ -1494,10 +1552,31 @@ html_template = r'''<!DOCTYPE html>
       MAINTAINED_BY: 0x00f5d4
     };
 
+    // Domain Clusters for Cosmic multi-body gravity
+    const DOMAIN_CENTERS = {
+      drawing: { x: 0, y: 12, z: 0 },
+      revision: { x: 0, y: 18, z: -10 },
+      turnout_layout: { x: -16, y: 0, z: 2 },
+      component: { x: 16, y: 0, z: 0 },
+      signaling: { x: -18, y: 6, z: 8 },
+      specification: { x: 0, y: -6, z: 12 },
+      defect: { x: 18, y: -10, z: -8 },
+      sop: { x: -8, y: -16, z: 0 },
+      manual: { x: 0, y: 24, z: 10 },
+      manuals: { x: 0, y: 24, z: 10 },
+      materials: { x: 14, y: 12, z: 10 },
+      procurement: { x: 16, y: 8, z: -14 },
+      tolerance: { x: -14, y: -10, z: 10 },
+      track_standards: { x: -14, y: -10, z: 10 },
+      equipment: { x: -12, y: -16, z: -10 },
+      standards: { x: -6, y: 18, z: 10 }
+    };
+
     // Global State
     let kgScene, kgCamera, kgRenderer, kgControls;
     let kgPhysicsNodes = [];
     let kgPhysicsEdges = [];
+    const kgPhysicsNodesMap = new Map();
     let currentLayout = "cosmic";
     let currentSemanticMode = "explore";
     let currentSelectedNode = null;
@@ -1506,12 +1585,46 @@ html_template = r'''<!DOCTYPE html>
     let activeFilterDomain = "all";
     let activeAlterationLevel = 13;
     let isPhysicsPaused = false;
+    let isPhysicsSleeping = false;
+    let isTransitioningLayout = false;
+    let cameraTween = null;
 
     // Simulation Physics Parameters
-    let k_repulsion = 60.0;
+    let k_repulsion = 55.0;
     let k_spring = 0.05;
     let l0_spring = 5.0;
-    let damping = 0.88;
+    let damping = 0.86;
+
+    // Entity Classification for Level of Detail (LOD)
+    function isPrimaryEngineeringEntity(data) {
+      if (!data) return false;
+      const id = data.id || "";
+      const type = data.type || "";
+      const domain = data.domain || "";
+      if (type === "DRAWING" || type === "REVISION" || type === "COMPONENT" ||
+          type === "ZONE" || type === "SLEEPER" || type === "MATERIAL" ||
+          type === "STANDARD" || type === "BOM_ITEM" || type === "SPARE_PART" ||
+          type === "FAILURE_MODE" || type === "HAZARD" || type === "FAILUREMODE" ||
+          type === "SOP" || type === "PROCEDURE" || type === "REQUIREMENT" ||
+          type === "DOCUMENT" || type === "SPECIFICATION" || type === "EQUIPMENT") {
+        return true;
+      }
+      if (domain === "drawing" || domain === "revision" || domain === "component" ||
+          domain === "turnout_layout" || domain === "signaling" || domain === "defect" ||
+          domain === "sop" || domain === "standards" || domain === "materials" ||
+          domain === "procurement" || domain === "safety" || domain === "equipment") {
+        return true;
+      }
+      if (id.startsWith("tol_") || id.startsWith("note_") || id.startsWith("drg_") ||
+          id.startsWith("rev_") || id.startsWith("comp_") || id.startsWith("zone_") ||
+          id.startsWith("sleeper_") || id.startsWith("doc_") || id.startsWith("defect_") ||
+          id.startsWith("hazard_") || id.startsWith("sop_") || id.startsWith("equip_") ||
+          id.startsWith("mat_") || id.startsWith("bom_") || id.startsWith("spare_") ||
+          id.startsWith("std_") || id.startsWith("spec_")) {
+        return true;
+      }
+      return false;
+    }
 
     function initKnowledgeGraphApp() {
       const container = document.getElementById('kg-canvas-container');
@@ -1537,7 +1650,7 @@ html_template = r'''<!DOCTYPE html>
 
       // 2. Camera & Orbit Controls
       kgCamera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
-      kgCamera.position.set(0, 16, 36);
+      kgCamera.position.set(0, 16, 38);
 
       kgRenderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
       kgRenderer.setSize(w, h);
@@ -1547,7 +1660,7 @@ html_template = r'''<!DOCTYPE html>
       kgControls = new THREE.OrbitControls(kgCamera, kgRenderer.domElement);
       kgControls.enableDamping = true;
       kgControls.dampingFactor = 0.06;
-      kgControls.maxDistance = 140;
+      kgControls.maxDistance = 150;
       kgControls.minDistance = 3;
 
       // 3. Lighting
@@ -1565,123 +1678,167 @@ html_template = r'''<!DOCTYPE html>
       rawKGNodes.forEach(n => addNodeToGraph(n));
       rawKGEdges.forEach(e => addEdgeToGraph(e));
 
+      // Resolve edge pointers once for zero-allocation 60 FPS physics
+      kgPhysicsEdges.forEach(e => {
+        e.sourceNode = kgPhysicsNodesMap.get(e.from);
+        e.targetNode = kgPhysicsNodesMap.get(e.to);
+      });
+
       // 5. Initialize UI
       renderDomainChips();
-
-      // Render Manuals Chapter Tree
       renderManualsTree();
       populateParentSelect();
       initSearchAutocomplete();
       initComponentTwinViewer();
       updateTelemetryCounters();
 
-      // 6. Animation Loop
+      // 6. Animation Loop with Physics Sleep & Camera Tween
       function animate() {
         requestAnimationFrame(animate);
-        if (!isPhysicsPaused) stepGraphPhysics();
+        if (!isPhysicsPaused && !isPhysicsSleeping) {
+          stepGraphPhysics();
+        } else if (isTransitioningLayout) {
+          interpolateToTargets();
+        }
+        updateCameraTween();
         kgControls.update();
         kgRenderer.render(kgScene, kgCamera);
       }
       animate();
 
-      // 7. Raycasting for Clicking Nodes
+      // 7. Raycasting for Clicking & Hover HUD
       setupRaycasting();
 
       // 8. Resize Listener
       window.addEventListener('resize', onWindowResize);
     }
 
-    function createBillboardSprite(text, color, domain) {
+    // High-Contrast Glassmorphic Billboard Badge
+    function createBillboardSprite(text, color, domain, isPrimary = true) {
+      if (!isPrimary) {
+        // Shared micro-sprite for regulatory clauses to avoid memory bloat
+        const canvas = document.createElement('canvas');
+        canvas.width = 16;
+        canvas.height = 16;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = color || '#00f0ff';
+        ctx.beginPath();
+        ctx.arc(8, 8, 6, 0, Math.PI * 2);
+        ctx.fill();
+        const texture = new THREE.CanvasTexture(canvas);
+        const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.85 });
+        const sprite = new THREE.Sprite(spriteMat);
+        sprite.scale.set(0.6, 0.6, 1.0);
+        sprite.position.y = 0.5;
+        return sprite;
+      }
+
       const canvas = document.createElement('canvas');
-      canvas.width = 280;
-      canvas.height = 76;
+      canvas.width = 260;
+      canvas.height = 72;
       const ctx = canvas.getContext('2d');
 
-      ctx.fillStyle = "rgba(6, 10, 18, 0.90)";
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 3;
+      // Rounded pill container
+      ctx.fillStyle = "rgba(7, 12, 22, 0.92)";
+      ctx.strokeStyle = color || '#00f0ff';
+      ctx.lineWidth = 2.5;
 
       const r = 12;
       ctx.beginPath();
       ctx.moveTo(r, 0);
-      ctx.lineTo(280 - r, 0);
-      ctx.quadraticCurveTo(280, 0, 280, r);
-      ctx.lineTo(280, 76 - r);
-      ctx.quadraticCurveTo(280, 76, 280 - r, 76);
-      ctx.lineTo(r, 76);
-      ctx.quadraticCurveTo(0, 76, 0, 76 - r);
+      ctx.lineTo(260 - r, 0);
+      ctx.quadraticCurveTo(260, 0, 260, r);
+      ctx.lineTo(260, 72 - r);
+      ctx.quadraticCurveTo(260, 72, 260 - r, 72);
+      ctx.lineTo(r, 72);
+      ctx.quadraticCurveTo(0, 72, 0, 72 - r);
       ctx.lineTo(0, r);
       ctx.quadraticCurveTo(0, 0, r, 0);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle = color;
-      ctx.font = "bold 14px -apple-system, sans-serif";
-      ctx.fillText((DOMAIN_METADATA[domain]?.label || domain).toUpperCase().slice(0, 26), 14, 26);
+      // Top domain tag
+      const meta = DOMAIN_METADATA[domain] || { label: domain, icon: "🔹" };
+      ctx.fillStyle = color || '#00f0ff';
+      ctx.font = "bold 13px -apple-system, sans-serif";
+      const domainLabel = `${meta.icon || '🔹'} ${(meta.label || domain).toUpperCase()}`.slice(0, 26);
+      ctx.fillText(domainLabel, 14, 25);
 
+      // Bottom crisp title
       ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 17px -apple-system, sans-serif";
-      const displayLabel = text.length > 22 ? text.substring(0, 21) + "…" : text;
-      ctx.fillText(displayLabel, 14, 56);
+      ctx.font = "bold 15px -apple-system, sans-serif";
+      const displayLabel = text.length > 21 ? text.substring(0, 20) + "…" : text;
+      ctx.fillText(displayLabel, 14, 53);
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.minFilter = THREE.LinearFilter;
-      const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true });
+      const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 1.0 });
       const sprite = new THREE.Sprite(spriteMat);
-      sprite.scale.set(4.2, 1.15, 1.0);
+      sprite.scale.set(3.8, 1.05, 1.0);
       sprite.position.y = 1.35;
       return sprite;
     }
 
     function addNodeToGraph(data) {
+      const isPrimary = isPrimaryEngineeringEntity(data);
       const nodeGroup = new THREE.Group();
       let coreMesh;
-      const colorObj = new THREE.Color(data.color);
+      const colorObj = new THREE.Color(data.color || DOMAIN_METADATA[data.domain]?.color || 0x00f0ff);
 
       if (data.type === "DRAWING") {
-        const sphereGeo = new THREE.SphereGeometry(0.75, 24, 24);
-        const sphereMat = new THREE.MeshStandardMaterial({ color: colorObj, emissive: colorObj, emissiveIntensity: 0.55, metalness: 0.8, roughness: 0.2 });
+        const sphereGeo = new THREE.SphereGeometry(0.85, 24, 24);
+        const sphereMat = new THREE.MeshStandardMaterial({ color: colorObj, emissive: colorObj, emissiveIntensity: 0.6, metalness: 0.8, roughness: 0.2 });
         coreMesh = new THREE.Mesh(sphereGeo, sphereMat);
         nodeGroup.add(coreMesh);
 
-        const ringGeo = new THREE.RingGeometry(1.0, 1.25, 32);
-        const ringMat = new THREE.MeshBasicMaterial({ color: colorObj, side: THREE.DoubleSide, transparent: true, opacity: 0.45 });
+        const ringGeo = new THREE.RingGeometry(1.15, 1.4, 32);
+        const ringMat = new THREE.MeshBasicMaterial({ color: colorObj, side: THREE.DoubleSide, transparent: true, opacity: 0.5 });
         const ringMesh = new THREE.Mesh(ringGeo, ringMat);
         ringMesh.rotation.x = Math.PI / 2.5;
         nodeGroup.add(ringMesh);
       } else if (data.type === "REVISION") {
-        const octGeo = new THREE.OctahedronGeometry(0.65, 0);
-        const octMat = new THREE.MeshStandardMaterial({ color: colorObj, emissive: colorObj, emissiveIntensity: 0.6, metalness: 0.5, roughness: 0.2 });
+        const octGeo = new THREE.OctahedronGeometry(0.7, 0);
+        const octMat = new THREE.MeshStandardMaterial({ color: colorObj, emissive: colorObj, emissiveIntensity: 0.65, metalness: 0.5, roughness: 0.2 });
         coreMesh = new THREE.Mesh(octGeo, octMat);
         nodeGroup.add(coreMesh);
       } else if (data.type === "NOTE") {
-        const boxGeo = new THREE.BoxGeometry(0.85, 0.65, 0.4);
+        const boxGeo = new THREE.BoxGeometry(0.8, 0.6, 0.4);
         const boxMat = new THREE.MeshStandardMaterial({ color: colorObj, emissive: colorObj, emissiveIntensity: 0.6, metalness: 0.4, roughness: 0.3 });
         coreMesh = new THREE.Mesh(boxGeo, boxMat);
         nodeGroup.add(coreMesh);
       } else if (data.type === "ZONE" || data.type === "SLEEPER") {
-        const cylGeo = new THREE.CylinderGeometry(0.4, 0.5, 0.7, 8);
+        const cylGeo = new THREE.CylinderGeometry(0.55, 0.6, 0.8, 12);
         const cylMat = new THREE.MeshStandardMaterial({ color: colorObj, emissive: colorObj, emissiveIntensity: 0.5, metalness: 0.6, roughness: 0.3 });
         coreMesh = new THREE.Mesh(cylGeo, cylMat);
         nodeGroup.add(coreMesh);
-      } else if (data.domain === "defect" || data.type === "FAILURE_MODE" || data.type === "HAZARD") {
-        const octGeo = new THREE.OctahedronGeometry(0.7, 0);
-        const octMat = new THREE.MeshStandardMaterial({ color: colorObj, emissive: colorObj, emissiveIntensity: 0.75, metalness: 0.3, roughness: 0.2 });
+      } else if (data.domain === "defect" || data.type === "FAILURE_MODE" || data.type === "HAZARD" || data.type === "FAILUREMODE") {
+        const octGeo = new THREE.OctahedronGeometry(0.75, 0);
+        const octMat = new THREE.MeshStandardMaterial({ color: 0xff3366, emissive: 0xff3366, emissiveIntensity: 0.85, metalness: 0.3, roughness: 0.2 });
         coreMesh = new THREE.Mesh(octGeo, octMat);
         nodeGroup.add(coreMesh);
+      } else if (!isPrimary) {
+        const dotGeo = new THREE.SphereGeometry(0.22, 8, 8);
+        const dotMat = new THREE.MeshBasicMaterial({ color: colorObj, transparent: true, opacity: 0.6 });
+        coreMesh = new THREE.Mesh(dotGeo, dotMat);
+        nodeGroup.add(coreMesh);
       } else {
-        const sphereGeo = new THREE.SphereGeometry(0.55, 24, 24);
-        const sphereMat = new THREE.MeshStandardMaterial({ color: colorObj, emissive: colorObj, emissiveIntensity: 0.45, metalness: 0.7, roughness: 0.25 });
+        const sphereGeo = new THREE.SphereGeometry(0.6, 20, 20);
+        const sphereMat = new THREE.MeshStandardMaterial({ color: colorObj, emissive: colorObj, emissiveIntensity: 0.5, metalness: 0.7, roughness: 0.25 });
         coreMesh = new THREE.Mesh(sphereGeo, sphereMat);
         nodeGroup.add(coreMesh);
       }
 
-      const sprite = createBillboardSprite(data.label, data.color, data.domain);
+      const sprite = createBillboardSprite(data.label, data.color, data.domain, isPrimary);
       nodeGroup.add(sprite);
 
-      const initX = data.x !== undefined ? data.x : (Math.random() - 0.5) * 20;
-      const initY = data.y !== undefined ? data.y : (Math.random() - 0.5) * 12;
+      // In non-manuals modes, hide non-primary clause nodes to eliminate the card jungle
+      if (!isPrimary && currentSemanticMode !== "manuals") {
+        nodeGroup.visible = false;
+      }
+
+      const initX = data.x !== undefined ? data.x : (Math.random() - 0.5) * 24;
+      const initY = data.y !== undefined ? data.y : (Math.random() - 0.5) * 16;
       const initZ = data.z !== undefined ? data.z : (Math.random() - 0.5) * 20;
 
       nodeGroup.position.set(initX, initY, initZ);
@@ -1692,6 +1849,7 @@ html_template = r'''<!DOCTYPE html>
         group: nodeGroup,
         mesh: coreMesh,
         sprite: sprite,
+        isPrimary: isPrimary,
         x: initX,
         y: initY,
         z: initZ,
@@ -1704,14 +1862,18 @@ html_template = r'''<!DOCTYPE html>
       };
 
       kgPhysicsNodes.push(nodeObj);
+      kgPhysicsNodesMap.set(data.id, nodeObj);
       return nodeObj;
     }
 
     function addEdgeToGraph(edgeData) {
       const predColor = PREDICATE_COLORS[edgeData.rel] || 0x00f0ff;
       const lineMat = new THREE.LineBasicMaterial({ color: predColor, transparent: true, opacity: 0.45, linewidth: 1.5 });
-      const dummyGeo = new THREE.BufferGeometry();
-      const lineMesh = new THREE.Line(dummyGeo, lineMat);
+      const lineGeo = new THREE.BufferGeometry();
+      const posArray = new Float32Array(6);
+      lineGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      const lineMesh = new THREE.Line(lineGeo, lineMat);
+      lineMesh.visible = false;
       kgScene.add(lineMesh);
 
       kgPhysicsEdges.push({
@@ -1719,49 +1881,76 @@ html_template = r'''<!DOCTYPE html>
         to: edgeData.to,
         rel: edgeData.rel,
         line: lineMesh,
-        color: predColor
+        color: predColor,
+        posArray: posArray,
+        sourceNode: null,
+        targetNode: null
       });
     }
 
-    // Force Simulation
+    // Force Simulation with Zero-Allocation Pointer Graph
     function stepGraphPhysics() {
-      if (currentLayout === "cosmic") stepCosmicForces();
-      else if (currentLayout === "planar") stepPlanarForces();
-      else interpolateToTargets();
+      if (currentLayout === "cosmic") {
+        stepCosmicForces();
+      } else {
+        interpolateToTargets();
+      }
 
-      kgPhysicsNodes.forEach(n => n.group.position.set(n.x, n.y, n.z));
+      // Update positions of visible nodes
+      for (let i = 0; i < kgPhysicsNodes.length; i++) {
+        const n = kgPhysicsNodes[i];
+        if (n.group.visible) {
+          n.group.position.set(n.x, n.y, n.z);
+        }
+      }
 
-      kgPhysicsEdges.forEach(e => {
-        const n1 = kgPhysicsNodes.find(n => n.data.id === e.from);
-        const n2 = kgPhysicsNodes.find(n => n.data.id === e.to);
-        if (n1 && n2 && n1.group.visible && n2.group.visible) {
+      // Update edge lines using pre-resolved pointers and pre-allocated float buffer
+      for (let i = 0; i < kgPhysicsEdges.length; i++) {
+        const e = kgPhysicsEdges[i];
+        const n1 = e.sourceNode;
+        const n2 = e.targetNode;
+        if (!n1 || !n2) continue;
+
+        if (n1.group.visible && n2.group.visible) {
           e.line.visible = true;
-          const posArr = new Float32Array([n1.x, n1.y, n1.z, n2.x, n2.y, n2.z]);
-          e.line.geometry.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+          const pos = e.posArray;
+          pos[0] = n1.x; pos[1] = n1.y; pos[2] = n1.z;
+          pos[3] = n2.x; pos[4] = n2.y; pos[5] = n2.z;
           e.line.geometry.attributes.position.needsUpdate = true;
         } else {
           e.line.visible = false;
         }
-      });
+      }
     }
 
     function stepCosmicForces() {
-      const numNodes = kgPhysicsNodes.length;
+      const visibleNodes = [];
+      for (let i = 0; i < kgPhysicsNodes.length; i++) {
+        const n = kgPhysicsNodes[i];
+        if (n.group.visible) visibleNodes.push(n);
+      }
+      const count = visibleNodes.length;
+      if (count === 0) return;
 
-      for (let i = 0; i < numNodes; i++) {
-        const n1 = kgPhysicsNodes[i];
-        if (!n1.group.visible) continue;
+      // 1. Domain Cluster Centering Gravity
+      for (let i = 0; i < count; i++) {
+        const n = visibleNodes[i];
+        const center = DOMAIN_CENTERS[n.data.domain] || { x: 0, y: 0, z: 0 };
+        n.vx += (center.x - n.x) * 0.004;
+        n.vy += (center.y - n.y) * 0.004;
+        n.vz += (center.z - n.z) * 0.004;
+      }
 
-        for (let j = i + 1; j < numNodes; j++) {
-          const n2 = kgPhysicsNodes[j];
-          if (!n2.group.visible) continue;
-
+      // 2. Inter-node Repulsion (Computed only across visible nodes)
+      for (let i = 0; i < count; i++) {
+        const n1 = visibleNodes[i];
+        for (let j = i + 1; j < count; j++) {
+          const n2 = visibleNodes[j];
           const dx = n2.x - n1.x;
           const dy = n2.y - n1.y;
           const dz = n2.z - n1.z;
-          const d2 = dx * dx + dy * dy + dz * dz + 0.05;
+          const d2 = dx * dx + dy * dy + dz * dz + 0.1;
           const d = Math.sqrt(d2);
-
           const force = k_repulsion / d2;
           const fx = (dx / d) * force;
           const fy = (dy / d) * force;
@@ -1777,10 +1966,12 @@ html_template = r'''<!DOCTYPE html>
         }
       }
 
-      kgPhysicsEdges.forEach(e => {
-        const n1 = kgPhysicsNodes.find(n => n.data.id === e.from);
-        const n2 = kgPhysicsNodes.find(n => n.data.id === e.to);
-        if (!n1 || !n2 || !n1.group.visible || !n2.group.visible) return;
+      // 3. Edge Spring Attraction
+      for (let i = 0; i < kgPhysicsEdges.length; i++) {
+        const e = kgPhysicsEdges[i];
+        const n1 = e.sourceNode;
+        const n2 = e.targetNode;
+        if (!n1 || !n2 || !n1.group.visible || !n2.group.visible) continue;
 
         const dx = n2.x - n1.x;
         const dy = n2.y - n1.y;
@@ -1800,14 +1991,12 @@ html_template = r'''<!DOCTYPE html>
         n2.vx -= fx * 0.016;
         n2.vy -= fy * 0.016;
         n2.vz -= fz * 0.016;
-      });
+      }
 
-      kgPhysicsNodes.forEach(n => {
-        if (!n.group.visible) return;
-        n.vx -= n.x * 0.008;
-        n.vy -= n.y * 0.008;
-        n.vz -= n.z * 0.008;
-
+      // 4. Damping & Energy Check for Simulation Sleep
+      let totalEnergy = 0;
+      for (let i = 0; i < count; i++) {
+        const n = visibleNodes[i];
         n.vx *= damping;
         n.vy *= damping;
         n.vz *= damping;
@@ -1815,24 +2004,235 @@ html_template = r'''<!DOCTYPE html>
         n.x += n.vx;
         n.y += n.vy;
         n.z += n.vz;
-      });
-    }
 
-    function stepPlanarForces() {
-      stepCosmicForces();
-      kgPhysicsNodes.forEach(n => {
-        n.z += (0 - n.z) * 0.15;
-        n.vz = 0;
-      });
+        totalEnergy += (n.vx * n.vx + n.vy * n.vy + n.vz * n.vz);
+      }
+
+      if (totalEnergy < 0.0008) {
+        isPhysicsSleeping = true;
+      }
     }
 
     function interpolateToTargets() {
-      const alpha = 0.08;
+      const alpha = 0.09;
+      let maxDist = 0;
+      for (let i = 0; i < kgPhysicsNodes.length; i++) {
+        const n = kgPhysicsNodes[i];
+        if (!n.group.visible) continue;
+        const dx = n.targetX - n.x;
+        const dy = n.targetY - n.y;
+        const dz = n.targetZ - n.z;
+        n.x += dx * alpha;
+        n.y += dy * alpha;
+        n.z += dz * alpha;
+        const dist = Math.abs(dx) + Math.abs(dy) + Math.abs(dz);
+        if (dist > maxDist) maxDist = dist;
+      }
+      if (maxDist < 0.01) {
+        isTransitioningLayout = false;
+      }
+    }
+
+    // Camera Smooth Tween
+    function tweenCamera(targetPos, targetLookAt, duration = 900) {
+      cameraTween = {
+        startPos: kgCamera.position.clone(),
+        targetPos: targetPos.clone(),
+        startLook: kgControls.target.clone(),
+        targetLook: targetLookAt.clone(),
+        startTime: performance.now(),
+        duration: duration
+      };
+    }
+
+    function updateCameraTween() {
+      if (!cameraTween) return;
+      const now = performance.now();
+      const elapsed = now - cameraTween.startTime;
+      const t = Math.min(elapsed / cameraTween.duration, 1.0);
+      const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      kgCamera.position.lerpVectors(cameraTween.startPos, cameraTween.targetPos, ease);
+      kgControls.target.lerpVectors(cameraTween.startLook, cameraTween.targetLook, ease);
+      kgControls.update();
+      if (t >= 1.0) cameraTween = null;
+    }
+
+    // =========================================================================
+    // 4 SYSTEMATIC GRAPH LAYOUT ENGINES
+    // =========================================================================
+
+    // 1. Tiered Architectural DAG Layout (9 Clear Tiers)
+    function applyDagLayout() {
+      isPhysicsSleeping = true;
+      isTransitioningLayout = true;
+
+      const tiers = {
+        manuals: { y: 24, items: [] },     // doc_*, std_*
+        drawings: { y: 18, items: [] },    // drg_*
+        revisions: { y: 12, items: [] },   // rev_*
+        zones: { y: 6, items: [] },        // zone_*, sleeper_*
+        components: { y: 0, items: [] },   // comp_*, mat_*
+        tolerances: { y: -6, items: [] },  // tol_*, sig_*
+        defects: { y: -12, items: [] },    // defect_*, hazard_*
+        sops: { y: -18, items: [] },       // sop_*, equip_*
+        procurement: { y: -24, items: [] } // bom_*, spare_*
+      };
+
       kgPhysicsNodes.forEach(n => {
-        n.x += (n.targetX - n.x) * alpha;
-        n.y += (n.targetY - n.y) * alpha;
-        n.z += (n.targetZ - n.z) * alpha;
+        if (!n.group.visible) return;
+        const d = n.data.domain;
+        const t = n.data.type;
+        const id = n.data.id;
+
+        if (d === "manual" || d === "standards" || t === "DOCUMENT" || t === "STANDARD") tiers.manuals.items.push(n);
+        else if (d === "drawing" || t === "DRAWING") tiers.drawings.items.push(n);
+        else if (d === "revision" || t === "REVISION") tiers.revisions.items.push(n);
+        else if (d === "turnout_layout" || t === "ZONE" || t === "SLEEPER") tiers.zones.items.push(n);
+        else if (d === "component" || d === "materials" || t === "COMPONENT" || t === "MATERIAL") tiers.components.items.push(n);
+        else if (d === "signaling" || d === "tolerance" || t === "TOLERANCE") tiers.tolerances.items.push(n);
+        else if (d === "defect" || t === "FAILURE_MODE" || t === "HAZARD") tiers.defects.items.push(n);
+        else if (d === "sop" || d === "equipment" || t === "SOP" || t === "EQUIPMENT") tiers.sops.items.push(n);
+        else if (d === "procurement" || t === "BOM_ITEM" || t === "SPARE_PART") tiers.procurement.items.push(n);
+        else tiers.components.items.push(n);
       });
+
+      Object.values(tiers).forEach(tier => {
+        const count = tier.items.length;
+        if (count === 0) return;
+        const width = Math.min(count * 6.5, 64);
+        tier.items.forEach((n, idx) => {
+          n.targetY = tier.y;
+          n.targetX = count > 1 ? -width / 2 + (idx / (count - 1)) * width : 0;
+          n.targetZ = ((idx % 3) - 1) * 1.8;
+        });
+      });
+
+      tweenCamera(new THREE.Vector3(0, 0, 48), new THREE.Vector3(0, 0, 0), 1000);
+    }
+
+    // 2. Turnout Sub-System Cluster Layout (Along Track Axis X: -32 to +35)
+    function applyPlanarLayout() {
+      isPhysicsSleeping = true;
+      isTransitioningLayout = true;
+
+      kgPhysicsNodes.forEach(n => {
+        if (!n.group.visible) return;
+        const id = n.data.id.toLowerCase();
+        const d = n.data.domain;
+        const t = n.data.type;
+
+        let zoneX = 0;
+        if (id.includes('toe') || id.includes('approach') || id.includes('6155') || id.includes('tongue_rail') || id.includes('cpl')) {
+          zoneX = -24; // Zone 1: Switch Toe & Point Lock
+        } else if (id.includes('detailb') || id.includes('9010') || id.includes('stretcher') || id.includes('chair')) {
+          zoneX = -12; // Zone 2: Tongue Gliding & Stretcher
+        } else if (id.includes('13') || id.includes('joh') || id.includes('ssd') || id.includes('6216')) {
+          zoneX = 0;   // Zone 3: Junction of Heads (JOH) & SSD
+        } else if (id.includes('intermediate') || id.includes('lead') || id.includes('versine')) {
+          zoneX = 14;  // Zone 4: Intermediate Lead Curve
+        } else if (id.includes('crossing') || id.includes('cms') || id.includes('6280') || id.includes('checkrail') || id.includes('48')) {
+          zoneX = 26;  // Zone 5: CMS Crossing & Check Rails
+        } else {
+          zoneX = 34;  // Zone 6: Exit & Track Fasteners
+        }
+
+        n.targetX = zoneX + (Math.random() - 0.5) * 4.5;
+        n.targetZ = 0;
+
+        if (d === "drawing" || t === "DRAWING") n.targetY = 14;
+        else if (d === "manual" || t === "DOCUMENT") n.targetY = 22;
+        else if (d === "revision" || t === "REVISION") n.targetY = 9;
+        else if (d === "turnout_layout" || t === "ZONE" || t === "SLEEPER") n.targetY = 0;
+        else if (d === "component" || t === "COMPONENT") n.targetY = 3.5;
+        else if (d === "tolerance" || t === "TOLERANCE") n.targetY = -5.5;
+        else if (d === "defect" || t === "FAILURE_MODE") n.targetY = -11.5;
+        else if (d === "sop" || t === "SOP") n.targetY = -17;
+        else n.targetY = -4;
+      });
+
+      tweenCamera(new THREE.Vector3(0, 42, 0), new THREE.Vector3(0, 0, 0), 1000);
+    }
+
+    // 3. Concentric Radial Orbit Layout (Around Focus Asset)
+    function applyConcentricLayout(centerNodeId = null) {
+      isPhysicsSleeping = true;
+      isTransitioningLayout = true;
+
+      const focusId = centerNodeId || currentSelectedNode?.data?.id || 'drg_6155';
+      let centerNode = kgPhysicsNodesMap.get(focusId);
+      if (!centerNode) centerNode = kgPhysicsNodes[0];
+
+      centerNode.targetX = 0;
+      centerNode.targetY = 0;
+      centerNode.targetZ = 0;
+
+      // Find 1-Hop Neighbors
+      const hop1 = [];
+      const hop1Set = new Set([centerNode.data.id]);
+      kgPhysicsEdges.forEach(e => {
+        if (e.from === centerNode.data.id && !hop1Set.has(e.to)) {
+          const t = kgPhysicsNodesMap.get(e.to);
+          if (t && t.group.visible) { hop1.push(t); hop1Set.add(e.to); }
+        }
+        if (e.to === centerNode.data.id && !hop1Set.has(e.from)) {
+          const s = kgPhysicsNodesMap.get(e.from);
+          if (s && s.group.visible) { hop1.push(s); hop1Set.add(e.from); }
+        }
+      });
+
+      const r1 = 14;
+      hop1.forEach((n, idx) => {
+        const angle = (idx / Math.max(hop1.length, 1)) * Math.PI * 2;
+        n.targetX = Math.cos(angle) * r1;
+        n.targetZ = Math.sin(angle) * r1;
+        n.targetY = Math.sin(angle * 2) * 2;
+      });
+
+      // Find 2-Hop Context
+      const hop2 = [];
+      const hop2Set = new Set(hop1Set);
+      kgPhysicsEdges.forEach(e => {
+        if (hop1Set.has(e.from) && !hop2Set.has(e.to)) {
+          const t = kgPhysicsNodesMap.get(e.to);
+          if (t && t.group.visible) { hop2.push(t); hop2Set.add(e.to); }
+        }
+        if (hop1Set.has(e.to) && !hop2Set.has(e.from)) {
+          const s = kgPhysicsNodesMap.get(e.from);
+          if (s && s.group.visible) { hop2.push(s); hop2Set.add(e.from); }
+        }
+      });
+
+      const r2 = 26;
+      hop2.forEach((n, idx) => {
+        const angle = (idx / Math.max(hop2.length, 1)) * Math.PI * 2 + 0.3;
+        n.targetX = Math.cos(angle) * r2;
+        n.targetZ = Math.sin(angle) * r2;
+        n.targetY = Math.cos(angle * 2) * 2.5;
+      });
+
+      // Outer Ring for Remainder
+      const remainder = kgPhysicsNodes.filter(n => n.group.visible && !hop2Set.has(n.data.id));
+      const r3 = 38;
+      remainder.forEach((n, idx) => {
+        const angle = (idx / Math.max(remainder.length, 1)) * Math.PI * 2 + 0.6;
+        n.targetX = Math.cos(angle) * r3;
+        n.targetZ = Math.sin(angle) * r3;
+        n.targetY = Math.sin(angle * 3) * 3;
+      });
+
+      tweenCamera(new THREE.Vector3(0, 18, 38), new THREE.Vector3(0, 0, 0), 1000);
+    }
+
+    // 4. Cosmic Multi-Body Gravitational Layout
+    function applyCosmicLayout() {
+      isPhysicsSleeping = false;
+      isTransitioningLayout = false;
+      kgPhysicsNodes.forEach(n => {
+        n.vx = (Math.random() - 0.5) * 0.1;
+        n.vy = (Math.random() - 0.5) * 0.1;
+        n.vz = (Math.random() - 0.5) * 0.1;
+      });
+      tweenCamera(new THREE.Vector3(0, 16, 38), new THREE.Vector3(0, 0, 0), 900);
     }
 
     // =========================================================================
@@ -2025,7 +2425,41 @@ html_template = r'''<!DOCTYPE html>
     function setupRaycasting() {
       const raycaster = new THREE.Raycaster();
       const mouse = new THREE.Vector2();
+      const hud = document.getElementById('kg-hover-hud');
+      const hudTag = document.getElementById('hud-tag');
+      const hudTitle = document.getElementById('hud-title');
+      const hudMetric = document.getElementById('hud-metric');
 
+      // Hover HUD Tooltip
+      kgRenderer.domElement.addEventListener('mousemove', (e) => {
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, kgCamera);
+        const visibleNodes = kgPhysicsNodes.filter(n => n.group.visible);
+        const meshes = visibleNodes.map(n => n.mesh);
+        const intersects = raycaster.intersectObjects(meshes);
+
+        if (intersects.length > 0) {
+          const hitMesh = intersects[0].object;
+          const hit = visibleNodes.find(n => n.mesh === hitMesh);
+          if (hit && hud) {
+            hud.style.display = 'block';
+            hud.style.left = (e.clientX + 16) + 'px';
+            hud.style.top = (e.clientY + 12) + 'px';
+            const meta = DOMAIN_METADATA[hit.data.domain] || { label: hit.data.domain, icon: '🔹' };
+            hudTag.innerHTML = `${meta.icon} ${meta.label}`;
+            hudTag.style.color = hit.data.color || '#00f0ff';
+            hudTitle.innerText = hit.data.label;
+            const specQuick = hit.data.specs ? (hit.data.specs.Standard || hit.data.specs.Unit || hit.data.specs.PageRange || '') : '';
+            hudMetric.innerText = specQuick ? `Standard: ${specQuick}` : (hit.data.type || 'Asset');
+          }
+        } else if (hud) {
+          hud.style.display = 'none';
+        }
+      });
+
+      // Node Click Selection
       kgRenderer.domElement.addEventListener('click', (e) => {
         if (e.target !== kgRenderer.domElement) return;
 
@@ -2033,12 +2467,19 @@ html_template = r'''<!DOCTYPE html>
         mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
         raycaster.setFromCamera(mouse, kgCamera);
-        const coreMeshes = kgPhysicsNodes.filter(n => n.group.visible).map(n => n.mesh);
-        const intersects = raycaster.intersectObjects(coreMeshes);
+        const visibleNodes = kgPhysicsNodes.filter(n => n.group.visible);
+        const meshes = visibleNodes.map(n => n.mesh);
+        const intersects = raycaster.intersectObjects(meshes);
 
         if (intersects.length > 0) {
-          const hit = kgPhysicsNodes.find(n => n.mesh === intersects[0].object);
-          if (hit) inspectNode(hit);
+          const hitMesh = intersects[0].object;
+          const hit = visibleNodes.find(n => n.mesh === hitMesh);
+          if (hit) {
+            inspectNode(hit);
+            if (currentLayout === "concentric") {
+              applyConcentricLayout(hit.data.id);
+            }
+          }
         }
       });
     }
@@ -2421,9 +2862,10 @@ html_template = r'''<!DOCTYPE html>
       notes.forEach(note => {
         const card = document.createElement('div');
         card.className = "note-card";
+        const noteNum = note.num || note.note_number || "";
         card.innerHTML = `
           <div class="note-card-header">
-            <span class="note-badge">NOTE ${note.note_number}</span>
+            <span class="note-badge">NOTE ${noteNum}</span>
             <span class="note-dwg-ref">${dossier.drawing_number}</span>
           </div>
           <div class="note-body">${note.text}</div>
@@ -2774,20 +3216,14 @@ html_template = r'''<!DOCTYPE html>
         b.classList.toggle('active', b.dataset.layout === layout);
       });
 
-      if (layout === "planar") {
-        kgControls.target.set(0, 0, 0);
-        kgCamera.position.set(0, 0, 36);
-        kgControls.update();
-      } else if (layout === "dag") {
-        const rankY = { drawing: 8, revision: 5, component: 2, turnout_layout: 0, specification: -3, materials: -5, procurement: -5, signaling: -2, defect: -7, sop: -8 };
-        kgPhysicsNodes.forEach(node => {
-          node.targetY = rankY[node.data.domain] !== undefined ? rankY[node.data.domain] : 0;
-          node.targetX = (Math.random() - 0.5) * 26;
-          node.targetZ = (Math.random() - 0.5) * 6;
-        });
-        kgControls.target.set(0, 0, 0);
-        kgCamera.position.set(0, 10, 36);
-        kgControls.update();
+      if (layout === "dag") {
+        applyDagLayout();
+      } else if (layout === "planar") {
+        applyPlanarLayout();
+      } else if (layout === "concentric") {
+        applyConcentricLayout();
+      } else if (layout === "cosmic") {
+        applyCosmicLayout();
       }
     }
 
