@@ -25,9 +25,32 @@ if os.path.exists(man_path):
     with open(man_path, "r", encoding="utf-8") as f:
         manuals_knowledge = json.load(f)
 
+all_ch_path = os.path.join(data_dir, "knowledge-graph", "intermediate", "all_chapters_extracted.json")
+compacted_tree = []
+if os.path.exists(all_ch_path):
+    with open(all_ch_path, "r", encoding="utf-8") as f:
+        all_ch_data = json.load(f)
+    for m in all_ch_data.get("manuals", []):
+        compacted_tree.append({
+            "doc_id": m["document_id"],
+            "alias": m["alias"],
+            "title": m["title"],
+            "total_chapters": m["total_chapters"],
+            "total_clauses": m["total_clauses"],
+            "chapters": [{
+                "id": ch["chapter_id"],
+                "num": ch["chapter_number"],
+                "title": ch["title"],
+                "pages": ch["page_range"],
+                "topics": ch["topics"],
+                "clauses": [{"id": cl["clause_id"], "para": cl["para_number"], "title": cl["title"], "page": cl["page_number"]} for cl in ch["clauses"]]
+            } for ch in m["chapters"]]
+        })
+
 extracted_json_str = json.dumps(extracted_knowledge)
 canonical_json_str = json.dumps(canonical_kg)
 manuals_json_str = json.dumps(manuals_knowledge)
+tree_json_str = json.dumps(compacted_tree)
 
 html_template = r'''<!DOCTYPE html>
 <html lang="en">
@@ -966,6 +989,144 @@ html_template = r'''<!DOCTYPE html>
       box-shadow: 0 0 35px rgba(0, 240, 255, 0.25);
       border-radius: 6px;
     }
+
+    /* Manuals Chapter Tree & TOC Navigator */
+    .manuals-tree-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px 4px;
+      overflow-y: auto;
+      max-height: calc(100vh - 350px);
+    }
+
+    .manual-tree-card {
+      background: rgba(18, 27, 46, 0.75);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .manual-tree-card:hover {
+      border-color: var(--accent-cyan);
+    }
+
+    .manual-tree-header {
+      padding: 10px 12px;
+      background: rgba(28, 42, 70, 0.5);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .manual-tree-header:hover {
+      background: rgba(38, 58, 96, 0.7);
+    }
+
+    .manual-tree-badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+    }
+
+    .manual-tree-body {
+      display: none;
+      padding: 8px;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(10, 16, 28, 0.6);
+    }
+
+    .manual-tree-body.open {
+      display: flex;
+    }
+
+    .chapter-tree-card {
+      background: rgba(22, 33, 56, 0.6);
+      border: 1px solid rgba(56, 96, 160, 0.25);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .chapter-tree-header {
+      padding: 8px 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--text-main);
+    }
+
+    .chapter-tree-header:hover {
+      background: rgba(40, 60, 100, 0.5);
+      color: var(--accent-cyan);
+    }
+
+    .chapter-tree-body {
+      display: none;
+      padding: 6px;
+      flex-direction: column;
+      gap: 4px;
+      background: rgba(6, 10, 18, 0.5);
+      border-top: 1px solid rgba(56, 96, 160, 0.2);
+    }
+
+    .chapter-tree-body.open {
+      display: flex;
+    }
+
+    .clause-tree-item {
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .clause-tree-item:hover {
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--text-main);
+      transform: translateX(3px);
+    }
+
+    .clause-para-badge {
+      font-size: 9.5px;
+      font-family: var(--font-mono);
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(247, 37, 133, 0.2);
+      border: 1px solid rgba(247, 37, 133, 0.4);
+      color: var(--accent-pink);
+      flex-shrink: 0;
+    }
+
+    .clause-title-text {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .clause-page-badge {
+      font-size: 9px;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+    }
   </style>
   <script src="./lib/three.min.js"></script>
   <script src="./lib/OrbitControls.js"></script>
@@ -1126,6 +1287,9 @@ html_template = r'''<!DOCTYPE html>
       <button class="drawer-tab" data-tab="risks" onclick="switchDrawerTab('risks')">
         <span>⚠️</span> Risks & SOPs
       </button>
+      <button class="drawer-tab" data-tab="manuals" onclick="switchDrawerTab('manuals')">
+        <span>📖</span> Manuals TOC <span class="drawer-tab-badge" id="manuals-tab-count">83</span>
+      </button>
     </div>
 
     <div class="drawer-content">
@@ -1203,6 +1367,14 @@ html_template = r'''<!DOCTYPE html>
           </div>
         </div>
       </div>
+
+      <!-- 6. TAB: MANUALS CHAPTER TREE & TOC NAVIGATOR -->
+      <div class="tab-pane" id="tab-pane-manuals">
+        <div class="notes-search-box">
+          <input type="text" id="manuals-tree-filter" class="notes-search-input" placeholder="Search 83 chapters & 2,731 clauses (e.g. 429, USFD, weld, tamping)..." oninput="filterManualsTree(this.value)">
+        </div>
+        <div id="manuals-tree-container" class="manuals-tree-container"></div>
+      </div>
     </div>
   </div>
 
@@ -1274,6 +1446,8 @@ html_template = r'''<!DOCTYPE html>
     const CANONICAL_DATA = __CANONICAL_KG_JSON__;
     const RDSO_MANUALS_KNOWLEDGE = __MANUALS_KNOWLEDGE_JSON__;
     window.RDSO_MANUALS_KNOWLEDGE = RDSO_MANUALS_KNOWLEDGE;
+    const RDSO_MANUALS_TREE = __MANUALS_TREE_JSON__;
+    window.RDSO_MANUALS_TREE = RDSO_MANUALS_TREE;
 
     const rawKGNodes = CANONICAL_DATA.entities;
     const rawKGEdges = CANONICAL_DATA.edges;
@@ -1393,6 +1567,9 @@ html_template = r'''<!DOCTYPE html>
 
       // 5. Initialize UI
       renderDomainChips();
+
+      // Render Manuals Chapter Tree
+      renderManualsTree();
       populateParentSelect();
       initSearchAutocomplete();
       initComponentTwinViewer();
@@ -1701,12 +1878,16 @@ html_template = r'''<!DOCTYPE html>
     function highlightManualsEcosystem() {
       const manualIds = new Set();
       kgPhysicsNodes.forEach(n => {
-        if (n.data.domain === "manual" || n.data.domain === "tolerance" || n.data.domain === "equipment" ||
-            n.data.type === "DOCUMENT" || n.data.type === "SPECIFICATION" || n.data.type === "SOP" ||
+        if (n.data.domain === "manual" || n.data.domain === "manuals" || n.data.domain === "tolerance" || n.data.domain === "equipment" ||
+            n.data.type === "DOCUMENT" || n.data.type === "CHAPTER" || n.data.type === "CLAUSE" ||
+            n.data.type === "SPECIFICATION" || n.data.type === "SOP" ||
             n.data.type === "TOLERANCE" || n.data.type === "EQUIPMENT") {
           manualIds.add(n.data.id);
         }
       });
+      // Switch drawer tab to manuals tree and open
+      switchDrawerTab('manuals');
+      toggleIntelligenceDrawer(true);
 
       // Expand to 1-hop connected drawings, components, notes
       kgPhysicsEdges.forEach(e => {
@@ -1886,53 +2067,119 @@ html_template = r'''<!DOCTYPE html>
 
       // 1. POPULATE ENGINEERING ANSWER CARD
       const descEl = document.getElementById('answer-card-desc');
-      const manClause = (window.RDSO_MANUALS_KNOWLEDGE?.clauses || []).find(c => c.id === data.id);
+      const manClause = (window.RDSO_MANUALS_KNOWLEDGE?.clauses && (Array.isArray(window.RDSO_MANUALS_KNOWLEDGE.clauses) ? window.RDSO_MANUALS_KNOWLEDGE.clauses.find(c => c.id === data.id) : window.RDSO_MANUALS_KNOWLEDGE.clauses[data.id]));
       const manDoc = window.RDSO_MANUALS_KNOWLEDGE?.manuals?.[data.id];
-      const manTol = (window.RDSO_MANUALS_KNOWLEDGE?.tolerances || []).find(t => t.id === data.id);
-      const manEq = (window.RDSO_MANUALS_KNOWLEDGE?.equipment || []).find(e => e.id === data.id);
+      const manTol = (window.RDSO_MANUALS_KNOWLEDGE?.tolerances && (Array.isArray(window.RDSO_MANUALS_KNOWLEDGE.tolerances) ? window.RDSO_MANUALS_KNOWLEDGE.tolerances.find(t => t.id === data.id) : window.RDSO_MANUALS_KNOWLEDGE.tolerances[data.id]));
+      const manEq = (window.RDSO_MANUALS_KNOWLEDGE?.equipment && (Array.isArray(window.RDSO_MANUALS_KNOWLEDGE.equipment) ? window.RDSO_MANUALS_KNOWLEDGE.equipment.find(e => e.id === data.id) : window.RDSO_MANUALS_KNOWLEDGE.equipment[data.id]));
 
-      if (manClause) {
+      if (data.type === "CLAUSE" || data.id.startsWith("CLAUSE:") || manClause) {
+        const specs = data.specs || {};
+        const title = data.label || specs.title || (manClause && manClause.title) || "Regulatory Clause";
+        const manualName = specs.Manual || (manClause && (manClause.manual || manClause.ref)) || "Official Code";
+        const pageNum = specs.Page || (manClause && manClause.page) || "";
+        const chapterName = specs.Chapter || (manClause && manClause.chapter) || "";
+        const verbatim = specs.Verbatim || (manClause && (manClause.verbatim || manClause.verbatim_text)) || data.desc;
+        const roles = specs.Roles || (manClause && manClause.roles) || [];
+        const tols = specs.Tolerances || (manClause && manClause.tolerances) || [];
+        const equips = specs.Equipment || (manClause && manClause.equipment) || [];
+        const fails = specs.FailureModes || (manClause && manClause.failure_modes) || [];
+
         descEl.innerHTML = `
           <div style="margin-bottom:8px;">
-            <strong style="color:var(--accent-cyan); font-size:13px;">${manClause.title}</strong>
-            <span style="font-size:11px; color:var(--accent-pink); background:rgba(247,37,133,0.15); padding:2px 6px; border-radius:4px; border:1px solid rgba(247,37,133,0.3); margin-left:6px;">${manClause.ref} · ${manClause.page}</span>
+            <strong style="color:var(--accent-cyan); font-size:13px;">${title}</strong>
+            <span style="font-size:11px; color:var(--accent-pink); background:rgba(247,37,133,0.15); padding:2px 6px; border-radius:4px; border:1px solid rgba(247,37,133,0.3); margin-left:6px;">${manualName} ${pageNum ? '· Page ' + pageNum : ''}</span>
           </div>
-          <blockquote style="border-left:3px solid var(--accent-cyan); padding-left:10px; margin:8px 0; font-style:italic; color:#e0e8f8; font-size:12px; line-height:1.5;">"${manClause.verbatim_text}"</blockquote>
-          <div style="margin-top:10px; font-size:11px; font-weight:600; color:var(--accent-green); text-transform:uppercase;">Mandatory Regulatory Rules:</div>
-          <ul style="margin:4px 0 0 16px; font-size:11px; color:var(--text-main); line-height:1.4;">
-            ${(manClause.governing_rules || []).map(r => `<li>${r}</li>`).join('')}
-          </ul>
-          ${manClause.responsible_authorities ? `
-            <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
-              ${Object.entries(manClause.responsible_authorities).map(([k,v]) => `<div style="font-size:10px; background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.25); border-radius:4px; padding:4px 8px;"><strong style="color:var(--accent-cyan);">${k.replace('_', ' ').toUpperCase()}:</strong> ${v}</div>`).join('')}
-            </div>
-          ` : ''}
+          ${chapterName ? `<div style="font-size:11px; color:var(--accent-purple); font-weight:600; margin-bottom:6px;">📖 ${chapterName}</div>` : ''}
+          <blockquote style="border-left:3px solid var(--accent-cyan); padding-left:10px; margin:8px 0; font-style:italic; color:#e0e8f8; font-size:12px; line-height:1.5;">"${verbatim}"</blockquote>
+          ${(tols.length > 0) ? `
+            <div style="margin-top:8px;">
+              <div style="font-size:10px; font-weight:600; color:var(--accent-yellow); text-transform:uppercase; margin-bottom:4px;">Statutory Tolerances & Bounds:</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                ${tols.map(t => `<span style="font-size:10px; background:rgba(255,214,10,0.12); border:1px solid rgba(255,214,10,0.35); border-radius:4px; padding:2px 6px; color:var(--accent-yellow); font-weight:600;">📐 ${t}</span>`).join('')}
+              </div>
+            </div>` : ''}
+          ${(roles.length > 0) ? `
+            <div style="margin-top:8px;">
+              <div style="font-size:10px; font-weight:600; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:4px;">Responsible Authorities:</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                ${roles.map(r => `<span style="font-size:10px; background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.25); border-radius:4px; padding:2px 6px; color:var(--accent-cyan); font-weight:600;">👮 ${r}</span>`).join('')}
+              </div>
+            </div>` : ''}
+          ${(equips.length > 0) ? `
+            <div style="margin-top:8px;">
+              <div style="font-size:10px; font-weight:600; color:var(--accent-blue); text-transform:uppercase; margin-bottom:4px;">Mandated Track Equipment:</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                ${equips.map(e => `<span style="font-size:10px; background:rgba(58,134,255,0.1); border:1px solid rgba(58,134,255,0.3); border-radius:4px; padding:2px 6px; color:var(--accent-blue); font-weight:600;">⚙️ ${e}</span>`).join('')}
+              </div>
+            </div>` : ''}
+          ${(fails.length > 0) ? `
+            <div style="margin-top:8px;">
+              <div style="font-size:10px; font-weight:600; color:var(--accent-red); text-transform:uppercase; margin-bottom:4px;">Monitored Defect Codes / Hazards:</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                ${fails.map(f => `<span style="font-size:10px; background:rgba(255,51,102,0.1); border:1px solid rgba(255,51,102,0.3); border-radius:4px; padding:2px 6px; color:var(--accent-red); font-weight:600;">⚠️ ${f}</span>`).join('')}
+              </div>
+            </div>` : ''}
         `;
-      } else if (manDoc) {
+      } else if (data.type === "CHAPTER" || data.id.startsWith("CHAPTER:")) {
+        const specs = data.specs || {};
         descEl.innerHTML = `
-          <div style="margin-bottom:8px;"><strong style="color:var(--accent-pink); font-size:13px;">${manDoc.title}</strong></div>
-          <p style="font-size:12px; line-height:1.5; color:#e0e8f8; margin-bottom:8px;">${manDoc.scope}</p>
-          <div style="font-size:11px; background:rgba(255,0,127,0.1); border:1px solid rgba(255,0,127,0.3); border-radius:6px; padding:8px; margin-top:8px;">
-            <div><strong>Issuing Authority:</strong> ${manDoc.issuing_authority}</div>
-            <div style="margin-top:4px;"><strong>Edition:</strong> ${manDoc.edition}</div>
-            <div style="margin-top:4px;"><strong>Volume:</strong> ${manDoc.pages} Pages</div>
-            <div style="margin-top:4px;"><strong>Local Archive:</strong> <code style="color:var(--accent-cyan);">manuals/${manDoc.filename}</code></div>
+          <div style="margin-bottom:8px;">
+            <strong style="color:var(--accent-purple); font-size:14px;">${data.label}</strong>
+            <span style="font-size:11px; color:var(--accent-cyan); background:rgba(0,240,255,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(0,240,255,0.3); margin-left:6px;">${specs.Manual || 'Manual'} · Pages ${specs.PageRange || 'N/A'}</span>
+          </div>
+          <p style="font-size:12px; line-height:1.5; color:#e0e8f8; margin-bottom:10px;">${data.desc}</p>
+          <div style="font-size:11px; font-weight:600; color:var(--accent-green); margin-bottom:4px;">KEY STATUTORY TOPICS:</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+            ${(specs.KeyTopics || []).map(t => `<span style="font-size:10px; background:rgba(157,78,221,0.15); border:1px solid rgba(157,78,221,0.35); border-radius:4px; padding:2px 6px; color:var(--text-main);">${t}</span>`).join('')}
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); display:flex; justify-content:space-between; align-items:center;">
+            <span>Indexed Clauses in Chapter: <strong style="color:var(--accent-cyan); font-size:13px;">${specs.ClauseCount || 0}</strong></span>
+            <button class="btn" style="padding:4px 8px; font-size:10px;" onclick="switchDrawerTab('manuals'); filterManualsTree('Ch ${specs.ChapterNumber || ''}')">View in TOC Tree ➔</button>
           </div>
         `;
-      } else if (manTol) {
+      } else if (manDoc || data.type === "DOCUMENT") {
+        const docTitle = (manDoc && manDoc.title) || data.label || "Official Manual";
+        const docScope = (manDoc && manDoc.scope) || data.desc || "";
+        const docAuth = (manDoc && manDoc.issuing_authority) || (data.specs && data.specs.issuing_authority) || "Ministry of Railways / RDSO";
+        const docEd = (manDoc && manDoc.edition) || (data.specs && data.specs.edition) || "Latest Standard";
+        const docPages = (manDoc && manDoc.pages) || (data.specs && data.specs.TotalPages) || "530";
+        const docFile = (manDoc && manDoc.filename) || data.id;
+
+        descEl.innerHTML = `
+          <div style="margin-bottom:8px;"><strong style="color:var(--accent-pink); font-size:13px;">${docTitle}</strong></div>
+          <p style="font-size:12px; line-height:1.5; color:#e0e8f8; margin-bottom:8px;">${docScope}</p>
+          <div style="font-size:11px; background:rgba(255,0,127,0.1); border:1px solid rgba(255,0,127,0.3); border-radius:6px; padding:8px; margin-top:8px;">
+            <div><strong>Issuing Authority:</strong> ${docAuth}</div>
+            <div style="margin-top:4px;"><strong>Edition:</strong> ${docEd}</div>
+            <div style="margin-top:4px;"><strong>Volume:</strong> ${docPages} Pages</div>
+            <div style="margin-top:4px;"><strong>Local Archive:</strong> <code style="color:var(--accent-cyan);">${docFile}</code></div>
+          </div>
+        `;
+      } else if (manTol || data.type === "TOLERANCE") {
+        const tolVal = (manTol && manTol.value) || (data.specs && (data.specs.text || data.specs.value)) || data.label;
+        const tolClause = (manTol && manTol.clause) || (data.specs && data.specs.unit) || "Standard";
+        const tolPurpose = (manTol && manTol.purpose) || data.desc || "Statutory track parameter limit";
+        const tolMin = (manTol && manTol.min_val) || (data.specs && data.specs.min) || "";
+        const tolMax = (manTol && manTol.max_val) || (data.specs && data.specs.max) || "";
+        const tolUnit = (manTol && manTol.unit) || (data.specs && data.specs.unit) || "";
+
         descEl.innerHTML = `
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
-            <span style="font-size:20px; font-weight:700; color:var(--accent-yellow); font-family:var(--font-mono);">${manTol.value}</span>
-            <span style="font-size:10px; color:var(--accent-cyan); background:rgba(0,240,255,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(0,240,255,0.3);">${manTol.clause}</span>
+            <span style="font-size:20px; font-weight:700; color:var(--accent-yellow); font-family:var(--font-mono);">${tolVal}</span>
+            <span style="font-size:10px; color:var(--accent-cyan); background:rgba(0,240,255,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(0,240,255,0.3);">${tolClause}</span>
           </div>
-          <p style="font-size:12px; line-height:1.5; color:#e0e8f8;"><strong>Safety & Engineering Purpose:</strong> ${manTol.purpose}</p>
-          <div style="margin-top:8px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Design Limits: [${manTol.min_val} ${manTol.unit} — ${manTol.max_val} ${manTol.unit}]</div>
+          <p style="font-size:12px; line-height:1.5; color:#e0e8f8;"><strong>Safety & Engineering Purpose:</strong> ${tolPurpose}</p>
+          ${(tolMin !== "" && tolMax !== "") ? `<div style="margin-top:8px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Design Limits: [${tolMin} ${tolUnit} — ${tolMax} ${tolUnit}]</div>` : ''}
         `;
-      } else if (manEq) {
+      } else if (manEq || data.type === "EQUIPMENT") {
+        const eqLabel = (manEq && manEq.label) || data.label;
+        const eqDesc = (manEq && manEq.desc) || data.desc || "Track maintenance equipment";
+        const eqSource = (manEq && manEq.source_doc) || "IR Codes & Manuals";
+
         descEl.innerHTML = `
-          <div style="margin-bottom:8px;"><strong style="color:var(--accent-cyan); font-size:13px;">${manEq.label}</strong></div>
-          <p style="font-size:12px; line-height:1.5; color:#e0e8f8;">${manEq.desc}</p>
-          <div style="margin-top:8px; font-size:11px; color:var(--accent-green);">Source Code: ${manEq.source_doc}</div>
+          <div style="margin-bottom:8px;"><strong style="color:var(--accent-cyan); font-size:13px;">${eqLabel}</strong></div>
+          <p style="font-size:12px; line-height:1.5; color:#e0e8f8;">${eqDesc}</p>
+          <div style="margin-top:8px; font-size:11px; color:var(--accent-green);">Source Code: ${eqSource}</div>
         `;
       } else {
         descEl.innerText = data.desc || "Canonical railway track infrastructure asset governed by official RDSO technical specifications.";
@@ -2039,6 +2286,115 @@ html_template = r'''<!DOCTYPE html>
     window.inspectNode = inspectNode;
     window.switchSemanticMode = switchSemanticMode;
     window.switchDrawerTab = switchDrawerTab;
+
+    function renderManualsTree(filterQuery = "") {
+      const container = document.getElementById('manuals-tree-container');
+      if (!container) return;
+      container.innerHTML = "";
+      const q = filterQuery.toLowerCase().trim();
+
+      const treeData = window.RDSO_MANUALS_TREE || [];
+      let totalVisibleClauses = 0;
+
+      treeData.forEach(manual => {
+        const matchingChapters = manual.chapters.filter(ch => {
+          if (!q) return true;
+          if (manual.alias.toLowerCase().includes(q) || manual.title.toLowerCase().includes(q)) return true;
+          if (ch.title.toLowerCase().includes(q) || `chapter ${ch.num}`.includes(q)) return true;
+          return ch.clauses.some(cl => cl.para.toLowerCase().includes(q) || cl.title.toLowerCase().includes(q));
+        });
+
+        if (matchingChapters.length === 0) return;
+
+        const manualCard = document.createElement('div');
+        manualCard.className = "manual-tree-card";
+
+        const manualHeader = document.createElement('div');
+        manualHeader.className = "manual-tree-header";
+        const isManualOpen = q.length > 0;
+        manualHeader.innerHTML = `
+          <div><span>📘</span> <strong>${manual.alias}</strong> <span style="color:var(--text-muted); font-size:11px; margin-left:4px;">${manual.title}</span></div>
+          <span class="manual-tree-badge">${matchingChapters.length} Ch · ${manual.total_clauses || 0} Cl</span>
+        `;
+
+        const manualBody = document.createElement('div');
+        manualBody.className = `manual-tree-body ${isManualOpen ? 'open' : ''}`;
+
+        manualHeader.onclick = () => {
+          manualBody.classList.toggle('open');
+        };
+
+        matchingChapters.forEach(ch => {
+          const matchingClauses = ch.clauses.filter(cl => {
+            if (!q) return true;
+            if (manual.alias.toLowerCase().includes(q) || ch.title.toLowerCase().includes(q)) return true;
+            return cl.para.toLowerCase().includes(q) || cl.title.toLowerCase().includes(q);
+          });
+
+          if (matchingClauses.length === 0 && q.length > 0) return;
+
+          const chCard = document.createElement('div');
+          chCard.className = "chapter-tree-card";
+
+          const chHeader = document.createElement('div');
+          chHeader.className = "chapter-tree-header";
+          const isChOpen = q.length > 0;
+          chHeader.innerHTML = `
+            <div>
+              <span style="color:var(--accent-purple); font-weight:700;">Ch ${ch.num}:</span>
+              <span style="margin-left:4px; font-weight:500;">${ch.title}</span>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span style="font-size:9.5px; color:var(--text-dim);">p.${ch.pages[0]}-${ch.pages[1]}</span>
+              <span style="font-size:9.5px; padding:1px 5px; border-radius:3px; background:rgba(157,78,221,0.2); color:var(--accent-purple);">${matchingClauses.length}</span>
+            </div>
+          `;
+
+          const chBody = document.createElement('div');
+          chBody.className = `chapter-tree-body ${isChOpen ? 'open' : ''}`;
+
+          chHeader.onclick = (e) => {
+            e.stopPropagation();
+            chBody.classList.toggle('open');
+          };
+
+          matchingClauses.forEach(cl => {
+            totalVisibleClauses++;
+            const clRow = document.createElement('div');
+            clRow.className = "clause-tree-item";
+            clRow.innerHTML = `
+              <span class="clause-para-badge">§ ${cl.para}</span>
+              <span class="clause-title-text" title="${cl.title}">${cl.title}</span>
+              <span class="clause-page-badge">p.${cl.page}</span>
+            `;
+            clRow.onclick = (e) => {
+              e.stopPropagation();
+              window.selectGraphNode(cl.id);
+            };
+            chBody.appendChild(clRow);
+          });
+
+          chCard.appendChild(chHeader);
+          chCard.appendChild(chBody);
+          manualBody.appendChild(chCard);
+        });
+
+        manualCard.appendChild(manualHeader);
+        manualCard.appendChild(manualBody);
+        container.appendChild(manualCard);
+      });
+
+      if (container.children.length === 0) {
+        container.innerHTML = `<div style="padding:20px; text-align:center; color:var(--text-dim); font-size:12px;">No manuals or clauses matching "<strong>${filterQuery}</strong>"</div>`;
+      }
+    }
+
+    function filterManualsTree(val) {
+      renderManualsTree(val);
+    }
+    window.renderManualsTree = renderManualsTree;
+    window.filterManualsTree = filterManualsTree;
+
 
     function switchDrawerTab(tabId) {
       document.querySelectorAll('.drawer-tab').forEach(t => {
@@ -2583,7 +2939,7 @@ html_template = r'''<!DOCTYPE html>
 </html>
 '''
 
-final_html = html_template.replace("__EXTRACTED_KNOWLEDGE_JSON__", extracted_json_str).replace("__CANONICAL_KG_JSON__", canonical_json_str).replace("__MANUALS_KNOWLEDGE_JSON__", manuals_json_str)
+final_html = html_template.replace("__EXTRACTED_KNOWLEDGE_JSON__", extracted_json_str).replace("__CANONICAL_KG_JSON__", canonical_json_str).replace("__MANUALS_KNOWLEDGE_JSON__", manuals_json_str).replace("__MANUALS_TREE_JSON__", tree_json_str)
 
 output_html_path = os.path.join(REPO_ROOT, "index.html")
 with open(output_html_path, "w", encoding="utf-8") as f:
