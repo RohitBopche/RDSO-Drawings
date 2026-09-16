@@ -34,7 +34,7 @@
       "@type": "rdso:StandardDrawing",
       "rdfs:label": "RDSO/T-6155",
       "rdso:drawingNumber": "RDSO/T-6155",
-      "rdso:title": "10125 mm Curved Switch with ZU-1-60/60E1A1 Thick-Web Tongue Rails for 1 in 12 Turnout B.G. (1673 mm) for 60 kg (UIC)/60E1 on P.S.C. Sleepers",
+      "rdso:title": "10125 mm Curved Switch with ZU-1-60/60E1A1 Thick-Web Tongue Rails for 1 in 12 Turnout B.G.",
       "rdso:specification": "IRS: T 10",
       "rdso:railSection": "60 kg (UIC) / 60E1",
       "rdso:trackGaugeMm": 1673,
@@ -43,8 +43,6 @@
       "rdso:switchLengthMm": 10125,
       "rdso:tongueRailLengthMm": 12480,
       "rdso:stockRailLengthMm": 13000,
-      "rdso:switchAngleAtToe": "0° 20' 00\"",
-      "rdso:divergenceAtHeelMm": 175,
       "rdso:throwAtToeMm": 160,
       "rdso:switchRadiusMm": 441360,
       "rdso:hasRevision": [
@@ -60,182 +58,104 @@
       "rdso:associatedSignalingDrawing": "rdso:Drawing_RDSO_S_3454"
     },
     {
-      "@id": "rdso:Drawing_RDSO_T_6155_1",
-      "@type": "rdso:BillOfMaterialsDrawing",
-      "rdfs:label": "RDSO/T-6155/1",
-      "rdso:drawingNumber": "RDSO/T-6155/1",
-      "rdso:title": "Particulars of Components for 10125 mm Curved Switch with ZU-1-60 Thick Web Tongue Rails",
-      "rdso:latestRevision": "ALT_7",
-      "rdso:governs": "rdso:Drawing_RDSO_T_6155"
+      "@id": "rdso:Component_RDSO_T_9616",
+      "@type": "rdso:SlideChairComponent",
+      "rdfs:label": "Cast Steel Slide Chair (RDSO/T-9616)",
+      "rdso:drawingNumber": "RDSO/T-9616",
+      "rdso:material": "Cast Steel Grade 230-450W (IS: 1030)",
+      "rdso:sleeperSpan": "Sleepers 04 to 20",
+      "rdso:totalQuantity": 34,
+      "rdso:features": "Elevated machined slide table, stock rail check stop, 4 plate screw counter-sunk holes",
+      "rdso:mountsOn": "rdso:Component_PSC_Sleeper",
+      "rdso:supports": "rdso:Component_ZU1_60_TongueRail"
     },
     {
-      "@id": "rdso:Drawing_RDSO_T_6216",
-      "@type": "rdso:SpringSettingDeviceAssembly",
-      "rdfs:label": "RDSO/T-6216",
+      "@id": "rdso:Component_RDSO_T_9010",
+      "@type": "rdso:TieBarComponent",
+      "rdfs:label": "Detail 'B' M.S. Flat Tie Bar (RDSO/T-9010)",
+      "rdso:drawingNumber": "RDSO/T-9010",
+      "rdso:material": "Mild Steel (IS: 2062)",
+      "rdso:location": "Between Sleepers 03 & 04",
+      "rdso:dropBendMm": 222,
+      "rdso:bottomSpanMm": 485,
+      "rdso:sleeperClearanceMm": 12,
+      "rdso:clearsInterlocking": "rdso:Drawing_RDSO_S_3454"
+    },
+    {
+      "@id": "rdso:Component_RDSO_T_6216",
+      "@type": "rdso:SpringSettingDeviceComponent",
+      "rdfs:label": "Spring Setting Device - SSD (RDSO/T-6216)",
       "rdso:drawingNumber": "RDSO/T-6216",
-      "rdso:title": "Spring Setting Device for Thick Web Switches on P.S.C. Sleepers (Assembly)",
-      "rdso:sleeperLocation": "Sleeper No. 13 (Junction of Rail Heads - JOH)",
+      "rdso:location": "Sleeper 13 (JOH)",
       "rdso:clearanceAtJOHMm": 60,
-      "rdso:subComponentsDrawing": "rdso:Drawing_RDSO_T_6217",
-      "rdso:latestRevision": "ALT_5"
+      "rdso:containsParts": "rdso:Drawing_RDSO_T_6217",
+      "rdso:governs": "Tongue rail flangeway gap stability under dynamic wheel loads"
     },
     {
-      "@id": "rdso:Drawing_RDSO_T_6217",
-      "@type": "rdso:ComponentCatalogueDrawing",
-      "rdfs:label": "RDSO/T-6217 to RDSO/T-6217/39",
-      "rdso:drawingNumber": "RDSO/T-6217",
-      "rdso:title": "Component Parts of Spring Setting Device (Items 1 to 39)",
-      "rdso:latestRevision": "ALT_4",
-      "rdso:keyParts": [
-        "Helical Compression Spring",
-        "Connecting Rod & Turnbuckle",
-        "Insulated Tongue Rail Pin Connection (28 mm dia)",
-        "Bracket Assembly on Sleeper 13"
-      ]
-    },
-    {
-      "@id": "rdso:Drawing_RDSO_T_6275",
-      "@type": "rdso:CheckRailAssembly",
-      "rdfs:label": "RDSO/T-6275 to RDSO/T-6275/4",
-      "rdso:drawingNumber": "RDSO/T-6275",
-      "rdso:title": "Check Rail Arrangement and Fittings for 1 in 12 Turnout 60 kg on PSC Sleepers",
-      "rdso:checkRailLengthMm": 5000,
-      "rdso:flangewayClearanceMinMm": 41,
-      "rdso:flangewayClearanceMaxMm": 45,
-      "rdso:flangewayClearanceNominalMm": 44,
-      "rdso:flareOpeningMm": 89,
-      "rdso:sleeperSpan": "Sleepers 44 to 52",
-      "rdso:latestRevision": "ALT_4"
-    },
-    {
-      "@id": "rdso:Drawing_RDSO_T_6279",
-      "@type": "rdso:CMSCrossingDrawing",
-      "rdfs:label": "RDSO/T-6279",
+      "@id": "rdso:Component_RDSO_T_6279",
+      "@type": "rdso:CMSCrossingComponent",
+      "rdfs:label": "1 in 12 Monoblock CMS Crossing (RDSO/T-6279)",
       "rdso:drawingNumber": "RDSO/T-6279",
-      "rdso:title": "1 in 12 Cast Manganese Steel (CMS) Monoblock Crossing 60 kg (UIC) on PSC Sleepers",
       "rdso:material": "Austenitic Cast Manganese Steel (IRS: T 29)",
       "rdso:initialHardnessBHN": 220,
       "rdso:workHardenedBHN": 350,
       "rdso:crossingAngle": "4° 45' 49\"",
-      "rdso:latestRevision": "ALT_2"
+      "rdso:location": "Sleepers 46 to 50 (TNC at Sleeper 48)"
     },
     {
-      "@id": "rdso:Drawing_RDSO_T_6280",
-      "@type": "rdso:CMSCrossingAssemblyDrawing",
-      "rdfs:label": "RDSO/T-6280",
-      "rdso:drawingNumber": "RDSO/T-6280",
-      "rdso:title": "Assembly of 1 in 12 CMS Crossing 60 kg (UIC) with Fittings and Check Rails on PSC Sleepers",
-      "rdso:sleeperSpan": "Sleepers 41 to 55",
-      "rdso:latestRevision": "ALT_4",
-      "rdso:associatedCheckRail": "rdso:Drawing_RDSO_T_6275",
-      "rdso:associatedCMSUnit": "rdso:Drawing_RDSO_T_6279",
-      "rdso:weldableAlternative": "rdso:Drawing_RDSO_T_6280_1"
+      "@id": "rdso:Component_RDSO_T_6275",
+      "@type": "rdso:CheckRailComponent",
+      "rdfs:label": "Check Rail Assembly (RDSO/T-6275)",
+      "rdso:drawingNumber": "RDSO/T-6275",
+      "rdso:lengthMm": 5000,
+      "rdso:flangewayClearanceMm": 44,
+      "rdso:flareOpeningMm": 89,
+      "rdso:location": "Sleepers 44 to 52 (Opposite CMS Nose)",
+      "rdso:protects": "rdso:Component_RDSO_T_6279"
     },
     {
-      "@id": "rdso:Drawing_RDSO_T_6280_1",
-      "@type": "rdso:WeldableCMSCrossingDrawing",
-      "rdfs:label": "RDSO/T-6280/1",
-      "rdso:drawingNumber": "RDSO/T-6280/1",
-      "rdso:title": "1 in 12 Weldable CMS Crossing 60 kg with Intermediate Explosively Welded Transition Rails",
-      "rdso:latestRevision": "ALT_2",
-      "rdso:keyAdvantage": "Eliminates fishplated buffer joints in crossing zone; allows direct flash-butt welding into continuous welded rail (CWR)."
+      "@id": "rdso:Component_RDSO_T_5919",
+      "@type": "rdso:FastenerComponent",
+      "rdfs:label": "Elastic Rail Clip Mk-V (RDSO/T-5919)",
+      "rdso:drawingNumber": "RDSO/T-5919",
+      "rdso:material": "Spring Steel 55Si7 / 60Si7",
+      "rdso:toeLoadKg": "1200 - 1500",
+      "rdso:nominalToeDeflectionMm": 13.5,
+      "rdso:totalQuantity": 84
     },
     {
-      "@id": "rdso:Drawing_RDSO_T_7075",
-      "@type": "rdso:TurnoutSwitchDrawing",
-      "rdfs:label": "RDSO/T-7075",
-      "rdso:drawingNumber": "RDSO/T-7075",
-      "rdso:title": "6425 mm Curved Switch with ZU-1-60 Thick-Web Tongue Rails for 1 in 8.5 Turnout B.G. on P.S.C. Sleepers",
-      "rdso:turnoutRatio": "1 in 8.5",
-      "rdso:switchLengthMm": 6425,
-      "rdso:throwAtToeMm": 115,
-      "rdso:loopSpeedPotentialKmph": 25,
-      "rdso:latestRevision": "ALT_1",
-      "rdso:associatedLayoutDrawing": "rdso:Drawing_RDSO_T_7076"
-    },
-    {
-      "@id": "rdso:Drawing_RDSO_T_7076",
-      "@type": "rdso:TurnoutLayoutDrawing",
-      "rdfs:label": "RDSO/T-7076",
-      "rdso:drawingNumber": "RDSO/T-7076",
-      "rdso:title": "Layout of 1 in 8.5 Turnout B.G. 60 kg (UIC) on P.S.C. Sleepers",
-      "rdso:turnoutRatio": "1 in 8.5",
-      "rdso:totalSleepers": 54,
-      "rdso:latestRevision": "ALT_1"
-    },
-    {
-      "@id": "rdso:Revision_RDSO_T_6155_ALT_10",
-      "@type": "rdso:DrawingRevision",
-      "rdso:altNumber": 10,
-      "rdso:revisionDate": "2023-10-12",
-      "rdso:revisionType": "REVISED & REDRAWN",
-      "rdso:changeSummary": "Major heavy-axle upgrade: ERC Mk-V adopted, cast steel slide chairs & bearing plates, nylon cord GRSP, plate screws T-3913."
-    },
-    {
-      "@id": "rdso:Revision_RDSO_T_6155_ALT_11",
-      "@type": "rdso:DrawingRevision",
-      "rdso:altNumber": 11,
-      "rdso:revisionDate": "2024-05-22",
-      "rdso:revisionType": "REVISED & REDRAWN",
-      "rdso:changeSummary": "Joint structural integrity: Machined Joint 'M' of tongue rail replaced with Welded Joint 'W'."
-    },
-    {
-      "@id": "rdso:Revision_RDSO_T_6155_ALT_12",
-      "@type": "rdso:DrawingRevision",
-      "rdso:altNumber": 12,
-      "rdso:revisionDate": "2024-10-01",
-      "rdso:revisionType": "REVISED & REDRAWN",
-      "rdso:changeSummary": "Interlocking clearance and dowel retrofit: Detail 'B' added for M.S. Flat Tie Bar bend (222 mm drop between Sleeper 3 & 4), Notes 23 to 27 added."
-    },
-    {
-      "@id": "rdso:Revision_RDSO_T_6155_ALT_13",
-      "@type": "rdso:DrawingRevision",
-      "rdso:altNumber": 13,
-      "rdso:revisionDate": "2025-01-27",
-      "rdso:revisionType": "REVISED & REDRAWN",
-      "rdso:changeSummary": "Maintenance Supply Chain & Preventive Assurance: LIST - A added containing 24 wear/breakage prone spares; Note 28 enforces mandatory 10% procurement buffer."
-    },
-    {
-      "@id": "rdso:Component_Detail_B_TieBar",
-      "@type": "rdso:TieBar",
-      "rdfs:label": "Detail 'B' Tie Bar Arrangement (RDSO/T-9010)",
-      "rdso:drawingNumber": "RDSO/T-9010",
-      "rdso:location": "Between Sleeper No. 03 & 04",
-      "rdso:dropBendDepthMm": 222,
-      "rdso:bottomSpanMm": 485,
-      "rdso:sleeperClearanceMm": 12,
-      "rdso:preventsFoulingWith": "rdso:Drawing_RDSO_S_3454"
+      "@id": "rdso:Component_RDSO_T_9630",
+      "@type": "rdso:PadComponent",
+      "rdfs:label": "Nylon Cord Reinforced GRSP (RDSO/T-9630)",
+      "rdso:drawingNumber": "RDSO/T-9630",
+      "rdso:thicknessMm": 10,
+      "rdso:material": "Natural Rubber Composite with Nylon Fabric Reinforcement",
+      "rdso:purpose": "Electrical insulation, vibration damping, and sleeper seat load distribution"
     },
     {
       "@id": "rdso:Drawing_RDSO_S_3454",
       "@type": "rdso:SignalingInterlocking",
       "rdfs:label": "Clamp Point Lock (RDSO/S-3454)",
       "rdso:drawingNumber": "RDSO/S-3454",
+      "rdso:mountingSpan": "Between Sleepers 03 & 04",
       "rdso:strokeMm": 220,
-      "rdso:mountingSpan": "Sleepers 03 to 04"
+      "rdso:interlockingFunction": "Positive mechanical locking of tongue rail against stock rail"
     },
     {
-      "@id": "rdso:SOP_EpoxyDowelRetrofit",
-      "@type": "rdso:FieldStandardOperatingProcedure",
-      "rdfs:label": "Sleeper 03 & 04 Dowel Retrofit SOP",
-      "rdso:governingNote": 25,
-      "rdso:governingNoteCuring": 26,
-      "rdso:drillingSpecs": {
-        "holeDiameterMm": 35,
-        "holeDepthMm": 165,
-        "location": "Outer ends of PSC Sleeper No. 03 & 04"
-      },
-      "rdso:dowelPartNumber": "RDSO/T-3002",
-      "rdso:resinStandard": "IS: 12994-1990 Type L-100 Epoxy Resin",
-      "rdso:mandatoryCuringHours": 24
+      "@id": "rdso:FieldFailure_MachinedJointFatigue",
+      "@type": "rdso:FieldDefectReport",
+      "rdfs:label": "Machined Tongue Rail Joint Fatigue Dipping",
+      "rdso:problem": "Under 25t heavy axle loads, Machined Joint 'M' at JOH experienced bolt elongation, joint dipping, and rail head batter.",
+      "rdso:resolution": "Superseded in Alt 11 by Welded Joint 'W' (flash-butt / AT weld) to create continuous rail beam.",
+      "rdso:affects": "rdso:Drawing_RDSO_T_6155"
     },
     {
-      "@id": "rdso:ListA_BreakageWearSparesSchedule",
-      "@type": "rdso:SparesSchedule",
-      "rdfs:label": "LIST - A: Breakage and Wear Prone Spare Parts",
-      "rdso:governingNote": 28,
-      "rdso:mandatoryProcurementRatio": "10% of total turnout order quantity",
-      "rdso:itemsCount": 24
+      "@id": "rdso:FieldFailure_TieBarFouling",
+      "@type": "rdso:FieldDefectReport",
+      "rdfs:label": "Point Machine Drive Rod Fouling with Straight Tie Bar",
+      "rdso:problem": "Straight tie bars prior to Alt 12 obstructed the horizontal throw path of S&T Clamp Point Lock S-3454, causing point detection failures.",
+      "rdso:resolution": "Detail 'B' introduced with 222 mm drop bend providing 100% mechanical clearance.",
+      "rdso:affects": "rdso:Component_RDSO_T_9010"
     }
   ]
 }
