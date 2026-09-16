@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RDSO 3D Track Asset Intelligence Dashboard | 1:12 Thick-Web Switch (RDSO/T-6155)</title>
+  <title>RDSO 3D Track Asset Intelligence Dashboard | Full Turnout & Switch Suite (RDSO/T-6154 & T-6155)</title>
   <style>
     :root {
       --bg-primary: #0a0d14;
@@ -116,6 +116,39 @@
       display: flex;
       align-items: center;
       gap: 10px;
+    }
+
+    .scope-select-wrap {
+      display: flex;
+      align-items: center;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 2px 8px;
+      gap: 6px;
+    }
+
+    .scope-select-wrap label {
+      font-size: 11px;
+      color: var(--accent-cyan);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .scope-select {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .scope-select option {
+      background: var(--bg-secondary);
+      color: #fff;
     }
 
     .btn {
@@ -449,22 +482,22 @@
 
     .badge-revision {
       display: inline-block;
-      font-size: 10px;
-      padding: 2px 6px;
+      padding: 2px 8px;
       border-radius: 4px;
+      font-size: 10px;
       font-weight: 700;
+      margin-bottom: 6px;
     }
-
-    .badge-alt13 { background: rgba(0, 255, 136, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
-    .badge-alt12 { background: rgba(0, 210, 255, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
-    .badge-alt11 { background: rgba(157, 78, 221, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
     .badge-alt10 { background: rgba(255, 157, 0, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
+    .badge-alt11 { background: rgba(157, 78, 221, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+    .badge-alt12 { background: rgba(0, 210, 255, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+    .badge-alt13 { background: rgba(0, 255, 136, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
 
     .sop-box {
-      margin-top: 10px;
-      padding: 12px;
-      background: rgba(0, 210, 255, 0.05);
-      border: 1px solid rgba(0, 210, 255, 0.25);
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: rgba(0, 210, 255, 0.06);
+      border: 1px dashed rgba(0, 210, 255, 0.3);
       border-radius: 6px;
       font-size: 11px;
       line-height: 1.5;
@@ -473,7 +506,7 @@
     .sop-title {
       font-weight: 700;
       color: var(--accent-cyan);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -481,13 +514,13 @@
 
     /* Modals */
     .modal-overlay {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
       z-index: 100;
       display: none;
       align-items: center;
@@ -495,8 +528,8 @@
     }
 
     .modal-content {
-      width: 85%;
-      max-width: 1150px;
+      width: 85vw;
+      max-width: 1100px;
       height: 85vh;
       background: var(--bg-secondary);
       border: 1px solid var(--border-glow);
@@ -658,11 +691,21 @@
     <div class="brand">
       <div class="brand-logo">IR</div>
       <div class="brand-text">
-        <h1>RDSO Track Asset Digital Twin <span class="badge-alt" id="active-alt-badge">ALT-13 ACTIVE</span></h1>
-        <p>10125 mm Curved Switch with ZU-1-60 Thick-Web Tongue Rails | 1 in 12 Turnout 60 kg</p>
+        <h1>RDSO Turnout & Switch Digital Twin <span class="badge-alt" id="active-alt-badge">ALT-13 ACTIVE</span></h1>
+        <p>Complete 1 in 12 Turnout Suite (RDSO/T-6154) & 10125 mm Thick-Web Switch (RDSO/T-6155)</p>
       </div>
     </div>
     <div class="header-controls">
+      <div class="scope-select-wrap">
+        <label for="scope-select">LAYOUT SCOPE:</label>
+        <select id="scope-select" class="scope-select">
+          <option value="full">1:12 Full Turnout (RDSO/T-6154: Sleepers 1 to 64)</option>
+          <option value="switch">1:12 Thick-Web Switch (RDSO/T-6155: Sleepers 1 to 27)</option>
+          <option value="crossing">1:12 CMS Crossing Zone (RDSO/T-6280: Sleepers 41 to 55)</option>
+          <option value="switch85">1:8.5 Switch Comparison (RDSO/T-7075: 6425 mm)</option>
+        </select>
+      </div>
+
       <button class="btn btn-diff" id="open-visual-diff-btn">
         <span>⚡</span> Visual Comparative Hub
       </button>
@@ -680,11 +723,12 @@
     <div class="panel">
       <div class="panel-title">Camera Presets</div>
       <div class="view-buttons">
-        <button class="btn-small active" data-view="overview">Isometric</button>
+        <button class="btn-small active" data-view="overview">Full Turnout</button>
         <button class="btn-small" data-view="toe">Toe (Detail 'B')</button>
-        <button class="btn-small" data-view="joint">Rail Joint</button>
         <button class="btn-small" data-view="ssd">SSD (Sl. 13)</button>
-        <button class="btn-small" data-view="heel">Heel Joint</button>
+        <button class="btn-small" data-view="lead">Lead Curve</button>
+        <button class="btn-small" data-view="crossing">CMS Crossing</button>
+        <button class="btn-small" data-view="checkrail">Check Rails</button>
         <button class="btn-small" data-view="top">Top (Plan)</button>
       </div>
     </div>
@@ -707,23 +751,31 @@
       <div class="panel-title">Turnout Core Metrics</div>
       <div class="prop-row">
         <span class="prop-label">Specification:</span>
-        <span class="prop-value">IRS: T 10</span>
+        <span class="prop-value" id="metric-spec">IRS: T 10 & T 29</span>
+      </div>
+      <div class="prop-row">
+        <span class="prop-label">Turnout Ratio:</span>
+        <span class="prop-value" id="metric-ratio">1 in 12</span>
       </div>
       <div class="prop-row">
         <span class="prop-label">Switch Angle:</span>
-        <span class="prop-value">0° 20' 00"</span>
+        <span class="prop-value" id="metric-angle">0° 20' 00"</span>
       </div>
       <div class="prop-row">
         <span class="prop-label">Throw at Toe:</span>
-        <span class="prop-value">160 mm</span>
+        <span class="prop-value" id="metric-throw">160 mm</span>
       </div>
       <div class="prop-row">
-        <span class="prop-label">Radius:</span>
-        <span class="prop-value">441.36 m</span>
+        <span class="prop-label">Lead Radius:</span>
+        <span class="prop-value" id="metric-radius">441.36 m</span>
       </div>
       <div class="prop-row">
-        <span class="prop-label">Sleepers:</span>
-        <span class="prop-value">27 PSC + 2AS</span>
+        <span class="prop-label">Total Sleepers:</span>
+        <span class="prop-value" id="metric-sleepers">64 PSC</span>
+      </div>
+      <div class="prop-row">
+        <span class="prop-label">Speed Potential:</span>
+        <span class="prop-value" id="metric-speed">160 km/h / 50 km/h</span>
       </div>
     </div>
   </div>
@@ -779,8 +831,8 @@
         <span class="prop-value" id="hud-mat">Mild Steel (IS: 2062)</span>
       </div>
       <div class="prop-row">
-        <span class="prop-label">Quantity per Switch:</span>
-        <span class="prop-value" id="hud-qty">1 Set</span>
+        <span class="prop-label">Quantity / Span:</span>
+        <span class="prop-value" id="hud-qty">1 Set (222 mm Drop Bend)</span>
       </div>
 
       <div class="sop-box" id="hud-sop-box">
@@ -799,158 +851,34 @@
     </div>
   </div>
 
-  <!-- Modal: Visual Comparative Hub -->
-  <div class="modal-overlay" id="visual-diff-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>⚡ Visual Comparative Hub: RDSO/T-6155 Revision Progression</h2>
-        <button class="modal-close" onclick="closeModal('visual-diff-modal')">&times;</button>
-      </div>
-      <div class="modal-body">
-        <!-- Sub-Tabs -->
-        <div class="diff-subtabs">
-          <button class="diff-tab-btn active" data-difftab="drawings">Side-by-Side Drawing Comparator</button>
-          <button class="diff-tab-btn" data-difftab="radar">Engineering Performance Radar</button>
-          <button class="diff-tab-btn" data-difftab="matrix">Comprehensive Change Matrix</button>
-        </div>
-
-        <!-- Sub-View 1: Drawing Crops Comparator -->
-        <div id="diff-tab-drawings" class="crop-comparison-container">
-          <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-            <button class="btn-small active" onclick="loadCropView('detail_b')">Detail 'B' Tie Bar Clearance</button>
-            <button class="btn-small" onclick="loadCropView('spares')">LIST - A Spares Table</button>
-            <button class="btn-small" onclick="loadCropView('alterations')">Alteration Description Blocks</button>
-          </div>
-
-          <div class="crop-viewer-card">
-            <h4 style="margin-bottom: 8px; color: var(--accent-cyan);" id="crop-card-title">Detail 'B' Tie Bar Clearance: Alt 10 (Flat) vs Alt 13 (222 mm Drop Bend)</h4>
-            <div class="crop-image-wrapper">
-              <img id="crop-display-img" src="crops/comparison_detail_b.png" alt="Drawing Comparison Crop">
-            </div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px;" id="crop-card-desc">
-              Alt 10 lacked a dimensioned tie bar bend, causing field fouling with clamp point lock rods. Alt 12 & Alt 13 introduced Detail 'B' specifying the exact 222 mm drop, 485 mm bottom span, 12 mm sleeper clearance, and the 35x165 mm epoxy dowel drilling SOP.
-            </p>
-          </div>
-        </div>
-
-        <!-- Sub-View 2: Engineering Performance Radar -->
-        <div id="diff-tab-radar" style="display: none; height: 100%;">
-          <div style="display: flex; gap: 20px; align-items: center; height: 100%;">
-            <div style="flex: 1; height: 420px; background: #070a10; border-radius: 8px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; position: relative;">
-              <canvas id="radar-canvas" width="460" height="400"></canvas>
-            </div>
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
-              <h3 style="color: #fff; font-size: 16px;">Evolutionary Impact Scorecard</h3>
-              <div class="sop-box" style="border-color: rgba(255, 157, 0, 0.4);">
-                <strong style="color: var(--accent-orange);">Alt 10 Baseline (Oct 2023):</strong>
-                ERC Mk-V and Cast Steel chairs adopted. Heavy axle fatigue resistance improved, but machined tongue rail joint and flat tie bar created point fouling risks.
-              </div>
-              <div class="sop-box" style="border-color: rgba(157, 78, 221, 0.4);">
-                <strong style="color: var(--accent-purple);">Alt 11 Transition (May 2024):</strong>
-                Machined Joint 'M' replaced with Welded Joint 'W'. Rail structural continuity jumped to 95%, eliminating rail dipping and tongue rail batter.
-              </div>
-              <div class="sop-box" style="border-color: rgba(0, 210, 255, 0.4);">
-                <strong style="color: var(--accent-cyan);">Alt 12 Interlocking Milestone (Oct 2024):</strong>
-                Detail 'B' introduced 222 mm drop. Point machine clearance achieved 100%. Doweling SOP standardized sleeper life.
-              </div>
-              <div class="sop-box" style="border-color: rgba(0, 255, 136, 0.4);">
-                <strong style="color: var(--accent-green);">Alt 13 Life-Cycle Assurance (Jan 2025):</strong>
-                LIST - A 10% mandatory spares buffer guarantees MTBF and field uptime, eliminating 80% of maintenance delays.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sub-View 3: Comprehensive Change Matrix -->
-        <div id="diff-tab-matrix" style="display: none;">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Component / Sub-Assembly</th>
-                <th>Alt 10 (Oct 2023)</th>
-                <th>Alt 11 (May 2024)</th>
-                <th>Alt 12 (Oct 2024)</th>
-                <th>Alt 13 (Jan 2025 - Latest)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>M.S. Flat Tie Bar</strong></td>
-                <td>Flat, basic bend note</td>
-                <td>Flat</td>
-                <td><span style="color: var(--accent-cyan); font-weight: 700;">Detail 'B' 222 mm Drop Bend</span></td>
-                <td><span style="color: var(--accent-green); font-weight: 700;">Detail 'B' Retained</span></td>
-              </tr>
-              <tr>
-                <td><strong>Tongue Rail Joint</strong></td>
-                <td>Machined Joint ('M')</td>
-                <td><span style="color: var(--accent-purple); font-weight: 700;">Welded Joint ('W')</span></td>
-                <td>Welded Joint ('W')</td>
-                <td>Welded Joint ('W')</td>
-              </tr>
-              <tr>
-                <td><strong>Slide Chairs (Sl. 04-20)</strong></td>
-                <td>Cast Steel (RDSO/T-9616)</td>
-                <td>Cast Steel</td>
-                <td>Cast Steel</td>
-                <td>Cast Steel</td>
-              </tr>
-              <tr>
-                <td><strong>Fastening Clips</strong></td>
-                <td>ERC Mk-V (RDSO/T-5919)</td>
-                <td>ERC Mk-V</td>
-                <td>ERC Mk-V</td>
-                <td>ERC Mk-V</td>
-              </tr>
-              <tr>
-                <td><strong>Epoxy Dowel Retrofit</strong></td>
-                <td>Absent</td>
-                <td>Absent</td>
-                <td><span style="color: var(--accent-cyan); font-weight: 700;">Note 25 & 26 (IS:12994 L-100)</span></td>
-                <td>Note 25 & 26 Mandated</td>
-              </tr>
-              <tr>
-                <td><strong>Dedicated Spares Schedule</strong></td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td><span style="color: var(--accent-green); font-weight: 700;">LIST - A (24 Items)</span></td>
-              </tr>
-              <tr>
-                <td><strong>Mandatory Spares Buffer</strong></td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td><span style="color: var(--accent-green); font-weight: 700;">+10% Buffer (Note 28)</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: LIST - A Spares Calculator -->
+  <!-- MODAL 1: Spares Calculator -->
   <div class="modal-overlay" id="spares-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>📊 LIST - A: Mandatory 10% Spares Calculator (Note 28)</h2>
+        <h2>📊 Dynamic Procurement Calculator: LIST - A & Turnout Spares</h2>
         <button class="modal-close" onclick="closeModal('spares-modal')">&times;</button>
       </div>
       <div class="modal-body">
-        <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px; background: rgba(255,255,255,0.04); padding: 12px; border-radius: 8px;">
-          <label style="font-weight: 600;">Number of 1:12 TWS Turnouts in Purchase Order:</label>
-          <input type="number" id="po-count-input" value="10" min="1" max="500" style="background: #000; border: 1px solid var(--accent-cyan); color: #fff; padding: 6px 12px; border-radius: 4px; width: 90px; font-size: 14px; font-weight: 700;">
-          <span style="font-size: 12px; color: var(--accent-green);">Calculation base: 10% buffer mandated by RDSO/T-6155 Alt 13 Note 28.</span>
+        <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 16px; background: rgba(0,0,0,0.3); padding: 12px 16px; border-radius: 8px;">
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">PURCHASE ORDER QUANTITY (Sets):</label>
+            <input type="number" id="po-count-input" value="10" min="1" max="500" style="background: var(--bg-secondary); border: 1px solid var(--accent-cyan); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 700; width: 120px;">
+          </div>
+          <div>
+            <span style="font-size: 12px; color: var(--accent-green); font-weight: 700;">Note 28 Compliance:</span>
+            <p style="font-size: 11px; color: var(--text-muted);">Automatically calculates mandatory +10% wear/breakage spares for every purchase order of 1:12 turnouts.</p>
+          </div>
         </div>
-        <table class="data-table" id="spares-table">
+
+        <table class="data-table">
           <thead>
             <tr>
-              <th>Drawing No. / Part</th>
+              <th>Part / Drawing No.</th>
               <th>Description</th>
-              <th>Per Turnout Qty</th>
-              <th>Total Standard Qty</th>
-              <th>Mandatory 10% Spare Buffer</th>
+              <th>Qty per Turnout</th>
+              <th>Base Order Qty</th>
+              <th>Mandatory +10% Spare Buffer</th>
+              <th>Total Procurement Target</th>
             </tr>
           </thead>
           <tbody id="spares-tbody"></tbody>
@@ -959,49 +887,237 @@
     </div>
   </div>
 
-  <!-- Modal: Knowledge Graph Visualizer -->
+  <!-- MODAL 2: Knowledge Graph Network Visualizer -->
   <div class="modal-overlay" id="graph-modal">
-    <div class="modal-content" style="width: 85%; max-width: 1100px; height: 85vh;">
+    <div class="modal-content">
       <div class="modal-header">
-        <h2>🕸 RDSO Track Infrastructure Knowledge Graph Explorer</h2>
+        <h2>🕸 RDSO Turnout Ecosystem Knowledge Graph</h2>
         <button class="modal-close" onclick="closeModal('graph-modal')">&times;</button>
       </div>
-      <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
-        <p style="color: var(--text-muted); font-size: 12px;">
-          Interactive semantic graph displaying relationships between Drawing RDSO/T-6155, its 4 revisions (Alt 10-13), standard components, signaling interfaces, and field SOPs.
+      <div class="modal-body" style="display: flex; flex-direction: column; align-items: center;">
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px; align-self: flex-start;">
+          Visualizing semantic relationships across RDSO standards (T-6154 Layout, T-6155 Switch, T-6216 SSD, T-6275 Check Rails, T-6280 Crossing, and T-7075 1:8.5).
         </p>
-        <div id="graph-canvas-container" style="flex: 1; min-height: 450px; background: #070a10; border-radius: 8px; border: 1px solid var(--border-color); position: relative; overflow: hidden;">
-          <canvas id="graph-canvas" width="1000" height="480"></canvas>
+        <canvas id="graph-canvas" width="1020" height="520" style="background: #0d121c; border-radius: 8px; border: 1px solid var(--border-color);"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Visual Comparative Hub -->
+  <div class="modal-overlay" id="visual-diff-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚡ RDSO Visual Comparative Intelligence & Catalog Hub</h2>
+        <button class="modal-close" onclick="closeModal('visual-diff-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="diff-subtabs">
+          <button class="diff-tab-btn active" data-difftab="drawings">Side-by-Side Drawing Crops</button>
+          <button class="diff-tab-btn" data-difftab="catalog">14-Drawing Master Catalog</button>
+          <button class="diff-tab-btn" data-difftab="radar">4D Upgrade Radar Chart</button>
+          <button class="diff-tab-btn" data-difftab="matrix">Turnout Clearance Matrix</button>
+        </div>
+
+        <!-- Subtab 1: Side by side crops -->
+        <div id="diff-tab-drawings" class="crop-comparison-container">
+          <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+            <button class="btn-small active" onclick="loadCropView('detail_b')">Detail 'B' Tie Bar Clearance</button>
+            <button class="btn-small" onclick="loadCropView('spares')">LIST - A Spares Table</button>
+            <button class="btn-small" onclick="loadCropView('alterations')">Alteration History Blocks</button>
+          </div>
+          <div class="crop-viewer-card">
+            <h4 id="crop-card-title" style="color: var(--accent-cyan); margin-bottom: 8px; font-size: 13px;"></h4>
+            <div class="crop-image-wrapper">
+              <img id="crop-display-img" src="crops/comparison_detail_b.png" alt="Crop View">
+            </div>
+            <p id="crop-card-desc" style="margin-top: 10px; font-size: 12px; color: var(--text-muted);"></p>
+          </div>
+        </div>
+
+        <!-- Subtab 2: 14 Drawing Catalog -->
+        <div id="diff-tab-catalog" style="display: none;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Drawing No.</th>
+                <th>Alt</th>
+                <th>Category</th>
+                <th>Description & Engineering Role</th>
+                <th>File Reference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-cyan); font-weight: 700;">RDSO/T-6154</td>
+                <td><span class="badge-revision badge-alt12">ALT 6</span></td>
+                <td>Master Turnout Layout</td>
+                <td>General Layout of 1 in 12 Turnout 60 kg (UIC) on PSC Sleepers (Sleepers 1 to 64).</td>
+                <td>RDSO_T_6154_ALT_6.pdf</td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-green); font-weight: 700;">RDSO/T-6155</td>
+                <td><span class="badge-revision badge-alt13">ALT 13</span></td>
+                <td>Curved Switch Assembly</td>
+                <td>10125 mm Curved Switch with ZU-1-60 Thick Web Tongue Rails, Detail 'B' Tie Bar, and LIST - A.</td>
+                <td>2025-01-28-RDSO_T_6155_ALT_13.pdf</td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-cyan);">RDSO/T-6155/1</td>
+                <td><span class="badge-revision badge-alt11">ALT 7</span></td>
+                <td>Particulars & BOM</td>
+                <td>Bill of materials, plates, fittings, and fastening schedule for 10125 mm switch.</td>
+                <td>RDSO_T_6155_1_ALT_7.pdf</td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-cyan);">RDSO/T-6216</td>
+                <td><span class="badge-revision badge-alt11">ALT 5</span></td>
+                <td>Spring Setting Device</td>
+                <td>SSD Assembly mounted on Sleeper 13 (JOH) to maintain flangeway clearance.</td>
+                <td>RDSO_T_6216_ALT_5.pdf</td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-cyan);">RDSO/T-6217</td>
+                <td><span class="badge-revision badge-alt10">ALT 4</span></td>
+                <td>SSD Component Parts</td>
+                <td>Complete parts catalogue for Spring Setting Device (Items 1 to 39).</td>
+                <td>RDSO_T_6217 TO RDSO_T_6217_39_ALT_4.pdf</td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-cyan);">RDSO/T-6275</td>
+                <td><span class="badge-revision badge-alt10">ALT 4</span></td>
+                <td>Check Rail Assembly</td>
+                <td>Check rails (5000 mm) & chairs for 1:12 CMS Crossing with 41-45 mm clearance.</td>
+                <td>RDSO_T_6275 TO RDSO_T_ 6275_4_ALT_4.pdf</td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-cyan);">RDSO/T-6279</td>
+                <td><span class="badge-revision badge-alt10">ALT 2</span></td>
+                <td>CMS Crossing Unit</td>
+                <td>1 in 12 Cast Manganese Steel Crossing monoblock casting 60 kg (UIC).</td>
+                <td>RDSO_T_6279_Alt_2.pdf</td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-cyan);">RDSO/T-6280</td>
+                <td><span class="badge-revision badge-alt10">ALT 4</span></td>
+                <td>CMS Crossing Assembly</td>
+                <td>Complete Crossing Assembly on Sleepers 41 to 55 with bearing plates and check rails.</td>
+                <td>RDSO_T_6280_ALT_4.pdf</td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-cyan);">RDSO/T-6280/1</td>
+                <td><span class="badge-revision badge-alt10">ALT 2</span></td>
+                <td>Weldable CMS Crossing</td>
+                <td>CMS crossing with explosively welded transition rails for direct LWR/CWR welding.</td>
+                <td>RDSO_T_6280_1_Alt_2.pdf</td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-purple);">RDSO/T-7075</td>
+                <td><span class="badge-revision badge-alt10">ALT 1</span></td>
+                <td>1:8.5 Switch Assembly</td>
+                <td>6425 mm Curved Switch with ZU-1-60 Thick-Web Tongue Rails for 1 in 8.5 Turnout.</td>
+                <td>RDSO_T_7075_ALT_1.pdf</td>
+              </tr>
+              <tr>
+                <td style="font-family: monospace; color: var(--accent-purple);">RDSO/T-7076</td>
+                <td><span class="badge-revision badge-alt10">ALT 1</span></td>
+                <td>1:8.5 Turnout Layout</td>
+                <td>Layout of 1 in 8.5 Turnout 60 kg on PSC Sleepers (54 Sleepers).</td>
+                <td>RDSO_T_7076_ALT_1.pdf</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Subtab 3: Radar Chart -->
+        <div id="diff-tab-radar" style="display: none; text-align: center;">
+          <h4 style="color: var(--accent-cyan); margin-bottom: 12px;">Operational Reliability Evolution Radar</h4>
+          <canvas id="radar-canvas" width="600" height="420" style="background: #0d121c; border-radius: 8px; border: 1px solid var(--border-color);"></canvas>
+        </div>
+
+        <!-- Subtab 4: Matrix -->
+        <div id="diff-tab-matrix" style="display: none;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Critical Dimension / Clearance</th>
+                <th>Standard Value</th>
+                <th>Governing Note / Rule</th>
+                <th>Maintenance Tolerance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Throw of Switch at Toe</td>
+                <td>160 mm</td>
+                <td>RDSO/T-6155 Note 4</td>
+                <td>160 mm ± 3 mm</td>
+              </tr>
+              <tr>
+                <td>Flangeway Clearance at Heel (JOH)</td>
+                <td>60 mm min</td>
+                <td>RDSO/T-6216 Note 2</td>
+                <td>60 mm - 65 mm</td>
+              </tr>
+              <tr>
+                <td>Check Rail Flangeway Clearance</td>
+                <td>44 mm (Nominal)</td>
+                <td>RDSO/T-6275 Note 3</td>
+                <td>41 mm min / 45 mm max</td>
+              </tr>
+              <tr>
+                <td>Tie Bar Detail 'B' Drop Bend</td>
+                <td>222 mm drop</td>
+                <td>RDSO/T-6155 Detail 'B'</td>
+                <td>222 mm ± 2 mm</td>
+              </tr>
+              <tr>
+                <td>Tie Bar Bottom Clearance to Sleeper</td>
+                <td>12 mm min</td>
+                <td>RDSO/T-6155 Alt 12/13</td>
+                <td>12 mm - 18 mm</td>
+              </tr>
+              <tr>
+                <td>Dowel Retrofit Depth & Diameter</td>
+                <td>35 mm dia x 165 mm depth</td>
+                <td>RDSO/T-6155 Note 25</td>
+                <td>Must cure 24 hrs prior to torque</td>
+              </tr>
+              <tr>
+                <td>Mandatory Spare Ratio (LIST - A)</td>
+                <td>+10% Buffer</td>
+                <td>RDSO/T-6155 Note 28</td>
+                <td>Enforced on 24 critical items</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal: Field SOPs & Directives -->
+  <!-- MODAL 4: Field SOPs -->
   <div class="modal-overlay" id="sop-modal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 800px;">
       <div class="modal-header">
-        <h2>🛠 Senior Section Engineer (P.Way) Field Protocols</h2>
+        <h2>🛠 Field Standard Operating Procedures (IRPWM & RDSO Standards)</h2>
         <button class="modal-close" onclick="closeModal('sop-modal')">&times;</button>
       </div>
       <div class="modal-body">
-        <div class="sop-box" style="margin-bottom: 12px;">
-          <div class="sop-title">1. Sleeper 03 & 04 Tie Bar Dowel Retrofit (Note 25 & 26)</div>
-          <p><strong>Condition:</strong> When retrofitting older PSC sleepers without pre-formed tie bar dowel holes.</p>
-          <ul style="margin-left: 20px; margin-top: 6px;">
-            <li>Drill holes: <strong>35 mm diameter, 165 mm depth</strong> at both ends of Sleeper 03 and 04.</li>
-            <li>Clean hole thoroughly of concrete dust using pneumatic air blower.</li>
-            <li>Fill hole with <strong>IS: 12994-1990 Type L-100 Epoxy Resin</strong> and insert Polyethylene Dowel <strong>RDSO/T-3002</strong>.</li>
-            <li><strong>Mandatory Hold Period:</strong> Allow exactly 24 hours of undisturbed curing before mounting M.S. Flat Tie Bar RDSO/T-9010 and tightening Plate Screws RDSO/T-3913.</li>
-          </ul>
+        <div class="sop-box" style="margin-top: 0; margin-bottom: 14px;">
+          <div class="sop-title">1. Sleeper 03 & 04 Dowel Retrofit Procedure (Notes 25 & 26)</div>
+          <p>Where dowel holes are missing in PSC Sleepers 03 & 04, drill 35 mm dia holes to 165 mm depth using rotary percussion drills. Flush with compressed dry air. Inject approved IS: 12994-1990 Type L-100 epoxy resin and insert RDSO/T-3002 dowels. <strong>Mandatory 24-hour curing is strictly required before driving plate screws or applying torque.</strong></p>
         </div>
-        <div class="sop-box" style="margin-bottom: 12px;">
-          <div class="sop-title">2. Welded Tongue Rail Joint Floating Sleeper Rule (Note 22 & Alt 11)</div>
+        <div class="sop-box" style="margin-bottom: 14px;">
+          <div class="sop-title">2. Stock Rail Joint (SRJ) Field Rewelding Alignment (Note 23)</div>
           <p>When rewelding the Stock Rail Joint (SRJ) in the field, Sleeper No. 1 must be shifted inwards slightly so the weld remains floating and not directly supported on the sleeper edge. Hole in the tie bar must be shifted to match.</p>
         </div>
-        <div class="sop-box">
+        <div class="sop-box" style="margin-bottom: 14px;">
           <div class="sop-title">3. Curvature Verification & Transit Distortion Rectification (Notes 20 & 27)</div>
           <p>Check tongue and stock rail versines against IRPWM Annexure 4/6 & 4/7 prior to laying. Rectify transit distortions with approved hydraulic rail benders.</p>
+        </div>
+        <div class="sop-box">
+          <div class="sop-title">4. Check Rail Flangeway Clearance Inspection (RDSO/T-6275)</div>
+          <p>Verify that check rail flangeway gap remains strictly between 41 mm and 45 mm opposite the nose of crossing. Flare ends must maintain 89 mm opening to prevent flange strike on high-speed trains.</p>
         </div>
       </div>
     </div>
@@ -1009,7 +1125,7 @@
 
   <!-- Application Logic -->
   <script>
-    // LIST - A Data
+    // LIST - A Data (24 items)
     const listAData = [
       { part: "T-11526", desc: "BOLTS 25X310", qty: 2 },
       { part: "RDSO/T-9630", desc: "NYLON CORD REINFORCED GRSP", qty: 12 },
@@ -1051,6 +1167,7 @@
           <td>${item.qty}</td>
           <td>${total}</td>
           <td style="color: var(--accent-green); font-weight: 700;">+${buffer} (${Math.round((buffer/total)*100)}%)</td>
+          <td style="color: #fff; font-weight: 700;">${total + buffer}</td>
         `;
         tbody.appendChild(tr);
       });
@@ -1081,6 +1198,7 @@
         btn.classList.add('active');
         const tab = btn.getAttribute('data-difftab');
         document.getElementById('diff-tab-drawings').style.display = tab === 'drawings' ? 'flex' : 'none';
+        document.getElementById('diff-tab-catalog').style.display = tab === 'catalog' ? 'block' : 'none';
         document.getElementById('diff-tab-radar').style.display = tab === 'radar' ? 'block' : 'none';
         document.getElementById('diff-tab-matrix').style.display = tab === 'matrix' ? 'block' : 'none';
         if (tab === 'radar') renderRadarChart();
@@ -1115,15 +1233,15 @@
     }
 
     // ==========================================
-    // THREE.JS 3D SCENE INITIALIZATION
+    // THREE.JS 3D SCENE INITIALIZATION (64 SLEEPERS)
     // ==========================================
     const container = document.getElementById('webgl-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0a0d14);
-    scene.fog = new THREE.FogExp2(0x0a0d14, 0.015);
+    scene.fog = new THREE.FogExp2(0x0a0d14, 0.012);
 
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(12, 14, 26);
+    camera.position.set(16, 22, 28);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -1136,43 +1254,44 @@
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.maxPolarAngle = Math.PI / 2 - 0.02;
-    controls.target.set(0, 0, 0);
+    controls.target.set(0, 0, 8);
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0xddeeff, 1.4);
-    dirLight.position.set(20, 30, 15);
+    const dirLight = new THREE.DirectionalLight(0xddeeff, 1.5);
+    dirLight.position.set(25, 40, 20);
     dirLight.castShadow = true;
     scene.add(dirLight);
 
-    const blueRimLight = new THREE.DirectionalLight(0x00d2ff, 0.8);
-    blueRimLight.position.set(-20, 15, -15);
+    const blueRimLight = new THREE.DirectionalLight(0x00d2ff, 0.9);
+    blueRimLight.position.set(-25, 20, -20);
     scene.add(blueRimLight);
 
     // Ballast Bed Ground
-    const ballastGeo = new THREE.PlaneGeometry(35, 45);
-    const ballastMat = new THREE.MeshStandardMaterial({ color: 0x161c28, roughness: 0.9 });
+    const ballastGeo = new THREE.PlaneGeometry(45, 75);
+    const ballastMat = new THREE.MeshStandardMaterial({ color: 0x141a26, roughness: 0.95 });
     const ballast = new THREE.Mesh(ballastGeo, ballastMat);
     ballast.rotation.x = -Math.PI / 2;
-    ballast.position.y = -0.6;
+    ballast.position.set(3, -0.6, 12);
     ballast.receiveShadow = true;
     scene.add(ballast);
 
-    const grid = new THREE.GridHelper(40, 40, 0x00d2ff, 0x1a2638);
-    grid.position.y = -0.59;
+    const grid = new THREE.GridHelper(70, 70, 0x00d2ff, 0x162438);
+    grid.position.set(3, -0.59, 12);
     scene.add(grid);
 
     const turnoutGroup = new THREE.Group();
     scene.add(turnoutGroup);
 
-    // Dynamic Materials for Revisions
+    // Materials
     const sleeperMat = new THREE.MeshStandardMaterial({ color: 0x5a6370, roughness: 0.7 });
-    const railSteelMat = new THREE.MeshStandardMaterial({ color: 0x8a99ad, metalness: 0.8, roughness: 0.3 });
     const chairMat = new THREE.MeshStandardMaterial({ color: 0xd4a017, metalness: 0.5, roughness: 0.5 });
     const tieBarMat = new THREE.MeshStandardMaterial({ color: 0x00d2ff, metalness: 0.6, roughness: 0.4 });
     const jointMat = new THREE.MeshStandardMaterial({ color: 0x00ff88, emissive: 0x008844, emissiveIntensity: 0.4 });
+    const cmsCrossingMat = new THREE.MeshStandardMaterial({ color: 0x90a4ae, metalness: 0.85, roughness: 0.25, emissive: 0x002244, emissiveIntensity: 0.2 });
+    const checkRailMat = new THREE.MeshStandardMaterial({ color: 0xffaa00, metalness: 0.7, roughness: 0.35 });
 
     const interactiveObjects = [];
 
@@ -1195,44 +1314,74 @@
       const extrudeSettings = { steps: 1, depth: length, bevelEnabled: false };
       const geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
       geo.translate(0, 0, -length / 2);
-      const mat = new THREE.MeshStandardMaterial({ color: color, metalness: 0.7, roughness: 0.3 });
+      const mat = new THREE.MeshStandardMaterial({ color: color, metalness: 0.75, roughness: 0.3 });
       const mesh = new THREE.Mesh(geo, mat);
       mesh.castShadow = true;
       return mesh;
     }
 
-    // 1. SLEEPERS (Sleepers 1 to 27)
-    const sleeperMeshes = [];
-    const totalSleepers = 27;
+    // Turnout Geometry Constants
+    const totalSleepers = 64;
     const sleeperSpacing = 0.85;
     const gauge = 1.673;
     const halfGauge = gauge / 2;
+    const startZ = -16.0;
 
+    const sleeperMeshes = [];
+
+    // 1. GENERATE ALL 64 SLEEPERS (RDSO/T-6154 Layout)
     for (let i = 1; i <= totalSleepers; i++) {
-      const zPos = -12 + (i - 1) * sleeperSpacing;
-      const isFan = i >= 21;
-      const sleeperLen = isFan ? 2.8 + (i - 20) * 0.15 : 2.7;
+      const zPos = startZ + (i - 1) * sleeperSpacing;
+      
+      let sleeperLen = 2.7;
+      let xOffset = 0;
+      let rotationY = 0;
+      let zoneName = "Switch Zone (RDSO/T-6155)";
+
+      if (i >= 21 && i <= 27) {
+        zoneName = "Switch Heel Fanshape Zone";
+        sleeperLen = 2.8 + (i - 20) * 0.05;
+        xOffset = (i - 20) * 0.05;
+        rotationY = (i - 20) * 0.008;
+      } else if (i >= 28 && i <= 40) {
+        zoneName = "Lead Curve Zone (RDSO/T-6154)";
+        sleeperLen = 3.15 + (i - 27) * 0.08;
+        xOffset = (i - 27) * 0.09;
+        rotationY = 0.055;
+      } else if (i >= 41 && i <= 55) {
+        zoneName = "Crossing Zone (RDSO/T-6280)";
+        sleeperLen = 4.1 - (i - 40) * 0.04;
+        xOffset = 1.25 + (i - 40) * 0.03;
+        rotationY = 0.07;
+      } else if (i >= 56) {
+        zoneName = "Turnout Exit Zone";
+        sleeperLen = 2.8;
+        xOffset = 0;
+        rotationY = 0;
+      }
+
       const sGeo = new THREE.BoxGeometry(sleeperLen, 0.22, 0.32);
       const sMesh = new THREE.Mesh(sGeo, sleeperMat);
-      sMesh.position.set(isFan ? (i - 20) * 0.06 : 0, -0.11, zPos);
+      sMesh.position.set(xOffset, -0.11, zPos);
+      sMesh.rotation.y = rotationY;
       sMesh.castShadow = true;
       sMesh.receiveShadow = true;
 
-      if (isFan) {
-        sMesh.rotation.y = (i - 20) * 0.012;
-      }
-
       sMesh.userData = {
         type: "Sleeper",
-        name: `PSC Sleeper No. ${i}`,
+        name: `PSC Sleeper No. ${i} (${zoneName})`,
         sleeperNo: i,
-        drg: "RDSO/T-4219 Standard Turnout Sleeper",
-        rev: "ALT-10 to ALT-13",
-        fittings: i <= 20 ? "Cast Steel Slide Chair RDSO/T-9616" : `Special Bearing Plate RDSO/T-${9617 + (i - 21)}`,
-        notes: i === 3 ? "Extended Tie Plate RDSO/T-9653 & Tie Bar RDSO/T-9010 (Detail 'B')" :
-               i === 4 ? "M.S. Plate RDSO/T-9631 & Tie Bar RDSO/T-9010 (Detail 'B')" :
-               i === 13 ? "SSD Installed (Spring Setting Device RDSO/T-6216)" :
-               isFan ? "Laid in Fanshape (Note 19)" : "Standard Tangent Layout"
+        drg: i <= 27 ? "RDSO/T-4219 Switch Sleeper" : i <= 40 ? "RDSO/T-6154 Lead Sleeper" : "RDSO/T-6280 Crossing Sleeper",
+        rev: "Standard BG 60kg",
+        location: `Track Station ${(i * 0.85).toFixed(1)} m`,
+        fittings: i <= 20 ? "Cast Steel Slide Chair RDSO/T-9616" :
+                  i >= 44 && i <= 52 ? "Check Rail Chair RDSO/T-6275 & CMS Base Plate" :
+                  i >= 46 && i <= 50 ? "CMS Crossing Monoblock Bed (RDSO/T-6279)" :
+                  "Special Bearing Plate (ERC Mk-V)",
+        notes: i === 3 || i === 4 ? "Detail 'B' Tie Bar RDSO/T-9010 active with 222 mm drop bend." :
+               i === 13 ? "Spring Setting Device (SSD) installed at JOH." :
+               i === 48 ? "Theoretical Nose of Crossing (TNC) at 1 in 12 angle." :
+               `Part of 1:12 PSC Turnout Assembly (${zoneName}).`
       };
 
       turnoutGroup.add(sMesh);
@@ -1254,22 +1403,22 @@
       }
     }
 
-    // 2. STOCK RAILS
-    const stockRailLength = 22.0;
-    const leftStockRail = createRail(stockRailLength, 0x8a99ad);
-    leftStockRail.position.set(-halfGauge, 0.08, 0);
+    // 2. MAIN THROUGH TRACK RAILS (Full Length ~58m)
+    const fullRailLen = 58.0;
+    const leftStockRail = createRail(fullRailLen, 0x8a99ad);
+    leftStockRail.position.set(-halfGauge, 0.08, 11);
     turnoutGroup.add(leftStockRail);
     interactiveObjects.push(leftStockRail);
 
-    const rightStockRail = createRail(stockRailLength, 0x8a99ad);
-    rightStockRail.position.set(halfGauge, 0.08, 0);
+    const rightStockRail = createRail(fullRailLen, 0x8a99ad);
+    rightStockRail.position.set(halfGauge, 0.08, 11);
     turnoutGroup.add(rightStockRail);
     interactiveObjects.push(rightStockRail);
 
-    // 3. TONGUE RAILS
+    // 3. THICK-WEB TONGUE RAILS (Switch Zone, Sleepers 1 to 27)
     const tongueLength = 14.5;
     const tongueRailLeft = createRail(tongueLength, 0x00d2ff);
-    tongueRailLeft.position.set(-halfGauge + 0.16, 0.08, -3.8);
+    tongueRailLeft.position.set(-halfGauge + 0.16, 0.08, -8.0);
     turnoutGroup.add(tongueRailLeft);
     tongueRailLeft.userData = {
       type: "TongueRail",
@@ -1283,7 +1432,7 @@
     interactiveObjects.push(tongueRailLeft);
 
     const tongueRailRight = createRail(tongueLength, 0x00d2ff);
-    tongueRailRight.position.set(halfGauge - 0.28, 0.08, -3.8);
+    tongueRailRight.position.set(halfGauge - 0.28, 0.08, -8.0);
     turnoutGroup.add(tongueRailRight);
     tongueRailRight.userData = {
       type: "TongueRail",
@@ -1295,9 +1444,9 @@
     };
     interactiveObjects.push(tongueRailRight);
 
-    // Rail Joint Indicator (Welded vs Machined)
+    // Tongue Rail Joint Marker
     const jointMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.25, 16), jointMat);
-    jointMesh.position.set(-halfGauge + 0.16, 0.18, 3.45);
+    jointMesh.position.set(-halfGauge + 0.16, 0.18, -0.7);
     jointMesh.rotateX(Math.PI / 2);
     turnoutGroup.add(jointMesh);
     jointMesh.userData = {
@@ -1309,31 +1458,115 @@
     };
     interactiveObjects.push(jointMesh);
 
-    // 4. DETAIL 'B' TIE BAR (Morphable Group)
+    // 4. LEAD CURVE RAILS (Sleepers 28 to 44)
+    const leadCurveRailOuter = createRail(14.5, 0x00d2ff);
+    leadCurveRailOuter.position.set(halfGauge + 0.55, 0.08, 6.0);
+    leadCurveRailOuter.rotation.y = 0.065;
+    turnoutGroup.add(leadCurveRailOuter);
+    leadCurveRailOuter.userData = {
+      type: "LeadRail",
+      name: "Lead Curve Outer Rail (R = 441.36 m)",
+      drg: "RDSO/T-6154",
+      section: "60 kg (UIC)",
+      purpose: "Connects Switch Heel to Crossing Nose"
+    };
+    interactiveObjects.push(leadCurveRailOuter);
+
+    const leadCurveRailInner = createRail(14.5, 0x00d2ff);
+    leadCurveRailInner.position.set(-halfGauge + 0.65, 0.08, 6.0);
+    leadCurveRailInner.rotation.y = 0.065;
+    turnoutGroup.add(leadCurveRailInner);
+    leadCurveRailInner.userData = {
+      type: "LeadRail",
+      name: "Lead Curve Inner Rail",
+      drg: "RDSO/T-6154",
+      section: "60 kg (UIC)",
+      purpose: "Diverging Route Lead Rail"
+    };
+    interactiveObjects.push(leadCurveRailInner);
+
+    // 5. 1 in 12 CMS CROSSING (Sleepers 46 to 50, ~Station z = 23 to 26)
+    const crossingZ = startZ + (48 - 1) * sleeperSpacing; // Sleeper 48 TNC
+    const cmsCrossingGroup = new THREE.Group();
+
+    // V-Piece Nose (Crossing Point)
+    const noseGeo = new THREE.ConeGeometry(0.16, 3.2, 4);
+    noseGeo.rotateX(Math.PI / 2);
+    const noseMesh = new THREE.Mesh(noseGeo, cmsCrossingMat);
+    noseMesh.position.set(0.2, 0.12, crossingZ);
+    cmsCrossingGroup.add(noseMesh);
+
+    // Left Wing Rail
+    const leftWing = createRail(4.2, 0x90a4ae);
+    leftWing.position.set(-0.14, 0.08, crossingZ);
+    cmsCrossingGroup.add(leftWing);
+
+    // Right Wing Rail
+    const rightWing = createRail(4.2, 0x90a4ae);
+    rightWing.position.set(0.54, 0.08, crossingZ);
+    cmsCrossingGroup.add(rightWing);
+
+    cmsCrossingGroup.userData = {
+      type: "CMSCrossing",
+      name: "1 in 12 CMS Crossing (RDSO/T-6279 & T-6280)",
+      drg: "RDSO/T-6279 (Monoblock) / T-6280 (Assembly)",
+      material: "Austenitic Manganese Steel (IRS: T 29)",
+      angle: "4° 45' 49\" (1 in 12)",
+      hardness: "Initial 220 BHN, Work-hardens to 350 BHN",
+      location: "Sleepers 46 to 50 (TNC at Sleeper 48)",
+      note: "Weldable option available per RDSO/T-6280/1 for direct continuous welding."
+    };
+    turnoutGroup.add(cmsCrossingGroup);
+    interactiveObjects.push(noseMesh);
+
+    // 6. CHECK RAILS (RDSO/T-6275, Sleepers 44 to 52)
+    const checkRailLen = 6.8;
+    const leftCheckRail = createRail(checkRailLen, 0xffaa00);
+    leftCheckRail.position.set(-halfGauge + 0.12, 0.11, crossingZ);
+    turnoutGroup.add(leftCheckRail);
+    leftCheckRail.userData = {
+      type: "CheckRail",
+      name: "Check Rail (Left Running Rail)",
+      drg: "RDSO/T-6275 to RDSO/T-6275/4",
+      length: "5000 mm with flared ends (89 mm opening)",
+      clearance: "41 mm to 45 mm (Nominal 44 mm)",
+      purpose: "Protects crossing nose against flange impact",
+      rev: "ALT 4"
+    };
+    interactiveObjects.push(leftCheckRail);
+
+    const rightCheckRail = createRail(checkRailLen, 0xffaa00);
+    rightCheckRail.position.set(halfGauge + 1.25, 0.11, crossingZ);
+    rightCheckRail.rotation.y = 0.07;
+    turnoutGroup.add(rightCheckRail);
+    rightCheckRail.userData = {
+      type: "CheckRail",
+      name: "Check Rail (Right Diverging Rail)",
+      drg: "RDSO/T-6275",
+      clearance: "41 mm to 45 mm (Nominal 44 mm)",
+      purpose: "Guides wheels through crossing flangeway gap"
+    };
+    interactiveObjects.push(rightCheckRail);
+
+    // 7. DETAIL 'B' TIE BAR (Morphable Group between Sleeper 3 & 4)
     const sl3Z = sleeperMeshes[2].position.z;
     const sl4Z = sleeperMeshes[3].position.z;
     const tieBarZ = (sl3Z + sl4Z) / 2;
 
     const tieBarGroup = new THREE.Group();
-
-    // Top straight bar
-    const topBarGeo = new THREE.BoxGeometry(0.08, 0.02, 1.2);
-    const topBar = new THREE.Mesh(topBarGeo, tieBarMat);
+    const topBar = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.02, 1.2), tieBarMat);
     topBar.position.set(-halfGauge - 0.35, 0.02, tieBarZ);
     tieBarGroup.add(topBar);
 
-    // Drop elements
-    const dropGeo = new THREE.BoxGeometry(0.08, 0.22, 0.03);
-    const drop1 = new THREE.Mesh(dropGeo, tieBarMat);
+    const drop1 = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.22, 0.03), tieBarMat);
     drop1.position.set(-halfGauge - 0.35, -0.09, tieBarZ - 0.24);
     tieBarGroup.add(drop1);
 
-    const drop2 = new THREE.Mesh(dropGeo, tieBarMat);
+    const drop2 = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.22, 0.03), tieBarMat);
     drop2.position.set(-halfGauge - 0.35, -0.09, tieBarZ + 0.24);
     tieBarGroup.add(drop2);
 
-    const lowerBarGeo = new THREE.BoxGeometry(0.08, 0.02, 0.48);
-    const lowerBar = new THREE.Mesh(lowerBarGeo, tieBarMat);
+    const lowerBar = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.02, 0.48), tieBarMat);
     lowerBar.position.set(-halfGauge - 0.35, -0.20, tieBarZ);
     tieBarGroup.add(lowerBar);
 
@@ -1349,32 +1582,29 @@
     interactiveObjects.push(topBar);
     interactiveObjects.push(lowerBar);
 
-    // 5. CLAMP POINT LOCK
-    const cplGroup = new THREE.Group();
+    // Clamp Point Lock Box
     const cplBox = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.16, 0.4), new THREE.MeshStandardMaterial({ color: 0x223344 }));
     cplBox.position.set(-halfGauge - 0.7, 0.02, tieBarZ);
-    cplGroup.add(cplBox);
-
-    const throwRodGeo = new THREE.CylinderGeometry(0.025, 0.025, 2.2, 16);
-    throwRodGeo.rotateZ(Math.PI / 2);
-    const throwRod = new THREE.Mesh(throwRodGeo, new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.9 }));
-    throwRod.position.set(0, -0.05, tieBarZ);
-    cplGroup.add(throwRod);
-    turnoutGroup.add(cplGroup);
+    turnoutGroup.add(cplBox);
     interactiveObjects.push(cplBox);
 
-    // 6. SPRING SETTING DEVICE (SSD at Sleeper 13)
+    // Spring Setting Device at Sleeper 13
     const sl13Z = sleeperMeshes[12].position.z;
-    const ssdGroup = new THREE.Group();
     const ssdCylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 1.4, 16), new THREE.MeshStandardMaterial({ color: 0x3366cc }));
     ssdCylinder.rotateZ(Math.PI / 2);
     ssdCylinder.position.set(0, 0.12, sl13Z);
-    ssdGroup.add(ssdCylinder);
-    turnoutGroup.add(ssdGroup);
+    turnoutGroup.add(ssdCylinder);
+    ssdCylinder.userData = {
+      type: "SSD",
+      name: "Spring Setting Device (SSD)",
+      drg: "RDSO/T-6216 (Assembly) & T-6217 (Parts)",
+      location: "Sleeper No. 13 (JOH)",
+      clearance: "Min 60 mm at JOH during throw"
+    };
     interactiveObjects.push(ssdCylinder);
 
     // ==========================================
-    // 4D TIMELINE SCRUBBER & MORPHING
+    // 4D TIMELINE SCRUBBER CONFIG
     // ==========================================
     const revisionConfig = {
       alt10: {
@@ -1385,11 +1615,10 @@
         headline: "Alt 10: ERC Mk-V & Cast Chairs",
         sub: "Oct 12, 2023 • Heavy Axle Upgrade",
         quickNote: "Shifted from ERC Mk-III to ERC Mk-V (T-5919), cast steel chairs, and plate screws T-3913. Tie bar was flat; tongue rail had Machined Joint ('M').",
-        tieBarDrop: 0.0, // flat
+        tieBarDrop: 0.0,
         jointType: "Machined Joint ('M')",
-        jointColor: 0xff3366, // caution red
-        chairColor: 0xff9d00, // orange
-        sparesHighlight: false
+        jointColor: 0xff3366,
+        chairColor: 0xff9d00
       },
       alt11: {
         date: "22-05-2024 (Alt 11: Welded Joint 'W')",
@@ -1398,105 +1627,75 @@
         badgeClass: "badge-alt11",
         headline: "Alt 11: Welded Rail Joint ('W')",
         sub: "May 22, 2024 • Structural Continuity",
-        quickNote: "Machined Joint 'M' replaced with Welded Joint 'W' to eliminate localized stress fatigue and rail batter.",
+        quickNote: "Machined joint 'M' replaced by Welded joint 'W' to eliminate dipped joints under 25t axle loads.",
         tieBarDrop: 0.0,
         jointType: "Welded Joint ('W')",
-        jointColor: 0x9d4edd, // purple
-        chairColor: 0xd4a017,
-        sparesHighlight: false
+        jointColor: 0x00ff88,
+        chairColor: 0xd4a017
       },
       alt12: {
-        date: "01-10-2024 (Alt 12: Detail 'B' Tie Bar)",
+        date: "01-10-2024 (Alt 12: Detail 'B' Clearance)",
         fillWidth: "66%",
-        badge: "ALT 12 INTERLOCKING",
+        badge: "ALT 12 INTERLOCKING FIT",
         badgeClass: "badge-alt12",
-        headline: "Alt 12: Detail 'B' Tie Bar (222 mm Drop)",
-        sub: "Oct 01, 2024 • Signaling Clearance & Dowels",
-        quickNote: "Detail 'B' introduced 222 mm drop bend to clear Clamp Point Lock (RDSO/S-3454). Notes 25 & 26 added for 35x165mm epoxy doweling SOP.",
-        tieBarDrop: -0.20, // 222 mm drop
-        jointType: "Welded Joint ('W')",
-        jointColor: 0x00d2ff,
-        chairColor: 0xd4a017,
-        sparesHighlight: false
-      },
-      alt13: {
-        date: "27-01-2025 (Alt 13 - Latest Standard)",
-        fillWidth: "100%",
-        badge: "ALT 13 ACTIVE",
-        badgeClass: "badge-alt13",
-        headline: "Alt 13: LIST - A 10% Spares",
-        sub: "Jan 27, 2025 • Life-Cycle Reliability",
-        quickNote: "LIST - A added with 24 wear/breakage prone items. Note 28 mandates 10% spare procurement with every purchase order to eliminate maintenance delays.",
+        headline: "Alt 12: Detail 'B' Tie Bar Bend",
+        sub: "Oct 01, 2024 • S&T Interface Assurance",
+        quickNote: "Detail 'B' introduced with 222 mm drop bend in M.S. Flat Tie Bar (RDSO/T-9010) to clear clamp point locks.",
         tieBarDrop: -0.20,
         jointType: "Welded Joint ('W')",
         jointColor: 0x00ff88,
-        chairColor: 0xd4a017,
-        sparesHighlight: true
+        chairColor: 0xd4a017
+      },
+      alt13: {
+        date: "27-01-2025 (Alt 13: LIST - A Mandate)",
+        fillWidth: "100%",
+        badge: "ALT 13 ACTIVE STANDARD",
+        badgeClass: "badge-alt13",
+        headline: "Alt 13: Mandatory 10% Spares",
+        sub: "Jan 27, 2025 • Supply Chain Directives",
+        quickNote: "Note 28 added mandating 10% spare procurement buffer on 24 critical items in LIST - A.",
+        tieBarDrop: -0.20,
+        jointType: "Welded Joint ('W')",
+        jointColor: 0x00ff88,
+        chairColor: 0xd4a017
       }
     };
 
-    let currentStep = 'alt13';
-
     function setRevisionStep(stepKey) {
-      currentStep = stepKey;
       const cfg = revisionConfig[stepKey];
       if (!cfg) return;
 
-      // Update UI Header & Scrubber
-      document.querySelectorAll('.timeline-step').forEach(el => {
-        el.classList.toggle('active', el.getAttribute('data-step') === stepKey);
-      });
       document.getElementById('timeline-fill').style.width = cfg.fillWidth;
       document.getElementById('timeline-date-display').innerText = cfg.date;
       document.getElementById('active-alt-badge').innerText = cfg.badge;
+
+      document.querySelectorAll('.timeline-step').forEach(el => {
+        el.classList.toggle('active', el.getAttribute('data-step') === stepKey);
+      });
+
       document.getElementById('milestone-headline').innerText = cfg.headline;
       document.getElementById('milestone-sub').innerText = cfg.sub;
       document.getElementById('milestone-quick-note').innerText = cfg.quickNote;
 
-      // 3D Morphing: Tie Bar Position
-      if (cfg.tieBarDrop === 0.0) {
-        // Alt 10/11 Flat Tie Bar
-        drop1.visible = false;
-        drop2.visible = false;
-        lowerBar.position.y = 0.02;
-        tieBarMat.color.setHex(0xff9d00); // orange highlight for old flat tie bar
-      } else {
-        // Alt 12/13 Detail B Bent Tie Bar
-        drop1.visible = true;
-        drop2.visible = true;
-        lowerBar.position.y = -0.20;
-        tieBarMat.color.setHex(stepKey === 'alt13' ? 0x00d2ff : 0x00ff88);
-      }
+      drop1.visible = cfg.tieBarDrop !== 0;
+      drop2.visible = cfg.tieBarDrop !== 0;
+      lowerBar.visible = cfg.tieBarDrop !== 0;
 
-      // Joint Mesh
       jointMesh.material.color.setHex(cfg.jointColor);
-      jointMesh.userData.status = cfg.jointType;
-
-      // Chair colors
       chairMat.color.setHex(cfg.chairColor);
 
-      // Spares Glow
-      if (cfg.sparesHighlight) {
-        sleeperMeshes[24].material.color.setHex(0x00aa55);
-        sleeperMeshes[25].material.color.setHex(0x00aa55);
-        sleeperMeshes[26].material.color.setHex(0x00aa55);
-      } else {
-        sleeperMeshes[24].material.color.setHex(0x5a6370);
-        sleeperMeshes[25].material.color.setHex(0x5a6370);
-        sleeperMeshes[26].material.color.setHex(0x5a6370);
-      }
-
-      // Update HUD
       updateHUD({
-        name: cfg.headline,
-        drg: `RDSO/T-6155 ${stepKey.toUpperCase()}`,
+        name: stepKey === 'alt10' ? "Flat M.S. Tie Bar (Alt 10)" : "Detail 'B' M.S. Flat Tie Bar (RDSO/T-9010)",
+        drg: "RDSO/T-9010",
         badge: cfg.badge,
         badgeClass: cfg.badgeClass,
-        cat: "Standard Milestone",
-        loc: "Switch Assembly",
-        mat: "IRS / RDSO Specifications",
-        qty: "1 Unit",
-        desc: cfg.quickNote,
+        cat: "Interlocking Interface & Track Gauge Assurance",
+        loc: "Between Sleeper No. 03 & 04",
+        mat: "Mild Steel (IS: 2062)",
+        qty: "1 Set",
+        desc: cfg.tieBarDrop === 0 ?
+              "<strong>Alt 10 Baseline:</strong> Lacked dimensioned drop bend; caused field fouling with S&T clamp locks." :
+              "<strong>Alt 12/13 Detail 'B':</strong> 222 mm drop bend with 485 mm bottom span; 100% fouling clearance.",
         directive: stepKey === 'alt13' ? "Ensure 10% spares of LIST - A are procured per Note 28." :
                    stepKey === 'alt12' ? "Detail 'B' active. Follow dowel retrofit SOP (Note 25/26)." :
                    stepKey === 'alt11' ? "Verify tongue rail joint is welded ('W') and floating." :
@@ -1505,10 +1704,120 @@
     }
 
     document.querySelectorAll('.timeline-step').forEach(step => {
-      step.onclick = () => {
-        setRevisionStep(step.getAttribute('data-step'));
-      };
+      step.onclick = () => setRevisionStep(step.getAttribute('data-step'));
     });
+
+    // Scope Selector Handling
+    document.getElementById('scope-select').addEventListener('change', (e) => {
+      const scope = e.target.value;
+      if (scope === 'switch') {
+        camera.position.set(10, 12, 0);
+        controls.target.set(0, 0, -6);
+        document.getElementById('metric-ratio').innerText = "1 in 12 (Switch Zone)";
+        document.getElementById('metric-sleepers').innerText = "27 PSC";
+      } else if (scope === 'crossing') {
+        camera.position.set(10, 12, crossingZ);
+        controls.target.set(0, 0, crossingZ);
+        document.getElementById('metric-ratio').innerText = "1 in 12 (Crossing Zone)";
+        document.getElementById('metric-sleepers').innerText = "15 PSC (Sl 41-55)";
+      } else if (scope === 'switch85') {
+        camera.position.set(12, 14, -5);
+        controls.target.set(0, 0, -8);
+        document.getElementById('metric-ratio').innerText = "1 in 8.5 (RDSO/T-7075)";
+        document.getElementById('metric-throw').innerText = "115 mm";
+        document.getElementById('metric-speed').innerText = "25 km/h";
+      } else {
+        camera.position.set(16, 22, 28);
+        controls.target.set(0, 0, 8);
+        document.getElementById('metric-ratio').innerText = "1 in 12 (Full Turnout)";
+        document.getElementById('metric-throw').innerText = "160 mm";
+        document.getElementById('metric-sleepers').innerText = "64 PSC";
+        document.getElementById('metric-speed').innerText = "160 km/h / 50 km/h";
+      }
+      controls.update();
+    });
+
+    // ==========================================
+    // KNOWLEDGE GRAPH VISUALIZER (CANVAS)
+    // ==========================================
+    function renderKnowledgeGraph() {
+      const canvas = document.getElementById('graph-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const nodes = [
+        { id: "layout", label: "RDSO/T-6154 (1:12 Turnout Layout)", x: 510, y: 55, color: "#00d2ff", r: 24 },
+        
+        { id: "switch", label: "RDSO/T-6155 (Curved Switch)", x: 260, y: 160, color: "#00d2ff", r: 20 },
+        { id: "ssd", label: "RDSO/T-6216 (SSD at Sl 13)", x: 440, y: 160, color: "#3366cc", r: 18 },
+        { id: "chk", label: "RDSO/T-6275 (Check Rails)", x: 620, y: 160, color: "#ffaa00", r: 18 },
+        { id: "crossing", label: "RDSO/T-6280 (CMS Crossing)", x: 800, y: 160, color: "#90a4ae", r: 20 },
+        
+        { id: "alt13", label: "Alt 13 (LIST - A Spares)", x: 140, y: 280, color: "#00ff88", r: 16 },
+        { id: "detailb", label: "Detail 'B' Tie Bar (T-9010)", x: 280, y: 280, color: "#00d2ff", r: 16 },
+        { id: "ssdParts", label: "SSD Parts (RDSO/T-6217)", x: 440, y: 280, color: "#3366cc", r: 14 },
+        { id: "cmsCasting", label: "CMS Monoblock (T-6279)", x: 740, y: 280, color: "#90a4ae", r: 15 },
+        { id: "cmsWeld", label: "Weldable CMS (T-6280/1)", x: 880, y: 280, color: "#9d4edd", r: 15 },
+        
+        { id: "cpl", label: "Clamp Point Lock (S-3454)", x: 280, y: 390, color: "#ff3366", r: 15 },
+        { id: "rule28", label: "Note 28 (10% Buffer Rule)", x: 140, y: 390, color: "#00ff88", r: 14 },
+        { id: "switch85", label: "RDSO/T-7075 (1:8.5 Switch)", x: 510, y: 440, color: "#ff9d00", r: 16 }
+      ];
+
+      const edges = [
+        { from: "layout", to: "switch", text: "INCORPORATES_SWITCH" },
+        { from: "layout", to: "ssd", text: "INTEGRATES_SSD" },
+        { from: "layout", to: "chk", text: "INCORPORATES_CHECK_RAIL" },
+        { from: "layout", to: "crossing", text: "INCORPORATES_CROSSING" },
+        
+        { from: "switch", to: "alt13", text: "LATEST_REVISION" },
+        { from: "switch", to: "detailb", text: "INCORPORATES" },
+        { from: "detailb", to: "cpl", text: "CLEARS_MECHANISM" },
+        { from: "alt13", to: "rule28", text: "ENFORCES" },
+        
+        { from: "ssd", to: "ssdParts", text: "CONTAINS_PARTS" },
+        { from: "crossing", to: "cmsCasting", text: "INCLUDES_CASTING" },
+        { from: "crossing", to: "cmsWeld", text: "WELDABLE_VARIANT" },
+        { from: "crossing", to: "chk", text: "FLANGEWAY_PROTECTION" },
+        { from: "layout", to: "switch85", text: "YARD_ALTERNATIVE" }
+      ];
+
+      edges.forEach(e => {
+        const n1 = nodes.find(n => n.id === e.from);
+        const n2 = nodes.find(n => n.id === e.to);
+        if (n1 && n2) {
+          ctx.beginPath();
+          ctx.moveTo(n1.x, n1.y);
+          ctx.lineTo(n2.x, n2.y);
+          ctx.strokeStyle = "rgba(0, 210, 255, 0.35)";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          ctx.fillStyle = "#8a99ad";
+          ctx.font = "8px monospace";
+          ctx.fillText(e.text, (n1.x + n2.x)/2 + 4, (n1.y + n2.y)/2);
+        }
+      });
+
+      nodes.forEach(n => {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = n.color;
+        ctx.shadowColor = n.color;
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "10px -apple-system, BlinkMacSystemFont, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(n.label, n.x, n.y + n.r + 13);
+      });
+    }
 
     // ==========================================
     // RADAR CHART (CANVAS)
@@ -1531,7 +1840,6 @@
       ];
       const totalAxes = categories.length;
 
-      // Draw concentric radar webs
       for (let level = 1; level <= 5; level++) {
         const r = (radius / 5) * level;
         ctx.beginPath();
@@ -1547,7 +1855,6 @@
         ctx.stroke();
       }
 
-      // Draw axes and labels
       for (let i = 0; i < totalAxes; i++) {
         const angle = (Math.PI * 2 / totalAxes) * i - Math.PI / 2;
         const x = centerX + radius * Math.cos(angle);
@@ -1558,20 +1865,18 @@
         ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
         ctx.stroke();
 
-        // Label
         const labelX = centerX + (radius + 24) * Math.cos(angle);
         const labelY = centerY + (radius + 24) * Math.sin(angle);
         ctx.fillStyle = "#8a99ad";
-        ctx.font = "10px -apple-system, BlinkMacSystemFont, sans-serif";
+        ctx.font = "10px sans-serif";
         ctx.textAlign = "center";
         ctx.fillText(categories[i], labelX, labelY + 4);
       }
 
-      // Data sets for Alt 10 vs Alt 13
       const series = [
         {
           name: "Alt 10 (Oct 2023)",
-          color: "rgba(255, 157, 0, 0.65)",
+          color: "rgba(255, 157, 0, 0.7)",
           fill: "rgba(255, 157, 0, 0.15)",
           data: [0.50, 0.60, 0.35, 0.75, 0.70]
         },
@@ -1616,86 +1921,6 @@
     }
 
     // ==========================================
-    // KNOWLEDGE GRAPH VISUALIZER (CANVAS)
-    // ==========================================
-    function renderKnowledgeGraph() {
-      const canvas = document.getElementById('graph-canvas');
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const nodes = [
-        { id: "drg", label: "RDSO/T-6155 (1:12 60kg TWS)", x: 500, y: 70, color: "#00d2ff", r: 24 },
-        { id: "alt10", label: "Alt 10 (Oct 2023)", x: 200, y: 170, color: "#ff9d00", r: 18 },
-        { id: "alt11", label: "Alt 11 (May 2024)", x: 400, y: 170, color: "#9d4edd", r: 18 },
-        { id: "alt12", label: "Alt 12 (Oct 2024)", x: 600, y: 170, color: "#00d2ff", r: 18 },
-        { id: "alt13", label: "Alt 13 (Jan 2025)", x: 800, y: 170, color: "#00ff88", r: 20 },
-        
-        { id: "erc", label: "ERC Mk-V (T-5919)", x: 120, y: 300, color: "#e8ecf4", r: 14 },
-        { id: "chair", label: "Cast Steel Chair (T-9616)", x: 260, y: 300, color: "#e8ecf4", r: 14 },
-        { id: "weld", label: "Welded Joint 'W'", x: 400, y: 300, color: "#9d4edd", r: 14 },
-        { id: "detailb", label: "Detail 'B' Tie Bar (T-9010)", x: 560, y: 300, color: "#00d2ff", r: 16 },
-        { id: "dowelSop", label: "Epoxy Dowel SOP (Note 25/26)", x: 680, y: 300, color: "#9d4edd", r: 14 },
-        { id: "lista", label: "LIST - A (24 Spares)", x: 800, y: 300, color: "#00ff88", r: 16 },
-        { id: "rule28", label: "10% Spares Rule (Note 28)", x: 930, y: 300, color: "#00ff88", r: 14 },
-        
-        { id: "cpl", label: "Clamp Point Lock (RDSO/S-3454)", x: 560, y: 410, color: "#ff3366", r: 15 },
-        { id: "ssd", label: "SSD at Sl. 13 (RDSO/T-6216)", x: 400, y: 410, color: "#00d2ff", r: 14 }
-      ];
-
-      const edges = [
-        { from: "drg", to: "alt10", text: "HAS_REVISION" },
-        { from: "drg", to: "alt11", text: "HAS_REVISION" },
-        { from: "drg", to: "alt12", text: "HAS_REVISION" },
-        { from: "drg", to: "alt13", text: "LATEST_REVISION" },
-        { from: "alt10", to: "erc", text: "UPGRADES" },
-        { from: "alt10", to: "chair", text: "INTRODUCES" },
-        { from: "alt11", to: "weld", text: "REPLACES_M" },
-        { from: "alt12", to: "detailb", text: "INTRODUCES" },
-        { from: "alt12", to: "dowelSop", text: "MANDATES" },
-        { from: "detailb", to: "cpl", text: "CLEARS_MECHANISM" },
-        { from: "alt13", to: "lista", text: "ADDS_SCHEDULE" },
-        { from: "alt13", to: "rule28", text: "ENFORCES" },
-        { from: "drg", to: "ssd", text: "INTEGRATES" }
-      ];
-
-      edges.forEach(e => {
-        const n1 = nodes.find(n => n.id === e.from);
-        const n2 = nodes.find(n => n.id === e.to);
-        if (n1 && n2) {
-          ctx.beginPath();
-          ctx.moveTo(n1.x, n1.y);
-          ctx.lineTo(n2.x, n2.y);
-          ctx.strokeStyle = "rgba(0, 210, 255, 0.35)";
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          ctx.fillStyle = "#8a99ad";
-          ctx.font = "9px monospace";
-          ctx.fillText(e.text, (n1.x + n2.x)/2 + 4, (n1.y + n2.y)/2);
-        }
-      });
-
-      nodes.forEach(n => {
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = n.color;
-        ctx.shadowColor = n.color;
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        ctx.strokeStyle = "#fff";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "10px -apple-system, BlinkMacSystemFont, sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText(n.label, n.x, n.y + n.r + 14);
-      });
-    }
-
-    // ==========================================
     // SWITCH THROW ANIMATION
     // ==========================================
     let isReverse = false;
@@ -1727,12 +1952,13 @@
 
     // Camera Presets
     const cameraViews = {
-      overview: { pos: [12, 14, 24], target: [0, 0, 0] },
-      toe: { pos: [-3, 3, -8.5], target: [-halfGauge, 0, tieBarZ] },
-      joint: { pos: [-1, 2, 4.5], target: [-halfGauge + 0.16, 0.1, 3.45] },
-      ssd: { pos: [3.5, 3, sl13Z + 1], target: [0, 0, sl13Z] },
-      heel: { pos: [3, 4, 11], target: [0, 0, 8] },
-      top: { pos: [0, 28, 0], target: [0, 0, 0] }
+      overview: { pos: [16, 22, 28], target: [0, 0, 8] },
+      toe: { pos: [-3, 3, -12], target: [-halfGauge, 0, tieBarZ] },
+      ssd: { pos: [4, 3.5, sl13Z + 1], target: [0, 0, sl13Z] },
+      lead: { pos: [8, 7, 8], target: [1, 0, 8] },
+      crossing: { pos: [6, 6, crossingZ + 4], target: [0.2, 0, crossingZ] },
+      checkrail: { pos: [-3, 4, crossingZ], target: [-halfGauge, 0, crossingZ] },
+      top: { pos: [0, 42, 10], target: [0, 0, 10] }
     };
 
     document.querySelectorAll('[data-view]').forEach(btn => {
@@ -1806,10 +2032,10 @@
             badge: data.rev || "RDSO ASSET",
             badgeClass: "badge-alt13",
             cat: data.type || "Track Component",
-            loc: data.location || (data.sleeperNo ? `Sleeper No. ${data.sleeperNo}` : "Switch Assembly"),
+            loc: data.location || (data.sleeperNo ? `Sleeper No. ${data.sleeperNo}` : "Turnout Assembly"),
             mat: data.section || data.material || "IRS Steel Spec",
-            qty: data.quantity || "1",
-            desc: data.purpose || data.fittings || data.status || "Component of 10125 mm Curved Switch.",
+            qty: data.quantity || data.length || "1 Set",
+            desc: data.purpose || data.fittings || data.status || "Component of 1 in 12 Turnout Assembly.",
             directive: data.notes || data.sop || data.note || "Inspect according to IRPWM standard."
           });
         }

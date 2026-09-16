@@ -6,7 +6,7 @@ Author: Antigravity AI - Advanced Agentic Coding for Indian Railways
 import os
 import sys
 import pymupdf
-from PIL import Image, ImageChops, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 
 def ensure_dir(path):
     os.makedirs(path, exist_ok=True)
@@ -19,7 +19,10 @@ def extract_crops():
     drawings = {
         "alt10": os.path.join(base_dir, "RDSO_T_6155_ALT_10.pdf"),
         "alt12": os.path.join(base_dir, "RDSO_T_6155_ALT_12.pdf"),
-        "alt13": os.path.join(base_dir, "2025-01-28-RDSO_T_6155_ALT_13.pdf")
+        "alt13": os.path.join(base_dir, "2025-01-28-RDSO_T_6155_ALT_13.pdf"),
+        "layout_6154": os.path.join(base_dir, "RDSO_T_6154_ALT_6.pdf"),
+        "crossing_6280": os.path.join(base_dir, "RDSO_T_6280_ALT_4.pdf"),
+        "switch_7075": os.path.join(base_dir, "RDSO_T_7075_ALT_1.pdf")
     }
 
     # Region coordinates (x0, y0, x1, y1) in relative coordinates [0..1]
@@ -33,9 +36,9 @@ def extract_crops():
     print("[*] Extracting high-resolution crops from drawings...")
     extracted_paths = {}
 
-    for key, pdf_path in drawings.items():
-        if not os.path.exists(pdf_path):
-            print(f"[!] Warning: {pdf_path} not found.")
+    for key in ["alt10", "alt12", "alt13"]:
+        pdf_path = drawings.get(key)
+        if not pdf_path or not os.path.exists(pdf_path):
             continue
         
         doc = pymupdf.open(pdf_path)
@@ -50,6 +53,25 @@ def extract_crops():
             pix.save(out_path)
             extracted_paths[f"{key}_{reg_name}"] = out_path
             print(f"    Saved: {out_name} ({pix.width}x{pix.height})")
+
+    # Extra crops for new drawings if available
+    if os.path.exists(drawings["layout_6154"]):
+        doc = pymupdf.open(drawings["layout_6154"])
+        p = doc[0]
+        rect = pymupdf.Rect(0.05 * p.rect.width, 0.15 * p.rect.height, 0.95 * p.rect.width, 0.65 * p.rect.height)
+        pix = p.get_pixmap(clip=rect, dpi=150)
+        out_path = os.path.join(crops_dir, "layout_6154_plan.png")
+        pix.save(out_path)
+        extracted_paths["layout_6154_plan"] = out_path
+
+    if os.path.exists(drawings["crossing_6280"]):
+        doc = pymupdf.open(drawings["crossing_6280"])
+        p = doc[0]
+        rect = pymupdf.Rect(0.20 * p.rect.width, 0.20 * p.rect.height, 0.80 * p.rect.width, 0.70 * p.rect.height)
+        pix = p.get_pixmap(clip=rect, dpi=150)
+        out_path = os.path.join(crops_dir, "crossing_6280_plan.png")
+        pix.save(out_path)
+        extracted_paths["crossing_6280_plan"] = out_path
 
     # Generate Visual Side-by-Side Comparison Panels
     print("[*] Generating Side-by-Side Visual Comparison Panels...")

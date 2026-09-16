@@ -1,123 +1,122 @@
 // ==============================================================================
-// RDSO Track Infrastructure Knowledge Graph - Neo4j Cypher DDL & Data Ingestion
-// Standard: RDSO/T-6155 (10125 mm Curved Switch with ZU-1-60 Thick-Web Tongue Rails)
+// RDSO Track Infrastructure Knowledge Graph - Full Turnout & Switch Ecosystem
+// Indian Railways Standard Drawings DDL & Semantic Graph Schema
+// Focus: RDSO/T-6154, T-6155 (Alt 10-13), T-6216/6217, T-6275, T-6279/6280, T-7075/7076
 // ==============================================================================
 
-// Create Constraints
-CREATE CONSTRAINT unique_drawing_number IF NOT EXISTS FOR (d:Drawing) REQUIRE d.number IS UNIQUE;
-CREATE CONSTRAINT unique_component_part IF NOT EXISTS FOR (c:Component) REQUIRE c.partNumber IS UNIQUE;
-CREATE CONSTRAINT unique_revision_id IF NOT EXISTS FOR (r:Revision) REQUIRE r.id IS UNIQUE;
+// 1. Constraints & Indexes
+CREATE CONSTRAINT unique_drawing_number IF NOT EXISTS
+FOR (d:StandardDrawing) REQUIRE d.drawingNumber IS UNIQUE;
 
-// Create Drawing Nodes
-MERGE (d:Drawing {number: 'RDSO/T-6155'})
-SET d.title = '10125 mm Curved Switch with ZU-1-60/60E1A1 Thick-Web Tongue Rails for 1 in 12 Turnout B.G. on P.S.C. Sleepers',
-    d.specification = 'IRS: T 10',
-    d.railSection = '60 kg (UIC) / 60E1',
-    d.gaugeMm = 1673,
-    d.switchAngleAtToe = '0° 20\' 00"',
-    d.divergenceAtHeelMm = 175,
-    d.throwAtToeMm = 160,
-    d.radiusMm = 441360,
-    d.tongueRailLengthMm = 12480,
-    d.stockRailLengthMm = 13000;
+CREATE CONSTRAINT unique_component_part IF NOT EXISTS
+FOR (c:TrackComponent) REQUIRE c.partNumber IS UNIQUE;
 
-MERGE (layout:Drawing {number: 'RDSO/T-6154'})
-SET layout.title = 'Layout of 1 in 12 Turnout B.G. with 10125 mm Curved Switch';
+// 2. Core Drawings
+MERGE (l12:StandardDrawing {drawingNumber: "RDSO/T-6154"})
+SET l12.title = "Layout of 1 in 12 Turnout B.G. (1673 mm) 60 kg (UIC) on P.S.C. Sleepers",
+    l12.turnoutRatio = "1 in 12",
+    l12.gaugeMm = 1673,
+    l12.totalSleepers = 64,
+    l12.speedMainKmph = 160,
+    l12.speedLoopKmph = 50,
+    l12.curveRadiusMm = 441360;
 
-MERGE (crossing:Drawing {number: 'RDSO/T-4220'})
-SET crossing.title = '1 in 12 CMS Crossing 60 kg';
+MERGE (s12:StandardDrawing {drawingNumber: "RDSO/T-6155"})
+SET s12.title = "10125 mm Curved Switch with ZU-1-60/60E1A1 Thick-Web Tongue Rails for 1 in 12 Turnout",
+    s12.railSection = "60 kg (UIC) / 60E1",
+    s12.switchLengthMm = 10125,
+    s12.throwAtToeMm = 160,
+    s12.heelDivergenceMm = 175;
 
-MERGE (clampLock:Drawing {number: 'RDSO/S-3454'})
-SET clampLock.title = 'Clamp Point Lock for Thick Web Switch';
+MERGE (bom12:StandardDrawing {drawingNumber: "RDSO/T-6155/1"})
+SET bom12.title = "Particulars of Components for 10125 mm Curved Switch (ZU-1-60 Thick Web) on PSC Sleepers";
 
-MERGE (d)-[:REQUIRES_LAYOUT]->(layout);
-MERGE (d)-[:USED_WITH_CROSSING]->(crossing);
-MERGE (d)-[:INTEGRATES_SIGNALING]->(clampLock);
+MERGE (ssd:StandardDrawing {drawingNumber: "RDSO/T-6216"})
+SET ssd.title = "Spring Setting Device for Thick Web Switches on P.S.C. Sleepers (Assembly)",
+    ssd.sleeperLocation = 13,
+    ssd.clearanceAtJOHMm = 60;
 
-// Create Revisions
-MERGE (r10:Revision {id: 'RDSO_T_6155_ALT_10'})
-SET r10.number = 10, r10.date = date('2023-10-12'), r10.type = 'REVISED & REDRAWN',
-    r10.summary = 'ERC Mk-V adoption, cast steel chairs/bearing plates, nylon-cord GRSP';
+MERGE (ssdParts:StandardDrawing {drawingNumber: "RDSO/T-6217"})
+SET ssdParts.title = "Component Parts of Spring Setting Device (Items 1 to 39)";
 
-MERGE (r11:Revision {id: 'RDSO_T_6155_ALT_11'})
-SET r11.number = 11, r11.date = date('2024-05-22'), r11.type = 'REVISED & REDRAWN',
-    r11.summary = 'Tongue rail machined joint replaced with welded joint';
+MERGE (chk:StandardDrawing {drawingNumber: "RDSO/T-6275"})
+SET chk.title = "Check Rail Arrangement and Chairs for 1 in 12 CMS Crossing 60 kg on PSC Sleepers",
+    chk.lengthMm = 5000,
+    chk.clearanceMinMm = 41,
+    chk.clearanceMaxMm = 45,
+    chk.flareOpeningMm = 89;
 
-MERGE (r12:Revision {id: 'RDSO_T_6155_ALT_12'})
-SET r12.number = 12, r12.date = date('2024-10-01'), r12.type = 'REVISED & REDRAWN',
-    r12.summary = 'Detail B added (222 mm drop bent tie bar), Notes 23-27 added';
+MERGE (cmsFab:StandardDrawing {drawingNumber: "RDSO/T-6279"})
+SET cmsFab.title = "1 in 12 Cast Manganese Steel (CMS) Crossing 60 kg (UIC) on PSC Sleepers",
+    cmsFab.material = "Austenitic Manganese Steel (IRS:T-29)",
+    cmsFab.crossingAngle = "4° 45' 49\"";
 
-MERGE (r13:Revision {id: 'RDSO_T_6155_ALT_13'})
-SET r13.number = 13, r13.date = date('2025-01-27'), r13.type = 'REVISED & REDRAWN',
-    r13.summary = 'LIST - A added, Note 28 enforces mandatory 10% wear/breakage spares buffer';
+MERGE (cmsAssy:StandardDrawing {drawingNumber: "RDSO/T-6280"})
+SET cmsAssy.title = "Assembly of 1 in 12 CMS Crossing 60 kg with Fittings and Check Rails on PSC Sleepers",
+    cmsAssy.sleeperSpan = "Sleepers 41 to 55";
 
-MERGE (d)-[:HAS_REVISION]->(r10);
-MERGE (d)-[:HAS_REVISION]->(r11);
-MERGE (d)-[:HAS_REVISION]->(r12);
-MERGE (d)-[:HAS_REVISION]->(r13);
-MERGE (d)-[:LATEST_REVISION]->(r13);
+MERGE (cmsWeld:StandardDrawing {drawingNumber: "RDSO/T-6280/1"})
+SET cmsWeld.title = "1 in 12 Weldable CMS Crossing with Transition Rails";
 
-MERGE (r10)-[:SUPERSEDED_BY]->(r11);
-MERGE (r11)-[:SUPERSEDED_BY]->(r12);
-MERGE (r12)-[:SUPERSEDED_BY]->(r13);
+MERGE (s85:StandardDrawing {drawingNumber: "RDSO/T-7075"})
+SET s85.title = "6425 mm Curved Switch with ZU-1-60 Thick-Web Tongue Rails for 1 in 8.5 Turnout",
+    s85.turnoutRatio = "1 in 8.5",
+    s85.switchLengthMm = 6425,
+    s85.throwAtToeMm = 115,
+    s85.speedLoopKmph = 25;
 
-// Key Components
-MERGE (cTieBar:Component {partNumber: 'RDSO/T-9010'})
-SET cTieBar.description = 'M.S. Flat Tie Bar (Non-Point Machine End)',
-    cTieBar.material = 'Mild Steel',
-    cTieBar.detail = 'Detail B 222 mm drop bend to clear Clamp Point Lock';
+MERGE (l85:StandardDrawing {drawingNumber: "RDSO/T-7076"})
+SET l85.title = "Layout of 1 in 8.5 Turnout B.G. 60 kg on PSC Sleepers",
+    l85.turnoutRatio = "1 in 8.5",
+    l85.totalSleepers = 54;
 
-MERGE (cTieBarPM:Component {partNumber: 'RDSO/T-9010/1'})
-SET cTieBarPM.description = 'M.S. Flat Tie Bar (Point Machine End)';
+// 3. Layout Integration Relationships
+MERGE (l12)-[:INCORPORATES_SWITCH]->(s12);
+MERGE (l12)-[:INCORPORATES_SSD]->(ssd);
+MERGE (l12)-[:INCORPORATES_CROSSING]->(cmsAssy);
+MERGE (l12)-[:INCORPORATES_CHECK_RAIL]->(chk);
+MERGE (s12)-[:GOVERNED_BY_BOM]->(bom12);
+MERGE (ssd)-[:CONTAINS_PARTS]->(ssdParts);
+MERGE (cmsAssy)-[:INCLUDES_CASTING]->(cmsFab);
+MERGE (cmsAssy)-[:HAS_WELDABLE_VARIANT]->(cmsWeld);
+MERGE (l85)-[:INCORPORATES_SWITCH]->(s85);
 
-MERGE (cSlideChair:Component {partNumber: 'RDSO/T-9616'})
-SET cSlideChair.description = 'Cast Steel Slide Chair',
-    cSlideChair.material = 'Cast Steel',
-    cSlideChair.quantity = 34,
-    cSlideChair.sleeperRange = 'Sleepers 04 to 20';
+// 4. Revisions for T-6155
+MERGE (r10:DrawingRevision {revisionKey: "RDSO/T-6155/ALT-10", altNumber: 10, date: "2023-10-12"});
+MERGE (r11:DrawingRevision {revisionKey: "RDSO/T-6155/ALT-11", altNumber: 11, date: "2024-05-22"});
+MERGE (r12:DrawingRevision {revisionKey: "RDSO/T-6155/ALT-12", altNumber: 12, date: "2024-10-01"});
+MERGE (r13:DrawingRevision {revisionKey: "RDSO/T-6155/ALT-13", altNumber: 13, date: "2025-01-27"});
 
-MERGE (cERCMkV:Component {partNumber: 'RDSO/T-5919'})
-SET cERCMkV.description = 'Elastic Rail Clip MK-V',
-    cERCMkV.material = 'Spring Steel 55Si7 / 60Si7',
-    cERCMkV.toeLoadKg = '1200 - 1500 kg',
-    cERCMkV.quantity = 84;
+MERGE (s12)-[:HAS_REVISION]->(r10);
+MERGE (s12)-[:HAS_REVISION]->(r11);
+MERGE (s12)-[:HAS_REVISION]->(r12);
+MERGE (s12)-[:HAS_REVISION]->(r13);
+MERGE (s12)-[:LATEST_REVISION]->(r13);
 
-MERGE (cSSD:Component {partNumber: 'RDSO/T-6216'})
-SET cSSD.description = 'Spring Setting Device (SSD)',
-    cSSD.sleeperLocation = 'Sleeper No. 13 (Junction of Rail Heads - JOH)';
+// 5. Critical Components & Directives
+MERGE (detailB:TrackFeature {featureId: "DETAIL_B_TIE_BAR"})
+SET detailB.description = "M.S. Flat Tie Bar 222 mm drop bend to clear Clamp Point Lock S-3454",
+    detailB.location = "Sleepers 03 & 04",
+    detailB.dropDepthMm = 222,
+    detailB.bottomSpanMm = 485;
 
-MERGE (dowel:Component {partNumber: 'RDSO/T-3002'})
-SET dowel.description = 'Polyethylene Dowel for Sleeper Retrofit',
-    dowel.diameterMm = 35,
-    dowel.depthMm = 165;
+MERGE (cpl:SignalingInterlocking {drawingNumber: "RDSO/S-3454", name: "Clamp Point Lock"});
+MERGE (detailB)-[:PREVENTS_FOULING_WITH]->(cpl);
+MERGE (r12)-[:INTRODUCES_FEATURE]->(detailB);
+MERGE (r13)-[:RETAINS_FEATURE]->(detailB);
 
-MERGE (screw:Component {partNumber: 'RDSO/T-3913'})
-SET screw.description = 'Plate Screw for PSC Sleeper',
-    screw.quantity = 215;
+MERGE (listA:SparesSchedule {scheduleId: "LIST_A", title: "Breakage and Wear Prone Spares Schedule"})
+SET listA.totalItems = 24,
+    listA.bufferPercent = 10,
+    listA.governingNote = 28;
 
-MERGE (sparesList:SparesSchedule {name: 'LIST - A'})
-SET sparesList.description = 'Breakage-prone and wear-prone spare parts schedule',
-    sparesList.mandatoryBufferPct = 10,
-    sparesList.totalItems = 24;
+MERGE (r13)-[:ADDS_SPARES_SCHEDULE]->(listA);
 
-// Directives & SOPs
-MERGE (sopDowel:FieldSOP {code: 'SOP-DOWEL-T6155'})
-SET sopDowel.name = 'Sleeper 03 & 04 Field Doweling SOP',
-    sopDowel.notes = 'Notes 25 & 26',
-    sopDowel.drillHole = '35 mm dia x 165 mm depth',
-    sopDowel.resin = 'IS: 12994:1990 Type L-100 Epoxy',
-    sopDowel.mandatoryCureTimeHours = 24;
+MERGE (sopDowel:StandardOperatingProcedure {sopId: "SOP_EPOXY_DOWEL"})
+SET sopDowel.governingNotes = "Notes 25 & 26",
+    sopDowel.holeSize = "35 mm dia x 165 mm depth",
+    sopDowel.resin = "IS:12994-1990 Type L-100",
+    sopDowel.cureTimeHours = 24;
 
-MERGE (ruleSpares:FieldSOP {code: 'RULE-SPARES-10PCT'})
-SET ruleSpares.name = 'Mandatory 10% Spares Procurement Rule',
-    ruleSpares.note = 'Note 28';
-
-// Link Relationships
-MERGE (r12)-[:INTRODUCES_DETAIL_B]->(cTieBar);
-MERGE (r12)-[:DEFINES_SOP]->(sopDowel);
-MERGE (r13)-[:ADDS_SCHEDULE]->(sparesList);
-MERGE (r13)-[:ENFORCES_RULE]->(ruleSpares);
-MERGE (sparesList)-[:MANDATES_SPARE {qty: 215}]->(screw);
-MERGE (sparesList)-[:MANDATES_SPARE {qty: 12}]->(:Component {partNumber: 'RDSO/T-9630', description: 'Nylon Cord Reinforced GRSP'});
-MERGE (sparesList)-[:MANDATES_SPARE {qty: 34}]->(:Component {partNumber: 'RDSO/T-6305', description: 'Wedge'});
-MERGE (sparesList)-[:MANDATES_SPARE {qty: 36}]->(:Component {partNumber: 'RDSO/T-6310', description: 'Leaf Spring'});
+MERGE (r12)-[:MANDATES_SOP]->(sopDowel);
+MERGE (r13)-[:MANDATES_SOP]->(sopDowel);
