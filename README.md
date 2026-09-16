@@ -147,6 +147,7 @@ The repository is organized into dedicated enterprise directories:
 ```text
 F:\git\RDSO-Drawings\
 ├── drawings/                   # All 59 official RDSO PDF blueprints
+├── manuals/                    # Official Codes, Manuals & Specifications (IRPWM, IRS: T 10, etc.)
 ├── data/                       # Canonical & extracted datasets (JSON & Cypher)
 │   ├── rdso_canonical_kg.json
 │   ├── rdso_extracted_knowledge.json
