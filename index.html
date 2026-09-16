@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RDSO Universal Railway Track Asset Digital Twin & Cross-Drawing Assembly Suite</title>
+  <title>RDSO Universal Railway Track Asset Digital Twin & Bi-Directional 3D Knowledge Graph</title>
   <style>
     :root {
       --bg-primary: #070a10;
       --bg-secondary: #0e1420;
-      --bg-glass: rgba(14, 20, 32, 0.90);
+      --bg-glass: rgba(14, 20, 32, 0.92);
       --border-color: rgba(64, 120, 220, 0.3);
       --border-glow: rgba(0, 210, 255, 0.5);
       --text-main: #e8ecf4;
@@ -183,14 +183,14 @@
     }
 
     .btn-kg {
-      background: linear-gradient(135deg, rgba(0, 210, 255, 0.25), rgba(157, 78, 221, 0.3));
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.25), rgba(157, 78, 221, 0.35));
       border: 1px solid var(--accent-cyan);
       color: #fff;
       font-weight: 700;
       box-shadow: 0 0 16px rgba(0, 210, 255, 0.35);
     }
     .btn-kg:hover {
-      background: linear-gradient(135deg, rgba(0, 210, 255, 0.4), rgba(157, 78, 221, 0.5));
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.4), rgba(157, 78, 221, 0.55));
     }
 
     .btn-throw {
@@ -203,7 +203,7 @@
       background: linear-gradient(135deg, #33dcff, #1a75ff);
     }
 
-    /* Left Sidebar: Assemblies & Camera */
+    /* Left Sidebar */
     .sidebar-left {
       position: absolute;
       top: 76px;
@@ -545,7 +545,7 @@
       flex: 1;
       height: 100%;
       position: relative;
-      background: #080c14;
+      background: #060910;
       border-radius: 8px;
       border: 1px solid var(--border-color);
       overflow: hidden;
@@ -557,11 +557,11 @@
     }
 
     .kg-side-panel {
-      width: 330px;
+      width: 350px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      background: rgba(0,0,0,0.3);
+      gap: 10px;
+      background: rgba(0,0,0,0.35);
       padding: 12px;
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.08);
@@ -572,19 +572,21 @@
       background: rgba(0, 210, 255, 0.08);
       border: 1px solid rgba(0, 210, 255, 0.25);
       border-radius: 6px;
-      padding: 10px;
+      padding: 9px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    /* Form inside Knowledge Graph */
     .kg-form-group {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      margin-bottom: 8px;
+      gap: 3px;
+      margin-bottom: 7px;
     }
 
     .kg-form-group label {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--accent-cyan);
       font-weight: 700;
     }
@@ -593,9 +595,9 @@
       background: var(--bg-secondary);
       border: 1px solid rgba(255,255,255,0.2);
       color: #fff;
-      padding: 6px 8px;
+      padding: 5px 8px;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 11.5px;
       outline: none;
     }
 
@@ -633,7 +635,7 @@
       <div class="brand-logo">IR</div>
       <div class="brand-text">
         <h1>Universal Track Asset Digital Twin <span class="badge-alt" id="active-alt-badge">ALT-13 ACTIVE</span></h1>
-        <p>Modular Multi-Drawing Component Assembly Engine & Living 3D Knowledge Graph</p>
+        <p>Modular Multi-Drawing Assembly Suite & Bi-Directional 3D Knowledge Graph</p>
       </div>
     </div>
     <div class="header-controls">
@@ -667,7 +669,7 @@
         <span id="throw-icon">⮂</span> <span id="throw-text">Throw Switch: Straight</span>
       </button>
       <button class="btn btn-kg" id="open-kg-btn">
-        <span>🌐</span> Living 3D Knowledge Graph
+        <span>🌐</span> 3D Force Knowledge Graph
       </button>
       <button class="btn" id="open-spares-btn">📊 LIST-A Spares (10%)</button>
       <button class="btn" id="open-sop-btn">🛠 Field SOPs</button>
@@ -775,10 +777,6 @@
         <span class="prop-label">Material Spec:</span>
         <span class="prop-value" id="hud-mat">Cast Steel Grade 230-450W (IS: 1030)</span>
       </div>
-      <div class="prop-row">
-        <span class="prop-label">Fastened By:</span>
-        <span class="prop-value" id="hud-fastener">RDSO/T-3913 Screws into T-3002 Dowels</span>
-      </div>
 
       <div class="sop-box" id="hud-desc-box">
         <div class="sop-title">📐 Engineering & Mounting Highlights</div>
@@ -786,6 +784,11 @@
           Features a precision-machined elevated slide table on which the ZU-1-60 tongue rail foot glides horizontally without galling. Recessed stock rail seating eliminates track gauge spreading under 25t axle loads.
         </div>
       </div>
+
+      <!-- Bi-directional Synchronizer Button -->
+      <button class="btn btn-small" id="hud-sync-kg-btn" style="margin-top: 10px; width: 100%; justify-content: center; background: linear-gradient(135deg, rgba(0,210,255,0.2), rgba(157,78,221,0.25)); border-color: var(--accent-cyan);" onclick="syncDigitalTwinToKnowledgeGraph()">
+        🌐 Inspect in 3D Knowledge Graph
+      </button>
 
       <div class="sop-box" style="margin-top: 8px; border-color: rgba(0, 255, 136, 0.3); background: rgba(0, 255, 136, 0.05);">
         <div class="sop-title" style="color: var(--accent-green);">📋 Governing Maintenance Directive</div>
@@ -796,12 +799,13 @@
     </div>
   </div>
 
-  <!-- MODAL 1: LIVING 3D KNOWLEDGE GRAPH & LEARNING ENGINE -->
+  <!-- MODAL: BI-DIRECTIONAL 3D FORCE-DIRECTED KNOWLEDGE GRAPH -->
   <div class="modal-overlay" id="kg-modal">
-    <div class="modal-content" style="width: 94vw; max-width: 1400px; height: 90vh;">
+    <div class="modal-content" style="width: 95vw; max-width: 1450px; height: 92vh;">
       <div class="modal-header">
-        <h2>🌐 Living 3D Track Knowledge Graph & Continuous Learning Engine</h2>
+        <h2>🌐 3D Force-Directed Knowledge Graph (Bi-Directional Physics & Learning Engine)</h2>
         <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="btn btn-small" onclick="resetGraphForces()">🔄 Reset Physics</button>
           <button class="btn btn-small" onclick="exportKnowledgeGraph('json')">💾 Export JSON-LD</button>
           <button class="btn btn-small" onclick="exportKnowledgeGraph('cypher')">💾 Export Cypher</button>
           <button class="modal-close" onclick="closeModal('kg-modal')">&times;</button>
@@ -809,37 +813,60 @@
       </div>
       <div class="modal-body" style="padding: 0; overflow: hidden;">
         <div class="kg-3d-layout">
-          <!-- 3D WebGL Canvas for Knowledge Graph -->
+          <!-- 3D Three.js Force Graph Viewport -->
           <div class="kg-canvas-wrap">
             <div id="kg-3d-canvas-container"></div>
-            <div style="position: absolute; bottom: 12px; left: 14px; font-size: 11px; color: var(--text-muted); background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; pointer-events: none;">
-              🖱 Orbit: Left Click + Drag | Pan: Right Click + Drag | Zoom: Scroll | Click Node to inspect & trace impacts
+            <div style="position: absolute; bottom: 12px; left: 14px; font-size: 11px; color: var(--text-muted); background: rgba(0,0,0,0.65); padding: 5px 12px; border-radius: 4px; pointer-events: none; border: 1px solid rgba(255,255,255,0.1);">
+              🖱 Left-Drag: Orbit 3D | Right-Drag: Pan | Scroll: Zoom | Click: Inspect Node | Double-Click: Blossom Sub-Components
+            </div>
+            <div style="position: absolute; top: 12px; left: 14px; display: flex; gap: 6px; z-index: 10;">
+              <button class="btn-small active" onclick="filterKGDomain('all')">All Domains</button>
+              <button class="btn-small" onclick="filterKGDomain('drawing')">Drawings</button>
+              <button class="btn-small" onclick="filterKGDomain('component')">Components</button>
+              <button class="btn-small" onclick="filterKGDomain('signaling')">S&T</button>
+              <button class="btn-small" onclick="filterKGDomain('defect')">Defects</button>
             </div>
           </div>
 
-          <!-- Side Panel: Node Inspector & Add Continuous Learning Node -->
+          <!-- Side Panel: Node Inspector, Bi-Directional Bridge & Continuous Learning -->
           <div class="kg-side-panel">
             <div class="kg-stat-box">
-              <div style="font-size: 11px; color: var(--accent-cyan); font-weight: 700; margin-bottom: 2px;">LIVING GRAPH STATS</div>
-              <div style="font-size: 13px; font-weight: 700;" id="kg-stat-text">16 Nodes • 24 Semantic Links • 6 Domains</div>
+              <div>
+                <div style="font-size: 10px; color: var(--accent-cyan); font-weight: 700;">ACTIVE KNOWLEDGE MATRIX</div>
+                <div style="font-size: 13px; font-weight: 800;" id="kg-stat-text">15 Nodes • 20 Springs</div>
+              </div>
+              <div style="font-size: 10px; color: var(--accent-green); font-weight: 700; border: 1px solid var(--accent-green); padding: 2px 6px; border-radius: 4px;">
+                LIVE PHYSICS
+              </div>
             </div>
 
-            <!-- Selected Node Impact Analysis -->
-            <div style="background: rgba(0,0,0,0.4); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
-              <div style="font-size: 11px; color: var(--accent-orange); font-weight: 700; margin-bottom: 4px;" id="kg-inspect-domain">SELECTED ENTITY</div>
-              <div style="font-size: 13px; font-weight: 700; color: #fff;" id="kg-inspect-label">Click a 3D node to inspect</div>
-              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;" id="kg-inspect-desc">
-                Select any component, standard, or failure mode to analyze interconnected dependencies across drawings.
+            <!-- Selected Node Inspector & Bi-Directional Bridge -->
+            <div style="background: rgba(0,0,0,0.45); padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="font-size: 10px; color: var(--accent-orange); font-weight: 800; letter-spacing: 0.5px;" id="kg-inspect-domain">SELECTED ENTITY</div>
+              <div style="font-size: 14px; font-weight: 800; color: #fff; margin-top: 2px;" id="kg-inspect-label">Click any 3D node</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.45;" id="kg-inspect-desc">
+                Select any node to observe real-time dynamic spring tension, upstream/downstream standards, and impact dependencies.
               </div>
+
               <div style="margin-top: 8px; font-size: 11px; color: var(--accent-green); font-weight: 600;" id="kg-inspect-impact"></div>
+
+              <!-- Action: Blossom Sub-Components -->
+              <button class="btn btn-small" id="kg-blossom-btn" style="margin-top: 8px; width: 100%; justify-content: center; background: rgba(157,78,221,0.25); border-color: var(--accent-purple); display: none;" onclick="toggleBlossomCurrentNode()">
+                🌸 Blossom Sub-Components in 3D
+              </button>
+
+              <!-- Action: Focus in Physical 3D Digital Twin -->
+              <button class="btn btn-throw" id="kg-focus-twin-btn" style="margin-top: 8px; width: 100%; justify-content: center; display: none;" onclick="focusPhysicalAssetFromKG()">
+                🔍 Focus Physical Asset in 3D Model
+              </button>
             </div>
 
-            <!-- Add New Knowledge Node Form (Continuous Learning) -->
-            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-              <div style="font-size: 12px; font-weight: 700; color: var(--accent-green); margin-bottom: 6px;">
-                ➕ Add Component / Field Insight
+            <!-- Ingest New Knowledge / Continuous Learning Form -->
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+              <div style="font-size: 11.5px; font-weight: 800; color: var(--accent-green); margin-bottom: 6px; display: flex; align-items: center; gap: 5px;">
+                <span>➕</span> Ingest Node into 3D Simulation
               </div>
-              
+
               <div class="kg-form-group">
                 <label>Entity Label / Title:</label>
                 <input type="text" id="new-node-label" class="kg-input" placeholder="e.g. Ultrasonic Flaw Finding Sl. 13">
@@ -858,12 +885,12 @@
               </div>
 
               <div class="kg-form-group">
-                <label>Link to Existing Node:</label>
+                <label>Tether to Existing Node (Spring Attachment):</label>
                 <select id="new-node-parent" class="kg-input"></select>
               </div>
 
               <div class="kg-form-group">
-                <label>Relationship Verb:</label>
+                <label>Relationship Type:</label>
                 <select id="new-node-relation" class="kg-input">
                   <option value="INCORPORATES">INCORPORATES</option>
                   <option value="FASTENED_BY">FASTENED_BY</option>
@@ -876,11 +903,11 @@
 
               <div class="kg-form-group">
                 <label>Engineering Rationale / Notes:</label>
-                <textarea id="new-node-desc" class="kg-input" rows="2" placeholder="Field report or design proposal details..."></textarea>
+                <textarea id="new-node-desc" class="kg-input" rows="2" placeholder="Field report, failure details, or design proposal..."></textarea>
               </div>
 
               <button class="btn btn-throw" style="width: 100%; justify-content: center; margin-top: 4px;" onclick="addContinuousLearningNode()">
-                🚀 Ingest Into Living Graph
+                🚀 Ingest into Force Simulation
               </button>
             </div>
           </div>
@@ -889,7 +916,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: Spares Calculator -->
+  <!-- MODAL: Spares Calculator -->
   <div class="modal-overlay" id="spares-modal">
     <div class="modal-content" style="max-width: 1000px;">
       <div class="modal-header">
@@ -925,7 +952,7 @@
     </div>
   </div>
 
-  <!-- MODAL 3: Field SOPs -->
+  <!-- MODAL: Field SOPs -->
   <div class="modal-overlay" id="sop-modal">
     <div class="modal-content" style="max-width: 800px;">
       <div class="modal-header">
@@ -945,7 +972,7 @@
           <div class="sop-title">3. Spring Setting Device (SSD) Maintenance at JOH (RDSO/T-6216)</div>
           <p>Inspect helical spring tension and turnbuckle adjustment at Sleeper 13. Ensure that minimum flangeway clearance of 60 mm is maintained at the Junction of Rail Heads (JOH) when the switch is thrown reverse.</p>
         </div>
-        <div class="sop-box">
+        <div class="sop-box" style="margin-bottom: 12px;">
           <div class="sop-title">4. Check Rail Flangeway Clearance Inspection (RDSO/T-6275)</div>
           <p>Verify that check rail flangeway gap remains strictly between 41 mm and 45 mm (nominal 44 mm) opposite the CMS nose. Flare ends must maintain 89 mm opening to prevent wheel flange impact.</p>
         </div>
@@ -1013,7 +1040,7 @@
     function openModal(id) {
       document.getElementById(id).style.display = 'flex';
       if (id === 'spares-modal') populateSparesTable();
-      if (id === 'kg-modal') init3DKnowledgeGraph();
+      if (id === 'kg-modal') init3DForceGraph();
     }
     function closeModal(id) {
       document.getElementById(id).style.display = 'none';
@@ -1076,15 +1103,10 @@
     scene.add(grid);
 
     // Dynamic Hierarchical Groups
-    const infrastructureGroup = new THREE.Group(); // 64-sleeper full turnout
-    const subAssemblyGroup = new THREE.Group();    // Focused sub-assembly linking
-    const componentStudioGroup = new THREE.Group(); // Isolated component studio
-
+    const infrastructureGroup = new THREE.Group();
+    const componentStudioGroup = new THREE.Group();
     scene.add(infrastructureGroup);
-    scene.add(subAssemblyGroup);
     scene.add(componentStudioGroup);
-
-    subAssemblyGroup.visible = false;
     componentStudioGroup.visible = false;
 
     // Materials
@@ -1093,27 +1115,22 @@
     const steelRailMat = new THREE.MeshStandardMaterial({ color: 0x8a99ad, metalness: 0.85, roughness: 0.25 });
     const tongueRailMat = new THREE.MeshStandardMaterial({ color: 0x00d2ff, metalness: 0.8, roughness: 0.3 });
     const castChairMat = new THREE.MeshStandardMaterial({ color: 0xd4a017, metalness: 0.6, roughness: 0.45 });
-    const slideTableMat = new THREE.MeshStandardMaterial({ color: 0xddccaa, metalness: 0.9, roughness: 0.15 }); // Polished slide table
-    const ercSpringMat = new THREE.MeshStandardMaterial({ color: 0x00ff88, metalness: 0.7, roughness: 0.3 }); // ERC Mk-V
+    const slideTableMat = new THREE.MeshStandardMaterial({ color: 0xddccaa, metalness: 0.9, roughness: 0.15 });
+    const ercSpringMat = new THREE.MeshStandardMaterial({ color: 0x00ff88, metalness: 0.7, roughness: 0.3 });
     const tieBarMat = new THREE.MeshStandardMaterial({ color: 0x00d2ff, metalness: 0.65, roughness: 0.35 });
     const cmsCrossingMat = new THREE.MeshStandardMaterial({ color: 0xa0b0c0, metalness: 0.9, roughness: 0.2, emissive: 0x002244, emissiveIntensity: 0.15 });
     const checkRailMat = new THREE.MeshStandardMaterial({ color: 0xffaa00, metalness: 0.75, roughness: 0.3 });
 
     const interactiveObjects = [];
+    const digitalTwinMeshRegistry = {}; // Bi-directional lookup registry
 
-    // ==========================================
-    // ACCURATE 60E1 / IRS 60 KG RAIL PROFILE SHAPE
-    // ==========================================
     function createRailProfileShape() {
       const shape = new THREE.Shape();
-      // Base flange: 150 mm width (from -0.075 to +0.075)
       shape.moveTo(-0.075, 0.0);
       shape.lineTo(0.075, 0.0);
       shape.lineTo(0.065, 0.012);
       shape.lineTo(0.010, 0.032);
-      // Web: 16.5 mm width (from -0.008 to +0.008)
       shape.lineTo(0.0082, 0.124);
-      // Head: 72 mm width (from -0.036 to +0.036)
       shape.lineTo(0.036, 0.138);
       shape.lineTo(0.036, 0.168);
       shape.lineTo(0.024, 0.172);
@@ -1138,36 +1155,29 @@
       return mesh;
     }
 
-    // Realistic Cast Steel Slide Chair (RDSO/T-9616)
     function createSlideChairMesh() {
       const chairGroup = new THREE.Group();
-      // Base plate
       const baseMesh = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.025, 0.26), castChairMat);
       baseMesh.position.y = 0.0125;
       chairGroup.add(baseMesh);
 
-      // Elevated polished slide table
       const tableMesh = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.025, 0.22), slideTableMat);
       tableMesh.position.set(0.08, 0.0375, 0);
       chairGroup.add(tableMesh);
 
-      // Stock rail outer check rib
       const ribMesh = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.24), castChairMat);
       ribMesh.position.set(-0.11, 0.04, 0);
       chairGroup.add(ribMesh);
 
-      // Plate screw heads (4x RDSO/T-3913)
       const screwGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.02, 8);
       [ [-0.14, -0.09], [-0.14, 0.09], [0.15, -0.09], [0.15, 0.09] ].forEach(([sx, sz]) => {
         const screw = new THREE.Mesh(screwGeo, castChairMat);
         screw.position.set(sx, 0.03, sz);
         chairGroup.add(screw);
       });
-
       return chairGroup;
     }
 
-    // Realistic ERC Mk-V Clip Mesh (RDSO/T-5919)
     function createERCMesh() {
       const curve = new THREE.CatmullRomCurve3([
         new THREE.Vector3(0, 0, 0),
@@ -1184,7 +1194,7 @@
     }
 
     // ==========================================
-    // 1. BUILD INFRASTRUCTURE GROUP (64 SLEEPERS)
+    // 1. ASSEMBLE 64 SLEEPERS INFRASTRUCTURE
     // ==========================================
     const totalSleepers = 64;
     const sleeperSpacing = 0.85;
@@ -1220,7 +1230,6 @@
         sleeperLen = 2.8;
       }
 
-      // PSC Sleeper with realistic chamfer
       const sGroup = new THREE.Group();
       const bodyMesh = new THREE.Mesh(new THREE.BoxGeometry(sleeperLen, 0.22, 0.32), concreteMat);
       bodyMesh.position.y = -0.11;
@@ -1233,7 +1242,7 @@
       infrastructureGroup.add(sGroup);
       sleeperMeshes.push(sGroup);
 
-      // Grooved Rubber Sole Pads (GRSP) under running rails
+      // GRSP Pads under running rails
       const leftPad = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.01, 0.22), grspRubberMat);
       leftPad.position.set(-halfGauge, 0.005, zPos);
       infrastructureGroup.add(leftPad);
@@ -1252,27 +1261,24 @@
         scRight.position.set(halfGauge - 0.08, 0, zPos);
         scRight.rotation.y = Math.PI;
         infrastructureGroup.add(scRight);
+
+        if (i === 10) digitalTwinMeshRegistry["comp_chair"] = scLeft;
       }
 
-      // Add ERC Mk-V clips to each sleeper rail seat
+      // Fasteners ERC
       const erc1 = createERCMesh();
       erc1.position.set(-halfGauge - 0.08, 0.02, zPos);
       infrastructureGroup.add(erc1);
-
-      const erc2 = createERCMesh();
-      erc2.position.set(-halfGauge + 0.08, 0.02, zPos);
-      erc2.rotation.y = Math.PI;
-      infrastructureGroup.add(erc2);
 
       bodyMesh.userData = {
         name: `PSC Sleeper No. ${i}`,
         drg: i <= 27 ? "RDSO/T-4219 Standard Turnout Sleeper" : "RDSO/T-6154 Sleeper Schedule",
         type: "Prestressed Concrete Sleeper",
+        kgNodeId: "drg_6154",
         location: `Station ${(i * 0.85).toFixed(1)} m (${zoneName})`,
-        fittings: i <= 20 ? "Cast Steel Slide Chair RDSO/T-9616 & 10mm GRSP" : "Special Bearing Plate & ERC Mk-V",
-        notes: i === 3 || i === 4 ? "Detail 'B' Tie Bar RDSO/T-9010 installed with 222 mm drop bend." :
-               i === 13 ? "Spring Setting Device (RDSO/T-6216) mounted on tie plate." :
-               i === 48 ? "Theoretical Nose of Crossing (TNC) seated on monolithic bed." :
+        notes: i === 3 || i === 4 ? "Detail 'B' Tie Bar installed with 222 mm drop bend." :
+               i === 13 ? "Spring Setting Device mounted on sleeper tie plate." :
+               i === 48 ? "Theoretical Nose of Crossing (TNC) at 1 in 12 angle." :
                "Reinforced PSC sleeper for 25t axle load operations."
       };
       interactiveObjects.push(bodyMesh);
@@ -1283,27 +1289,28 @@
     const leftStockRail = createRealisticRail(fullRailLen, steelRailMat);
     leftStockRail.position.set(-halfGauge, 0.01, 11);
     infrastructureGroup.add(leftStockRail);
-    leftStockRail.userData = { name: "Straight Stock Rail (Left)", drg: "IRS: T 10", type: "60 kg (UIC) / 60E1 Rail" };
+    leftStockRail.userData = { name: "Straight Stock Rail (Left)", drg: "IRS: T 10", kgNodeId: "drg_6154", type: "60 kg (UIC) / 60E1 Rail" };
     interactiveObjects.push(leftStockRail);
 
     const rightStockRail = createRealisticRail(fullRailLen, steelRailMat);
     rightStockRail.position.set(halfGauge, 0.01, 11);
     infrastructureGroup.add(rightStockRail);
-    rightStockRail.userData = { name: "Straight Stock Rail (Right)", drg: "IRS: T 10", type: "60 kg (UIC) / 60E1 Rail" };
+    rightStockRail.userData = { name: "Straight Stock Rail (Right)", drg: "IRS: T 10", kgNodeId: "drg_6154", type: "60 kg (UIC) / 60E1 Rail" };
     interactiveObjects.push(rightStockRail);
 
-    // Thick-Web Tongue Rails (Switch Zone)
+    // Thick-Web Tongue Rails
     const tongueLength = 14.5;
     const tongueRailLeft = createRealisticRail(tongueLength, tongueRailMat);
     tongueRailLeft.position.set(-halfGauge + 0.16, 0.04, -8.0);
     infrastructureGroup.add(tongueRailLeft);
-    tongueRailLeft.userData = { name: "Thick-Web Tongue Rail (Left)", drg: "RDSO/T-6155/1", type: "ZU-1-60 / 60E1A1 Thick Web Rail" };
+    tongueRailLeft.userData = { name: "Thick-Web Tongue Rail (Left)", drg: "RDSO/T-6155/1", kgNodeId: "drg_6155", type: "ZU-1-60 Thick Web Rail" };
     interactiveObjects.push(tongueRailLeft);
+    digitalTwinMeshRegistry["drg_6155"] = tongueRailLeft;
 
     const tongueRailRight = createRealisticRail(tongueLength, tongueRailMat);
     tongueRailRight.position.set(halfGauge - 0.28, 0.04, -8.0);
     infrastructureGroup.add(tongueRailRight);
-    tongueRailRight.userData = { name: "Thick-Web Tongue Rail (Right)", drg: "RDSO/T-6155/1", type: "ZU-1-60 Thick Web Rail" };
+    tongueRailRight.userData = { name: "Thick-Web Tongue Rail (Right)", drg: "RDSO/T-6155/1", kgNodeId: "drg_6155", type: "ZU-1-60 Thick Web Rail" };
     interactiveObjects.push(tongueRailRight);
 
     // Lead Curve Rails
@@ -1312,12 +1319,7 @@
     leadCurveOuter.rotation.y = 0.065;
     infrastructureGroup.add(leadCurveOuter);
 
-    const leadCurveInner = createRealisticRail(14.5, tongueRailMat);
-    leadCurveInner.position.set(-halfGauge + 0.65, 0.01, 6.0);
-    leadCurveInner.rotation.y = 0.065;
-    infrastructureGroup.add(leadCurveInner);
-
-    // 1 in 12 CMS Crossing Unit (Sleepers 46 to 50)
+    // CMS Crossing
     const crossingZ = startZ + (48 - 1) * sleeperSpacing;
     const cmsMesh = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.18, 4.8), cmsCrossingMat);
     cmsMesh.position.set(0.2, 0.08, crossingZ);
@@ -1326,30 +1328,29 @@
     cmsMesh.userData = {
       name: "1 in 12 Monoblock CMS Crossing (RDSO/T-6279 & T-6280)",
       drg: "RDSO/T-6279 (Monoblock) / T-6280 (Assembly)",
+      kgNodeId: "drg_6280",
       type: "Cast Manganese Steel (IRS: T 29)",
       notes: "Nose at Sleeper 48. Initial 220 BHN, work-hardens to 350 BHN."
     };
     interactiveObjects.push(cmsMesh);
+    digitalTwinMeshRegistry["drg_6280"] = cmsMesh;
+    digitalTwinMeshRegistry["comp_cms_unit"] = cmsMesh;
 
-    // Check Rails (RDSO/T-6275)
+    // Check Rails
     const checkRail1 = createRealisticRail(6.8, checkRailMat);
     checkRail1.position.set(-halfGauge + 0.10, 0.02, crossingZ);
     infrastructureGroup.add(checkRail1);
     checkRail1.userData = {
       name: "Check Rail (RDSO/T-6275)",
       drg: "RDSO/T-6275 to T-6275/4",
+      kgNodeId: "drg_6275",
       type: "Check Rail Flangeway Guard",
       notes: "5000 mm length, 44 mm nominal flangeway clearance, 89 mm flared ends."
     };
     interactiveObjects.push(checkRail1);
+    digitalTwinMeshRegistry["drg_6275"] = checkRail1;
 
-    const checkRail2 = createRealisticRail(6.8, checkRailMat);
-    checkRail2.position.set(halfGauge + 1.25, 0.02, crossingZ);
-    checkRail2.rotation.y = 0.07;
-    infrastructureGroup.add(checkRail2);
-    interactiveObjects.push(checkRail2);
-
-    // Detail 'B' Bent Tie Bar (RDSO/T-9010)
+    // Detail 'B' Bent Tie Bar
     const sl3Z = sleeperMeshes[2].position.z;
     const sl4Z = sleeperMeshes[3].position.z;
     const tieBarZ = (sl3Z + sl4Z) / 2;
@@ -1374,20 +1375,23 @@
     tieBarGroup.userData = {
       name: "Detail 'B' M.S. Flat Tie Bar (RDSO/T-9010)",
       drg: "RDSO/T-9010",
+      kgNodeId: "comp_detailb",
       type: "Tie Bar Assembly",
       notes: "222 mm drop bend to clear S&T Clamp Point Lock (RDSO/S-3454)."
     };
     infrastructureGroup.add(tieBarGroup);
     interactiveObjects.push(tbTop);
+    digitalTwinMeshRegistry["comp_detailb"] = tieBarGroup;
 
-    // Clamp Point Lock (RDSO/S-3454)
+    // S&T Clamp Point Lock
     const cplMesh = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.18, 0.45), new THREE.MeshStandardMaterial({ color: 0x223344 }));
     cplMesh.position.set(-halfGauge - 0.75, 0.02, tieBarZ);
     infrastructureGroup.add(cplMesh);
-    cplMesh.userData = { name: "Clamp Point Lock (RDSO/S-3454)", drg: "RDSO/S-3454", type: "S&T Interlocking Point Machine" };
+    cplMesh.userData = { name: "Clamp Point Lock (RDSO/S-3454)", drg: "RDSO/S-3454", kgNodeId: "comp_cpl", type: "S&T Interlocking Point Machine" };
     interactiveObjects.push(cplMesh);
+    digitalTwinMeshRegistry["comp_cpl"] = cplMesh;
 
-    // Spring Setting Device (RDSO/T-6216) at Sleeper 13
+    // Spring Setting Device at Sleeper 13
     const sl13Z = sleeperMeshes[12].position.z;
     const ssdCylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 1.4, 16), new THREE.MeshStandardMaterial({ color: 0x3366cc }));
     ssdCylinder.rotateZ(Math.PI / 2);
@@ -1396,148 +1400,58 @@
     ssdCylinder.userData = {
       name: "Spring Setting Device - SSD (RDSO/T-6216)",
       drg: "RDSO/T-6216 & T-6217",
+      kgNodeId: "drg_6216",
       type: "Dynamic Flangeway Stabilizer",
       notes: "Maintains 60 mm clearance at JOH during reverse switch throw."
     };
     interactiveObjects.push(ssdCylinder);
+    digitalTwinMeshRegistry["drg_6216"] = ssdCylinder;
+
+    // Active active selected mesh for bi-directional link
+    let activeInspectedData = null;
 
     // ==========================================
-    // 2. BUILD COMPONENT STUDIO MODELS (ISOLATED MACRO)
-    // ==========================================
-    const compModels = {};
-
-    // A. Slide Chair Studio
-    const csChair = createSlideChairMesh();
-    csChair.scale.set(4, 4, 4);
-    csChair.position.set(0, -0.2, 0);
-    componentStudioGroup.add(csChair);
-    compModels["comp_slide_chair"] = csChair;
-
-    // B. Tie Bar Studio
-    const csTieBar = new THREE.Group();
-    const csTbTop = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.03, 1.8), tieBarMat);
-    const csTbD1 = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.35, 0.04), tieBarMat);
-    csTbD1.position.set(0, -0.16, -0.38);
-    const csTbD2 = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.35, 0.04), tieBarMat);
-    csTbD2.position.set(0, -0.16, 0.38);
-    const csTbLow = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.03, 0.76), tieBarMat);
-    csTbLow.position.set(0, -0.33, 0);
-    csTieBar.add(csTbTop, csTbD1, csTbD2, csTbLow);
-    csTieBar.scale.set(2.5, 2.5, 2.5);
-    componentStudioGroup.add(csTieBar);
-    compModels["comp_tie_bar"] = csTieBar;
-
-    // C. SSD Studio
-    const csSSD = new THREE.Group();
-    const csSSDCyl = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 2.8, 24), new THREE.MeshStandardMaterial({ color: 0x3366cc, metalness: 0.8, roughness: 0.25 }));
-    csSSDCyl.rotateZ(Math.PI / 2);
-    const csSpring = new THREE.Mesh(new THREE.TorusGeometry(0.19, 0.02, 16, 60), new THREE.MeshStandardMaterial({ color: 0xffaa00 }));
-    csSSD.add(csSSDCyl, csSpring);
-    componentStudioGroup.add(csSSD);
-    compModels["comp_ssd"] = csSSD;
-
-    // D. CMS Crossing Studio
-    const csCMS = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.35, 5.5), cmsCrossingMat);
-    csCMS.castShadow = true;
-    componentStudioGroup.add(csCMS);
-    compModels["comp_cms_crossing"] = csCMS;
-
-    // E. Check Rail Studio
-    const csCheck = createRealisticRail(5.0, checkRailMat);
-    csCheck.scale.set(1.5, 1.5, 1.5);
-    componentStudioGroup.add(csCheck);
-    compModels["comp_check_rail"] = csCheck;
-
-    // F. ERC Mk-V Studio
-    const csERC = createERCMesh();
-    csERC.scale.set(12, 12, 12);
-    componentStudioGroup.add(csERC);
-    compModels["comp_erc_mkv"] = csERC;
-
-    // G. Tongue Rail Studio
-    const csTongue = createRealisticRail(6.0, tongueRailMat);
-    csTongue.scale.set(1.4, 1.4, 1.4);
-    componentStudioGroup.add(csTongue);
-    compModels["comp_tongue_rail"] = csTongue;
-
-    // Hide all studio components initially
-    Object.values(compModels).forEach(m => m.visible = false);
-
-    // ==========================================
-    // VIEW MODE & ASSEMBLY SWITCHER
+    // VIEW MODE SWITCHER
     // ==========================================
     function setAssemblyViewMode(mode) {
-      // Hide all modes
-      infrastructureGroup.visible = false;
-      subAssemblyGroup.visible = false;
-      componentStudioGroup.visible = false;
-      Object.values(compModels).forEach(m => m.visible = false);
-
+      infrastructureGroup.visible = true;
       const titleEl = document.getElementById('assembly-title-display');
       const descEl = document.getElementById('assembly-desc-display');
 
-      if (mode.startsWith("comp_")) {
-        // Component Studio Mode
-        componentStudioGroup.visible = true;
-        const targetModel = compModels[mode];
-        if (targetModel) targetModel.visible = true;
-
-        camera.position.set(4, 3, 5);
-        controls.target.set(0, 0, 0);
-
-        const titles = {
-          comp_slide_chair: "Component Studio: Cast Steel Slide Chair (RDSO/T-9616)",
-          comp_tie_bar: "Component Studio: Detail 'B' Bent Tie Bar (RDSO/T-9010)",
-          comp_ssd: "Component Studio: Spring Setting Device (RDSO/T-6216/6217)",
-          comp_cms_crossing: "Component Studio: Monoblock CMS Crossing (RDSO/T-6279)",
-          comp_check_rail: "Component Studio: Check Rail Assembly (RDSO/T-6275)",
-          comp_erc_mkv: "Component Studio: Elastic Rail Clip Mk-V (RDSO/T-5919)",
-          comp_tongue_rail: "Component Studio: ZU-1-60 Thick-Web Tongue Rail"
-        };
-        titleEl.innerText = titles[mode] || "Component Studio Macro View";
-        descEl.innerText = "Isolated macro 360° inspection of individual railway track component with millimeter geometric fidelity.";
+      if (mode === "sub_toe_interlock") {
+        camera.position.set(-3, 3, -12);
+        controls.target.set(-halfGauge, 0, tieBarZ);
+        titleEl.innerText = "Sub-Assembly: Toe & Clamp Lock Interface (Sleepers 1-4)";
+        descEl.innerText = "Focusing on Detail 'B' 222 mm drop bend tie bar, Clamp Point Lock (S-3454) drive rod clearance, and slide chairs.";
+      } else if (mode === "sub_joh_ssd") {
+        camera.position.set(4, 3.5, sl13Z + 1);
+        controls.target.set(0, 0, sl13Z);
+        titleEl.innerText = "Sub-Assembly: JOH Flangeway & SSD System (Sleeper 13)";
+        descEl.innerText = "Focusing on Spring Setting Device (RDSO/T-6216) maintaining 60 mm heel clearance during reverse throw.";
+      } else if (mode === "sub_crossing_guard") {
+        camera.position.set(6, 6, crossingZ + 4);
+        controls.target.set(0.2, 0, crossingZ);
+        titleEl.innerText = "Sub-Assembly: CMS Crossing & Check Rail Guard (Sleepers 44-52)";
+        descEl.innerText = "Focusing on 1:12 CMS Monoblock (T-6279), 44 mm flangeway clearance, and flared check rails (T-6275).";
+      } else if (mode === "switch_zone") {
+        camera.position.set(10, 12, 0);
+        controls.target.set(0, 0, -6);
+        titleEl.innerText = "Switch Zone Assembly (RDSO/T-6155: Sleepers 1-27)";
+        descEl.innerText = "Complete 10125 mm Curved Switch with ZU-1-60 tongue rails and slide chairs on PSC sleepers.";
+      } else if (mode === "crossing_zone") {
+        camera.position.set(10, 12, crossingZ);
+        controls.target.set(0, 0, crossingZ);
+        titleEl.innerText = "CMS Crossing Zone Assembly (RDSO/T-6280: Sleepers 41-55)";
+        descEl.innerText = "Monoblock CMS crossing, special crossing bearing plates, and check rails.";
       } else {
-        // Infrastructure / Sub-assembly modes
-        infrastructureGroup.visible = true;
-
-        if (mode === "sub_toe_interlock") {
-          camera.position.set(-3, 3, -12);
-          controls.target.set(-halfGauge, 0, tieBarZ);
-          titleEl.innerText = "Sub-Assembly: Toe & S&T Interface (Sleepers 1-4)";
-          descEl.innerText = "Focusing on Detail 'B' 222 mm drop bend tie bar, Clamp Point Lock (S-3454) drive rod clearance, and slide chairs.";
-        } else if (mode === "sub_joh_ssd") {
-          camera.position.set(4, 3.5, sl13Z + 1);
-          controls.target.set(0, 0, sl13Z);
-          titleEl.innerText = "Sub-Assembly: JOH Flangeway & SSD System (Sleeper 13)";
-          descEl.innerText = "Focusing on Spring Setting Device (RDSO/T-6216) maintaining 60 mm heel clearance during reverse throw.";
-        } else if (mode === "sub_crossing_guard") {
-          camera.position.set(6, 6, crossingZ + 4);
-          controls.target.set(0.2, 0, crossingZ);
-          titleEl.innerText = "Sub-Assembly: CMS Crossing & Check Rail Guard (Sleepers 44-52)";
-          descEl.innerText = "Focusing on 1:12 CMS Monoblock (T-6279), 44 mm flangeway clearance, and flared check rails (T-6275).";
-        } else if (mode === "switch_zone") {
-          camera.position.set(10, 12, 0);
-          controls.target.set(0, 0, -6);
-          titleEl.innerText = "Switch Zone Assembly (RDSO/T-6155: Sleepers 1-27)";
-          descEl.innerText = "Complete 10125 mm Curved Switch with ZU-1-60 tongue rails and slide chairs on PSC sleepers.";
-        } else if (mode === "crossing_zone") {
-          camera.position.set(10, 12, crossingZ);
-          controls.target.set(0, 0, crossingZ);
-          titleEl.innerText = "CMS Crossing Zone Assembly (RDSO/T-6280: Sleepers 41-55)";
-          descEl.innerText = "Monoblock CMS crossing, special crossing bearing plates, and check rails.";
-        } else {
-          camera.position.set(16, 22, 28);
-          controls.target.set(0, 0, 8);
-          titleEl.innerText = "Full 1:12 Turnout Assembly (RDSO/T-6154: 64 Sleepers)";
-          descEl.innerText = "Integrated 64-sleeper layout combining Switch Zone, Lead Curve, and CMS Crossing on PSC Sleepers.";
-        }
+        camera.position.set(16, 22, 28);
+        controls.target.set(0, 0, 8);
+        titleEl.innerText = "Full 1:12 Turnout Assembly (RDSO/T-6154: 64 Sleepers)";
+        descEl.innerText = "Integrated 64-sleeper layout combining Switch Zone, Lead Curve, and CMS Crossing on PSC Sleepers.";
       }
       controls.update();
     }
-
-    document.getElementById('view-mode-select').addEventListener('change', (e) => {
-      setAssemblyViewMode(e.target.value);
-    });
+    document.getElementById('view-mode-select').addEventListener('change', (e) => setAssemblyViewMode(e.target.value));
 
     // Camera Presets
     const cameraViews = {
@@ -1608,12 +1522,11 @@
       tbDrop2.visible = dropVisible;
       tbLower.visible = dropVisible;
     }
-
     document.querySelectorAll('.timeline-step').forEach(step => {
       step.onclick = () => setRevisionStep(step.getAttribute('data-step'));
     });
 
-    // Raycasting for Clicks & HUD
+    // Raycasting for Clicks & Bi-Directional HUD
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     const tooltip = document.getElementById('tooltip-3d');
@@ -1648,14 +1561,26 @@
       if (intersects.length > 0) {
         const data = intersects[0].object.userData.name ? intersects[0].object.userData : intersects[0].object.parent.userData;
         if (data && data.name) {
+          activeInspectedData = data;
           document.getElementById('hud-title').innerText = data.name;
           document.getElementById('hud-drg').innerText = data.drg || "RDSO Standard";
           document.getElementById('hud-cat').innerText = data.type || "Track Component";
           document.getElementById('hud-loc').innerText = data.location || "Turnout Assembly";
           document.getElementById('hud-desc').innerHTML = data.notes || data.desc || "High-precision Indian Railways track standard component.";
+          document.getElementById('hud-sync-kg-btn').style.display = "block";
         }
       }
     });
+
+    // Bi-directional trigger: Digital Twin -> 3D Knowledge Graph
+    function syncDigitalTwinToKnowledgeGraph() {
+      if (!activeInspectedData) return;
+      openModal('kg-modal');
+      const targetKgId = activeInspectedData.kgNodeId || "drg_6154";
+      setTimeout(() => {
+        focusKGNodeById(targetKgId);
+      }, 200);
+    }
 
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -1672,35 +1597,36 @@
     }
     animate();
 
-    // ==========================================
-    // 3. LIVING 3D KNOWLEDGE GRAPH IN THREE.JS
-    // ==========================================
+    // =========================================================================
+    // 2. INDUSTRIAL-GRADE 3D FORCE-DIRECTED KNOWLEDGE GRAPH WITH BLOSSOM NODES
+    // =========================================================================
     let kgScene, kgCamera, kgRenderer, kgControls;
-    let kgNodes = [];
-    let kgEdges = [];
+    let kgPhysicsNodes = [];
+    let kgPhysicsEdges = [];
     let kgInitialized = false;
+    let currentSelectedKGNode = null;
+    let blossomedNodesMap = {}; // Tracks blossom state
 
-    // Default Knowledge Graph Nodes (Multi-Layer Taxonomy)
-    const initialKGNodes = [
-      { id: "drg_6154", label: "RDSO/T-6154 (1:12 Turnout Layout)", domain: "drawing", color: "#00d2ff", x: 0, y: 5, z: 0, desc: "Master layout of 1 in 12 Turnout 60 kg (UIC) on PSC Sleepers (Sleepers 1 to 64)." },
-      { id: "drg_6155", label: "RDSO/T-6155 (Curved Switch)", domain: "drawing", color: "#00d2ff", x: -6, y: 2, z: 0, desc: "10125 mm Curved Switch with ZU-1-60 Thick Web Tongue Rails." },
-      { id: "drg_6216", label: "RDSO/T-6216 (SSD Assembly)", domain: "drawing", color: "#3366cc", x: -3, y: 2, z: -4, desc: "Spring Setting Device for Thick Web Switches at Sleeper 13 (JOH)." },
-      { id: "drg_6275", label: "RDSO/T-6275 (Check Rails)", domain: "drawing", color: "#ffaa00", x: 3, y: 2, z: -4, desc: "Check Rail arrangement (5000 mm) with 41-45 mm flangeway clearance." },
-      { id: "drg_6280", label: "RDSO/T-6280 (CMS Crossing)", domain: "drawing", color: "#a0b0c0", x: 6, y: 2, z: 0, desc: "1 in 12 CMS Crossing assembly with specialized base plates." },
+    // Initial Knowledge Graph Data
+    const rawKGNodes = [
+      { id: "drg_6154", label: "RDSO/T-6154 (1:12 Turnout Layout)", domain: "drawing", color: "#00d2ff", x: 0, y: 3, z: 0, desc: "Master layout of 1 in 12 Turnout 60 kg (UIC) on PSC Sleepers (Sleepers 1 to 64)." },
+      { id: "drg_6155", label: "RDSO/T-6155 (Curved Switch)", domain: "drawing", color: "#00d2ff", x: -5, y: 1, z: 0, desc: "10125 mm Curved Switch with ZU-1-60 Thick Web Tongue Rails.", canBlossom: true },
+      { id: "drg_6216", label: "RDSO/T-6216 (SSD Assembly)", domain: "drawing", color: "#3366cc", x: -2, y: 1, z: -4, desc: "Spring Setting Device for Thick Web Switches at Sleeper 13 (JOH).", canBlossom: true },
+      { id: "drg_6275", label: "RDSO/T-6275 (Check Rails)", domain: "drawing", color: "#ffaa00", x: 2, y: 1, z: -4, desc: "Check Rail arrangement (5000 mm) with 41-45 mm flangeway clearance." },
+      { id: "drg_6280", label: "RDSO/T-6280 (CMS Crossing)", domain: "drawing", color: "#a0b0c0", x: 5, y: 1, z: 0, desc: "1 in 12 CMS Crossing assembly with specialized base plates.", canBlossom: true },
       
-      { id: "comp_chair", label: "Cast Steel Slide Chair (T-9616)", domain: "component", color: "#00ff88", x: -8, y: -2, z: 2, desc: "Sleepers 04-20: precision machined elevated slide table." },
-      { id: "comp_detailb", label: "Detail 'B' Bent Tie Bar (T-9010)", domain: "component", color: "#00ff88", x: -5, y: -2, z: 4, desc: "222 mm drop bend to clear S&T Clamp Point Lock S-3454." },
-      { id: "comp_cpl", label: "Clamp Point Lock (RDSO/S-3454)", domain: "signaling", color: "#ff3366", x: -5, y: -5, z: 5, desc: "Signaling interlocking point drive with 220 mm stroke." },
-      { id: "comp_ssd_parts", label: "SSD Parts 1 to 39 (T-6217)", domain: "component", color: "#00ff88", x: -3, y: -2, z: -6, desc: "Compression springs, turnbuckles, and insulated pin bushings." },
-      { id: "comp_cms_unit", label: "CMS Monoblock Unit (T-6279)", domain: "component", color: "#00ff88", x: 7, y: -2, z: 2, desc: "Austenitic manganese casting, initial 220 BHN work-hardening to 350 BHN." },
+      { id: "comp_chair", label: "Cast Steel Slide Chair (T-9616)", domain: "component", color: "#00ff88", x: -7, y: -2, z: 2, desc: "Sleepers 04-20: precision machined elevated slide table." },
+      { id: "comp_detailb", label: "Detail 'B' Bent Tie Bar (T-9010)", domain: "component", color: "#00ff88", x: -4, y: -2, z: 4, desc: "222 mm drop bend to clear S&T Clamp Point Lock S-3454." },
+      { id: "comp_cpl", label: "Clamp Point Lock (RDSO/S-3454)", domain: "signaling", color: "#ff3366", x: -4, y: -5, z: 5, desc: "Signaling interlocking point drive with 220 mm stroke." },
+      { id: "comp_cms_unit", label: "CMS Monoblock Unit (T-6279)", domain: "component", color: "#00ff88", x: 6, y: -2, z: 2, desc: "Austenitic manganese casting, initial 220 BHN work-hardening to 350 BHN." },
       
-      { id: "spec_flange", label: "Check Rail Flangeway 44 mm", domain: "specification", color: "#ff9d00", x: 3, y: -2, z: -6, desc: "Guarantees wheel flange guidance past the unguided crossing gap." },
-      { id: "sop_dowel", label: "Epoxy Dowel Retrofit (Note 25/26)", domain: "sop", color: "#9d4edd", x: -8, y: -5, z: 4, desc: "35x165 mm hole, IS:12994 L-100 epoxy resin, mandatory 24-hr curing." },
-      { id: "sop_lista", label: "LIST - A Spares 10% (Note 28)", domain: "sop", color: "#9d4edd", x: -8, y: 5, z: 2, desc: "Mandates 10% spare procurement on 24 critical wear/breakage items." },
-      { id: "defect_fatigue", label: "Tongue Joint Fatigue Crack", domain: "defect", color: "#ff3366", x: -6, y: -5, z: -2, desc: "Machined Joint 'M' fractured under 25t loads -> superseded by Welded Joint 'W'." }
+      { id: "spec_flange", label: "Check Rail Flangeway 44 mm", domain: "specification", color: "#ff9d00", x: 2, y: -2, z: -6, desc: "Guarantees wheel flange guidance past the unguided crossing gap." },
+      { id: "sop_dowel", label: "Epoxy Dowel Retrofit (Note 25/26)", domain: "sop", color: "#9d4edd", x: -7, y: -5, z: 4, desc: "35x165 mm hole, IS:12994 L-100 epoxy resin, mandatory 24-hr curing." },
+      { id: "sop_lista", label: "LIST - A Spares 10% (Note 28)", domain: "sop", color: "#9d4edd", x: -7, y: 4, z: 2, desc: "Mandates 10% spare procurement on 24 critical wear/breakage items." },
+      { id: "defect_fatigue", label: "Tongue Joint Fatigue Crack", domain: "defect", color: "#ff3366", x: -5, y: -5, z: -2, desc: "Machined Joint 'M' fractured under 25t loads -> superseded by Welded Joint 'W'." }
     ];
 
-    const initialKGEdges = [
+    const rawKGEdges = [
       { from: "drg_6154", to: "drg_6155", rel: "INCORPORATES_SWITCH" },
       { from: "drg_6154", to: "drg_6216", rel: "INTEGRATES_SSD" },
       { from: "drg_6154", to: "drg_6275", rel: "INCORPORATES_CHECK_RAIL" },
@@ -1711,12 +1637,77 @@
       { from: "comp_detailb", to: "sop_dowel", rel: "GOVERNED_BY_SOP" },
       { from: "drg_6155", to: "sop_lista", rel: "ENFORCES" },
       { from: "drg_6155", to: "defect_fatigue", rel: "HISTORICAL_DEFECT" },
-      { from: "drg_6216", to: "comp_ssd_parts", rel: "CONTAINS_PARTS" },
       { from: "drg_6280", to: "comp_cms_unit", rel: "INCLUDES_CASTING" },
       { from: "drg_6275", to: "spec_flange", rel: "MANDATES_LIMIT" }
     ];
 
-    function init3DKnowledgeGraph() {
+    // Blossom definitions for complex sub-assemblies
+    const blossomRegistry = {
+      drg_6216: [
+        { id: "ssd_p1", label: "Helical Spring (T-6217/1)", domain: "component", color: "#00ff88", desc: "Heavy helical compression spring absorbing dynamic wheel shock." },
+        { id: "ssd_p4", label: "Turnbuckle & Rod (T-6217/4)", domain: "component", color: "#00ff88", desc: "Adjustment turnbuckle setting JOH flangeway clearance." },
+        { id: "ssd_p2", label: "Mounting Bracket (T-6217/2)", domain: "component", color: "#00ff88", desc: "Rigid anchor bracket fastened to Sleeper 13 tie plate." },
+        { id: "ssd_p12", label: "Insulating Bush (T-6217/12)", domain: "signaling", color: "#ff3366", desc: "28 mm diameter bush electrically isolating tongue rail from SSD body." }
+      ],
+      drg_6155: [
+        { id: "sw_tl", label: "Left ZU-1-60 Tongue Rail", domain: "component", color: "#00ff88", desc: "Asymmetrical thick web tongue rail with 160 mm throw at toe." },
+        { id: "sw_tr", label: "Right ZU-1-60 Tongue Rail", domain: "component", color: "#00ff88", desc: "Curved ZU-1-60 tongue rail machined for turnout curvature." },
+        { id: "sw_screws", label: "Plate Screws T-3913", domain: "component", color: "#00ff88", desc: "High tensile plate screws securing slide chairs into dowels." }
+      ],
+      drg_6280: [
+        { id: "cms_nose", label: "Theoretical Nose of Crossing (TNC)", domain: "specification", color: "#ff9d00", desc: "Sleeper 48 intersection of running rail gauge lines at 1 in 12." },
+        { id: "cms_plates", label: "Special Crossing Bearing Plates", domain: "component", color: "#00ff88", desc: "Continuous heavy steel plates distributing crossing impacts over Sleepers 46-50." }
+      ]
+    };
+
+    // Helper: Canvas Billboard Text Sprite
+    function createBillboardSprite(text, color, domain) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 70;
+      const ctx = canvas.getContext('2d');
+
+      // Rounded Pill Background
+      ctx.fillStyle = "rgba(8, 12, 22, 0.88)";
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      
+      const r = 10;
+      ctx.beginPath();
+      ctx.moveTo(r, 0);
+      ctx.lineTo(256 - r, 0);
+      ctx.quadraticCurveTo(256, 0, 256, r);
+      ctx.lineTo(256, 70 - r);
+      ctx.quadraticCurveTo(256, 70, 256 - r, 70);
+      ctx.lineTo(r, 70);
+      ctx.quadraticCurveTo(0, 70, 0, 70 - r);
+      ctx.lineTo(0, r);
+      ctx.quadraticCurveTo(0, 0, r, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Domain tag
+      ctx.fillStyle = color;
+      ctx.font = "bold 16px -apple-system, sans-serif";
+      ctx.fillText(domain.toUpperCase(), 12, 24);
+
+      // Node Label
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 18px -apple-system, sans-serif";
+      const displayLabel = text.length > 20 ? text.substring(0, 19) + "…" : text;
+      ctx.fillText(displayLabel, 12, 52);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.minFilter = THREE.LinearFilter;
+      const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true });
+      const sprite = new THREE.Sprite(spriteMat);
+      sprite.scale.set(3.8, 1.0, 1.0);
+      sprite.position.y = 1.1; // Float above sphere
+      return sprite;
+    }
+
+    function init3DForceGraph() {
       if (kgInitialized) return;
       kgInitialized = true;
 
@@ -1725,47 +1716,48 @@
       const h = kgContainer.clientHeight || 500;
 
       kgScene = new THREE.Scene();
-      kgScene.background = new THREE.Color(0x060910);
+      kgScene.background = new THREE.Color(0x060912);
 
       kgCamera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
-      kgCamera.position.set(0, 10, 22);
+      kgCamera.position.set(0, 10, 24);
 
       kgRenderer = new THREE.WebGLRenderer({ antialias: true });
       kgRenderer.setSize(w, h);
+      kgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       kgContainer.appendChild(kgRenderer.domElement);
 
       kgControls = new THREE.OrbitControls(kgCamera, kgRenderer.domElement);
       kgControls.enableDamping = true;
+      kgControls.dampingFactor = 0.08;
 
-      const amb = new THREE.AmbientLight(0xffffff, 0.9);
+      const amb = new THREE.AmbientLight(0xffffff, 0.95);
       kgScene.add(amb);
 
-      const ptLight = new THREE.PointLight(0x00d2ff, 1.5, 50);
-      ptLight.position.set(0, 10, 10);
+      const ptLight = new THREE.PointLight(0x00d2ff, 1.5, 60);
+      ptLight.position.set(0, 15, 15);
       kgScene.add(ptLight);
 
-      // Populate Node Select in Form
-      const parentSelect = document.getElementById('new-node-parent');
-      parentSelect.innerHTML = '';
-      initialKGNodes.forEach(n => {
-        const opt = document.createElement('option');
-        opt.value = n.id;
-        opt.innerText = n.label;
-        parentSelect.appendChild(opt);
+      // Populate Node Parent Select
+      updateKGParentSelect();
+
+      // Initialize Physics Data Structure
+      rawKGNodes.forEach(n => {
+        addNodeToPhysics(n);
+      });
+      rawKGEdges.forEach(e => {
+        addEdgeToPhysics(e);
       });
 
-      // Build 3D Nodes & Edges
-      buildKG3DObjects(initialKGNodes, initialKGEdges);
-
-      // Animate KG
-      function animateKG() {
-        requestAnimationFrame(animateKG);
+      // 3D Force Simulation Loop
+      function animate3DForceGraph() {
+        requestAnimationFrame(animate3DForceGraph);
+        stepForceSimulation();
         kgControls.update();
         kgRenderer.render(kgScene, kgCamera);
       }
-      animateKG();
+      animate3DForceGraph();
 
-      // Click to inspect node in KG
+      // Raycasting for 3D Node Interaction
       const kgRaycaster = new THREE.Raycaster();
       const kgMouse = new THREE.Vector2();
 
@@ -1775,82 +1767,334 @@
         kgMouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
         kgRaycaster.setFromCamera(kgMouse, kgCamera);
-        const intersects = kgRaycaster.intersectObjects(kgNodes.map(n => n.mesh));
+        const meshes = kgPhysicsNodes.map(n => n.mesh);
+        const intersects = kgRaycaster.intersectObjects(meshes);
 
         if (intersects.length > 0) {
-          const hit = intersects[0].object.userData;
-          inspectKGNode(hit);
+          const clickedNode = kgPhysicsNodes.find(n => n.mesh === intersects[0].object);
+          if (clickedNode) inspectKGNode(clickedNode);
+        }
+      });
+
+      // Double-click to blossom
+      kgRenderer.domElement.addEventListener('dblclick', (e) => {
+        if (currentSelectedKGNode && currentSelectedKGNode.data.canBlossom) {
+          toggleBlossomCurrentNode();
         }
       });
     }
 
-    function buildKG3DObjects(nodes, edges) {
-      // Clear existing
-      kgNodes.forEach(n => kgScene.remove(n.mesh));
-      kgEdges.forEach(e => kgScene.remove(e.line));
-      kgNodes = [];
-      kgEdges = [];
-
-      // Nodes
-      nodes.forEach(data => {
-        const geo = new THREE.SphereGeometry(0.7, 24, 24);
-        const mat = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(data.color),
-          emissive: new THREE.Color(data.color),
-          emissiveIntensity: 0.4,
-          metalness: 0.5,
-          roughness: 0.2
-        });
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.position.set(data.x, data.y, data.z);
-        mesh.userData = data;
-        kgScene.add(mesh);
-        kgNodes.push({ data, mesh });
+    function addNodeToPhysics(data) {
+      // 3D Sphere Node
+      const geo = new THREE.SphereGeometry(0.55, 24, 24);
+      const mat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(data.color),
+        emissive: new THREE.Color(data.color),
+        emissiveIntensity: 0.45,
+        metalness: 0.6,
+        roughness: 0.2
       });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(data.x, data.y, data.z);
+      kgScene.add(mesh);
 
-      // Edges
-      edges.forEach(edge => {
-        const n1 = kgNodes.find(n => n.data.id === edge.from);
-        const n2 = kgNodes.find(n => n.data.id === edge.to);
+      // 3D Billboard Sprite Label
+      const sprite = createBillboardSprite(data.label, data.color, data.domain);
+      mesh.add(sprite);
+
+      const nodeObj = {
+        data: data,
+        mesh: mesh,
+        sprite: sprite,
+        x: data.x, y: data.y, z: data.z,
+        vx: (Math.random() - 0.5) * 0.05,
+        vy: (Math.random() - 0.5) * 0.05,
+        vz: (Math.random() - 0.5) * 0.05
+      };
+
+      kgPhysicsNodes.push(nodeObj);
+      return nodeObj;
+    }
+
+    function addEdgeToPhysics(edgeData) {
+      const lineMat = new THREE.MeshBasicMaterial({ color: 0x00d2ff, opacity: 0.55, transparent: true });
+      const dummyGeo = new THREE.BufferGeometry();
+      const lineMesh = new THREE.Line(dummyGeo, lineMat);
+      kgScene.add(lineMesh);
+
+      kgPhysicsEdges.push({
+        from: edgeData.from,
+        to: edgeData.to,
+        rel: edgeData.rel,
+        line: lineMesh
+      });
+    }
+
+    function updateKGParentSelect() {
+      const parentSelect = document.getElementById('new-node-parent');
+      parentSelect.innerHTML = '';
+      rawKGNodes.forEach(n => {
+        const opt = document.createElement('option');
+        opt.value = n.id;
+        opt.innerText = n.label;
+        parentSelect.appendChild(opt);
+      });
+    }
+
+    // ==========================================
+    // 3. FORCE-DIRECTED NUMERICAL PHYSICS SIMULATOR
+    // ==========================================
+    const k_repulsion = 45.0;
+    const k_spring = 0.06;
+    const l0_spring = 4.0;
+    const damping = 0.88;
+
+    function stepForceSimulation() {
+      const n = kgPhysicsNodes.length;
+      if (n === 0) return;
+
+      // 1. Coulomb Repulsion between all pairs
+      for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+          const n1 = kgPhysicsNodes[i];
+          const n2 = kgPhysicsNodes[j];
+
+          let dx = n1.x - n2.x;
+          let dy = n1.y - n2.y;
+          let dz = n1.z - n2.z;
+          let d2 = dx*dx + dy*dy + dz*dz + 0.1;
+          let d = Math.sqrt(d2);
+
+          let f = (k_repulsion / d2);
+          let fx = (dx / d) * f;
+          let fy = (dy / d) * f;
+          let fz = (dz / d) * f;
+
+          n1.vx += fx * 0.016;
+          n1.vy += fy * 0.016;
+          n1.vz += fz * 0.016;
+
+          n2.vx -= fx * 0.016;
+          n2.vy -= fy * 0.016;
+          n2.vz -= fz * 0.016;
+        }
+      }
+
+      // 2. Hooke's Law Spring Attraction along Edges
+      kgPhysicsEdges.forEach(e => {
+        const n1 = kgPhysicsNodes.find(node => node.data.id === e.from);
+        const n2 = kgPhysicsNodes.find(node => node.data.id === e.to);
         if (n1 && n2) {
-          const p1 = n1.mesh.position;
-          const p2 = n2.mesh.position;
-          const points = [p1, new THREE.Vector3((p1.x+p2.x)/2, (p1.y+p2.y)/2 + 0.5, (p1.z+p2.z)/2), p2];
-          const curve = new THREE.CatmullRomCurve3(points);
-          const geo = new THREE.TubeGeometry(curve, 16, 0.035, 8, false);
-          const lineMat = new THREE.MeshBasicMaterial({ color: 0x00d2ff, opacity: 0.6, transparent: true });
-          const tube = new THREE.Mesh(geo, lineMat);
-          kgScene.add(tube);
-          kgEdges.push({ edge, line: tube });
+          let dx = n2.x - n1.x;
+          let dy = n2.y - n1.y;
+          let dz = n2.z - n1.z;
+          let d = Math.sqrt(dx*dx + dy*dy + dz*dz) + 0.001;
+          let displacement = d - l0_spring;
+          let f = displacement * k_spring;
+
+          let fx = (dx / d) * f;
+          let fy = (dy / d) * f;
+          let fz = (dz / d) * f;
+
+          n1.vx += fx * 0.016;
+          n1.vy += fy * 0.016;
+          n1.vz += fz * 0.016;
+
+          n2.vx -= fx * 0.016;
+          n2.vy -= fy * 0.016;
+          n2.vz -= fz * 0.016;
+
+          // Update edge line geometry
+          const positions = new Float32Array([n1.x, n1.y, n1.z, n2.x, n2.y, n2.z]);
+          e.line.geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         }
       });
 
-      document.getElementById('kg-stat-text').innerText = `${nodes.length} Nodes • ${edges.length} Semantic Links • 6 Domains`;
+      // 3. Domain Centering Pull & Velocity Damping
+      kgPhysicsNodes.forEach(node => {
+        // Soft pull towards origin to prevent drift
+        node.vx -= node.x * 0.015;
+        node.vy -= node.y * 0.015;
+        node.vz -= node.z * 0.015;
+
+        // Damping
+        node.vx *= damping;
+        node.vy *= damping;
+        node.vz *= damping;
+
+        // Integration
+        node.x += node.vx;
+        node.y += node.vy;
+        node.z += node.vz;
+
+        // Update mesh position
+        node.mesh.position.set(node.x, node.y, node.z);
+      });
+
+      document.getElementById('kg-stat-text').innerText = `${kgPhysicsNodes.length} Nodes • ${kgPhysicsEdges.length} Springs`;
     }
 
-    function inspectKGNode(nodeData) {
-      document.getElementById('kg-inspect-domain').innerText = `DOMAIN: ${nodeData.domain.toUpperCase()}`;
-      document.getElementById('kg-inspect-label').innerText = nodeData.label;
-      document.getElementById('kg-inspect-desc').innerText = nodeData.desc || "Standard entity in RDSO Track Infrastructure Knowledge Graph.";
-      
-      // Impact Analysis
-      const connectedEdges = initialKGEdges.filter(e => e.from === nodeData.id || e.to === nodeData.id);
-      const impactCount = connectedEdges.length;
-      document.getElementById('kg-inspect-impact').innerHTML = `⚡ <strong>Live Impact Trace:</strong> Directly influences <strong>${impactCount}</strong> connected components and standards across the turnout infrastructure.`;
+    function resetGraphForces() {
+      kgPhysicsNodes.forEach(n => {
+        n.vx = (Math.random() - 0.5) * 0.4;
+        n.vy = (Math.random() - 0.5) * 0.4;
+        n.vz = (Math.random() - 0.5) * 0.4;
+      });
+    }
 
-      // Highlight selected mesh in 3D
-      kgNodes.forEach(n => {
-        if (n.data.id === nodeData.id) {
-          n.mesh.scale.set(1.4, 1.4, 1.4);
-          n.mesh.material.emissiveIntensity = 0.9;
+    // ==========================================
+    // 4. BI-DIRECTIONAL BRIDGING & INSPECTION
+    // ==========================================
+    function inspectKGNode(nodeObj) {
+      currentSelectedKGNode = nodeObj;
+      const data = nodeObj.data;
+
+      document.getElementById('kg-inspect-domain').innerText = `DOMAIN: ${data.domain.toUpperCase()}`;
+      document.getElementById('kg-inspect-label').innerText = data.label;
+      document.getElementById('kg-inspect-desc').innerText = data.desc || "Standard entity in RDSO Track Infrastructure Knowledge Graph.";
+
+      // Connected Edges & Impact Trace
+      const connectedEdges = kgPhysicsEdges.filter(e => e.from === data.id || e.to === data.id);
+      document.getElementById('kg-inspect-impact').innerHTML = `⚡ <strong>Live Dynamic Trace:</strong> Tethered to <strong>${connectedEdges.length}</strong> active physics springs across standards.`;
+
+      // Highlight selected node with radiant emissive pulse
+      kgPhysicsNodes.forEach(n => {
+        if (n === nodeObj) {
+          n.mesh.scale.set(1.5, 1.5, 1.5);
+          n.mesh.material.emissiveIntensity = 1.0;
         } else {
-          n.mesh.scale.set(1, 1, 1);
-          n.mesh.material.emissiveIntensity = 0.3;
+          n.mesh.scale.set(1.0, 1.0, 1.0);
+          n.mesh.material.emissiveIntensity = 0.4;
         }
       });
+
+      // Highlight connected lines in neon gold
+      kgPhysicsEdges.forEach(e => {
+        if (e.from === data.id || e.to === data.id) {
+          e.line.material.color.setHex(0xffdd00);
+          e.line.material.opacity = 1.0;
+        } else {
+          e.line.material.color.setHex(0x00d2ff);
+          e.line.material.opacity = 0.3;
+        }
+      });
+
+      // Blossom Button Visibility
+      const blossomBtn = document.getElementById('kg-blossom-btn');
+      if (data.canBlossom) {
+        blossomBtn.style.display = "block";
+        blossomBtn.innerText = blossomedNodesMap[data.id] ? "🌸 Collapse Sub-Components" : "🌸 Blossom Sub-Components in 3D";
+      } else {
+        blossomBtn.style.display = "none";
+      }
+
+      // Bi-Directional Bridge Button Visibility
+      const twinFocusBtn = document.getElementById('kg-focus-twin-btn');
+      twinFocusBtn.style.display = "block";
+      twinFocusBtn.innerText = `🔍 Focus Physical Asset (${data.label.split(' ')[0]}) in 3D Model`;
     }
 
-    // Continuous Learning Engine: Ingest User Contribution
+    // Bi-directional focus: Knowledge Graph -> Digital Twin
+    function focusPhysicalAssetFromKG() {
+      if (!currentSelectedKGNode) return;
+      closeModal('kg-modal');
+
+      const targetId = currentSelectedKGNode.data.id;
+      const physicalMesh = digitalTwinMeshRegistry[targetId] || digitalTwinMeshRegistry["comp_chair"];
+
+      if (physicalMesh) {
+        // Center Digital Twin Camera on that physical component
+        const worldPos = new THREE.Vector3();
+        physicalMesh.getWorldPosition(worldPos);
+
+        camera.position.set(worldPos.x + 3, worldPos.y + 2.5, worldPos.z + 4);
+        controls.target.copy(worldPos);
+        controls.update();
+
+        // Trigger emissive pulse on physical mesh
+        if (physicalMesh.material && physicalMesh.material.emissive) {
+          const origEmissive = physicalMesh.material.emissive.getHex();
+          physicalMesh.material.emissive.setHex(0x00d2ff);
+          physicalMesh.material.emissiveIntensity = 0.9;
+          setTimeout(() => {
+            physicalMesh.material.emissive.setHex(origEmissive);
+            physicalMesh.material.emissiveIntensity = 0.2;
+          }, 1500);
+        }
+
+        // Update HUD
+        document.getElementById('hud-title').innerText = currentSelectedKGNode.data.label;
+        document.getElementById('hud-drg').innerText = targetId.toUpperCase();
+        document.getElementById('hud-desc').innerHTML = currentSelectedKGNode.data.desc;
+      }
+    }
+
+    function focusKGNodeById(nodeId) {
+      const target = kgPhysicsNodes.find(n => n.data.id === nodeId);
+      if (target) {
+        inspectKGNode(target);
+        // Smoothly pan 3D graph camera to this node
+        kgControls.target.set(target.x, target.y, target.z);
+        kgCamera.position.set(target.x, target.y + 4, target.z + 12);
+        kgControls.update();
+      }
+    }
+
+    // ==========================================
+    // 5. BLOSSOM SUB-COMPONENTS ENGINE
+    // ==========================================
+    function toggleBlossomCurrentNode() {
+      if (!currentSelectedKGNode) return;
+      const parentId = currentSelectedKGNode.data.id;
+      const isBlossomed = blossomedNodesMap[parentId];
+
+      if (isBlossomed) {
+        // Collapse children
+        const children = blossomRegistry[parentId] || [];
+        children.forEach(c => {
+          const idx = kgPhysicsNodes.findIndex(n => n.data.id === c.id);
+          if (idx !== -1) {
+            kgScene.remove(kgPhysicsNodes[idx].mesh);
+            kgPhysicsNodes.splice(idx, 1);
+          }
+          const eIdx = kgPhysicsEdges.findIndex(e => e.to === c.id);
+          if (eIdx !== -1) {
+            kgScene.remove(kgPhysicsEdges[eIdx].line);
+            kgPhysicsEdges.splice(eIdx, 1);
+          }
+        });
+        blossomedNodesMap[parentId] = false;
+        document.getElementById('kg-blossom-btn').innerText = "🌸 Blossom Sub-Components in 3D";
+      } else {
+        // Blossom children into physics simulation
+        const children = blossomRegistry[parentId] || [];
+        const p = currentSelectedKGNode;
+
+        children.forEach((c, i) => {
+          const angle = (Math.PI * 2 / children.length) * i;
+          const burstDist = 3.2;
+          const childData = {
+            ...c,
+            x: p.x + Math.cos(angle) * burstDist,
+            y: p.y + (Math.random() - 0.5) * 2,
+            z: p.z + Math.sin(angle) * burstDist
+          };
+
+          addNodeToPhysics(childData);
+          addEdgeToPhysics({ from: parentId, to: c.id, rel: "BLOSSOMS_INTO" });
+        });
+
+        blossomedNodesMap[parentId] = true;
+        document.getElementById('kg-blossom-btn').innerText = "🌸 Collapse Sub-Components";
+      }
+
+      resetGraphForces();
+      updateKGParentSelect();
+    }
+
+    // ==========================================
+    // 6. CONTINUOUS LEARNING ENGINE: INGESTION
+    // ==========================================
     function addContinuousLearningNode() {
       const label = document.getElementById('new-node-label').value.trim();
       if (!label) return alert("Please enter an entity title.");
@@ -1858,7 +2102,7 @@
       const domain = document.getElementById('new-node-domain').value;
       const parentId = document.getElementById('new-node-parent').value;
       const relation = document.getElementById('new-node-relation').value;
-      const desc = document.getElementById('new-node-desc').value.trim() || "User-contributed continuous learning insight.";
+      const desc = document.getElementById('new-node-desc').value.trim() || "Field engineering report / proposal.";
 
       const domainColors = {
         component: "#00ff88",
@@ -1869,55 +2113,67 @@
         signaling: "#ff3366"
       };
 
-      const parentNode = initialKGNodes.find(n => n.id === parentId);
+      const parentNode = kgPhysicsNodes.find(n => n.data.id === parentId);
       const newId = "usr_" + Date.now();
-      const offset = (Math.random() - 0.5) * 4;
+      const offsetDist = 2.5;
 
-      const newNode = {
+      const newNodeData = {
         id: newId,
         label: label,
         domain: domain,
         color: domainColors[domain] || "#00d2ff",
-        x: (parentNode ? parentNode.x : 0) + offset,
-        y: (parentNode ? parentNode.y - 3 : -4) + offset * 0.5,
-        z: (parentNode ? parentNode.z : 0) + offset,
+        x: (parentNode ? parentNode.x : 0) + (Math.random() - 0.5) * offsetDist,
+        y: (parentNode ? parentNode.y - 2 : -2) + (Math.random() - 0.5) * offsetDist,
+        z: (parentNode ? parentNode.z : 0) + (Math.random() - 0.5) * offsetDist,
         desc: desc
       };
 
-      initialKGNodes.push(newNode);
-      initialKGEdges.push({ from: parentId, to: newId, rel: relation });
+      rawKGNodes.push(newNodeData);
+      rawKGEdges.push({ from: parentId, to: newId, rel: relation });
 
-      // Update Form Parent Select
-      const opt = document.createElement('option');
-      opt.value = newId;
-      opt.innerText = label;
-      document.getElementById('new-node-parent').appendChild(opt);
+      const nodeObj = addNodeToPhysics(newNodeData);
+      addEdgeToPhysics({ from: parentId, to: newId, rel: relation });
 
-      // Rebuild 3D Graph
-      buildKG3DObjects(initialKGNodes, initialKGEdges);
-      inspectKGNode(newNode);
+      resetGraphForces();
+      updateKGParentSelect();
+      inspectKGNode(nodeObj);
 
-      // Clear input
       document.getElementById('new-node-label').value = '';
       document.getElementById('new-node-desc').value = '';
-      alert(`[+] Successfully ingested node "${label}" into the living 3D Knowledge Graph!`);
+      alert(`[+] Ingested "${label}" into 3D Physics Simulation! Springs and balance forces active.`);
+    }
+
+    // Filter Domains
+    function filterKGDomain(domain) {
+      kgPhysicsNodes.forEach(n => {
+        if (domain === 'all' || n.data.domain === domain) {
+          n.mesh.visible = true;
+          n.sprite.visible = true;
+        } else {
+          n.mesh.visible = false;
+          n.sprite.visible = false;
+        }
+      });
     }
 
     // Export Graph Functionality
     function exportKnowledgeGraph(format) {
+      const activeNodes = kgPhysicsNodes.map(n => n.data);
+      const activeEdges = kgPhysicsEdges.map(e => ({ from: e.from, to: e.to, rel: e.rel }));
+
       if (format === 'json') {
-        const payload = JSON.stringify({ nodes: initialKGNodes, edges: initialKGEdges }, null, 2);
+        const payload = JSON.stringify({ nodes: activeNodes, edges: activeEdges }, null, 2);
         const blob = new Blob([payload], { type: "application/json" });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = "rdso_living_knowledge_graph_exported.json";
         a.click();
       } else {
-        let cypher = "// Exported Cypher from RDSO Living 3D Knowledge Graph\n";
-        initialKGNodes.forEach(n => {
-          cypher += `MERGE (n:${n.domain} {id: "${n.id}", label: "${n.label}", desc: "${n.desc}"});\n`;
+        let cypher = "// Exported Cypher from RDSO 3D Force Knowledge Graph\n";
+        activeNodes.forEach(n => {
+          cypher += `MERGE (n:${n.domain} {id: "${n.id}", label: "${n.label}"});\n`;
         });
-        initialKGEdges.forEach(e => {
+        activeEdges.forEach(e => {
           cypher += `MATCH (a {id: "${e.from}"}), (b {id: "${e.to}"}) MERGE (a)-[:${e.rel}]->(b);\n`;
         });
         const blob = new Blob([cypher], { type: "text/plain" });
