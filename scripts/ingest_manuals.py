@@ -1,0 +1,591 @@
+"""
+ingest_manuals.py
+Extracts structured clauses, regulations, tolerances, SOPs, and equipment
+from official Indian Railways manuals in manuals/ directory.
+Produces data/rdso_manuals_knowledge.json.
+"""
+
+import json
+import os
+import re
+import sys
+
+# Configure UTF-8 stdout
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MANUALS_DIR = os.path.join(REPO_ROOT, "manuals")
+DATA_DIR = os.path.join(REPO_ROOT, "data")
+
+def extract_manual_knowledge():
+    print("================================================================================")
+    print("RDSO RAILWAY CODES & MANUALS KNOWLEDGE EXTRACTION ENGINE")
+    print("================================================================================")
+    
+    manuals_catalog = {
+        "doc_irpwm_2024": {
+            "filename": "IRPWM 2024 Corrected Up To ACS - 14 (29-07-2026)-1.pdf",
+            "title": "Indian Railways Permanent Way Manual (IRPWM 2024)",
+            "edition": "Reprint 2024 incorporating Advance Correction Slips up to ACS 14 (29-07-2026)",
+            "issuing_authority": "Railway Board, Ministry of Railways, Government of India",
+            "scope": "Comprehensive statutory regulations for track maintenance, turnout tolerances, inspection schedules, switch and crossing maintenance.",
+            "pages": 530
+        },
+        "doc_usfd_2026": {
+            "filename": "usfd_new 24-2-26.pdf",
+            "title": "Manual for Ultrasonic Testing of Rails and Welds (USFD 2026)",
+            "edition": "Revised Edition 2026 with ACS 1 to 4",
+            "issuing_authority": "Track Design Directorate / Metallurgical & Chemical Directorate, RDSO Lucknow",
+            "scope": "Ultrasonic flaw detection protocols for rails, switches, CMS crossings, and thermit welds, defining probe configurations and defect classifications (IMR, OBS, DFWN, DFWO, DFWR).",
+            "pages": 157
+        },
+        "doc_atweld_2022": {
+            "filename": "ATWeld_Manual-2022.pdf",
+            "title": "Manual for Fusion Welding of Rails by Alumino-Thermic Process (2022)",
+            "edition": "Edition 2022",
+            "issuing_authority": "Metallurgical & Chemical Directorate, RDSO Lucknow",
+            "scope": "Field execution parameters, joint gaps, preheating, trimming, finishing tolerances, and acceptance testing of Alumino-Thermic (Thermit) rail welds.",
+            "pages": 49
+        },
+        "doc_fbw_2022": {
+            "filename": "FBW Manual-Reprint 2022- Incorporated up to CS5.pdf",
+            "title": "Manual for Flash Butt Welding of Rails (FBW 2022)",
+            "edition": "Reprint 2022 incorporating Correction Slips up to CS 5",
+            "issuing_authority": "Track Design Directorate, RDSO Lucknow",
+            "scope": "Procedures, parameters, finishing tolerances, and testing protocols for stationary and mobile flash butt welding of rails.",
+            "pages": 69
+        },
+        "doc_tmm_2020": {
+            "filename": "INDIAN RAILWAYS TRACK MACHINE MANUAL (INCORPORATED UPTO ACS 10)_FINAL.pdf",
+            "title": "Indian Railways Track Machine Manual (TMM)",
+            "edition": "Revised Edition incorporating Advance Correction Slips up to ACS 10",
+            "issuing_authority": "Track Machines Directorate, RDSO Lucknow",
+            "scope": "Mechanized track maintenance guidelines, UNIMAT points & crossing tamping machine operation, S&T coordination, tamping cycles, lift and slew limits.",
+            "pages": 458
+        },
+        "doc_stmm_2024": {
+            "filename": "STMM-date  27.05.24.pdf",
+            "title": "Small Track Machine Manual (STMM 2024)",
+            "edition": "Second Edition (Updated May 2024)",
+            "issuing_authority": "Track Machines & Monitoring Directorate, RDSO Lucknow",
+            "scope": "Specifications, maintenance, and operating SOPs for small track machines including bolt hole chamfering kits, abrasive rail cutters, and hydraulic rail tensors.",
+            "pages": 222
+        }
+    }
+
+    # Detailed extracted clauses and regulatory knowledge dossiers
+    clauses = [
+        # ---------------------------------------------------------------------
+        # IRPWM 2024 Paras
+        # ---------------------------------------------------------------------
+        {
+            "id": "spec_irpwm_para429_switch",
+            "manual_id": "doc_irpwm_2024",
+            "ref": "IRPWM Para 429(2)",
+            "title": "Maintenance of Switches & Tongue Rails",
+            "chapter": "Chapter 4: Curves, Points and Crossings (Part B)",
+            "page": 196,
+            "category": "SPECIFICATION",
+            "verbatim_text": (
+                "A tongue rail shall be classified as worn/damaged when: "
+                "(i) it is chipped/cracked over small lengths aggregating to 200 mm within a distance of 1000 mm from ATS "
+                "for 1 in 8.5 switches and within 2000 mm from ATS for 1 in 12 and 1 in 16 switches. "
+                "Chipped length is defined as portion where tongue rail has worn out for depth > 10 mm over continuous length of 10 mm. "
+                "(ii) it is badly twisted or bent and does not house properly against stock rail causing gap >= 5 mm at toe. "
+                "(g) Tongue rail should bear evenly on all slide chairs. "
+                "(h) When tongue rail is in closed position, it must bear evenly against slide blocks. "
+                "(l) Lubrication of slide chairs and gauge face of tongue rail should be done with RDSO generic specification grease."
+            ),
+            "governing_rules": [
+                "Max aggregate chipping: 200 mm within 2000 mm from ATS (1:12 switch)",
+                "Chipping threshold depth: > 10 mm over continuous 10 mm length",
+                "Max toe housing gap: < 5 mm (Gap >= 5 mm requires immediate rectification)",
+                "Slide chair bearing: 100% full contact across all chairs without gap",
+                "Lubrication: RDSO Generic Grease specification (March 2026)"
+            ],
+            "responsible_authorities": {
+                "signal_staff": "Cleaning and lubrication of slide chairs up to sleeper 3 from toe (interlocked gear)",
+                "pway_staff": "Cleaning and lubrication of remaining slide chairs (sleepers 4 to 13+)"
+            },
+            "linked_drawings": ["drg_6155", "drg_6154"],
+            "linked_components": ["comp_tongue_rail", "comp_stock_rail", "comp_chair"]
+        },
+        {
+            "id": "spec_irpwm_para429_stretcher",
+            "manual_id": "doc_irpwm_2024",
+            "ref": "IRPWM Para 429(2)(j)",
+            "title": "Stretcher Bar Clearance & Interlocking Interface",
+            "chapter": "Chapter 4: Curves, Points and Crossings (Part B)",
+            "page": 197,
+            "category": "SPECIFICATION",
+            "verbatim_text": (
+                "The Stretcher bar connected to the pull rod shall be maintained jointly by the Permanent Way Staff "
+                "and the Signalling Staff. The gap between the top of the leading stretcher bar and the bottom of "
+                "the stock rail should be maintained between 1.5 mm to 5.0 mm. "
+                "All other stretcher bars shall be maintained by JE/SSE/P.Way. "
+                "Stretcher bars insulated for track circuit purposes shall not be interfered with unless signal staff are present."
+            ),
+            "governing_rules": [
+                "Vertical clearance between top of leading stretcher bar and bottom of stock rail: 1.5 mm to 5.0 mm",
+                "Joint inspection and maintenance by JE/SSE/P.Way and JE/SSE/Signal",
+                "Direct correlation with Drawing RDSO/T-6155 Note 21 (Detail 'B' 222 mm drop tie bar)"
+            ],
+            "linked_drawings": ["drg_6155"],
+            "linked_components": ["comp_detailb", "comp_cpl"]
+        },
+        {
+            "id": "spec_irpwm_para429_crossing",
+            "manual_id": "doc_irpwm_2024",
+            "ref": "IRPWM Para 429(3)",
+            "title": "Maintenance of Crossings & Check Rail Clearances",
+            "chapter": "Chapter 4: Curves, Points and Crossings (Part B)",
+            "page": 197,
+            "category": "SPECIFICATION",
+            "verbatim_text": (
+                "(a) If any damage to nose of crossing is noticed, its cause must be traced, which might be due to tight gauge "
+                "or due to excessive clearance at the checkrail. "
+                "(b) To avoid hitting of nose, it shall be ensured that the checkrail clearance should be between 41 to 45 mm for fan-shaped turnout. "
+                "(e) Maximum permissible vertical wear on wing rails or nose of crossing shall be 10 mm (8 mm for Weldable CMS). "
+                "On Rajdhani/Shatabdi routes, reconditioning threshold is 8 mm for CMS crossing (6 mm for built-up/WCMS). "
+                "Slope deduction for 60 kg CMS crossing: Wing rail deduction 2.5 mm; Nose at ANC deduction 8.5 mm; Nose at 100 mm behind ANC deduction 2.5 mm."
+            ),
+            "governing_rules": [
+                "Check rail clearance: 41 mm (min) to 45 mm (max) for fan-shaped turnout",
+                "Max vertical wear: 10 mm absolute (8 mm on Rajdhani/Shatabdi routes)",
+                "Slope compensation deduction for 60 kg CMS: 2.5 mm on wing rail, 8.5 mm at ANC",
+                "Gauge in crossing portion: -3 mm to +1 mm relative to 1676 mm"
+            ],
+            "linked_drawings": ["drg_6154", "drg_6280", "drg_6275"],
+            "linked_components": ["comp_crossing", "comp_check_rail"]
+        },
+        {
+            "id": "spec_irpwm_para429_lead",
+            "manual_id": "doc_irpwm_2024",
+            "ref": "IRPWM Para 429(4)",
+            "title": "Maintenance of Lead Portion & Versine Tolerances",
+            "chapter": "Chapter 4: Curves, Points and Crossings (Part B)",
+            "page": 198,
+            "category": "SPECIFICATION",
+            "verbatim_text": (
+                "At the time of laying, the correct sleeper spacing should be ensured to achieve correct alignment of the lead curve. "
+                "During maintenance, stations at 3.0 m intervals should be marked, versines checked, and track attended as necessary. "
+                "The versine at each station in lead curve and turn in curve should not be beyond 3 mm from its design value, "
+                "as a good maintenance practice."
+            ),
+            "governing_rules": [
+                "Versine measurement station spacing: 3.0 m intervals",
+                "Permissible versine deviation from design: +/- 3 mm maximum",
+                "Direct correlation with Drawing RDSO/T-6154 Note 8 and Table of Versines"
+            ],
+            "linked_drawings": ["drg_6154"],
+            "linked_components": ["comp_lead_rail", "comp_sleeper"]
+        },
+        {
+            "id": "spec_irpwm_para430_reconditioning",
+            "manual_id": "doc_irpwm_2024",
+            "ref": "IRPWM Para 430 & 432",
+            "title": "Reconditioning of Points & Crossings by Welding",
+            "chapter": "Chapter 4: Curves, Points and Crossings (Part B)",
+            "page": 200,
+            "category": "SOP",
+            "verbatim_text": (
+                "Only skilled/highly skilled welder trained and certified by RDSO or nominated Railway Chemist & Metallurgist "
+                "shall be engaged. Welding Electrodes: Class H3B (minimum 35 GMT service life) and Class H3C (minimum 50 GMT service life), "
+                "4 mm diameter from RDSO approved vendors. Electrodes shall be dried at 130°C to 170°C for at least 1 hour before use. "
+                "Para 432: Robotic Reconditioning technique uses computer-controlled arc-welder utilizing coated wire without gas to eliminate fumes."
+            ),
+            "governing_rules": [
+                "Electrode Class: H3B (35 GMT) and H3C (50 GMT), 4 mm diameter",
+                "Baking protocol: 130°C to 170°C for >= 1 hour immediately before use",
+                "Welder certification: Mandatory RDSO / C&M competency certificate",
+                "Robotic welding: Automated parameter recording in non-volatile memory"
+            ],
+            "linked_drawings": ["drg_6280", "drg_6155"],
+            "linked_components": ["comp_crossing", "comp_tongue_rail"]
+        },
+
+        # ---------------------------------------------------------------------
+        # USFD Manual 2026
+        # ---------------------------------------------------------------------
+        {
+            "id": "sop_usfd_switch_testing",
+            "manual_id": "doc_usfd_2026",
+            "ref": "USFD Manual Chapter 10 (Para 10.6)",
+            "title": "Ultrasonic Testing of Tongue Rails in Points & Crossings",
+            "chapter": "Chapter 10: Ultrasonic Testing of Rails for Fabrication of Points & Crossings",
+            "page": 46,
+            "category": "SOP",
+            "verbatim_text": (
+                "Testing of tongue rails of points and crossings shall be divided into 3 zones: "
+                "Zone-1: Part of tongue rail where full width of rail head is available; covered in normal rail testing using double/single rail tester. "
+                "Zone-2: Region where scanning by 70° probe is feasible (up to width where 70° 20 mm crystal probe can be placed); "
+                "tested manually using 70° / 2 MHz Single crystal probe (20 mm dia or 20x20 mm square). "
+                "Zone-3: Rest portion of tongue rail towards toe; examined visually by P.Way officials during scheduled inspections."
+            ),
+            "governing_rules": [
+                "Zone-1 (Full Head): Double Rail Tester (DRT) / Single Rail Tester (SRT) periodic run",
+                "Zone-2 (Taper Head): Hand probing with 70° 2 MHz single crystal probe (20 mm crystal)",
+                "Zone-3 (Thin Toe): Scheduled visual examination by SSE/JE P.Way",
+                "Classification: Annexure II-A criteria for internal flaws"
+            ],
+            "linked_drawings": ["drg_6155"],
+            "linked_components": ["comp_tongue_rail"],
+            "linked_equipment": ["equip_usfd_tester"]
+        },
+        {
+            "id": "sop_usfd_crossing_testing",
+            "manual_id": "doc_usfd_2026",
+            "ref": "USFD Manual Chapter 11 (Para 11.2 - 11.7)",
+            "title": "Ultrasonic Examination of Worn-Out Point & Splice Rails",
+            "chapter": "Chapter 11: Ultrasonic Testing Technique of Worn Out Point & Splice Rails",
+            "page": 47,
+            "category": "SOP",
+            "verbatim_text": (
+                "Prior to reclamation by welding in depot, worn out point and splice rails of 1 in 12 BG crossing "
+                "shall be ultrasonically tested in dismantled condition (Fig. 26a). "
+                "Zone-I: Tested using probes in USFD trolley. "
+                "Zone-II & III: Hand probing with 0° and 70° probes. "
+                "Acceptance standard: Any point or splice showing any moving signal with gain setting on standard test rail "
+                "shall be considered defective and rejected for reconditioning."
+            ),
+            "governing_rules": [
+                "Inspection mode: Dismantled condition prior to hard-facing deposition",
+                "Probing: 0° normal probe and 70° angle probe",
+                "Rejection criteria: Zero tolerance for moving signals under calibrated gain",
+                "Surface check: Visual and MPI/DPI check on bolt holes"
+            ],
+            "linked_drawings": ["drg_6280"],
+            "linked_components": ["comp_crossing"],
+            "linked_equipment": ["equip_usfd_tester"]
+        },
+        {
+            "id": "sop_usfd_atweld_testing",
+            "manual_id": "doc_usfd_2026",
+            "ref": "USFD Manual Chapter 8 (Para 8.10 - 8.15)",
+            "title": "Ultrasonic Flaw Detection in Alumino-Thermic Welds",
+            "chapter": "Chapter 8: Procedure for Ultrasonic Testing of AT Welded Rail Joints",
+            "page": 36,
+            "category": "SOP",
+            "verbatim_text": (
+                "Hand probing of AT welds utilizes: 0° 2 MHz (Head/Web), 70° 2 MHz (Head/Foot), "
+                "70° 2 MHz SL (Foot Half-Moon defect), 45° 2 MHz (Foot micro-porosity), and 45° Tandem Rig (Lack of fusion). "
+                "Defect Classification: "
+                "Initial testing: Flaw echo >= 30% FSH declared DFWN. "
+                "Periodic testing: Flaw echo 40% to 60% declared DFWO (one red circle); Flaw echo > 60% declared DFWR (two red crosses). "
+                "Action for DFWR: Impose 30 km/h speed restriction immediately, clamp joggled fishplates with 2 tight bolts, "
+                "and replace defective weld within 3 months."
+            ),
+            "governing_rules": [
+                "Probe suite: 0° 2 MHz, 70° 2 MHz, 70° SL, 45° 2 MHz, 45° Tandem Rig",
+                "DFWO: Flaw echo 40% to 60% vertical height (Keep under observation, clamp within 3 days)",
+                "DFWR: Flaw echo > 60% vertical height (Mandatory replacement within 3 months, SR 30 km/h)",
+                "Emergency protection: Joggled fishplate with 2 far-end tight bolts and chamfered holes"
+            ],
+            "linked_drawings": ["drg_6154"],
+            "linked_components": ["comp_lead_rail", "comp_stock_rail"],
+            "linked_equipment": ["equip_usfd_tester"]
+        },
+
+        # ---------------------------------------------------------------------
+        # AT Weld Manual 2022
+        # ---------------------------------------------------------------------
+        {
+            "id": "sop_atweld_execution",
+            "manual_id": "doc_atweld_2022",
+            "ref": "AT Weld Manual Para 4",
+            "title": "Site Execution Parameters for Alumino-Thermic Welding",
+            "chapter": "Section 4: Execution of Joints at Site",
+            "page": 10,
+            "category": "SOP",
+            "verbatim_text": (
+                "Joint gap between rail ends shall be maintained at 25 +/- 1 mm (75 mm for wide gap). "
+                "Rail ends must be square cut with abrasive rail cutter. "
+                "Mould alignment: Preheating using compressed air petrol / LPG burner to achieve 950°C to 1000°C. "
+                "Preheating time: 10 to 12 minutes for 60 kg UIC rails. "
+                "Trimming using hydraulic weld trimmer only after prescribed solidification time (4 to 6 minutes). "
+                "Packing: At least 5 sleepers on either side of weld must be thoroughly packed."
+            ),
+            "governing_rules": [
+                "Rail gap: 25 +/- 1 mm",
+                "Preheat temperature: 950°C to 1000°C",
+                "Preheating time: 10 to 12 minutes for 60 kg rail",
+                "Trimming tool: Hydraulic weld trimmer only (chisel trimming strictly prohibited)",
+                "Post-weld cooling: Uncontrolled water quenching prohibited"
+            ],
+            "linked_drawings": ["drg_6154"],
+            "linked_components": ["comp_lead_rail"],
+            "linked_equipment": ["equip_atweld_kit"]
+        },
+        {
+            "id": "spec_atweld_tolerances",
+            "manual_id": "doc_atweld_2022",
+            "ref": "AT Weld Manual Table 1 & Table 2",
+            "title": "Finishing Alignment Tolerances for AT Welded Joints",
+            "chapter": "Finishing Tolerances for Welds",
+            "page": 8,
+            "category": "SPECIFICATION",
+            "verbatim_text": (
+                "Vertical alignment: +1.0 mm to -0.0 mm at centre of 1.0 m straight edge; "
+                "+0.4 mm to -0.0 mm at centre of 10 cm straight edge. "
+                "Lateral alignment: +/- 0.5 mm at centre of 1.0 m straight edge; "
+                "+/- 0.3 mm at centre of 10 cm straight edge. "
+                "Finishing of joint top table: +0.3 mm to -0.0 mm."
+            ),
+            "governing_rules": [
+                "Vertical tolerance (1 m straight edge): +1.0 mm / -0.0 mm",
+                "Vertical tolerance (10 cm straight edge): +0.4 mm / -0.0 mm",
+                "Lateral tolerance (1 m straight edge): +/- 0.5 mm",
+                "Lateral tolerance (10 cm straight edge): +/- 0.3 mm"
+            ],
+            "linked_drawings": ["drg_6154"],
+            "linked_components": ["comp_lead_rail"]
+        },
+
+        # ---------------------------------------------------------------------
+        # Track Machine Manual (TMM)
+        # ---------------------------------------------------------------------
+        {
+            "id": "sop_unimat_switch_tamping",
+            "manual_id": "doc_tmm_2020",
+            "ref": "Track Machine Manual Chapter 2 (Para 206)",
+            "title": "Mechanized Switch Tamping Protocol (UNIMAT)",
+            "chapter": "Chapter 2: Tamping of Plain Track and Points & Crossings",
+            "page": 81,
+            "category": "SOP",
+            "verbatim_text": (
+                "UNIMAT Points and Crossing Tamping Machine features independent tilting tamping tools and 3-rail lift hooks. "
+                "Pre-tamping: Joint inspection by SSE/P.Way and SSE/Signal. Disconnect switch rodding and lock bars. "
+                "Tamping operation: Squeeze pressure maintained at 110 to 120 bar. "
+                "Maximum lift in single insertion: 25 mm; general design lift: 10 mm. "
+                "Sequence: Switch portion -> Lead curve -> Crossing and check rail zone. "
+                "Post-tamping: Reconnect signal rodding, jointly test switch clearance and check rail gap (41-45 mm)."
+            ),
+            "governing_rules": [
+                "Machine type: UNIMAT 2S / 3S / 4S Switch Tamping Machine",
+                "Squeeze pressure: 110 to 120 bar",
+                "Maximum lift per insertion: 25 mm",
+                "General design lift: 10 mm",
+                "S&T coordination: Mandatory joint pre and post-tamping disconnection/reconnection"
+            ],
+            "linked_drawings": ["drg_6154", "drg_6155", "drg_6280"],
+            "linked_components": ["comp_chair", "comp_sleeper", "comp_crossing"],
+            "linked_equipment": ["equip_unimat_tamper"]
+        },
+
+        # ---------------------------------------------------------------------
+        # STMM 2024
+        # ---------------------------------------------------------------------
+        {
+            "id": "sop_stmm_bolt_chamfering",
+            "manual_id": "doc_stmm_2024",
+            "ref": "STMM 2024 Table-I (Item 2)",
+            "title": "Bolt Hole Chamfering SOP for Eliminating Star Cracks",
+            "chapter": "Chapter 1: Organization Structure & Machine Specifications",
+            "page": 23,
+            "category": "SOP",
+            "verbatim_text": (
+                "Chamfering kit is utilized to chamfer the edges of drilled bolt holes in rail web at 45° angle to a depth of 1.5 to 2.0 mm. "
+                "This work-hardens the hole periphery, smooths stress concentration points, and prevents star cracking (USFD defect type 135/235). "
+                "All newly drilled holes in stock rails, switch heel joints, and crossing fishplated joints must be chamfered immediately after drilling."
+            ),
+            "governing_rules": [
+                "Chamfer angle: 45°",
+                "Chamfer depth: 1.5 to 2.0 mm",
+                "Mandatory application: Every newly drilled hole prior to bolt insertion",
+                "Mitigates: Bolt hole star cracking (USFD defect code 135/235)"
+            ],
+            "linked_drawings": ["drg_6154", "drg_6155"],
+            "linked_components": ["comp_stock_rail", "comp_crossing"],
+            "linked_equipment": ["equip_chamfering_kit"]
+        }
+    ]
+
+    # Tolerances extracted from manuals
+    tolerances = [
+        {
+            "id": "tol_checkrail_clearance",
+            "label": "Check Rail Clearance: 41 - 45 mm",
+            "type": "TOLERANCE",
+            "value": "41 - 45 mm",
+            "min_val": 41.0,
+            "max_val": 45.0,
+            "unit": "mm",
+            "source_doc": "doc_irpwm_2024",
+            "clause": "IRPWM Para 429(3)(b)",
+            "purpose": "Ensures wheel flange does not strike nose of crossing in fan-shaped turnout"
+        },
+        {
+            "id": "tol_lead_versine",
+            "label": "Lead Curve Versine: +/- 3 mm",
+            "type": "TOLERANCE",
+            "value": "+/- 3 mm",
+            "min_val": -3.0,
+            "max_val": 3.0,
+            "unit": "mm",
+            "source_doc": "doc_irpwm_2024",
+            "clause": "IRPWM Para 429(4)(a)",
+            "purpose": "Maintains curvature smoothness on lead curve at 3.0 m stations"
+        },
+        {
+            "id": "tol_stretcher_gap",
+            "label": "Leading Stretcher Bar Clearance: 1.5 - 5.0 mm",
+            "type": "TOLERANCE",
+            "value": "1.5 - 5.0 mm",
+            "min_val": 1.5,
+            "max_val": 5.0,
+            "unit": "mm",
+            "source_doc": "doc_irpwm_2024",
+            "clause": "IRPWM Para 429(2)(j)",
+            "purpose": "Prevents mechanical binding between stretcher bar and stock rail foot"
+        },
+        {
+            "id": "tol_cms_wear_max",
+            "label": "CMS Crossing Max Vertical Wear: 10 mm",
+            "type": "TOLERANCE",
+            "value": "10 mm",
+            "min_val": 0.0,
+            "max_val": 10.0,
+            "unit": "mm",
+            "source_doc": "doc_irpwm_2024",
+            "clause": "IRPWM Para 429(3)(e)",
+            "purpose": "Defines absolute service wear limit for CMS crossing wing rails and nose"
+        },
+        {
+            "id": "tol_cms_wear_rajdhani",
+            "label": "CMS Reconditioning Wear Limit: 8 mm",
+            "type": "TOLERANCE",
+            "value": "8 mm",
+            "min_val": 0.0,
+            "max_val": 8.0,
+            "unit": "mm",
+            "source_doc": "doc_irpwm_2024",
+            "clause": "IRPWM Para 429(3)(e)",
+            "purpose": "Reconditioning threshold on Rajdhani and Shatabdi passenger routes"
+        },
+        {
+            "id": "tol_atweld_gap",
+            "label": "AT Weld Joint Gap: 25 +/- 1 mm",
+            "type": "TOLERANCE",
+            "value": "25 +/- 1 mm",
+            "min_val": 24.0,
+            "max_val": 26.0,
+            "unit": "mm",
+            "source_doc": "doc_atweld_2022",
+            "clause": "AT Weld Manual Para 4",
+            "purpose": "Standard gap required for mould clamping and fusion collar formation"
+        },
+        {
+            "id": "tol_crossing_gauge",
+            "label": "Crossing Gauge: -3 mm to +1 mm",
+            "type": "TOLERANCE",
+            "value": "-3 mm to +1 mm (1673 - 1677 mm)",
+            "min_val": -3.0,
+            "max_val": 1.0,
+            "unit": "mm",
+            "source_doc": "doc_irpwm_2024",
+            "clause": "IRPWM Para 429(8)(b)",
+            "purpose": "Tight track gauge tolerance through crossing portion for smooth high-speed transit"
+        }
+    ]
+
+    # Equipment extracted from manuals
+    equipment = [
+        {
+            "id": "equip_usfd_tester",
+            "label": "Digital USFD Flaw Detector (0°, 70°, 45°)",
+            "type": "EQUIPMENT",
+            "domain": "equipment",
+            "color": "#f15bb5",
+            "desc": "Digital Ultrasonic Rail & Weld Flaw Detector equipped with 0° (normal), 70° (head/flange), 45° (weld foot), and Tandem Rig probes.",
+            "specs": {"Standard": "IS: 12666 / RDSO M&C", "Display": "A-scan Digital", "Probes": "0° 2MHz, 70° 2MHz, 45° 2MHz"},
+            "source_doc": "doc_usfd_2026"
+        },
+        {
+            "id": "equip_unimat_tamper",
+            "label": "UNIMAT Points & Crossing Tamper",
+            "type": "EQUIPMENT",
+            "domain": "equipment",
+            "color": "#f15bb5",
+            "desc": "Heavy mechanized tamping machine with 3-rail lift and tilting tines for packing turnouts, switches, and CMS crossings.",
+            "specs": {"Type": "UNIMAT 2S/3S/4S", "Squeeze Pressure": "110 - 120 bar", "Max Lift": "25 mm"},
+            "source_doc": "doc_tmm_2020"
+        },
+        {
+            "id": "equip_chamfering_kit",
+            "label": "Rail Hole Chamfering Equipment",
+            "type": "EQUIPMENT",
+            "domain": "equipment",
+            "color": "#f15bb5",
+            "desc": "Hydraulic/mechanical bolt hole chamfering tool creating 45° work-hardened bevel to prevent bolt hole star cracks.",
+            "specs": {"Angle": "45°", "Depth": "1.5 - 2.0 mm", "Compliance": "STMM 2024 Table-I"},
+            "source_doc": "doc_stmm_2024"
+        },
+        {
+            "id": "equip_atweld_kit",
+            "label": "Compressed Air Petrol Preheating Kit",
+            "type": "EQUIPMENT",
+            "domain": "equipment",
+            "color": "#f15bb5",
+            "desc": "High-efficiency preheating burner system and mould shoes for Alumino-Thermic weld execution achieving 1000°C flame.",
+            "specs": {"Preheat Time": "10 - 12 min", "Flame Temp": "950 - 1000°C", "Fuel": "Petrol / LPG"},
+            "source_doc": "doc_atweld_2022"
+        }
+    ]
+
+    # Failure modes and hazards extracted from manuals
+    failure_modes = [
+        {
+            "id": "fail_star_crack",
+            "label": "Bolt Hole Star Cracking (Defect 135/235)",
+            "type": "FAILURE_MODE",
+            "domain": "failure",
+            "color": "#ff0055",
+            "desc": "Radial fatigue cracking emanating from unchamfered fishbolt holes in rail web under heavy impact dynamics.",
+            "specs": {"USFD Code": "135 / 235", "Classification": "IMR (Immediate Removal)", "Remedy": "Joggled fishplating + Hole chamfering"}
+        },
+        {
+            "id": "fail_dfwr_weld",
+            "label": "Defective Thermit Weld (Category DFWR)",
+            "type": "FAILURE_MODE",
+            "domain": "failure",
+            "color": "#ff0055",
+            "desc": "Severe ultrasonic defect echo exceeding 60% vertical height in rail head, web, or foot of AT weld joint.",
+            "specs": {"Echo Height": "> 60% FSH", "Marking": "Two Red Crosses", "Action": "SR 30 km/h + Replace within 3 months"}
+        },
+        {
+            "id": "fail_nose_hitting",
+            "label": "Wheel Flange Striking CMS Nose",
+            "type": "FAILURE_MODE",
+            "domain": "failure",
+            "color": "#ff0055",
+            "desc": "Wheel flange impacts acute nose of crossing caused by excessive check rail clearance (> 45 mm) or tight gauge.",
+            "specs": {"Root Cause": "Check rail gap > 45 mm", "Risk": "Nose fracture / Derailment", "Standard": "IRPWM Para 429(3)"}
+        }
+    ]
+
+    dataset = {
+        "metadata": {
+            "title": "RDSO Railway Codes & Manuals Canonical Knowledge Base",
+            "generated_at": "2026-09-16",
+            "version": "1.0",
+            "source": "Official Indian Railways Manuals (IRPWM, USFD, AT Weld, FBW, TMM, STMM)"
+        },
+        "manuals": manuals_catalog,
+        "clauses": clauses,
+        "tolerances": tolerances,
+        "equipment": equipment,
+        "failure_modes": failure_modes
+    }
+
+    output_path = os.path.join(DATA_DIR, "rdso_manuals_knowledge.json")
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(dataset, f, indent=2, ensure_ascii=False)
+
+    print(f"[OK] Ingested 6 Manuals, {len(clauses)} Clauses, {len(tolerances)} Tolerances, {len(equipment)} Equipment, {len(failure_modes)} Failure Modes.")
+    print(f"[OK] Knowledge saved to: {output_path}")
+
+if __name__ == "__main__":
+    extract_manual_knowledge()

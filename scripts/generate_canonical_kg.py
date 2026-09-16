@@ -558,6 +558,176 @@ def build_canonical_knowledge_graph():
     add_edge("sop_lista_procurement", "note_6155_28", "GOVERNS", "SOP enforces Note 28 10% inventory buffer", source_dwg="RDSO/T-6155", crop="crops/t6155_notes_full.png")
     add_edge("sop_versine_check", "note_6154_07", "GOVERNS", "SOP enforces Note 7 curve checking", source_dwg="RDSO/T-6154", crop="crops/t6154_versine_checking.png")
 
+    # =========================================================================
+    # 14. RAILWAY CODES, MANUALS & EXTENDED REGULATIONS
+    # =========================================================================
+    manuals_path = os.path.join(REPO_ROOT, "data", "rdso_manuals_knowledge.json")
+    if os.path.exists(manuals_path):
+        with open(manuals_path, "r", encoding="utf-8") as f:
+            man_data = json.load(f)
+
+        # 14.1 DOCUMENT NODES (6 Official Manuals)
+        manual_coords = {
+            "doc_irpwm_2024": (-14, 10, 0),
+            "doc_usfd_2026": (14, 10, -4),
+            "doc_atweld_2022": (12, 10, 8),
+            "doc_fbw_2022": (6, 11, -10),
+            "doc_tmm_2020": (-8, 11, -10),
+            "doc_stmm_2024": (-10, 10, 8)
+        }
+        for mid, mobj in man_data.get("manuals", {}).items():
+            cx, cy, cz = manual_coords.get(mid, (0, 10, 0))
+            add_entity(mid, mobj["title"], "DOCUMENT", "manual", "#ff007f",
+                       f"{mobj['scope']} ({mobj['edition']})",
+                       {"Authority": mobj["issuing_authority"], "Pages": mobj["pages"], "File": mobj["filename"]},
+                       x=cx, y=cy, z=cz, alt=13)
+
+        # 14.2 CLAUSES & REGULATORY SPECIFICATIONS / SOPS
+        clause_coords = {
+            "spec_irpwm_para429_switch": (-12, 8, 2),
+            "spec_irpwm_para429_stretcher": (-10, 8, 5),
+            "spec_irpwm_para429_crossing": (10, 8, 4),
+            "spec_irpwm_para429_lead": (6, 8, 2),
+            "spec_irpwm_para430_reconditioning": (12, 7, -2),
+            "sop_usfd_switch_testing": (13, 8, -6),
+            "sop_usfd_crossing_testing": (11, 7, -8),
+            "sop_usfd_atweld_testing": (15, 7, 2),
+            "sop_atweld_execution": (11, 8, 10),
+            "spec_atweld_tolerances": (13, 8, 8),
+            "sop_unimat_switch_tamping": (-6, 9, -8),
+            "sop_stmm_bolt_chamfering": (-9, 8, 10)
+        }
+        for cl in man_data.get("clauses", []):
+            cid = cl["id"]
+            cx, cy, cz = clause_coords.get(cid, (0, 8, 0))
+            rule_sample = cl["governing_rules"][0] if cl.get("governing_rules") else ""
+            add_entity(cid, cl["title"], cl.get("category", "SPECIFICATION"), "manual", "#00f5d4",
+                       cl["verbatim_text"][:280] + "...",
+                       {
+                           "Manual Ref": cl["ref"],
+                           "Chapter": cl["chapter"],
+                           "Page": f"Page {cl['page']}",
+                           "Key Rule": rule_sample
+                       },
+                       x=cx, y=cy, z=cz, alt=13)
+
+        # 14.3 TOLERANCE NODES
+        tol_coords = {
+            "tol_checkrail_clearance": (10, 6, 6),
+            "tol_lead_versine": (4, 6, 4),
+            "tol_stretcher_gap": (-8, 6, 7),
+            "tol_cms_wear_max": (12, 6, 2),
+            "tol_cms_wear_rajdhani": (14, 6, 0),
+            "tol_atweld_gap": (9, 6, 11),
+            "tol_crossing_gauge": (8, 6, -2)
+        }
+        for tol in man_data.get("tolerances", []):
+            tid = tol["id"]
+            cx, cy, cz = tol_coords.get(tid, (0, 6, 0))
+            add_entity(tid, tol["label"], "TOLERANCE", "tolerance", "#fee440",
+                       tol["purpose"],
+                       {
+                           "Value": tol["value"],
+                           "Min": f"{tol['min_val']} mm",
+                           "Max": f"{tol['max_val']} mm",
+                           "Clause": tol["clause"]
+                       },
+                       x=cx, y=cy, z=cz, alt=13)
+
+        # 14.4 EQUIPMENT NODES
+        equip_coords = {
+            "equip_usfd_tester": (16, 8, -4),
+            "equip_unimat_tamper": (-6, 7, -12),
+            "equip_chamfering_kit": (-11, 7, 12),
+            "equip_atweld_kit": (14, 7, 12)
+        }
+        for eq in man_data.get("equipment", []):
+            eid = eq["id"]
+            cx, cy, cz = equip_coords.get(eid, (0, 7, 0))
+            add_entity(eid, eq["label"], "EQUIPMENT", "equipment", "#f15bb5",
+                       eq["desc"], eq["specs"],
+                       x=cx, y=cy, z=cz, alt=13)
+
+        # 14.5 EXTENDED FAILURE MODES
+        fail_coords = {
+            "fail_star_crack": (-7, -5, 12),
+            "fail_dfwr_weld": (13, -5, 8),
+            "fail_nose_hitting": (9, -5, 6)
+        }
+        for fm in man_data.get("failure_modes", []):
+            fid = fm["id"]
+            cx, cy, cz = fail_coords.get(fid, (0, -5, 0))
+            add_entity(fid, fm["label"], "FAILURE_MODE", "defect", "#ff0055",
+                       fm["desc"], fm["specs"],
+                       x=cx, y=cy, z=cz, alt=13)
+
+        # 14.6 EDGES & CITATIONS (Manuals -> Drawings, Components, Tolerances, SOPs)
+        # Manuals -> Drawings
+        add_edge("doc_irpwm_2024", "drg_6154", "GOVERNS", "IRPWM Chapter 4 governs turnout geometric layout, sleeper spacing, and tolerances", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 428-429")
+        add_edge("doc_irpwm_2024", "drg_6155", "GOVERNS", "IRPWM Para 429(2) governs curved switch tongue rail wear limits, slide chair bearing, and housing", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(2)")
+        add_edge("doc_irpwm_2024", "drg_6280", "GOVERNS", "IRPWM Para 429(3) governs CMS crossing wear limits, cant slope deductions, and check rail gaps", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(3)")
+        add_edge("doc_fbw_2022", "drg_6154", "GOVERNS", "FBW Manual governs flash butt welding of rails in turnout approaches", source_dwg="FBW Manual", revision="CS 5", region="Finishing Tolerances")
+
+        # Manuals -> Clauses
+        add_edge("doc_irpwm_2024", "spec_irpwm_para429_switch", "SPECIFIES", "IRPWM Para 429(2) defines switch maintenance rules and wear limits", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(2)")
+        add_edge("doc_irpwm_2024", "spec_irpwm_para429_stretcher", "SPECIFIES", "IRPWM Para 429(2)(j) defines leading stretcher bar clearance", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(2)(j)")
+        add_edge("doc_irpwm_2024", "spec_irpwm_para429_crossing", "SPECIFIES", "IRPWM Para 429(3) defines check rail clearances and CMS wear limits", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(3)")
+        add_edge("doc_irpwm_2024", "spec_irpwm_para429_lead", "SPECIFIES", "IRPWM Para 429(4) defines lead curve versine stations and limits", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(4)")
+        add_edge("doc_irpwm_2024", "spec_irpwm_para430_reconditioning", "SPECIFIES", "IRPWM Para 430/432 defines welding reconditioning of crossings", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 430")
+        add_edge("doc_usfd_2026", "sop_usfd_switch_testing", "SPECIFIES", "USFD Chapter 10 defines 3-zone ultrasonic scanning of tongue rails", source_dwg="USFD 2026", revision="ACS 4", region="Chapter 10")
+        add_edge("doc_usfd_2026", "sop_usfd_crossing_testing", "SPECIFIES", "USFD Chapter 11 defines testing of worn-out point and splice rails", source_dwg="USFD 2026", revision="ACS 4", region="Chapter 11")
+        add_edge("doc_usfd_2026", "sop_usfd_atweld_testing", "SPECIFIES", "USFD Chapter 8 defines hand probing and classification of AT welds", source_dwg="USFD 2026", revision="ACS 4", region="Chapter 8")
+        add_edge("doc_atweld_2022", "sop_atweld_execution", "SPECIFIES", "AT Weld Manual Para 4 defines joint execution, preheating, and trimming", source_dwg="AT Weld Manual", revision="2022", region="Section 4")
+        add_edge("doc_atweld_2022", "spec_atweld_tolerances", "SPECIFIES", "AT Weld Manual Table 1 & 2 defines weld finishing tolerances", source_dwg="AT Weld Manual", revision="2022", region="Tables 1 & 2")
+        add_edge("doc_tmm_2020", "sop_unimat_switch_tamping", "SPECIFIES", "Track Machine Manual defines UNIMAT turnout tamping cycle", source_dwg="TMM", revision="ACS 10", region="Chapter 2")
+        add_edge("doc_stmm_2024", "sop_stmm_bolt_chamfering", "SPECIFIES", "STMM Table-I Item 2 defines bolt hole chamfering SOP", source_dwg="STMM", revision="2024", region="Table-I")
+
+        # Clauses -> Tolerances
+        add_edge("spec_irpwm_para429_crossing", "tol_checkrail_clearance", "SPECIFIES", "IRPWM Para 429(3)(b) mandates 41-45 mm check rail clearance", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(3)(b)")
+        add_edge("tol_checkrail_clearance", "comp_checkrail", "APPLIES_TO", "Clearance applies between check rail and running rail")
+        add_edge("spec_irpwm_para429_crossing", "tol_cms_wear_max", "SPECIFIES", "IRPWM Para 429(3)(e) mandates 10 mm max vertical wear on CMS crossing", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(3)(e)")
+        add_edge("tol_cms_wear_max", "comp_cms_unit", "APPLIES_TO", "Wear limit applies to CMS crossing wing rails and nose")
+        add_edge("spec_irpwm_para429_crossing", "tol_cms_wear_rajdhani", "SPECIFIES", "IRPWM Para 429(3)(e) mandates 8 mm wear limit on Rajdhani routes", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(3)(e)")
+        add_edge("tol_cms_wear_rajdhani", "comp_cms_unit", "APPLIES_TO", "Rajdhani reconditioning limit applies to CMS crossing")
+        add_edge("spec_irpwm_para429_crossing", "tol_crossing_gauge", "SPECIFIES", "IRPWM Para 429(8)(b) mandates -3 mm to +1 mm gauge in crossing portion", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(8)(b)")
+        add_edge("tol_crossing_gauge", "comp_cms_unit", "APPLIES_TO", "Track gauge tolerance enforced across crossing")
+        add_edge("spec_irpwm_para429_stretcher", "tol_stretcher_gap", "SPECIFIES", "IRPWM Para 429(2)(j) mandates 1.5 to 5.0 mm clearance", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(2)(j)")
+        add_edge("tol_stretcher_gap", "comp_detailb", "APPLIES_TO", "Clearance between leading stretcher bar and stock rail bottom")
+        add_edge("spec_irpwm_para429_lead", "tol_lead_versine", "SPECIFIES", "IRPWM Para 429(4)(a) mandates +/- 3 mm versine tolerance on 3 m stations", source_dwg="IRPWM 2024", revision="ACS 14", region="Para 429(4)(a)")
+        add_edge("tol_lead_versine", "drg_6154", "APPLIES_TO", "Lead curve versine tolerance applies to turnout curve")
+        add_edge("sop_atweld_execution", "tol_atweld_gap", "SPECIFIES", "AT Weld Manual Para 4 mandates 25 +/- 1 mm rail gap", source_dwg="AT Weld Manual", revision="2022", region="Section 4")
+
+        # Clauses -> Components
+        add_edge("spec_irpwm_para429_switch", "comp_tongue_rail", "APPLIES_TO", "Wear limits and housing rules apply to tongue rail")
+        add_edge("spec_irpwm_para429_switch", "comp_chair", "APPLIES_TO", "Even bearing and lubrication rules apply to slide chairs")
+        add_edge("spec_irpwm_para429_stretcher", "comp_cpl", "INTERFACES_WITH", "Stretcher bar gap interfaces with Clamp Point Lock drive rod")
+        add_edge("sop_usfd_switch_testing", "comp_tongue_rail", "APPLIES_TO", "USFD tongue rail testing applies to switch rail")
+        add_edge("sop_usfd_crossing_testing", "comp_cms_unit", "APPLIES_TO", "USFD point and splice testing applies to crossing assembly")
+        add_edge("sop_unimat_switch_tamping", "comp_chair", "MAINTAINED_BY", "Slide chairs and bearers tamped by UNIMAT machine")
+        add_edge("sop_unimat_switch_tamping", "comp_sleeper", "MAINTAINED_BY", "Special PSC turnout sleepers tamped by UNIMAT")
+        add_edge("spec_irpwm_para430_reconditioning", "comp_cms_unit", "APPLIES_TO", "Reconditioning by H3B/H3C electrodes applies to CMS crossing")
+
+        # Equipment Requirements
+        add_edge("sop_usfd_switch_testing", "equip_usfd_tester", "REQUIRES", "Ultrasonic inspection requires digital flaw detector")
+        add_edge("sop_usfd_crossing_testing", "equip_usfd_tester", "REQUIRES", "Depot ultrasonic inspection requires digital flaw detector")
+        add_edge("sop_usfd_atweld_testing", "equip_usfd_tester", "REQUIRES", "Thermit weld testing requires 0°, 70°, 45° probes")
+        add_edge("sop_unimat_switch_tamping", "equip_unimat_tamper", "REQUIRES", "Mechanized tamping requires UNIMAT machine")
+        add_edge("sop_atweld_execution", "equip_atweld_kit", "REQUIRES", "Joint preheating requires air-petrol burner kit")
+        add_edge("sop_stmm_bolt_chamfering", "equip_chamfering_kit", "REQUIRES", "Hole chamfering requires 45° chamfering tool")
+
+        # Failure Modes, Hazards & Mitigations
+        add_edge("fail_star_crack", "hazard_derailment_split", "CAN_CAUSE", "Bolt hole star crack propagation causes rail break and derailment")
+        add_edge("fail_star_crack", "sop_stmm_bolt_chamfering", "MITIGATED_BY", "45° chamfering relieves stress concentration and prevents star cracks")
+        add_edge("fail_nose_hitting", "hazard_derailment_split", "CAN_CAUSE", "Flange striking nose can cause wheel climb and derailment")
+        add_edge("fail_nose_hitting", "tol_checkrail_clearance", "MITIGATED_BY", "Maintaining check rail clearance 41-45 mm prevents nose collision")
+        add_edge("fail_dfwr_weld", "hazard_derailment_split", "CAN_CAUSE", "Unattended DFWR weld fracture can cause sudden rail break under high axle loads")
+        add_edge("fail_dfwr_weld", "sop_usfd_atweld_testing", "MITIGATED_BY", "USFD detection and immediate joggled fishplate protection mitigates failure")
+
+        # Cross-Domain Links to Drawing Notes
+        add_edge("note_6154_07", "spec_irpwm_para429_lead", "REFERENCES", "Note 7 versines directly align with IRPWM Para 429(4) versine rules", source_dwg="RDSO/T-6154", revision="ALT_06", region="Note 7")
+        add_edge("note_6155_21", "spec_irpwm_para429_stretcher", "REFERENCES", "Note 21 tie bar drop directly corresponds to IRPWM Para 429(2)(j) stretcher bar clearance", source_dwg="RDSO/T-6155", revision="ALT_13", region="Note 21")
+
+
     # Final payload
     canonical_data = {
         "metadata": {

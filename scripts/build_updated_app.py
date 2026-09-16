@@ -12,6 +12,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 data_dir = os.path.join(REPO_ROOT, "data")
 ext_path = os.path.join(data_dir, "rdso_extracted_knowledge.json")
 can_path = os.path.join(data_dir, "rdso_canonical_kg.json")
+man_path = os.path.join(data_dir, "rdso_manuals_knowledge.json")
 
 with open(ext_path, "r", encoding="utf-8") as f:
     extracted_knowledge = json.load(f)
@@ -19,8 +20,14 @@ with open(ext_path, "r", encoding="utf-8") as f:
 with open(can_path, "r", encoding="utf-8") as f:
     canonical_kg = json.load(f)
 
+manuals_knowledge = {}
+if os.path.exists(man_path):
+    with open(man_path, "r", encoding="utf-8") as f:
+        manuals_knowledge = json.load(f)
+
 extracted_json_str = json.dumps(extracted_knowledge)
 canonical_json_str = json.dumps(canonical_kg)
+manuals_json_str = json.dumps(manuals_knowledge)
 
 html_template = r'''<!DOCTYPE html>
 <html lang="en">
@@ -995,6 +1002,9 @@ html_template = r'''<!DOCTYPE html>
       <button class="semantic-mode-btn" data-mode="bom" onclick="switchSemanticMode('bom')">
         <span>📦</span> Procurement & BOM
       </button>
+      <button class="semantic-mode-btn" data-mode="manuals" onclick="switchSemanticMode('manuals')">
+        <span>📖</span> Codes & Manuals
+      </button>
     </div>
 
     <!-- Global Search -->
@@ -1259,9 +1269,11 @@ html_template = r'''<!DOCTYPE html>
 
   <!-- APPLICATION LOGIC & CANONICAL KNOWLEDGE GRAPH -->
   <script>
-    // Injected Canonical Knowledge Core and Extracted Dossiers
+    // Injected Canonical Knowledge Core, Extracted Dossiers, and Railway Manuals
     const RDSO_EXTRACTED_KNOWLEDGE = __EXTRACTED_KNOWLEDGE_JSON__;
     const CANONICAL_DATA = __CANONICAL_KG_JSON__;
+    const RDSO_MANUALS_KNOWLEDGE = __MANUALS_KNOWLEDGE_JSON__;
+    window.RDSO_MANUALS_KNOWLEDGE = RDSO_MANUALS_KNOWLEDGE;
 
     const rawKGNodes = CANONICAL_DATA.entities;
     const rawKGEdges = CANONICAL_DATA.edges;
@@ -1278,7 +1290,10 @@ html_template = r'''<!DOCTYPE html>
       procurement: { label: "BOM & LIST-A Spares", color: "#f72585", icon: "📦" },
       signaling: { label: "S&T Point Interlocking", color: "#ff3366", icon: "⚡" },
       defect: { label: "Failure Modes & Hazards", color: "#d90429", icon: "⚠️" },
-      sop: { label: "Field SOPs & Protocols", color: "#9d4edd", icon: "📋" }
+      sop: { label: "Field SOPs & Protocols", color: "#9d4edd", icon: "📋" },
+      manual: { label: "Codes & Manuals", color: "#ff007f", icon: "📖" },
+      tolerance: { label: "Tolerances & Limits", color: "#fee440", icon: "📏" },
+      equipment: { label: "Tools & Equipment", color: "#f15bb5", icon: "🛠️" }
     };
 
     const PREDICATE_COLORS = {
@@ -1300,7 +1315,9 @@ html_template = r'''<!DOCTYPE html>
       CAN_CAUSE: 0xff3366,
       MITIGATED_BY: 0x00ff88,
       INTRODUCED_IN: 0xa2d2ff,
-      REFERENCES: 0x00f0ff
+      REFERENCES: 0x00f0ff,
+      INSPECTED_BY: 0x00f5d4,
+      MAINTAINED_BY: 0x00f5d4
     };
 
     // Global State
@@ -1674,7 +1691,42 @@ html_template = r'''<!DOCTYPE html>
         indicator.innerText = "PROCUREMENT & BOM";
         desc.innerText = "Bill of Materials & LIST-A wear spares mode. Highlights physical component counts and mandatory 10% inventory buffers.";
         highlightProcurementEcosystem();
+      } else if (mode === "manuals") {
+        indicator.innerText = "CODES & MANUALS";
+        desc.innerText = "Regulatory governance & standard SOP lineage. Connects official codes (IRPWM, USFD, AT Weld, FBW, TMM, STMM) to drawings and field tolerances.";
+        highlightManualsEcosystem();
       }
+    }
+
+    function highlightManualsEcosystem() {
+      const manualIds = new Set();
+      kgPhysicsNodes.forEach(n => {
+        if (n.data.domain === "manual" || n.data.domain === "tolerance" || n.data.domain === "equipment" ||
+            n.data.type === "DOCUMENT" || n.data.type === "SPECIFICATION" || n.data.type === "SOP" ||
+            n.data.type === "TOLERANCE" || n.data.type === "EQUIPMENT") {
+          manualIds.add(n.data.id);
+        }
+      });
+
+      // Expand to 1-hop connected drawings, components, notes
+      kgPhysicsEdges.forEach(e => {
+        if (manualIds.has(e.from)) manualIds.add(e.to);
+        if (manualIds.has(e.to)) manualIds.add(e.from);
+      });
+
+      kgPhysicsNodes.forEach(n => {
+        const isHit = manualIds.has(n.data.id);
+        n.mesh.material.opacity = isHit ? 1.0 : 0.15;
+        n.mesh.material.transparent = !isHit;
+        n.sprite.material.opacity = isHit ? 1.0 : 0.15;
+      });
+
+      kgPhysicsEdges.forEach(e => {
+        const isHit = manualIds.has(e.from) && manualIds.has(e.to);
+        e.line.material.opacity = isHit ? 0.95 : 0.08;
+        if (isHit) e.line.material.color.setHex(0x00f5d4);
+        else e.line.material.color.setHex(0x182844);
+      });
     }
 
     function resetNodeOpacities() {
@@ -1833,7 +1885,58 @@ html_template = r'''<!DOCTYPE html>
       currentActiveDossier = RDSO_EXTRACTED_KNOWLEDGE[dossierKey] || RDSO_EXTRACTED_KNOWLEDGE["RDSO_T_6155"];
 
       // 1. POPULATE ENGINEERING ANSWER CARD
-      document.getElementById('answer-card-desc').innerText = data.desc || "Canonical railway track infrastructure asset governed by official RDSO technical specifications.";
+      const descEl = document.getElementById('answer-card-desc');
+      const manClause = (window.RDSO_MANUALS_KNOWLEDGE?.clauses || []).find(c => c.id === data.id);
+      const manDoc = window.RDSO_MANUALS_KNOWLEDGE?.manuals?.[data.id];
+      const manTol = (window.RDSO_MANUALS_KNOWLEDGE?.tolerances || []).find(t => t.id === data.id);
+      const manEq = (window.RDSO_MANUALS_KNOWLEDGE?.equipment || []).find(e => e.id === data.id);
+
+      if (manClause) {
+        descEl.innerHTML = `
+          <div style="margin-bottom:8px;">
+            <strong style="color:var(--accent-cyan); font-size:13px;">${manClause.title}</strong>
+            <span style="font-size:11px; color:var(--accent-pink); background:rgba(247,37,133,0.15); padding:2px 6px; border-radius:4px; border:1px solid rgba(247,37,133,0.3); margin-left:6px;">${manClause.ref} · ${manClause.page}</span>
+          </div>
+          <blockquote style="border-left:3px solid var(--accent-cyan); padding-left:10px; margin:8px 0; font-style:italic; color:#e0e8f8; font-size:12px; line-height:1.5;">"${manClause.verbatim_text}"</blockquote>
+          <div style="margin-top:10px; font-size:11px; font-weight:600; color:var(--accent-green); text-transform:uppercase;">Mandatory Regulatory Rules:</div>
+          <ul style="margin:4px 0 0 16px; font-size:11px; color:var(--text-main); line-height:1.4;">
+            ${(manClause.governing_rules || []).map(r => `<li>${r}</li>`).join('')}
+          </ul>
+          ${manClause.responsible_authorities ? `
+            <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+              ${Object.entries(manClause.responsible_authorities).map(([k,v]) => `<div style="font-size:10px; background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.25); border-radius:4px; padding:4px 8px;"><strong style="color:var(--accent-cyan);">${k.replace('_', ' ').toUpperCase()}:</strong> ${v}</div>`).join('')}
+            </div>
+          ` : ''}
+        `;
+      } else if (manDoc) {
+        descEl.innerHTML = `
+          <div style="margin-bottom:8px;"><strong style="color:var(--accent-pink); font-size:13px;">${manDoc.title}</strong></div>
+          <p style="font-size:12px; line-height:1.5; color:#e0e8f8; margin-bottom:8px;">${manDoc.scope}</p>
+          <div style="font-size:11px; background:rgba(255,0,127,0.1); border:1px solid rgba(255,0,127,0.3); border-radius:6px; padding:8px; margin-top:8px;">
+            <div><strong>Issuing Authority:</strong> ${manDoc.issuing_authority}</div>
+            <div style="margin-top:4px;"><strong>Edition:</strong> ${manDoc.edition}</div>
+            <div style="margin-top:4px;"><strong>Volume:</strong> ${manDoc.pages} Pages</div>
+            <div style="margin-top:4px;"><strong>Local Archive:</strong> <code style="color:var(--accent-cyan);">manuals/${manDoc.filename}</code></div>
+          </div>
+        `;
+      } else if (manTol) {
+        descEl.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <span style="font-size:20px; font-weight:700; color:var(--accent-yellow); font-family:var(--font-mono);">${manTol.value}</span>
+            <span style="font-size:10px; color:var(--accent-cyan); background:rgba(0,240,255,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(0,240,255,0.3);">${manTol.clause}</span>
+          </div>
+          <p style="font-size:12px; line-height:1.5; color:#e0e8f8;"><strong>Safety & Engineering Purpose:</strong> ${manTol.purpose}</p>
+          <div style="margin-top:8px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Design Limits: [${manTol.min_val} ${manTol.unit} — ${manTol.max_val} ${manTol.unit}]</div>
+        `;
+      } else if (manEq) {
+        descEl.innerHTML = `
+          <div style="margin-bottom:8px;"><strong style="color:var(--accent-cyan); font-size:13px;">${manEq.label}</strong></div>
+          <p style="font-size:12px; line-height:1.5; color:#e0e8f8;">${manEq.desc}</p>
+          <div style="margin-top:8px; font-size:11px; color:var(--accent-green);">Source Code: ${manEq.source_doc}</div>
+        `;
+      } else {
+        descEl.innerText = data.desc || "Canonical railway track infrastructure asset governed by official RDSO technical specifications.";
+      }
       
       const provBox = document.getElementById('answer-provenance-box');
       const linkedFact = rawKGFacts.find(f => f.subject_id === data.id || f.object_id === data.id);
@@ -1841,8 +1944,9 @@ html_template = r'''<!DOCTYPE html>
         provBox.style.display = "flex";
         document.getElementById('prov-dwg-title').innerText = `${linkedFact.source.drawing_id} (${linkedFact.source.revision})`;
         document.getElementById('prov-meta-line').innerText = `Region: ${linkedFact.source.region} | Method: ${linkedFact.extraction_method}`;
-        document.getElementById('answer-crop-thumb').src = linkedFact.source.crop;
-        currentActiveCrop = linkedFact.source.crop;
+        const cropImg = (linkedFact.source.crop && linkedFact.source.crop.endsWith('.png')) ? linkedFact.source.crop : "crops/t6155_notes_full.png";
+        document.getElementById('answer-crop-thumb').src = cropImg;
+        currentActiveCrop = cropImg;
       } else {
         provBox.style.display = "flex";
         document.getElementById('prov-dwg-title').innerText = `${currentActiveDossier.drawing_number} (ALT ${currentActiveDossier.alteration_number || 13})`;
@@ -2343,9 +2447,12 @@ html_template = r'''<!DOCTYPE html>
         }
 
         const matches = kgPhysicsNodes.filter(n => {
-          return n.data.label.toLowerCase().includes(q) ||
+          const specsStr = JSON.stringify(n.data.specs || {}).toLowerCase();
+          return n.data.id.toLowerCase().includes(q) ||
+                 n.data.label.toLowerCase().includes(q) ||
                  (n.data.desc && n.data.desc.toLowerCase().includes(q)) ||
-                 n.data.domain.toLowerCase().includes(q);
+                 n.data.domain.toLowerCase().includes(q) ||
+                 specsStr.includes(q);
         });
 
         if (matches.length === 0) {
@@ -2476,7 +2583,7 @@ html_template = r'''<!DOCTYPE html>
 </html>
 '''
 
-final_html = html_template.replace("__EXTRACTED_KNOWLEDGE_JSON__", extracted_json_str).replace("__CANONICAL_KG_JSON__", canonical_json_str)
+final_html = html_template.replace("__EXTRACTED_KNOWLEDGE_JSON__", extracted_json_str).replace("__CANONICAL_KG_JSON__", canonical_json_str).replace("__MANUALS_KNOWLEDGE_JSON__", manuals_json_str)
 
 output_html_path = os.path.join(REPO_ROOT, "index.html")
 with open(output_html_path, "w", encoding="utf-8") as f:
