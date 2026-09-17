@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "description": "Deterministic canonical identity map for logical document entities. Alias IDs remain readable during incremental migration and must resolve to the canonical ID.",
+  "mappings": [
+    {
+      "canonical_id": "DOC:IRPWM:2024:ACS14",
+      "aliases": ["doc_irpwm_2024"],
+      "entity_type": "DOCUMENT",
+      "identity_key": "indian railways permanent way manual (irPWM 2024)",
+      "reason": "Merge the legacy application-oriented document ID with the canonical document identity."
+    },
+    {
+      "canonical_id": "DOC:USFD:2026:ACS4",
+      "aliases": ["doc_usfd_2026"],
+      "entity_type": "DOCUMENT",
+      "identity_key": "manual for ultrasonic testing of rails and welds (usfd 2026)",
+      "reason": "Merge the legacy application-oriented document ID with the canonical document identity."
+    },
+    {
+      "canonical_id": "DOC:AT_WELD:2022",
+      "aliases": ["doc_atweld_2022"],
+      "entity_type": "DOCUMENT",
+      "identity_key": "manual for fusion welding of rails by alumino-thermic process (2022)",
+      "reason": "Merge the legacy application-oriented document ID with the canonical document identity."
+    },
+    {
+      "canonical_id": "DOC:FBW:2022:CS5",
+      "aliases": ["doc_fbw_2022"],
+      "entity_type": "DOCUMENT",
+      "identity_key": "manual for flash butt welding of rails (fbw 2022)",
+      "reason": "Merge the legacy application-oriented document ID with the canonical document identity."
+    },
+    {
+      "canonical_id": "DOC:TMM:2020:ACS10",
+      "aliases": ["doc_tmm_2020"],
+      "entity_type": "DOCUMENT",
+      "identity_key": "indian railways track machine manual (tmm)",
+      "reason": "Merge the legacy application-oriented document ID with the canonical document identity."
+    },
+    {
+      "canonical_id": "DOC:STMM:2024",
+      "aliases": ["doc_stmm_2024"],
+      "entity_type": "DOCUMENT",
+      "identity_key": "small track machine manual (stmm 2024)",
+      "reason": "Merge the legacy application-oriented document ID with the canonical document identity."
+    }
+  ]
+}
