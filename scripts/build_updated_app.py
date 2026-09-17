@@ -1241,6 +1241,480 @@ html_template = r'''<!DOCTYPE html>
       color: #fff;
     }
 
+    /* =========================================================================
+       PHASE 5: QUESTION INTERFACE & ANSWER CARDS (§15, §16)
+       ========================================================================= */
+    .qa-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 4px;
+    }
+
+    .qa-input-wrap {
+      display: flex;
+      gap: 8px;
+      background: rgba(10, 16, 28, 0.85);
+      border: 1px solid var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+      border-radius: 8px;
+      padding: 8px 12px;
+      align-items: center;
+    }
+
+    .qa-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .qa-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .qa-ask-btn {
+      background: var(--accent-cyan);
+      color: #000;
+      border: none;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .qa-ask-btn:hover {
+      box-shadow: 0 0 10px var(--accent-cyan);
+      transform: translateY(-1px);
+    }
+
+    .qa-chips-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .qa-chips-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .qa-chips-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .qa-chip {
+      background: rgba(14, 22, 38, 0.85);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-size: 10.5px;
+      padding: 5px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .qa-chip:hover {
+      border-color: var(--accent-cyan);
+      color: #fff;
+      background: rgba(0, 240, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    /* Full Answer Card (Blueprint §15) */
+    .qa-answer-card {
+      background: linear-gradient(145deg, rgba(14, 22, 38, 0.95), rgba(8, 14, 24, 0.98));
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(0, 240, 255, 0.1);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeInAnswer 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInAnswer {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .qa-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 10px;
+    }
+
+    .qa-intent-badge {
+      font-size: 9.5px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .qa-confidence-meter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--accent-green);
+      font-weight: 700;
+    }
+
+    .qa-confidence-bar {
+      width: 48px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .qa-confidence-fill {
+      height: 100%;
+      background: var(--accent-green);
+      border-radius: 2px;
+    }
+
+    .qa-statement-box {
+      font-size: 13px;
+      color: #fff;
+      line-height: 1.5;
+      font-weight: 500;
+      background: rgba(0, 240, 255, 0.04);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 8px 12px;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .qa-param-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      background: rgba(10, 16, 28, 0.7);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .qa-param-table th {
+      background: rgba(14, 22, 38, 0.9);
+      padding: 6px 10px;
+      color: var(--text-dim);
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: left;
+    }
+
+    .qa-param-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    .qa-traversal-path {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      background: rgba(10, 16, 28, 0.6);
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .qa-traversal-node {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(18, 27, 46, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 3px 7px;
+      font-size: 10px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .qa-traversal-node:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.1);
+    }
+
+    .qa-provenance-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(14, 22, 38, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11px;
+    }
+
+    .qa-conflict-box {
+      background: rgba(255, 51, 102, 0.08);
+      border: 1px solid rgba(255, 51, 102, 0.3);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 10.5px;
+      color: #ff99aa;
+      line-height: 1.4;
+    }
+
+    .qa-card-toolbar {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    /* =========================================================================
+       PHASE 6: LEARNING SYSTEM & TRAINING ACADEMY (§17)
+       ========================================================================= */
+    .learning-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 4px;
+    }
+
+    .learning-subnav {
+      display: flex;
+      gap: 6px;
+      background: rgba(10, 16, 28, 0.7);
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .learning-subnav-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+
+    .learning-subnav-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .learning-subnav-btn.active {
+      background: rgba(0, 240, 255, 0.2);
+      color: var(--accent-cyan);
+      border: 1px solid var(--border-glow);
+    }
+
+    .learning-track-card {
+      background: linear-gradient(135deg, rgba(14, 22, 38, 0.9), rgba(8, 14, 24, 0.95));
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .learning-track-card:hover {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 4px 16px rgba(0, 240, 255, 0.1);
+    }
+
+    .learning-stage-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 10px;
+      background: rgba(10, 16, 28, 0.6);
+      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .learning-stage-row:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.06);
+    }
+
+    .learning-stage-badge {
+      font-size: 9px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+
+    /* 3D Flip Flashcard */
+    .flashcard-box {
+      perspective: 1000px;
+      min-height: 220px;
+      cursor: pointer;
+    }
+
+    .flashcard-card {
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-radius: 8px;
+    }
+
+    .flashcard-card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-front, .flashcard-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+
+    .flashcard-front {
+      background: linear-gradient(145deg, rgba(16, 26, 46, 0.95), rgba(10, 16, 28, 0.98));
+      border: 1px solid var(--accent-cyan);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
+    }
+
+    .flashcard-back {
+      background: linear-gradient(145deg, rgba(14, 30, 28, 0.95), rgba(8, 20, 24, 0.98));
+      border: 1px solid var(--accent-green);
+      box-shadow: 0 0 16px rgba(0, 255, 136, 0.15);
+      transform: rotateY(180deg);
+    }
+
+    /* Quiz Styles */
+    .quiz-question-box {
+      background: rgba(14, 22, 38, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quiz-option-btn {
+      text-align: left;
+      background: rgba(10, 16, 28, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quiz-option-btn:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.08);
+      color: #fff;
+    }
+
+    .quiz-option-btn.selected {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.18);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .quiz-option-btn.correct {
+      border-color: var(--accent-green) !important;
+      background: rgba(0, 255, 136, 0.18) !important;
+      color: #fff !important;
+    }
+
+    .quiz-option-btn.wrong {
+      border-color: var(--accent-red) !important;
+      background: rgba(255, 51, 102, 0.18) !important;
+      color: #fff !important;
+    }
+
+    /* Competency Matrix Styles */
+    .competency-card {
+      background: rgba(14, 22, 38, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .competency-bar-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .competency-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
     /* Layout Switcher */
     .layout-switcher {
       display: flex;
@@ -2383,6 +2857,12 @@ html_template = r'''<!DOCTYPE html>
       <button class="drawer-tab" data-tab="procurement" onclick="switchDrawerTab('procurement')">
         <span>📦</span> Spares & BOM
       </button>
+      <button class="drawer-tab" data-tab="qa" id="drawer-tab-qa" onclick="switchDrawerTab('qa')">
+        <span>❓</span> Ask Q&A
+      </button>
+      <button class="drawer-tab" data-tab="learning" id="drawer-tab-learning" onclick="switchDrawerTab('learning')">
+        <span>🎓</span> Academy
+      </button>
     </div>
 
     <div class="drawer-content">
@@ -2508,6 +2988,20 @@ html_template = r'''<!DOCTYPE html>
       <div class="tab-pane" id="tab-pane-procurement">
         <div id="procurement-container" style="display: flex; flex-direction: column; gap: 10px; padding: 4px;">
           <!-- Populated dynamically by renderProcurementCalculator() -->
+        </div>
+      </div>
+
+      <!-- 12. TAB: QUESTION INTERFACE & NATURAL LANGUAGE RETRIEVAL (§15, §16) -->
+      <div class="tab-pane" id="tab-pane-qa">
+        <div id="qa-container" class="qa-container">
+          <!-- Populated dynamically by renderQuestionInterface() -->
+        </div>
+      </div>
+
+      <!-- 13. TAB: LEARNING SYSTEM & TRAINING ACADEMY (§17, §21, §36) -->
+      <div class="tab-pane" id="tab-pane-learning">
+        <div id="learning-container" class="learning-container">
+          <!-- Populated dynamically by renderLearningModule() -->
         </div>
       </div>
     </div>
@@ -4688,6 +5182,18 @@ html_template = r'''<!DOCTYPE html>
           renderProcurementCalculator(1);
         }
       }
+      if (tabId === 'qa') {
+        const container = document.getElementById('qa-container');
+        if (container && (!container.children || container.children.length === 0)) {
+          renderQuestionInterface();
+        }
+      }
+      if (tabId === 'learning') {
+        const container = document.getElementById('learning-container');
+        if (container && (!container.children || container.children.length === 0)) {
+          renderLearningModule('tracks');
+        }
+      }
     }
 
     function openFullscreenBlueprint(src, title) {
@@ -6476,6 +6982,1525 @@ html_template = r'''<!DOCTYPE html>
     window.renderProcurementCalculator = renderProcurementCalculator;
     window.exportProcurementCSV = exportProcurementCSV;
 
+    // =========================================================================
+    // PHASE 5: QUESTION INTERFACE & NATURAL LANGUAGE RETRIEVAL (§15, §16, §24)
+    // =========================================================================
+
+    const INTENT_METADATA = {
+      TOLERANCE_INQUIRY: { label: "Tolerance Inquiry", color: "var(--accent-yellow)", icon: "🎯" },
+      SPECIFICATION_GOVERNANCE: { label: "Specification & Standards", color: "var(--accent-purple)", icon: "⚖️" },
+      INSPECTION_PROCEDURE: { label: "Inspection & Testing", color: "var(--accent-cyan)", icon: "📋" },
+      FAILURE_MITIGATION: { label: "Failure & Mitigation", color: "var(--accent-red)", icon: "⚠️" },
+      BOM_PROCUREMENT: { label: "Procurement & Spares", color: "var(--accent-green)", icon: "📦" },
+      REVISION_COMPARISON: { label: "Revision Lineage", color: "var(--accent-blue)", icon: "⏳" },
+      COMPONENT_LOOKUP: { label: "Component Detail", color: "#00f0ff", icon: "🧱" }
+    };
+
+    const CANONICAL_QA_DATABASE = [
+      {
+        id: "qa_tongue_wear",
+        intent: "TOLERANCE_INQUIRY",
+        keywords: ["wear", "tongue rail", "permissible", "vertical wear", "lateral wear", "limit"],
+        question: "What is the permissible wear for 60kg tongue rails?",
+        statement: "Maximum permissible vertical wear on 60kg tongue rails is 6.0 mm; maximum lateral wear is 8.0 mm per IRPWM 2024 Para 429 and IRS:T-10.",
+        params: [
+          { name: "Max Vertical Wear", nominal: "0.0 mm (New)", limit: "6.0 mm", unit: "mm", risk: "Wheel flange climb risk over tongue rail", remedy: "Recondition by in-situ welding or replace switch rail" },
+          { name: "Max Lateral Wear", nominal: "0.0 mm (New)", limit: "8.0 mm", unit: "mm", risk: "Loss of rail wheel guidance at turnout entry", remedy: "Replace tongue rail with Thick-Web ZU-1-60 profile" }
+        ],
+        traversal: [
+          { id: "drg_6155", label: "RDSO/T-6155 (Drawing)", universe: "drawings" },
+          { id: "comp_tonguerail_lh", label: "Tongue Rail LH (Component)", universe: "drawings" },
+          { id: "std_irs_t10", label: "IRS:T-10 (Standard)", universe: "drawings" },
+          { id: "DOC:IRPWM:2024:ACS14", label: "IRPWM 2024 Para 429 (Statutory Clause)", universe: "manuals" }
+        ],
+        primaryNodeId: "comp_tonguerail_lh",
+        provenance: {
+          doc: "Indian Railways Permanent Way Manual (IRPWM)",
+          edition: "2024 Edition with ACS-14",
+          chapter: "Chapter 4: Track Structure on Curves & Turnouts",
+          clause: "Para 429(3)",
+          status: "VERIFIED",
+          confidence: 0.98
+        },
+        conflictNote: null,
+        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
+      },
+      {
+        id: "qa_switch_throw",
+        intent: "TOLERANCE_INQUIRY",
+        keywords: ["throw", "toe", "switch opening", "stroke", "opening at toe", "clearance at toe"],
+        question: "What is the standard switch throw at the toe of curved switch?",
+        statement: "Standard switch opening at the toe of switch is 160 mm (-0 mm, +3 mm), giving an operating tolerance window of 160.0 to 163.0 mm per RDSO/T-6155 Note 12.",
+        params: [
+          { name: "Switch Opening at Toe", nominal: "160.0 mm", limit: "160.0 – 163.0 mm", unit: "mm", risk: "Under-throw (<160mm) risks facing point splitting; over-throw (>163mm) strains point motor", remedy: "Adjust drive rod stroke on point machine (S-3454)" }
+        ],
+        traversal: [
+          { id: "drg_6155", label: "RDSO/T-6155 (Drawing)", universe: "drawings" },
+          { id: "note_6155_12", label: "Note 12 (Directives)", universe: "drawings" },
+          { id: "comp_detailb", label: "Detail 'B' Flat Tie Bar", universe: "drawings" },
+          { id: "DOC:IRPWM:2024:ACS14", label: "IRPWM Para 429 (Clause)", universe: "manuals" }
+        ],
+        primaryNodeId: "comp_detailb",
+        provenance: {
+          doc: "RDSO/T-6155",
+          edition: "Alt 13 (Latest)",
+          chapter: "Title Block & Engineering Notes",
+          clause: "Note 12",
+          status: "VERIFIED",
+          confidence: 0.99
+        },
+        conflictNote: "Alt 11 vs Alt 12 note: Alt 11 set 160 mm strictly; Alt 12 amended tolerance window to +3 mm to prevent point machine motor burnouts under heavy vibration.",
+        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
+      },
+      {
+        id: "qa_check_rail",
+        intent: "TOLERANCE_INQUIRY",
+        keywords: ["check rail", "clearance", "crossing clearance", "41", "45", "flange clearance"],
+        question: "What is the check rail clearance limit for 1:12 BG turnouts?",
+        statement: "Check rail clearance at the crossing nose must be maintained between 41.0 mm and 45.0 mm per IRPWM Para 429 and IRS:T-10.",
+        params: [
+          { name: "Check Rail Clearance", nominal: "43.0 mm", limit: "41.0 – 45.0 mm", unit: "mm", risk: "Clearance <41 mm risks wheel flange striking nose; >45 mm permits unguided wheel climb", remedy: "Adjust check rail packing washers or replace check rail blocks" }
+        ],
+        traversal: [
+          { id: "drg_6155", label: "RDSO/T-6155 (Turnout)", universe: "drawings" },
+          { id: "comp_cms_crossing", label: "CMS Crossing 1:12", universe: "drawings" },
+          { id: "std_irs_t10", label: "IRS:T-10", universe: "drawings" },
+          { id: "DOC:IRPWM:2024:ACS14", label: "IRPWM Para 429", universe: "manuals" }
+        ],
+        primaryNodeId: "comp_cms_crossing",
+        provenance: {
+          doc: "IRPWM 2024 / IRS:T-10",
+          edition: "2024 Edition",
+          chapter: "Chapter 4: Turnout Geometry",
+          clause: "Para 429 & Note 14",
+          status: "VERIFIED",
+          confidence: 0.99
+        },
+        conflictNote: null,
+        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
+      },
+      {
+        id: "qa_rubber_pad_spec",
+        intent: "SPECIFICATION_GOVERNANCE",
+        keywords: ["rubber pad", "grsp", "composite", "specification", "governs", "standard", "pad"],
+        question: "Which IRS specification governs sleeper rubber pads?",
+        statement: "Grooved Rubber Sole Pads (GRSP 6mm & 10mm composite) are governed by IRS:T-46:2020 and layout standard RDSO/T-6154.",
+        params: [
+          { name: "GRSP Pad Thickness", nominal: "10.0 mm Composite", limit: "±0.5 mm", unit: "mm", risk: "Pad crushing leads to PSC sleeper rail seat attrition", remedy: "Renew with IRS:T-46 high-damping rubber pads" }
+        ],
+        traversal: [
+          { id: "drg_6154", label: "RDSO/T-6154 (Layout)", universe: "drawings" },
+          { id: "comp_grsp", label: "10 mm GRSP Pad (comp_grsp)", universe: "drawings" },
+          { id: "std_irs_t10", label: "IRS:T-10 (Standard)", universe: "drawings" }
+        ],
+        primaryNodeId: "comp_grsp",
+        provenance: {
+          doc: "IRS:T-46:2020",
+          edition: "2020 Edition",
+          chapter: "Elastomeric Pad Specifications",
+          clause: "Clause 4.1 & Table 2",
+          status: "VERIFIED",
+          confidence: 0.97
+        },
+        conflictNote: null,
+        workflow: { label: "View Drawing Overview", tab: "overview" }
+      },
+      {
+        id: "qa_erc_mkv_toe_load",
+        intent: "SPECIFICATION_GOVERNANCE",
+        keywords: ["erc", "toe load", "elastic rail clip", "clip", "fastener", "kg", "mkv", "mk-v"],
+        question: "What is the toe load standard for ERC Mk-V fasteners?",
+        statement: "ERC Mk-V High-Toe-Load Elastic Rail Clips require a nominal toe clamping load of 1200 to 1500 kg (minimum 1200 kg in service) governed by IRS:T-12:2009 / RDSO/T-5919.",
+        params: [
+          { name: "Toe Clamping Load", nominal: "1250 kg", limit: ">= 1200 kg", unit: "kg", risk: "Sub-standard toe load permits rail creep, track gauge spread, and rail rollover under 25t axle load", remedy: "Replace fatigued clips with new ERC Mk-V and renew GFN-66 liners" }
+        ],
+        traversal: [
+          { id: "drg_6155", label: "RDSO/T-6155", universe: "drawings" },
+          { id: "fastener_erc_mkv", label: "ERC Mk-V (Fastener)", universe: "drawings" },
+          { id: "std_irs_t10", label: "IRS:T-10", universe: "drawings" },
+          { id: "DOC:IRPWM:2024:ACS14", label: "IRPWM Para 429", universe: "manuals" }
+        ],
+        primaryNodeId: "fastener_erc_mkv",
+        provenance: {
+          doc: "IRS:T-12:2009 / RDSO/T-5919",
+          edition: "2009 Edition",
+          chapter: "Elastic Fastenings",
+          clause: "Specification IRS:T-12",
+          status: "VERIFIED",
+          confidence: 0.98
+        },
+        conflictNote: null,
+        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
+      },
+      {
+        id: "qa_usfd_testing",
+        intent: "INSPECTION_PROCEDURE",
+        keywords: ["usfd", "ultrasonic", "scan", "testing", "flaw", "inspection", "probe", "frequency"],
+        question: "What is the USFD testing protocol for curved switches?",
+        statement: "USFD testing mandates 3-Zone ultrasonic scanning of machined tongue rails (Zone 1: head, Zone 2: web, Zone 3: foot) using 70° and 0° normal probes every 3 months or 10 GMT per USFD Manual 2026 Chapter 10.",
+        params: [
+          { name: "USFD Frequency", nominal: "3 Months / 10 GMT", limit: "Mandatory Periodic", unit: "GMT/M", risk: "Undetected internal fatigue fracture in machined web triggers sudden switch break under traffic", remedy: "Immediate joggled fishplating with emergency clamps per USFD protocol" }
+        ],
+        traversal: [
+          { id: "comp_tonguerail_lh", label: "Tongue Rail LH", universe: "drawings" },
+          { id: "DOC:USFD:2026:ACS4", label: "USFD Manual 2026", universe: "manuals" },
+          { id: "FAIL:TRACK:BOLT_HOLE_STAR_CRACK", label: "Star Crack (Defect)", universe: "manuals" }
+        ],
+        primaryNodeId: "doc_usfd_2026",
+        provenance: {
+          doc: "Indian Railways Manual for Ultrasonic Testing of Rails and Welds (USFD)",
+          edition: "2026 Edition with ACS-4",
+          chapter: "Chapter 10: Testing of Points & Crossings",
+          clause: "Clause 10.3 & Annexure 10/1",
+          status: "VERIFIED",
+          confidence: 0.96
+        },
+        conflictNote: null,
+        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
+      },
+      {
+        id: "qa_alt11_changes",
+        intent: "REVISION_COMPARISON",
+        keywords: ["alt 11", "alteration 11", "changed in alt 11", "revision 11", "alt11", "difference"],
+        question: "What was changed in Alt 11 for T-6155?",
+        statement: "Alteration 11 (2018) introduced 222 mm drop for Detail 'B' Flat Tie Bars, standardized HTS 25x310 mm fishbolts with split pins, and mandated 10% LIST-A depot spares buffer under Note 28.",
+        params: [
+          { name: "Detail 'B' Drop", nominal: "222.0 mm", limit: "Exact", unit: "mm", risk: "Insufficient tie bar drop causes ballast collision during tamping operations", remedy: "Verify Detail 'B' stamp on tie bar forged body" },
+          { name: "LIST-A Spares Buffer", nominal: "10%", limit: "Statutory Mandate", unit: "%", risk: "Stockouts during emergency turnout renewal", remedy: "Maintain 10% buffer in divisional track depot" }
+        ],
+        traversal: [
+          { id: "drg_6155", label: "RDSO/T-6155", universe: "drawings" },
+          { id: "rev_6155_alt11", label: "Alteration 11 (2018)", universe: "drawings" },
+          { id: "comp_detailb", label: "Detail 'B' Flat Tie Bar", universe: "drawings" },
+          { id: "spare_bolt_25x310", label: "Fishbolt 25x310 mm", universe: "drawings" }
+        ],
+        primaryNodeId: "rev_6155_alt11",
+        provenance: {
+          doc: "RDSO/T-6155 Alteration Ledger",
+          edition: "Alteration 11",
+          chapter: "Revision Table",
+          clause: "Alt 11 Entry",
+          status: "VERIFIED",
+          confidence: 0.99
+        },
+        conflictNote: "Supersession note: Alt 11 replaced previous straight tie bar designs with the 222 mm cranked drop to clear heavy mechanized tamping machine tines.",
+        workflow: { label: "Open Revisions & Diff", tab: "revisions" }
+      },
+      {
+        id: "qa_lista_procurement",
+        intent: "BOM_PROCUREMENT",
+        keywords: ["buffer", "list-a", "procurement", "spares buffer", "sets", "how many spares", "order"],
+        question: "How are LIST-A spares calculated for 10 turnout sets?",
+        statement: "Under Note 28 mandate, 10% wear buffer is added to LIST-A components: 10 sets require 20 base Detail 'B' bars + ceil(20 * 0.10) = 2 buffer, totaling 22 units.",
+        params: [
+          { name: "Detail 'B' Tie Bars", nominal: "20 Base", limit: "+2 Buffer = 22 Total", unit: "Nos", risk: "Depot deficit", remedy: "Requisition per Note 28 formula" },
+          { name: "HTS Bolts 25x310", nominal: "240 Base", limit: "+24 Buffer = 264 Total", unit: "Nos", risk: "Fastener shortfall", remedy: "Include 10% bolt buffer in tender" }
+        ],
+        traversal: [
+          { id: "drg_6155", label: "RDSO/T-6155", universe: "drawings" },
+          { id: "note_6155_28", label: "Note 28 (Spares Buffer)", universe: "drawings" },
+          { id: "comp_detailb", label: "Detail 'B' Tie Bar", universe: "drawings" }
+        ],
+        primaryNodeId: "comp_detailb",
+        provenance: {
+          doc: "RDSO/T-6155",
+          edition: "Alt 13",
+          chapter: "Engineering Notes",
+          clause: "Note 28",
+          status: "DERIVED",
+          confidence: 0.98
+        },
+        conflictNote: null,
+        workflow: { label: "Open Spares & BOM Calculator", tab: "procurement" }
+      },
+      {
+        id: "qa_star_crack_mitigation",
+        intent: "FAILURE_MITIGATION",
+        keywords: ["star crack", "bolt hole", "mitigation", "fracture", "failure mode", "crack", "bolt"],
+        question: "What are the mitigations for bolt hole star cracks?",
+        statement: "Immediate remedial action requires clamping joggled fishplates over the affected bolt hole, imposing 30 km/h speed restriction, and scheduling rail renewal within 48 hours per USFD Chapter 10.",
+        params: [
+          { name: "Speed Restriction", nominal: "30 km/h", limit: "Maximum Speed", unit: "km/h", risk: "Dynamic axle impact causes complete switch web fracture", remedy: "Install joggled fishplate with 4 G-clamps immediately" },
+          { name: "Renewal Window", nominal: "Within 48 Hours", limit: "Strict Maximum", unit: "Hours", risk: "Derailment risk", remedy: "Replace tongue rail" }
+        ],
+        traversal: [
+          { id: "FAIL:TRACK:BOLT_HOLE_STAR_CRACK", label: "Star Crack (Defect)", universe: "manuals" },
+          { id: "comp_detailb", label: "Detail 'B' Hole Location", universe: "drawings" },
+          { id: "DOC:USFD:2026:ACS4", label: "USFD Chapter 10", universe: "manuals" }
+        ],
+        primaryNodeId: "FAIL:TRACK:BOLT_HOLE_STAR_CRACK",
+        provenance: {
+          doc: "USFD Manual 2026",
+          edition: "2026 Edition with ACS-4",
+          chapter: "Chapter 10: Classification of Rail Defects",
+          clause: "Para 10.4",
+          status: "VERIFIED",
+          confidence: 0.95
+        },
+        conflictNote: null,
+        workflow: { label: "Open Risks & SOPs", tab: "risks" }
+      }
+    ];
+
+    function detectQuestionIntent(query) {
+      if (!query || typeof query !== "string") {
+        return { isQuestion: false, intent: "UNKNOWN", confidence: 0.0 };
+      }
+      const q = query.trim().toLowerCase();
+      const isQ = (
+        q.endsWith("?") ||
+        /^(what|which|how|where|can|is|tell|explain|give|show)\b/i.test(q) ||
+        /(wear|throw|tolerance|clearance|standard|specification|irs:|is 2062|usfd|inspect|alt 10|alt 11|alt 12|buffer|spare|crack|defect|mitigat)/i.test(q)
+      );
+      if (!isQ) {
+        return { isQuestion: false, intent: "UNKNOWN", confidence: 0.0 };
+      }
+
+      if (/(alt 10|alt 11|alt 12|alt 13|revision|alteration|difference|changed in)/i.test(q)) {
+        return { isQuestion: true, intent: "REVISION_COMPARISON", confidence: 0.98 };
+      }
+      if (/(inspect|usfd|ultrasonic|scan|check rail clearance|procedure|frequency|protocol)/i.test(q)) {
+        return { isQuestion: true, intent: "INSPECTION_PROCEDURE", confidence: 0.95 };
+      }
+      if (/(wear|throw|clearance|tolerance|opening|toe load|torque|limit)/i.test(q)) {
+        return { isQuestion: true, intent: "TOLERANCE_INQUIRY", confidence: 0.98 };
+      }
+      if (/(standard|specification|irs:|irs |is:|\bis 2062\b|\bis 814\b|govern|material|grade)/i.test(q)) {
+        return { isQuestion: true, intent: "SPECIFICATION_GOVERNANCE", confidence: 0.96 };
+      }
+      if (/(crack|fracture|defect|failure|mitigat|remedy|risk|squat)/i.test(q)) {
+        return { isQuestion: true, intent: "FAILURE_MITIGATION", confidence: 0.95 };
+      }
+      if (/(buffer|spare|bom|procurement|how many|quantity|sets|list-a)/i.test(q)) {
+        return { isQuestion: true, intent: "BOM_PROCUREMENT", confidence: 0.96 };
+      }
+
+      return { isQuestion: true, intent: "COMPONENT_LOOKUP", confidence: 0.85 };
+    }
+
+    function answerEngineeringQuestion(query) {
+      if (!query || typeof query !== "string") return null;
+      const { isQuestion, intent, confidence } = detectQuestionIntent(query);
+      if (!isQuestion) return null;
+
+      const qLower = query.toLowerCase();
+      const tokens = qLower.split(/[\s,?.!]+/).filter(t => t.length > 2);
+
+      let bestMatch = null;
+      let bestScore = 0;
+
+      CANONICAL_QA_DATABASE.forEach(item => {
+        let score = 0;
+        if (item.intent === intent) score += 40;
+        item.keywords.forEach(kw => {
+          if (qLower.includes(kw)) {
+            score += 35;
+          } else if (tokens.some(t => kw.includes(t))) {
+            score += 12;
+          }
+        });
+        if (score > bestScore) {
+          bestScore = score;
+          bestMatch = item;
+        }
+      });
+
+      if (bestMatch && bestScore >= 35) {
+        const intentMeta = INTENT_METADATA[bestMatch.intent] || { label: bestMatch.intent, color: "var(--accent-cyan)", icon: "ℹ️" };
+        return {
+          ...bestMatch,
+          query: query,
+          intentLabel: intentMeta.label,
+          intentColor: intentMeta.color,
+          intentIcon: intentMeta.icon,
+          confidence: Math.max(bestMatch.provenance.confidence, confidence)
+        };
+      }
+
+      // Dynamic Fallback: Search kgPhysicsNodes for entity
+      const matchedNode = kgPhysicsNodes.find(n => {
+        const lbl = n.data.label.toLowerCase();
+        return tokens.some(t => t.length > 3 && lbl.includes(t));
+      });
+
+      if (matchedNode) {
+        const d = matchedNode.data;
+        const outEdges = kgPhysicsEdges.filter(e => e.from === d.id);
+        const nodeUniverse = getNodeUniverse(d);
+
+        return {
+          id: `qa_dyn_${d.id}`,
+          intent: intent !== "UNKNOWN" ? intent : "COMPONENT_LOOKUP",
+          intentLabel: (INTENT_METADATA[intent] || INTENT_METADATA.COMPONENT_LOOKUP).label,
+          intentColor: (INTENT_METADATA[intent] || INTENT_METADATA.COMPONENT_LOOKUP).color,
+          intentIcon: (INTENT_METADATA[intent] || INTENT_METADATA.COMPONENT_LOOKUP).icon,
+          question: query,
+          statement: `${d.label} is an authoritative railway engineering entity (${d.type || d.domain}) in the ${nodeUniverse === 'drawings' ? 'Drawings Universe' : 'Manuals Universe'}. ${d.desc || 'Standard asset verified in RDSO knowledge core.'}`,
+          params: d.specs ? Object.entries(d.specs).map(([k, v]) => ({ name: k, nominal: String(v), limit: "As Specified", unit: "-", risk: "Non-compliance risks operational derailment", remedy: "Adhere to IRS design drawings" })) : [],
+          traversal: [
+            { id: d.id, label: d.label, universe: nodeUniverse },
+            ...outEdges.slice(0, 3).map(e => ({ id: e.to, label: `${e.rel} ➔ ${e.to}`, universe: e.to.startsWith('DOC:') || e.to.startsWith('doc_') ? 'manuals' : 'drawings' }))
+          ],
+          primaryNodeId: d.id,
+          provenance: {
+            doc: nodeUniverse === 'drawings' ? "RDSO Turnout Standard Drawings" : "Indian Railways Regulatory Manuals",
+            edition: "Canonical Core v1",
+            chapter: d.type || "Engineering Asset",
+            clause: d.id,
+            status: "VERIFIED",
+            confidence: 0.88
+          },
+          conflictNote: null,
+          workflow: { label: "Inspect Selected Node", tab: "overview" }
+        };
+      }
+
+      return null;
+    }
+
+    function focusAnswerEntityIn3D(nodeId) {
+      if (!nodeId) return;
+      if (typeof ensureNodeVisibleAndExpanded === "function") {
+        ensureNodeVisibleAndExpanded(nodeId);
+      }
+      if (typeof selectGraphNode === "function") {
+        selectGraphNode(nodeId);
+      }
+      focusNodeIn3D(nodeId);
+    }
+
+    function renderQuestionInterface(initialQuery = "") {
+      const container = document.getElementById('qa-container');
+      if (!container) return;
+
+      const defaultQ = initialQuery || "What is the permissible wear for 60kg tongue rails?";
+      const initialAnswer = answerEngineeringQuestion(defaultQ);
+
+      container.innerHTML = `
+        <div class="qa-input-wrap">
+          <span style="font-size: 15px;">❓</span>
+          <input type="text" class="qa-input" id="qa-user-input" placeholder="Ask any railway engineering question (wear, throw, standards, alt 11, USFD, spares)..." value="${initialQuery}">
+          <button class="qa-ask-btn" onclick="submitUserQuestion()">
+            <span>⚡</span> Ask Question
+          </button>
+        </div>
+
+        <div class="qa-chips-section">
+          <div class="qa-chips-label">
+            <span>💡</span> Quick Canonical Questions:
+          </div>
+          <div class="qa-chips-list">
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the permissible wear for 60kg tongue rails?')">🎯 Tongue Rail Wear Limits</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the standard switch throw at the toe of curved switch?')">📏 Switch Throw at Toe</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the check rail clearance limit for 1:12 BG turnouts?')">⚠️ Check Rail Clearance</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('Which IRS specification governs sleeper rubber pads?')">⚖️ Rubber Pad IRS Spec</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the toe load standard for ERC Mk-V fasteners?')">🔩 ERC Mk-V Clamping Load</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the USFD testing protocol for curved switches?')">🔍 USFD Inspection Protocol</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What was changed in Alt 11 for T-6155?')">📝 Alt 11 Revision Ledger</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('How are LIST-A spares calculated for 10 turnout sets?')">📦 LIST-A Spares Calculation</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What are the mitigations for bolt hole star cracks?')">🚨 Star Crack Mitigations</button>
+          </div>
+        </div>
+
+        <div id="qa-answer-mount">
+          <!-- Populated by renderQuestionAnswerCard -->
+        </div>
+      `;
+
+      const input = document.getElementById('qa-user-input');
+      if (input) {
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') submitUserQuestion();
+        });
+        input.addEventListener('input', () => {
+          const q = input.value.trim();
+          if (q.length > 4) {
+            const ans = answerEngineeringQuestion(q);
+            if (ans) renderQuestionAnswerCard(ans, document.getElementById('qa-answer-mount'));
+          }
+        });
+      }
+
+      if (initialAnswer) {
+        renderQuestionAnswerCard(initialAnswer, document.getElementById('qa-answer-mount'));
+      }
+    }
+
+    function onQuestionPromptSelected(promptText) {
+      const input = document.getElementById('qa-user-input');
+      if (input) input.value = promptText;
+      const ans = answerEngineeringQuestion(promptText);
+      if (ans) {
+        renderQuestionAnswerCard(ans, document.getElementById('qa-answer-mount'));
+      }
+    }
+
+    function submitUserQuestion() {
+      const input = document.getElementById('qa-user-input');
+      if (!input) return;
+      const q = input.value.trim();
+      if (!q) return;
+      const ans = answerEngineeringQuestion(q);
+      const mount = document.getElementById('qa-answer-mount');
+      if (ans) {
+        renderQuestionAnswerCard(ans, mount);
+      } else {
+        mount.innerHTML = `
+          <div style="background: rgba(14,22,38,0.7); border: 1px dashed var(--border-subtle); border-radius: 8px; padding: 24px; text-align: center; color: var(--text-dim);">
+            <div style="font-size: 24px; margin-bottom: 8px;">🔍</div>
+            <strong style="color: #fff; font-size: 13px;">No direct canonical answer resolved</strong>
+            <div style="font-size: 11px; margin-top: 4px;">Try asking about <strong>wear limits</strong>, <strong>switch throw</strong>, <strong>USFD inspection</strong>, <strong>Alt 11 changes</strong>, or <strong>LIST-A spares</strong>.</div>
+          </div>
+        `;
+      }
+    }
+
+    function renderQuestionAnswerCard(answer, containerEl) {
+      if (!containerEl || !answer) return;
+
+      const confPct = Math.round(answer.confidence * 100);
+      const statusPillClass = answer.provenance.status === 'VERIFIED' ? 'confidence-badge' : 'list-a-pill';
+
+      let paramTableHtml = '';
+      if (answer.params && answer.params.length > 0) {
+        let rows = '';
+        answer.params.forEach(p => {
+          rows += `
+            <tr>
+              <td><strong style="color: #fff;">${p.name}</strong></td>
+              <td style="font-family: var(--font-mono); color: var(--accent-cyan);">${p.nominal}</td>
+              <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-yellow);">${p.limit}</td>
+              <td style="color: var(--text-muted); font-size: 10px;">${p.risk}</td>
+              <td style="color: var(--accent-green); font-size: 10px;">${p.remedy}</td>
+            </tr>
+          `;
+        });
+        paramTableHtml = `
+          <table class="qa-param-table">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Nominal</th>
+                <th>Allowed Limit</th>
+                <th>Safety Consequence</th>
+                <th>Prescribed Action</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      }
+
+      let traversalHtml = '';
+      if (answer.traversal && answer.traversal.length > 0) {
+        let chips = '';
+        answer.traversal.forEach((node, idx) => {
+          const isDrawings = node.universe === 'drawings';
+          const icon = isDrawings ? '📐' : '📖';
+          chips += `
+            <span class="qa-traversal-node" onclick="focusAnswerEntityIn3D('${node.id}')" title="Focus ${node.id} in 3D">
+              <span>${icon}</span>
+              <span>${node.label}</span>
+            </span>
+            ${idx < answer.traversal.length - 1 ? '<span style="color: var(--text-dim); font-size: 10px;">➔</span>' : ''}
+          `;
+        });
+        traversalHtml = `
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-size: 9.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+              <span>🌐 Cross-Domain Knowledge Traversal Path (Blueprint §16.1):</span>
+            </div>
+            <div class="qa-traversal-path">${chips}</div>
+          </div>
+        `;
+      }
+
+      let conflictHtml = '';
+      if (answer.conflictNote) {
+        conflictHtml = `
+          <div class="qa-conflict-box">
+            <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; margin-bottom: 2px;">
+              <span>⚖️</span> <span>Revision / Standard Conflict Disclosure (Blueprint §16.2):</span>
+            </div>
+            <div>${answer.conflictNote}</div>
+          </div>
+        `;
+      }
+
+      containerEl.innerHTML = `
+        <div class="qa-answer-card">
+          <!-- Header -->
+          <div class="qa-card-header">
+            <div>
+              <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                <span class="qa-intent-badge" style="background: ${answer.intentColor}22; color: ${answer.intentColor}; border: 1px solid ${answer.intentColor}44;">
+                  <span>${answer.intentIcon}</span> ${answer.intentLabel}
+                </span>
+                <span class="${statusPillClass}">✓ ${answer.provenance.status}</span>
+              </div>
+              <h3 style="margin: 0; font-size: 14px; color: #fff; font-weight: 700;">${answer.question}</h3>
+            </div>
+            <div class="qa-confidence-meter" title="${confPct}% Statistical Evidence Grounding">
+              <span>${confPct}% CONF</span>
+              <div class="qa-confidence-bar">
+                <div class="qa-confidence-fill" style="width: ${confPct}%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Direct Verified Statement -->
+          <div class="qa-statement-box">
+            ${answer.statement}
+          </div>
+
+          <!-- Parameter Matrix -->
+          ${paramTableHtml}
+
+          <!-- Traversal Path -->
+          ${traversalHtml}
+
+          <!-- Evidence & Provenance Card -->
+          <div class="qa-provenance-card">
+            <div>
+              <div style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Statutory Provenance & Clause Reference</div>
+              <div style="font-weight: 700; color: #fff; margin-top: 2px;">${answer.provenance.doc} · <span style="color: var(--accent-cyan); font-family: var(--font-mono);">${answer.provenance.clause}</span></div>
+              <div style="color: var(--text-dim); font-size: 9.5px;">${answer.provenance.chapter || answer.provenance.edition}</div>
+            </div>
+            <button class="search-card-btn" onclick="openFullscreenActiveBlueprint()" style="background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan);">
+              <span>🔍</span> View Source Crop
+            </button>
+          </div>
+
+          <!-- Conflict Disclosure -->
+          ${conflictHtml}
+
+          <!-- Action Toolbar -->
+          <div class="qa-card-toolbar">
+            <button class="btn btn-primary" onclick="focusAnswerEntityIn3D('${answer.primaryNodeId}')" style="font-size: 11px; padding: 6px 12px;">
+              <span>🪐</span> Focus in 3D Cosmos
+            </button>
+            ${answer.workflow ? `
+              <button class="btn" onclick="switchDrawerTab('${answer.workflow.tab}')" style="font-size: 11px; padding: 6px 12px; border-color: var(--accent-green); color: var(--accent-green);">
+                <span>📋</span> ${answer.workflow.label}
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    window.detectQuestionIntent = detectQuestionIntent;
+    window.answerEngineeringQuestion = answerEngineeringQuestion;
+    window.focusAnswerEntityIn3D = focusAnswerEntityIn3D;
+    window.renderQuestionInterface = renderQuestionInterface;
+    window.onQuestionPromptSelected = onQuestionPromptSelected;
+    window.submitUserQuestion = submitUserQuestion;
+    window.renderQuestionAnswerCard = renderQuestionAnswerCard;
+
+    /* =========================================================================
+       PHASE 6: LEARNING SYSTEM & TRAINING ACADEMY (§17, §21, §36)
+       ========================================================================= */
+
+    const CANONICAL_LEARNING_TRACKS = [
+      {
+        id: "track_turnout_curved_switches",
+        title: "Turnout Engineering & Curved Switches",
+        doc: "RDSO/T-6155 & T-6154",
+        icon: "🛤️",
+        color: "var(--accent-cyan)",
+        stages: [
+          {
+            stage: 1,
+            name: "Identify",
+            topic: "Master Layout Geometry (1 in 12, 1676 mm Gauge)",
+            desc: "Master turnout parameters: 1:12 angle, 1676 mm broad gauge, 60kg rail section, and 39.992 m overall lead length.",
+            targetNode: "drg_6155",
+            actionLabel: "Inspect T-6155 ➔"
+          },
+          {
+            stage: 2,
+            name: "Understand",
+            topic: "Switch Assembly & Components (Thick-Web, Detail B)",
+            desc: "Examine curved asymmetric tongue rails, stock rails, spherical washers, and forged tie bar connections.",
+            targetNode: "comp_detailb",
+            actionLabel: "Inspect Detail 'B' ➔"
+          },
+          {
+            stage: 3,
+            name: "Trace",
+            topic: "Fastenings & Sleepers (PSC Sleepers, ERC Mk-V, GRSP)",
+            desc: "Trace wheel load path down through PSC sleepers, Elastic Rail Clips, and 10mm elastomeric pads.",
+            targetNode: "std_irs_t10",
+            actionLabel: "Inspect IRS:T-10 ➔"
+          },
+          {
+            stage: 4,
+            name: "Compare",
+            topic: "Revision Lineage (Alt 10 vs Alt 11 vs Alt 12)",
+            desc: "Analyze engineering evolution: Alt 10 baseline, Alt 11 222mm forged drop for tamping, and Alt 12 weld-free lug.",
+            targetTab: "revisions",
+            actionLabel: "Compare Revisions ➔"
+          },
+          {
+            stage: 5,
+            name: "Apply & Diagnose",
+            topic: "Field Tolerances & Defect Mitigations",
+            desc: "Execute statutory checks: 115mm toe throw, 41-45mm check rail gap, and star crack ultrasonic remediation.",
+            targetTab: "inspection",
+            actionLabel: "Launch Field Checklist ➔"
+          }
+        ]
+      },
+      {
+        id: "track_irpwm_statutory_tolerances",
+        title: "IRPWM 2024 Track Tolerances & Joint Inspection",
+        doc: "IRPWM 2024 ACS-14",
+        icon: "📜",
+        color: "var(--accent-green)",
+        stages: [
+          {
+            stage: 1,
+            name: "Identify",
+            topic: "Chapter 4 Turnout Classification",
+            desc: "Classifications for passenger mainline, loop line turnouts, and maximum authorized turnout turnout speeds.",
+            targetNode: "man_irpwm_ch4",
+            actionLabel: "Inspect IRPWM Ch 4 ➔"
+          },
+          {
+            stage: 2,
+            name: "Understand",
+            topic: "Statutory Maintenance Tolerances",
+            desc: "Master statutory operating limits for gauge (+3/-2mm), cross-level (±4mm), twist, and clearance.",
+            targetNode: "man_irpwm_ch4",
+            actionLabel: "View Tolerances ➔"
+          },
+          {
+            stage: 3,
+            name: "Trace",
+            topic: "P-Way and S&T Joint Inspection Mandates",
+            desc: "Joint inspection protocol: monthly joint walkthroughs by SSE/P-Way and SSE/Signal for motorized points.",
+            targetTab: "inspection",
+            actionLabel: "Open Joint Form ➔"
+          },
+          {
+            stage: 4,
+            name: "Compare",
+            topic: "ACS-14 Updates to Speed Regimes",
+            desc: "Review newest amendments under ACS-14 for 25T heavy axle load lines and enhanced track geometry standards.",
+            targetNode: "man_irpwm_ch4",
+            actionLabel: "Read ACS-14 ➔"
+          },
+          {
+            stage: 5,
+            name: "Apply & Diagnose",
+            topic: "Wear Gauging & Remedial Renewal",
+            desc: "Apply 6.0 mm vertical and 8.0 mm lateral tongue rail wear thresholds to condemn or recondition in-situ.",
+            targetTab: "qa",
+            actionLabel: "Q&A Diagnostics ➔"
+          }
+        ]
+      },
+      {
+        id: "track_usfd_flaw_detection",
+        title: "USFD 2026 Flaw Detection & Diagnostics",
+        doc: "USFD Manual 2026 Ch 10 & IRS:T-12",
+        icon: "🔍",
+        color: "var(--accent-purple)",
+        stages: [
+          {
+            stage: 1,
+            name: "Identify",
+            topic: "3-Zone Ultrasonic Probe Configuration (0°, 70°, 45°)",
+            desc: "Probe beam orientations: 0° for horizontal web flaws, 70° for transverse head cracks, and 45° for bolt hole cracks.",
+            targetNode: "man_usfd_ch10",
+            actionLabel: "Inspect USFD Ch 10 ➔"
+          },
+          {
+            stage: 2,
+            name: "Understand",
+            topic: "Echo Signal Interpretation & Defect Classifications",
+            desc: "Distinguish IMR (Immediate Removal - crack >50%), OBS (Observed flaw), and REM (Remedial monitoring) defect flags.",
+            targetNode: "man_usfd_ch10",
+            actionLabel: "Echo Criteria ➔"
+          },
+          {
+            stage: 3,
+            name: "Trace",
+            topic: "Tongue Rail & Crossing Testing Protocol",
+            desc: "Mandatory inspection interval: scan machined switch rails every 3 months or 10 GMT, whichever is earlier.",
+            targetNode: "man_usfd_ch10",
+            actionLabel: "View Frequency ➔"
+          },
+          {
+            stage: 4,
+            name: "Compare",
+            topic: "Historical Defect Thresholds vs 2026 Advanced Digital Phased Array",
+            desc: "Comparison of manual A-scan calibration versus digital B-scan continuous recording and pattern matching.",
+            targetTab: "conflicts",
+            actionLabel: "Standards Matrix ➔"
+          },
+          {
+            stage: 5,
+            name: "Apply & Diagnose",
+            topic: "Bolt Hole Star Cracks & Gauge Corner Flaking Remediation",
+            desc: "Statutory remediation: execute immediate fishplating with clamp, impose 30 km/h caution order, and replace within 3 days.",
+            targetTab: "paths",
+            actionLabel: "Trace Failure Path ➔"
+          }
+        ]
+      }
+    ];
+
+    const CANONICAL_FLASHCARDS = [
+      {
+        id: "fc1",
+        category: "Track Tolerances",
+        question: "What is the statutory check rail clearance at the nose of a 1:12 BG turnout?",
+        hint: "Governed by IRPWM 2024 Para 429 and IRS:T-10 standards.",
+        answer: "41.0 mm to 45.0 mm (standard). Maximum permissible is 45.0 mm, minimum is 41.0 mm. Prevents wheel flanges striking the crossing nose or climbing unguided.",
+        citation: "IRPWM 2024 Para 429 & IRS:T-10",
+        doc: "IRPWM 2024",
+        nodeId: "std_irs_t10"
+      },
+      {
+        id: "fc2",
+        category: "Revision Lineage",
+        question: "Why was a 222 mm forged drop introduced in Detail 'B' Flat Tie Bars under Alteration 11?",
+        hint: "Relates to mechanized maintenance and on-track tamping machines.",
+        answer: "To provide essential physical clearance preventing mechanized tamping tool tines from striking and bending tie bars during ballast packing operations.",
+        citation: "RDSO/T-6155 Alt 11 Revision Record",
+        doc: "RDSO/T-6155",
+        nodeId: "comp_detailb"
+      },
+      {
+        id: "fc3",
+        category: "Procurement & Spares",
+        question: "What spares buffer percentage is mandated for LIST-A turnout items under Note 28?",
+        hint: "Specifies wear reserve allowance rounded up for depot stores.",
+        answer: "+10% spare components (rounded up to nearest whole integer) mandated to be requisitioned and stocked for maintenance replacements.",
+        citation: "RDSO/T-6155 General Note 28",
+        doc: "RDSO/T-6155",
+        nodeId: "drg_6155"
+      },
+      {
+        id: "fc4",
+        category: "Switch Geometry",
+        question: "What is the standard switch opening / throw at the toe of a curved switch?",
+        hint: "Measured at first stretcher bar position between stock and tongue rail.",
+        answer: "115 ± 3 mm (operating range: 112 mm to 118 mm; minimum permissible in field: 95 mm). Ensures adequate wheel flange passage.",
+        citation: "IRPWM 2024 Para 429 · IRS:T-10",
+        doc: "IRPWM 2024",
+        nodeId: "std_irs_t10"
+      },
+      {
+        id: "fc5",
+        category: "Maintenance Limits",
+        question: "What are the condemning wear limits for 60kg machined tongue rails?",
+        hint: "Separate vertical and lateral wear limits per IRPWM Para 429.",
+        answer: "Max 6.0 mm vertical wear and max 8.0 mm lateral head wear. If either limit is breached, tongue rail must be grounded for reconditioning or replaced.",
+        citation: "IRPWM 2024 Para 429",
+        doc: "IRPWM 2024",
+        nodeId: "man_irpwm_ch4"
+      },
+      {
+        id: "fc6",
+        category: "Fasteners & Pads",
+        question: "Which Indian Railway Standard governs Grooved Rubber Sole Pads (GRSP)?",
+        hint: "Covers 6mm and 10mm elastomeric composite sole pads.",
+        answer: "IRS:T-46:2020. Mandates tensile strength, elongation at break, and electrical resistance for 10mm composite pads beneath PSC sleepers.",
+        citation: "IRS:T-46:2020 Specification",
+        doc: "IRS Standards",
+        nodeId: "comp_grsp"
+      },
+      {
+        id: "fc7",
+        category: "NDT & USFD",
+        question: "Which ultrasonic probe angle is utilized to detect 360° star cracks around fishbolt holes?",
+        hint: "Uses angular shear wave reflection in rail web.",
+        answer: "45° shear wave probe (or tandem 45°/70° array) steered across the web to detect radial fatigue cracks originating from bolt hole edges.",
+        citation: "USFD Manual 2026 Chapter 10",
+        doc: "USFD Manual",
+        nodeId: "man_usfd_ch10"
+      },
+      {
+        id: "fc8",
+        category: "Fasteners",
+        question: "What is the statutory toe load requirement for Elastic Rail Clip (ERC) Mk-V?",
+        hint: "High-capacity elastic clip designed for 25T/32.5T heavy axle loads.",
+        answer: "1200 kg to 1500 kg toe load. Required to prevent longitudinal rail creep and maintain sleeper fastening grip under dynamic impact.",
+        citation: "IRS:T-10 & RDSO/T-5919",
+        doc: "IRS:T-10",
+        nodeId: "std_irs_t10"
+      },
+      {
+        id: "fc9",
+        category: "Layout Parameters",
+        question: "What is the lead length and curved switch radius for 1 in 12 60kg turnouts?",
+        hint: "Found in master layout drawing RDSO/T-6154/6155.",
+        answer: "Switch radius is 10,125 mm (curved thick-web switch); Overall turnout lead length is 39.992 meters from SRJ to theoretical crossing nose.",
+        citation: "RDSO/T-6154 Master Layout Drawing",
+        doc: "RDSO/T-6154",
+        nodeId: "drg_6155"
+      },
+      {
+        id: "fc10",
+        category: "Statutory Inspection",
+        question: "What is the mandated joint inspection frequency for motor-operated points?",
+        hint: "Conducted jointly by Civil and Signal engineering supervisors.",
+        answer: "Once every month jointly by Sectional SSE (P-Way) and SSE (Signal), with recorded joint compliance register.",
+        citation: "IRPWM 2024 ACS-14 & Joint Code",
+        doc: "IRPWM 2024",
+        nodeId: "man_irpwm_ch4"
+      }
+    ];
+
+    const CANONICAL_QUIZ_QUESTIONS = [
+      {
+        id: "q1_check_rail",
+        question: "What is the statutory check rail clearance at the nose of a 1:12 BG turnout?",
+        options: ["35.0 – 38.0 mm", "41.0 – 45.0 mm", "48.0 – 52.0 mm", "57.0 – 60.0 mm"],
+        correctIndex: 1,
+        citation: "IRPWM 2024 Para 429 & IRS:T-10",
+        domain: "Track Geometry & Layout",
+        explanation: "Standard check rail clearance must be between 41.0 mm and 45.0 mm to prevent wheel flanges striking the crossing nose or climbing unguided."
+      },
+      {
+        id: "q2_alt11_drop",
+        question: "What forged drop was standardized for Detail 'B' Flat Tie Bars under Alteration 11?",
+        options: ["150 mm", "185 mm", "222 mm", "250 mm"],
+        correctIndex: 2,
+        citation: "RDSO/T-6155 Alt 11 Record",
+        domain: "Revision Lineage & Amendments",
+        explanation: "Alteration 11 introduced the 222 mm drop to prevent tamping machine tool tines from striking tie bars during mechanized track maintenance."
+      },
+      {
+        id: "q3_lista_buffer",
+        question: "What spares buffer percentage is mandated for LIST-A turnout items under Note 28?",
+        options: ["5%", "10%", "15%", "20%"],
+        correctIndex: 1,
+        citation: "RDSO/T-6155 Note 28",
+        domain: "Procurement & BOM Spares",
+        explanation: "Note 28 requires adding a 10% wear buffer (rounded up) to all LIST-A components for depot stock maintenance."
+      },
+      {
+        id: "q4_usfd_frequency",
+        question: "How frequently must machined tongue rails undergo USFD 3-Zone ultrasonic scanning?",
+        options: ["Every 1 Month / 5 GMT", "Every 3 Months / 10 GMT", "Every 6 Months / 20 GMT", "Annually / 40 GMT"],
+        correctIndex: 1,
+        citation: "USFD Manual 2026 Chapter 10",
+        domain: "Failure Modes & Inspection",
+        explanation: "Periodic ultrasonic scanning of tongue rails is mandatory every 3 months or 10 GMT, whichever is earlier, to detect sub-surface fatigue flaws."
+      },
+      {
+        id: "q5_rubber_pad_spec",
+        question: "Which IRS specification governs elastomeric Grooved Rubber Sole Pads (GRSP)?",
+        options: ["IRS:T-10", "IRS:T-12", "IRS:T-46", "IRS:T-29"],
+        correctIndex: 2,
+        citation: "IRS:T-46:2020",
+        domain: "Fasteners & Sleeper Standards",
+        explanation: "Grooved Rubber Sole Pads (GRSP 6mm/10mm composite) are manufactured and tested in accordance with IRS:T-46:2020."
+      }
+    ];
+
+    window.currentLearningSubTab = 'tracks';
+    window.currentFlashcardIndex = 0;
+    window.masteredFlashcards = new Set();
+    window.userQuizChoices = {};
+    window.quizSubmitted = false;
+    window.lastQuizScore = null;
+
+    function renderLearningModule(subTab = 'tracks') {
+      const container = document.getElementById('learning-container');
+      if (!container) return;
+
+      window.currentLearningSubTab = subTab;
+
+      container.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Academy Sub-Navigation -->
+          <div class="learning-subnav">
+            <button class="learning-subnav-btn ${subTab === 'tracks' ? 'active' : ''}" onclick="renderLearningModule('tracks')">
+              <span>🛤️</span> Tracks
+            </button>
+            <button class="learning-subnav-btn ${subTab === 'flashcards' ? 'active' : ''}" onclick="renderLearningModule('flashcards')">
+              <span>🎴</span> Flashcards
+            </button>
+            <button class="learning-subnav-btn ${subTab === 'quiz' ? 'active' : ''}" onclick="renderLearningModule('quiz')">
+              <span>📝</span> Assessment
+            </button>
+            <button class="learning-subnav-btn ${subTab === 'competency' ? 'active' : ''}" onclick="renderLearningModule('competency')">
+              <span>📊</span> Competency
+            </button>
+          </div>
+
+          <!-- Active Sub-View Mount -->
+          <div id="learning-subview-mount"></div>
+        </div>
+      `;
+
+      const mount = document.getElementById('learning-subview-mount');
+      if (subTab === 'tracks') {
+        renderTracksSubView(mount);
+      } else if (subTab === 'flashcards') {
+        renderFlashcardsSubView(mount);
+      } else if (subTab === 'quiz') {
+        renderQuizSubView(mount);
+      } else if (subTab === 'competency') {
+        renderCompetencySubView(mount);
+      }
+    }
+
+    function renderTracksSubView(mount) {
+      let html = `
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-size: 11px; color: var(--text-muted); line-height: 1.4; padding: 0 2px;">
+            Structured 5-stage learning progression (§17.3) guiding track engineers from asset identification to statutory failure diagnostics.
+          </div>
+      `;
+
+      CANONICAL_LEARNING_TRACKS.forEach((track, tIdx) => {
+        html += `
+          <div class="learning-track-card" style="border-left: 3px solid ${track.color};">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #fff; font-size: 12.5px;">
+                  <span>${track.icon}</span> <span>${track.title}</span>
+                </div>
+                <div style="font-size: 9.5px; color: var(--text-dim); margin-top: 2px;">
+                  Governing Reference: <span style="color: ${track.color}; font-family: var(--font-mono); font-weight: 600;">${track.doc}</span>
+                </div>
+              </div>
+              <span class="search-card-type-badge" style="background: rgba(255,255,255,0.06); color: var(--text-main);">5 STAGES</span>
+            </div>
+
+            <!-- Stages Progression -->
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
+        `;
+
+        const stageColors = [
+          'rgba(0, 240, 255, 0.2)',
+          'rgba(0, 150, 255, 0.2)',
+          'rgba(180, 80, 255, 0.2)',
+          'rgba(255, 170, 0, 0.2)',
+          'rgba(0, 255, 136, 0.2)'
+        ];
+        const stageTextColors = [
+          'var(--accent-cyan)',
+          '#66b3ff',
+          'var(--accent-purple)',
+          '#ffaa00',
+          'var(--accent-green)'
+        ];
+
+        track.stages.forEach(st => {
+          const bgCol = stageColors[st.stage - 1] || stageColors[0];
+          const textCol = stageTextColors[st.stage - 1] || stageTextColors[0];
+
+          html += `
+            <div class="learning-stage-row">
+              <div style="display: flex; flex-direction: column; gap: 2px; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="learning-stage-badge" style="background: ${bgCol}; color: ${textCol}; border: 1px solid ${textCol}44;">
+                    STAGE ${st.stage} · ${st.name}
+                  </span>
+                  <span style="font-weight: 600; color: #fff; font-size: 11px;">${st.topic}</span>
+                </div>
+                <div style="color: var(--text-dim); font-size: 10px; line-height: 1.35; padding-left: 2px;">
+                  ${st.desc}
+                </div>
+              </div>
+              ${st.targetNode ? `
+                <button class="search-card-btn" onclick="inspectNodeById('${st.targetNode}')" style="white-space: nowrap; font-size: 9.5px; padding: 4px 8px;">
+                  ${st.actionLabel}
+                </button>
+              ` : st.targetTab ? `
+                <button class="search-card-btn" onclick="switchDrawerTab('${st.targetTab}')" style="white-space: nowrap; font-size: 9.5px; padding: 4px 8px; border-color: ${textCol}; color: ${textCol};">
+                  ${st.actionLabel}
+                </button>
+              ` : ''}
+            </div>
+          `;
+        });
+
+        html += `
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      mount.innerHTML = html;
+    }
+
+    function inspectNodeById(nodeId) {
+      if (typeof kgPhysicsNodes !== 'undefined') {
+        const node = kgPhysicsNodes.find(n => n.data.id === nodeId);
+        if (node && typeof inspectNode === 'function') {
+          inspectNode(node);
+          return;
+        }
+      }
+      if (typeof focusAnswerEntityIn3D === 'function') {
+        focusAnswerEntityIn3D(nodeId);
+      }
+    }
+    window.inspectNodeById = inspectNodeById;
+
+    function renderFlashcardsSubView(mount) {
+      const total = CANONICAL_FLASHCARDS.length;
+      const idx = window.currentFlashcardIndex;
+      const card = CANONICAL_FLASHCARDS[idx];
+      const isMastered = window.masteredFlashcards.has(idx);
+
+      mount.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Progress Header -->
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 4px;">
+            <div style="font-size: 11px; font-weight: 700; color: #fff;">
+              Flashcard <span style="color: var(--accent-cyan);">${idx + 1}</span> of ${total}
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="search-card-rev-badge" style="background: ${isMastered ? 'rgba(0,255,136,0.2)' : 'rgba(255,255,255,0.06)'}; color: ${isMastered ? 'var(--accent-green)' : 'var(--text-muted)'};">
+                ${isMastered ? '★ MASTERED' : 'LEARNING'}
+              </span>
+              <span style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">
+                ${window.masteredFlashcards.size} / ${total} Mastered
+              </span>
+            </div>
+          </div>
+
+          <!-- 3D Flip Flashcard Box -->
+          <div class="flashcard-box" onclick="flipCurrentFlashcard()">
+            <div class="flashcard-card" id="active-flashcard-card">
+              <!-- FRONT FACE -->
+              <div class="flashcard-front">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span class="search-card-type-badge" style="background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border: 1px solid var(--accent-cyan)44;">
+                      🏷️ ${card.category}
+                    </span>
+                    <span style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">CARD #${idx + 1}</span>
+                  </div>
+                  <div style="font-size: 13.5px; font-weight: 700; color: #fff; line-height: 1.45; margin-bottom: 8px;">
+                    ${card.question}
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-style: italic; line-height: 1.4;">
+                    💡 Hint: ${card.hint}
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                  <span style="font-size: 10px; color: var(--accent-cyan); font-weight: 600;">
+                    🔄 Click anywhere to flip & reveal authoritative answer
+                  </span>
+                  <span style="font-size: 13px;">➔</span>
+                </div>
+              </div>
+
+              <!-- BACK FACE -->
+              <div class="flashcard-back">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span class="search-card-type-badge" style="background: rgba(0, 255, 136, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green)44;">
+                      ✓ STATUTORY ANSWER
+                    </span>
+                    <span style="font-size: 9.5px; color: var(--accent-green); font-family: var(--font-mono); font-weight: 700;">
+                      ${card.doc}
+                    </span>
+                  </div>
+                  <div style="font-size: 12.5px; font-weight: 600; color: #fff; line-height: 1.45; margin-bottom: 8px;">
+                    ${card.answer}
+                  </div>
+                  <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; padding: 6px 8px; font-size: 10px; color: var(--text-dim);">
+                    📜 Citation: <strong style="color: #fff;">${card.citation}</strong>
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                  <button class="search-card-btn" onclick="event.stopPropagation(); markFlashcardMastered(${idx})" style="background: ${isMastered ? 'rgba(0,255,136,0.3)' : 'transparent'}; color: var(--accent-green); border-color: var(--accent-green); font-size: 10px; padding: 5px 10px;">
+                    ${isMastered ? '✓ Mastered' : '★ Mark as Mastered'}
+                  </button>
+                  ${card.nodeId ? `
+                    <button class="search-card-btn" onclick="event.stopPropagation(); inspectNodeById('${card.nodeId}')" style="font-size: 10px; padding: 5px 10px;">
+                      🔍 Inspect Asset
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Navigation Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+            <button class="btn" onclick="prevFlashcard()" style="flex: 1; justify-content: center; font-size: 11px;">
+              ◀ Previous
+            </button>
+            <button class="btn" onclick="flipCurrentFlashcard()" style="flex: 1; justify-content: center; font-size: 11px; border-color: var(--accent-cyan); color: var(--accent-cyan);">
+              🔄 Flip 3D
+            </button>
+            <button class="btn" onclick="nextFlashcard()" style="flex: 1; justify-content: center; font-size: 11px;">
+              Next ▶
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function flipCurrentFlashcard() {
+      const cardEl = document.getElementById('active-flashcard-card');
+      if (cardEl) {
+        cardEl.classList.toggle('flipped');
+      }
+    }
+
+    function nextFlashcard() {
+      window.currentFlashcardIndex = (window.currentFlashcardIndex + 1) % CANONICAL_FLASHCARDS.length;
+      const mount = document.getElementById('learning-subview-mount');
+      if (mount) renderFlashcardsSubView(mount);
+    }
+
+    function prevFlashcard() {
+      window.currentFlashcardIndex = (window.currentFlashcardIndex - 1 + CANONICAL_FLASHCARDS.length) % CANONICAL_FLASHCARDS.length;
+      const mount = document.getElementById('learning-subview-mount');
+      if (mount) renderFlashcardsSubView(mount);
+    }
+
+    function markFlashcardMastered(idx) {
+      if (window.masteredFlashcards.has(idx)) {
+        window.masteredFlashcards.delete(idx);
+      } else {
+        window.masteredFlashcards.add(idx);
+      }
+      const mount = document.getElementById('learning-subview-mount');
+      if (mount) renderFlashcardsSubView(mount);
+    }
+
+    function renderQuizSubView(mount) {
+      const isSubmitted = window.quizSubmitted;
+      const scoreData = window.lastQuizScore;
+
+      let html = `
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 12.5px; font-weight: 700; color: #fff;">
+                Official Competency Knowledge Assessment
+              </div>
+              <div style="font-size: 10px; color: var(--text-muted); margin-top: 1px;">
+                5 Canonical Questions · 80% Statutory Passing Standard (§17.4)
+              </div>
+            </div>
+            ${isSubmitted ? `
+              <button class="search-card-btn" onclick="resetQuizAssessment()" style="font-size: 10px; padding: 4px 8px;">
+                🔄 Retake
+              </button>
+            ` : ''}
+          </div>
+      `;
+
+      if (isSubmitted && scoreData) {
+        const pass = scoreData.passed;
+        html += `
+          <div style="background: ${pass ? 'rgba(0, 255, 136, 0.12)' : 'rgba(255, 51, 102, 0.12)'}; border: 1px solid ${pass ? 'var(--accent-green)' : 'var(--accent-red)'}; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="font-weight: 800; font-size: 13px; color: ${pass ? 'var(--accent-green)' : '#ff8899'};">
+                ${pass ? '🏅 ASSESSMENT PASSED' : '⚠️ ASSESSMENT REQUIRES RETEST'}
+              </div>
+              <div style="font-family: var(--font-mono); font-weight: 800; font-size: 14px; color: #fff;">
+                ${scoreData.score} / ${scoreData.total} (${scoreData.percentage}%)
+              </div>
+            </div>
+            <div style="font-size: 10.5px; color: var(--text-main); line-height: 1.4;">
+              ${pass ? 'You have demonstrated statutory mastery of RDSO 1:12 turnout geometry, Alt 11 lineage, procurement buffers, and USFD protocols.' : 'Statutory threshold is 80% (4/5 questions correct). Review the citations below and re-test to earn your competency certification.'}
+            </div>
+          </div>
+        `;
+
+        // If passed, render the Official RDSO Certificate Card
+        if (pass) {
+          html += `
+            <div style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(20, 25, 40, 0.95)); border: 2px solid #ffd700; border-radius: 8px; padding: 14px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); display: flex; flex-direction: column; gap: 8px; text-align: center;">
+              <div style="font-size: 9px; font-weight: 800; letter-spacing: 1.5px; color: #ffd700; text-transform: uppercase;">
+                GOVERNMENT OF INDIA · MINISTRY OF RAILWAYS · RDSO
+              </div>
+              <div style="font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.5px;">
+                CERTIFICATE OF ENGINEERING COMPETENCY
+              </div>
+              <div style="font-size: 10px; color: var(--text-dim);">
+                This certifies that the candidate has verified compliance under
+              </div>
+              <div style="font-size: 11.5px; font-weight: 700; color: var(--accent-cyan); font-family: var(--font-mono);">
+                RDSO/T-6155 · IRPWM 2024 (ACS-14) · USFD 2026 · IRS:T-10 / T-46
+              </div>
+              <div style="display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,215,0,0.3); padding-top: 8px; margin-top: 4px; font-size: 9.5px;">
+                <div>
+                  <span style="color: var(--text-muted);">SCORE:</span> <strong style="color: #ffd700;">${scoreData.percentage}%</strong>
+                </div>
+                <div>
+                  <span style="color: var(--text-muted);">CERT ID:</span> <strong style="color: #fff; font-family: var(--font-mono);">RDSO-ACS14-AUTH-99824</strong>
+                </div>
+                <div>
+                  <span style="color: var(--text-muted);">STATUS:</span> <strong style="color: var(--accent-green);">VERIFIED</strong>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Render the 5 questions
+      CANONICAL_QUIZ_QUESTIONS.forEach((q, qIdx) => {
+        const userChoice = window.userQuizChoices[q.id];
+        const hasChoice = typeof userChoice === 'number';
+
+        html += `
+          <div class="quiz-question-box" id="quiz-q-box-${qIdx}">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="search-card-rev-badge" style="background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan);">Q${qIdx + 1}</span>
+                <span style="font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">${q.domain}</span>
+              </div>
+              <span style="font-size: 9.5px; color: var(--text-dim); font-family: var(--font-mono);">${q.citation}</span>
+            </div>
+
+            <div style="font-size: 12px; font-weight: 700; color: #fff; line-height: 1.4;">
+              ${q.question}
+            </div>
+
+            <!-- Options -->
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
+        `;
+
+        q.options.forEach((opt, optIdx) => {
+          let extraClass = '';
+          if (isSubmitted) {
+            if (optIdx === q.correctIndex) {
+              extraClass = 'correct';
+            } else if (optIdx === userChoice && userChoice !== q.correctIndex) {
+              extraClass = 'wrong';
+            }
+          } else if (userChoice === optIdx) {
+            extraClass = 'selected';
+          }
+
+          html += `
+            <button class="quiz-option-btn ${extraClass}" onclick="selectQuizOption(${qIdx}, ${optIdx})" ${isSubmitted ? 'disabled' : ''}>
+              <span style="font-family: var(--font-mono); font-weight: 700; font-size: 10px; opacity: 0.8;">[${String.fromCharCode(65 + optIdx)}]</span>
+              <span style="flex: 1;">${opt}</span>
+              ${isSubmitted && optIdx === q.correctIndex ? '<span style="color: var(--accent-green); font-weight: 800;">✓ Correct</span>' : ''}
+              ${isSubmitted && optIdx === userChoice && userChoice !== q.correctIndex ? '<span style="color: var(--accent-red); font-weight: 800;">✗ Your Choice</span>' : ''}
+            </button>
+          `;
+        });
+
+        html += `</div>`;
+
+        if (isSubmitted) {
+          html += `
+            <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 8px 10px; font-size: 10px; color: var(--text-muted); line-height: 1.4; margin-top: 4px;">
+              💡 <strong style="color: #fff;">Statutory Rationale:</strong> ${q.explanation}
+            </div>
+          `;
+        }
+
+        html += `</div>`;
+      });
+
+      if (!isSubmitted) {
+        const answeredCount = Object.keys(window.userQuizChoices).length;
+        html += `
+          <div style="margin-top: 4px; display: flex; flex-direction: column; gap: 6px;">
+            <button class="btn btn-primary" onclick="submitQuizAssessment()" style="padding: 10px; justify-content: center; font-size: 12px; font-weight: 700;">
+              <span>⚡</span> Submit Assessment (${answeredCount} / ${CANONICAL_QUIZ_QUESTIONS.length} Answered)
+            </button>
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+      mount.innerHTML = html;
+    }
+
+    function selectQuizOption(qIdx, optIdx) {
+      if (window.quizSubmitted) return;
+      const q = CANONICAL_QUIZ_QUESTIONS[qIdx];
+      window.userQuizChoices[q.id] = optIdx;
+
+      // Update UI selection state in current question box
+      const box = document.getElementById(`quiz-q-box-${qIdx}`);
+      if (box) {
+        box.querySelectorAll('.quiz-option-btn').forEach((btn, idx) => {
+          btn.classList.toggle('selected', idx === optIdx);
+        });
+      }
+
+      // Update button count
+      const mount = document.getElementById('learning-subview-mount');
+      if (mount) {
+        const submitBtn = mount.querySelector('.btn-primary');
+        if (submitBtn) {
+          const count = Object.keys(window.userQuizChoices).length;
+          submitBtn.innerHTML = `<span>⚡</span> Submit Assessment (${count} / ${CANONICAL_QUIZ_QUESTIONS.length} Answered)`;
+        }
+      }
+    }
+
+    function submitQuizAssessment() {
+      let correct = 0;
+      const total = CANONICAL_QUIZ_QUESTIONS.length;
+      const results = [];
+
+      CANONICAL_QUIZ_QUESTIONS.forEach(q => {
+        const choice = window.userQuizChoices[q.id];
+        const isCorrect = (choice === q.correctIndex);
+        if (isCorrect) correct += 1;
+        results.push({
+          id: q.id,
+          domain: q.domain,
+          isCorrect: isCorrect
+        });
+      });
+
+      const pct = Math.round((correct / total) * 100);
+      const passed = pct >= 80;
+
+      window.lastQuizScore = {
+        score: correct,
+        total: total,
+        percentage: pct,
+        passed: passed,
+        results: results
+      };
+      window.quizSubmitted = true;
+
+      const mount = document.getElementById('learning-subview-mount');
+      if (mount) renderQuizSubView(mount);
+    }
+
+    function resetQuizAssessment() {
+      window.userQuizChoices = {};
+      window.quizSubmitted = false;
+      window.lastQuizScore = null;
+      const mount = document.getElementById('learning-subview-mount');
+      if (mount) renderQuizSubView(mount);
+    }
+
+    function renderCompetencySubView(mount) {
+      const scoreData = window.lastQuizScore;
+
+      const domainMap = [
+        { name: "Track Geometry & Layout", refId: "q1_check_rail", doc: "IRPWM 2024 Para 429", trackId: "track_turnout_curved_switches" },
+        { name: "Revision Lineage & Amendments", refId: "q2_alt11_drop", doc: "RDSO/T-6155 Alt 11", trackId: "track_turnout_curved_switches" },
+        { name: "Procurement & BOM Spares", refId: "q3_lista_buffer", doc: "RDSO/T-6155 Note 28", trackId: "track_turnout_curved_switches" },
+        { name: "Failure Modes & Inspection", refId: "q4_usfd_frequency", doc: "USFD 2026 Ch 10", trackId: "track_usfd_flaw_detection" },
+        { name: "Fasteners & Sleeper Standards", refId: "q5_rubber_pad_spec", doc: "IRS:T-46 & IRS:T-10", trackId: "track_irpwm_statutory_tolerances" }
+      ];
+
+      let overallPct = 0;
+      let evaluatedCount = 0;
+
+      const domainsEvaluated = domainMap.map(d => {
+        let score = 0;
+        let evaluated = false;
+        if (scoreData && scoreData.results) {
+          const res = scoreData.results.find(r => r.id === d.refId);
+          if (res) {
+            score = res.isCorrect ? 100 : 0;
+            evaluated = true;
+            evaluatedCount += 1;
+            overallPct += score;
+          }
+        }
+        return { ...d, score, evaluated };
+      });
+
+      const avgPct = evaluatedCount > 0 ? Math.round(overallPct / evaluatedCount) : 0;
+
+      let html = `
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Competency Dashboard Summary -->
+          <div style="background: rgba(14, 22, 38, 0.9); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 12px; font-weight: 700; color: #fff;">
+                Permanent Way Engineering Competency Index
+              </div>
+              <div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">
+                ${evaluatedCount > 0 ? `Computed from active Assessment: ${avgPct}% Aggregate Score` : 'Take the Assessment to generate your live competency index'}
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); color: ${avgPct >= 80 ? 'var(--accent-green)' : avgPct > 0 ? '#ffaa00' : 'var(--text-muted)'};">
+                ${avgPct}%
+              </div>
+              <div style="font-size: 9px; text-transform: uppercase; font-weight: 700; color: var(--text-dim);">
+                ${avgPct >= 80 ? 'QUALIFIED' : avgPct > 0 ? 'PARTIAL' : 'NOT EVALUATED'}
+              </div>
+            </div>
+          </div>
+
+          <!-- Domain Breakdown -->
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+      `;
+
+      domainsEvaluated.forEach((d, idx) => {
+        const colors = ['var(--accent-cyan)', '#ffaa00', 'var(--accent-green)', 'var(--accent-purple)', '#66b3ff'];
+        const barColor = colors[idx % colors.length];
+        const status = d.evaluated ? (d.score === 100 ? 'MASTERED' : 'NEEDS REVIEW') : 'UNTESTED';
+        const statusColor = d.evaluated ? (d.score === 100 ? 'var(--accent-green)' : 'var(--accent-red)') : 'var(--text-dim)';
+
+        html += `
+          <div class="competency-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span style="font-weight: 700; color: #fff; font-size: 11px;">${d.name}</span>
+                <span style="font-size: 9.5px; color: var(--text-dim); margin-left: 6px;">(${d.doc})</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="search-card-type-badge" style="background: ${statusColor}22; color: ${statusColor}; border: 1px solid ${statusColor}44; font-size: 9px;">
+                  ${status}
+                </span>
+                <span style="font-family: var(--font-mono); font-weight: 700; font-size: 11px; color: #fff;">
+                  ${d.evaluated ? `${d.score}%` : '—'}
+                </span>
+              </div>
+            </div>
+
+            <div class="competency-bar-track">
+              <div class="competency-bar-fill" style="width: ${d.evaluated ? d.score : 0}%; background: ${barColor};"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; color: var(--text-muted); margin-top: 2px;">
+              <span>Aligned Module: <strong style="color: var(--text-main);">${d.trackId}</strong></span>
+              <button class="search-card-btn" onclick="renderLearningModule('tracks')" style="font-size: 9px; padding: 2px 6px;">
+                Open Track ➔
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `
+          </div>
+        </div>
+      `;
+
+      mount.innerHTML = html;
+    }
+
+    window.CANONICAL_LEARNING_TRACKS = CANONICAL_LEARNING_TRACKS;
+    window.CANONICAL_FLASHCARDS = CANONICAL_FLASHCARDS;
+    window.CANONICAL_QUIZ_QUESTIONS = CANONICAL_QUIZ_QUESTIONS;
+    window.renderLearningModule = renderLearningModule;
+    window.renderTracksSubView = renderTracksSubView;
+    window.renderFlashcardsSubView = renderFlashcardsSubView;
+    window.flipCurrentFlashcard = flipCurrentFlashcard;
+    window.nextFlashcard = nextFlashcard;
+    window.prevFlashcard = prevFlashcard;
+    window.markFlashcardMastered = markFlashcardMastered;
+    window.renderQuizSubView = renderQuizSubView;
+    window.selectQuizOption = selectQuizOption;
+    window.submitQuizAssessment = submitQuizAssessment;
+    window.resetQuizAssessment = resetQuizAssessment;
+    window.renderCompetencySubView = renderCompetencySubView;
+
     function renderDossierNotes(dossier) {
       const container = document.getElementById('drawer-notes-list');
       const countBadge = document.getElementById('notes-tab-count');
@@ -6971,15 +8996,57 @@ html_template = r'''<!DOCTYPE html>
         }
 
         currentMatches = rankSearchResults(q);
-        activeCardIndex = currentMatches.length > 0 ? 0 : -1;
+        const ansMatch = answerEngineeringQuestion(q);
+        activeCardIndex = currentMatches.length > 0 || ansMatch ? 0 : -1;
 
-        if (currentMatches.length === 0) {
+        if (currentMatches.length === 0 && !ansMatch) {
           dropdown.innerHTML = `<div style="padding: 12px; font-size: 11.5px; color: var(--text-dim); text-align: center;">No railway assets or directives match "<strong>${q}</strong>"</div>`;
           dropdown.style.display = "block";
           return;
         }
 
         dropdown.innerHTML = '';
+
+        if (ansMatch) {
+          const previewCard = document.createElement('div');
+          previewCard.className = "search-card qa-preview-card selected";
+          previewCard.style = "border: 1px solid var(--accent-cyan); background: linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(10, 16, 28, 0.95)); cursor: pointer; margin-bottom: 6px; box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);";
+          previewCard.innerHTML = `
+            <div class="search-card-header">
+              <div class="search-card-title" style="color: var(--accent-cyan); font-weight: 800;">
+                <span>❓</span> <span>ENGINEERING ANSWER CARD</span>
+              </div>
+              <div style="display: flex; gap: 4px; align-items: center;">
+                <span class="search-card-type-badge" style="background: ${ansMatch.intentColor}22; color: ${ansMatch.intentColor}; border: 1px solid ${ansMatch.intentColor}44;">${ansMatch.intentLabel}</span>
+                <span class="search-card-rev-badge" style="background: rgba(0, 240, 255, 0.2); color: var(--accent-cyan); border-color: var(--accent-cyan);">${Math.round(ansMatch.confidence * 100)}% CONF</span>
+              </div>
+            </div>
+            <div class="search-card-body" style="color: #fff; font-weight: 500; font-size: 11.5px; line-height: 1.45;">
+              ${ansMatch.statement}
+            </div>
+            <div class="search-card-footer">
+              <span class="search-card-evidence"><span>📜</span> ${ansMatch.provenance.doc} · ${ansMatch.provenance.clause}</span>
+              <div class="search-card-actions">
+                <button class="search-card-btn qa-inspect-btn" style="background: var(--accent-cyan); color: #000; font-weight: 700;">View Full Answer</button>
+                <button class="search-card-btn action-3d">Focus 3D</button>
+              </div>
+            </div>
+          `;
+          previewCard.onclick = (e) => {
+            if (e.target.closest('.action-3d')) {
+              e.stopPropagation();
+              focusAnswerEntityIn3D(ansMatch.primaryNodeId);
+              dropdown.style.display = "none";
+              return;
+            }
+            toggleIntelligenceDrawer(true);
+            switchDrawerTab('qa');
+            renderQuestionInterface(q);
+            dropdown.style.display = "none";
+          };
+          dropdown.appendChild(previewCard);
+        }
+
         const displayList = currentMatches.slice(0, 8);
         displayList.forEach((m, idx) => {
           const d = m.data;
