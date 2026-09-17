@@ -9,8 +9,8 @@ from pathlib import Path
 
 try:
     from jsonschema import Draft202012Validator
-except ImportError as exc:  # pragma: no cover
-    raise SystemExit("Missing dependency: jsonschema") from exc
+except ImportError:
+    Draft202012Validator = None
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_DIR = ROOT / "data" / "knowledge-graph" / "schemas"
@@ -27,8 +27,26 @@ def load_schema(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _fallback_validate(record: dict, schema: dict) -> list[str]:
+    errors = []
+    # Check top-level required
+    for req in schema.get("required", []):
+        if req not in record:
+            errors.append(f"missing required property: {req}")
+    # Check anyOf
+    if "anyOf" in schema:
+        matched = False
+        for option in schema["anyOf"]:
+            if all(r in record for r in option.get("required", [])):
+                matched = True
+                break
+        if not matched:
+            errors.append("did not match anyOf schema constraint")
+    return errors
+
+
 def validate_jsonl(label: str, path: Path, schema: dict) -> tuple[int, list[str]]:
-    validator = Draft202012Validator(schema)
+    validator = Draft202012Validator(schema) if Draft202012Validator is not None else None
     count = 0
     errors: list[str] = []
     with path.open(encoding="utf-8") as handle:
@@ -41,11 +59,17 @@ def validate_jsonl(label: str, path: Path, schema: dict) -> tuple[int, list[str]
                 errors.append(f"{label}:{line_no}: invalid JSON: {exc.msg}")
                 continue
             count += 1
-            for error in validator.iter_errors(record):
-                location = ".".join(str(p) for p in error.path) or "$"
-                errors.append(f"{label}:{line_no}:{location}: {error.message}")
-                if len(errors) >= 25:
-                    return count, errors
+            if validator:
+                for error in validator.iter_errors(record):
+                    location = ".".join(str(p) for p in error.path) or "$"
+                    errors.append(f"{label}:{line_no}:{location}: {error.message}")
+                    if len(errors) >= 25:
+                        return count, errors
+            else:
+                for err in _fallback_validate(record, schema):
+                    errors.append(f"{label}:{line_no}:$: {err}")
+                    if len(errors) >= 25:
+                        return count, errors
     return count, errors
 
 

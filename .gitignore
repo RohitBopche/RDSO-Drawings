@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+chrome_kg_test_profile/
+chrome_kg_interlink_profile/
+chrome_kg_manuals_profile/
+artifacts/
+.DS_Store
+Thumbs.db

@@ -115,6 +115,18 @@ def main() -> int:
         if evidence_ids and not EVIDENCE_FILE.exists():
             add(errors, f"edges:{index}: evidence_ids present but {EVIDENCE_FILE.name} is missing")
 
+    alias_map: dict[str, str] = {}
+    alias_file = CANONICAL / "identity_aliases.json"
+    if alias_file.exists():
+        try:
+            alias_doc = json.loads(alias_file.read_text(encoding="utf-8"))
+            for mapping in alias_doc.get("mappings", []):
+                canon = mapping.get("canonical_id")
+                for alias in mapping.get("aliases", []):
+                    alias_map[alias] = canon
+        except Exception:
+            pass
+
     document_identity: dict[str, list[str]] = {}
     for record in document_records:
         if record.get("type") != "DOCUMENT":
@@ -124,7 +136,8 @@ def main() -> int:
             identity = " ".join(label.casefold().split())
             document_identity.setdefault(identity, []).append(str(record.get("id")))
     for identity, ids in document_identity.items():
-        if len(ids) > 1:
+        canonical_group = {alias_map.get(doc_id, doc_id) for doc_id in ids}
+        if len(canonical_group) > 1:
             add(errors, f"documents: duplicate logical identity {identity!r}: {', '.join(ids)}")
 
     for index, requirement in enumerate(requirement_records, 1):
