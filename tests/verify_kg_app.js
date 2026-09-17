@@ -13,6 +13,7 @@ const chromeCandidates = [
 const chromePath = chromeCandidates.find(p => fs.existsSync(p)) || chromeCandidates[0];
 const targetUrl = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
 const artifactDir = [
+    "C:\\Users\\LENOVO\\.gemini\\antigravity-ide\\brain\\28ef0a3f-1b2d-4d16-a24b-878459c10a0f",
     "C:\\Users\\LENOVO\\.gemini\\antigravity-ide\\brain\\ea8fa10c-88f4-4a72-b9b0-d40e78abc040",
     path.join(__dirname, '..', 'artifacts')
 ].find(d => fs.existsSync(d)) || path.join(__dirname, '..', 'artifacts');
@@ -322,6 +323,81 @@ async function run() {
         console.log(`- Linked Notes (from RDSO/T-6155): ${compChairData.linkedNotesCount}`);
 
         await client.captureScreenshot('rdso_comp_chair_linked_drawer.png');
+
+        // Test 8: Phase 1 Search Autocomplete, Card Layout, Overview Tab & Breadcrumbs
+        console.log('\n--- TEST 8: Phase 1 Search Autocomplete & Overview Intelligence ---');
+        
+        // Step A: Trigger search for "T-6155"
+        const searchDropdownData = await client.evaluate(`
+            (() => {
+                const input = document.getElementById('graph-search-input');
+                input.value = 'T-6155';
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                const dropdown = document.getElementById('search-dropdown');
+                const items = dropdown.querySelectorAll('.search-dropdown-item');
+                const firstCard = items[0];
+                return {
+                    isActive: dropdown.classList.contains('active'),
+                    itemCount: items.length,
+                    firstCardTitle: firstCard ? firstCard.querySelector('.search-card-title')?.innerText : null,
+                    firstCardBadge: firstCard ? firstCard.querySelector('.search-card-badge')?.innerText : null,
+                    firstCardRev: firstCard ? firstCard.querySelector('.search-card-rev')?.innerText : null,
+                    firstCardMeta: firstCard ? firstCard.querySelector('.search-card-meta')?.innerText : null
+                };
+            })()
+        `);
+        console.log('Search Dropdown Evaluation:');
+        console.log(`- Dropdown active: ${searchDropdownData.isActive}`);
+        console.log(`- Item count: ${searchDropdownData.itemCount}`);
+        console.log(`- Top item: ${searchDropdownData.firstCardTitle} [${searchDropdownData.firstCardBadge}] [${searchDropdownData.firstCardRev}]`);
+        console.log(`- Top item meta: ${searchDropdownData.firstCardMeta}`);
+
+        await client.captureScreenshot('rdso_phase1_search_dropdown.png');
+
+        // Step B: Select top item from search dropdown
+        const overviewData = await client.evaluate(`
+            (() => {
+                const firstCard = document.querySelector('#search-dropdown .search-dropdown-item');
+                if (firstCard) firstCard.click();
+                
+                const breadcrumbBar = document.getElementById('drawer-breadcrumb-bar');
+                const overviewTab = document.getElementById('tab-pane-overview');
+                const heroTitle = overviewTab ? overviewTab.querySelector('.overview-hero-title')?.innerText : null;
+                const heroRev = overviewTab ? overviewTab.querySelector('.overview-hero-rev')?.innerText : null;
+                
+                const paramItems = overviewTab ? Array.from(overviewTab.querySelectorAll('.param-item')).map(p => {
+                    return p.querySelector('.param-label')?.innerText + ': ' + p.querySelector('.param-value')?.innerText;
+                }) : [];
+                
+                const altEvents = overviewTab ? Array.from(overviewTab.querySelectorAll('.alt-event')).map(e => {
+                    return e.querySelector('.alt-num')?.innerText + ' (' + e.querySelector('.alt-date')?.innerText + '): ' + e.querySelector('.alt-desc')?.innerText;
+                }) : [];
+
+                const pillCount = overviewTab ? overviewTab.querySelectorAll('.related-pill').length : 0;
+                const samplePills = overviewTab ? Array.from(overviewTab.querySelectorAll('.related-pill')).slice(0, 3).map(p => p.innerText.replace(/\\s+/g, ' ').trim()) : [];
+
+                return {
+                    breadcrumbs: breadcrumbBar ? breadcrumbBar.innerText.replace(/\\s+/g, ' ').trim() : null,
+                    heroTitle,
+                    heroRev,
+                    parametersCount: paramItems.length,
+                    sampleParams: paramItems.slice(0, 4),
+                    alterationsCount: altEvents.length,
+                    sampleAlterations: altEvents.slice(0, 2),
+                    relatedPillCount: pillCount,
+                    samplePills
+                };
+            })()
+        `);
+        console.log('Overview Tab Evaluation:');
+        console.log(`- Breadcrumbs: ${overviewData.breadcrumbs}`);
+        console.log(`- Hero Title: ${overviewData.heroTitle}`);
+        console.log(`- Hero Revision: ${overviewData.heroRev}`);
+        console.log(`- Engineering Parameters (${overviewData.parametersCount}):\n  ${overviewData.sampleParams.join('\n  ')}`);
+        console.log(`- Alteration History (${overviewData.alterationsCount}):\n  ${overviewData.sampleAlterations.join('\n  ')}`);
+        console.log(`- Related 1-hop pills (${overviewData.relatedPillCount}): ${overviewData.samplePills.join(' | ')}`);
+
+        await client.captureScreenshot('rdso_phase1_overview_tab.png');
 
         console.log('\n[SUCCESS] All verification tests passed flawlessly!');
     } catch (err) {
