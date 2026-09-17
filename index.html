@@ -1360,6 +1360,12 @@
       border-bottom: 1px solid var(--border-subtle);
       background: rgba(10, 16, 28, 0.95);
       overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .drawer-nav-tabs::-webkit-scrollbar {
+      display: none;
     }
 
     .drawer-tab {
@@ -3600,6 +3606,166 @@
           <p style="font-size:12px; line-height:1.5; color:#e0e8f8;">${eqDesc}</p>
           <div style="margin-top:8px; font-size:11px; color:var(--accent-green);">Source Code: ${eqSource}</div>
         `;
+      } else if (data.type === "REVISION" || data.domain === "revision" || data.id.startsWith("rev_")) {
+        const altNum = data.alt || parseInt((data.id.match(/alt(\d+)/i) || [])[1] || 11);
+        const parentDwg = data.id.includes("6154") ? "RDSO/T-6154" : (currentActiveDossier.drawing_number || "RDSO/T-6155");
+        const specs = data.specs || {};
+        const effDate = specs["Effective Date"] || "";
+        const upgrade = specs["Key Upgrade"] || "";
+        const iface = specs["Interface"] || specs["Specification"] || specs["Coverage"] || "";
+        const rootCause = specs["Root Cause"] || "";
+
+        // Connected Revisions & Notes
+        const supersedesEdges = kgPhysicsEdges.filter(e => (e.from === data.id || e.to === data.id) && e.rel === "SUPERSEDES");
+        const precedingRev = supersedesEdges.find(e => e.to === data.id);
+        const succeedingRev = supersedesEdges.find(e => e.from === data.id);
+        const introNotes = kgPhysicsEdges.filter(e => e.from === data.id && e.rel === "INTRODUCED_IN");
+
+        let lineageSummary = [];
+        if (precedingRev) {
+          const pNode = kgPhysicsNodes.find(n => n.data.id === precedingRev.from);
+          lineageSummary.push(`Supersedes ${pNode ? pNode.data.label : precedingRev.from}`);
+        }
+        if (succeedingRev) {
+          const sNode = kgPhysicsNodes.find(n => n.data.id === succeedingRev.to);
+          lineageSummary.push(`Superseded by ${sNode ? sNode.data.label : succeedingRev.to}`);
+        }
+        if (introNotes.length > 0) {
+          const nNames = introNotes.map(e => {
+            const nNode = kgPhysicsNodes.find(n => n.data.id === e.to);
+            return nNode ? nNode.data.label : e.to;
+          });
+          lineageSummary.push(`Introduced ${nNames.join(', ')}`);
+        }
+
+        descEl.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 11.5px; line-height: 1.45; color: #e0e8f8;">
+              ${data.desc}
+            </div>
+
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 10px;">
+              <span style="background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3); color: var(--accent-cyan); padding: 2px 6px; border-radius: 4px; font-weight: 600;">
+                📜 ${parentDwg} (ALT ${altNum})
+              </span>
+              ${effDate ? `
+                <span style="background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.3); color: var(--accent-green); padding: 2px 6px; border-radius: 4px; font-weight: 600;">
+                  📅 ${effDate}
+                </span>
+              ` : ''}
+              <span style="background: rgba(157, 78, 221, 0.15); border: 1px solid rgba(157, 78, 221, 0.35); color: var(--text-main); padding: 2px 6px; border-radius: 4px;">
+                ${altNum === 13 ? '★ Current Release' : 'Archived Alteration'}
+              </span>
+            </div>
+
+            <div style="background: rgba(14, 22, 38, 0.6); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 6px 8px;">
+              <div style="font-size: 9.5px; font-weight: 700; color: var(--accent-yellow); text-transform: uppercase; margin-bottom: 4px;">Alteration Specifications:</div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 10.5px;">
+                ${upgrade ? `<div style="color: var(--text-dim);"><strong style="color: var(--text-main);">Key Upgrade:</strong> ${upgrade}</div>` : ''}
+                ${effDate ? `<div style="color: var(--text-dim);"><strong style="color: var(--text-main);">Effective Date:</strong> ${effDate}</div>` : ''}
+                ${iface ? `<div style="color: var(--text-dim);"><strong style="color: var(--text-main);">Interface:</strong> ${iface}</div>` : ''}
+                ${rootCause ? `<div style="color: var(--text-dim);"><strong style="color: var(--text-main);">Root Cause:</strong> ${rootCause}</div>` : ''}
+              </div>
+            </div>
+
+            ${lineageSummary.length > 0 ? `
+              <div style="font-size: 10px; color: var(--text-muted);">
+                <strong style="color: var(--accent-cyan);">Revision Lineage:</strong> ${lineageSummary.join(' · ')}.
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+        const provBox = document.getElementById('answer-provenance-box');
+        provBox.style.display = "flex";
+        document.getElementById('prov-dwg-title').innerText = `${parentDwg} (ALT ${altNum}) Alteration Ledger`;
+        document.getElementById('prov-meta-line').innerText = `Region: Title Block Alteration History | Method: Tabular Verification`;
+        const revCrop = "crops/t6155_title_alt13.png";
+        document.getElementById('answer-crop-thumb').src = revCrop;
+        currentActiveCrop = revCrop;
+
+        const toolbar = document.getElementById('answer-card-toolbar');
+        if (toolbar) {
+          toolbar.style.display = "flex";
+          toolbar.innerHTML = `
+            <button class="answer-tool-btn" id="btn-answer-blueprint" onclick="openFullscreenBlueprint('crops/t6155_title_alt13.png', '${data.label}')">
+              <span>🔍</span> Revision Crop
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-revisions" onclick="switchDrawerTab('revisions')">
+              <span>⏳</span> Compare Alt
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-paths" onclick="renderPathFinderUI('${data.id}', 'std_irs_t10'); switchDrawerTab('paths');">
+              <span>🛤️</span> Trace Paths
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-notes" onclick="switchDrawerTab('notes')">
+              <span>📑</span> View Notes
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-overview" onclick="switchDrawerTab('overview')">
+              <span>📋</span> Node Dossier
+            </button>
+          `;
+        }
+      } else if (data.type === "STANDARD" || data.domain === "standard" || data.id.startsWith("std_")) {
+        const specs = data.specs || {};
+        const specEntries = Object.entries(specs);
+
+        descEl.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 11.5px; line-height: 1.45; color: #e0e8f8;">
+              ${data.desc}
+            </div>
+
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 10px;">
+              <span style="background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3); color: var(--accent-cyan); padding: 2px 6px; border-radius: 4px; font-weight: 600;">
+                ⚖️ STATUTORY STANDARD
+              </span>
+              <span style="background: rgba(157, 78, 221, 0.15); border: 1px solid rgba(157, 78, 221, 0.35); color: var(--text-main); padding: 2px 6px; border-radius: 4px;">
+                🏛️ RDSO Track Directorate
+              </span>
+            </div>
+
+            ${specEntries.length > 0 ? `
+              <div style="background: rgba(14, 22, 38, 0.6); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 6px 8px;">
+                <div style="font-size: 9.5px; font-weight: 700; color: var(--accent-yellow); text-transform: uppercase; margin-bottom: 4px;">Standard Parameters:</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 10.5px;">
+                  ${specEntries.map(([k, v]) => `
+                    <div style="color: var(--text-dim);"><strong style="color: var(--text-main);">${k}:</strong> ${v}</div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+
+        const provBox = document.getElementById('answer-provenance-box');
+        provBox.style.display = "flex";
+        document.getElementById('prov-dwg-title').innerText = `${data.label}`;
+        document.getElementById('prov-meta-line').innerText = `Standard: IRS / Bureau of Indian Standards`;
+        const stdCrop = "crops/t6155_notes_full.png";
+        document.getElementById('answer-crop-thumb').src = stdCrop;
+        currentActiveCrop = stdCrop;
+
+        const toolbar = document.getElementById('answer-card-toolbar');
+        if (toolbar) {
+          toolbar.style.display = "flex";
+          toolbar.innerHTML = `
+            <button class="answer-tool-btn" id="btn-answer-blueprint" onclick="openFullscreenActiveBlueprint()">
+              <span>🔍</span> Blueprint
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-paths" onclick="renderPathFinderUI('${data.id}', 'drg_6155'); switchDrawerTab('paths');">
+              <span>🛤️</span> Trace Paths
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-conflicts" onclick="switchDrawerTab('conflicts')">
+              <span>⚖️</span> Conflicts
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-manuals" onclick="switchDrawerTab('manuals')">
+              <span>📖</span> Manuals TOC
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-overview" onclick="switchDrawerTab('overview')">
+              <span>📋</span> Node Dossier
+            </button>
+          `;
+        }
       } else {
         const specs = data.specs || {};
         const specEntries = Object.entries(specs);
@@ -3650,47 +3816,46 @@
             </div>
           </div>
         `;
-      }
-      
-      const provBox = document.getElementById('answer-provenance-box');
-      const linkedFact = rawKGFacts.find(f => f.subject_id === data.id || f.object_id === data.id);
-      if (linkedFact && linkedFact.source) {
-        provBox.style.display = "flex";
-        document.getElementById('prov-dwg-title').innerText = `${linkedFact.source.drawing_id} (${linkedFact.source.revision})`;
-        document.getElementById('prov-meta-line').innerText = `Region: ${linkedFact.source.region} | Method: ${linkedFact.extraction_method}`;
-        const cropImg = (linkedFact.source.crop && linkedFact.source.crop.endsWith('.png')) ? linkedFact.source.crop : "crops/t6155_notes_full.png";
-        document.getElementById('answer-crop-thumb').src = cropImg;
-        currentActiveCrop = cropImg;
-      } else {
-        provBox.style.display = "flex";
-        document.getElementById('prov-dwg-title').innerText = `${currentActiveDossier.drawing_number} (ALT ${currentActiveDossier.alteration_number || 13})`;
-        document.getElementById('prov-meta-line').innerText = `Region: Master Blueprint | Method: Coordinate Crop`;
-        const firstCrop = Object.values(currentActiveDossier.crops || {})[0] || "crops/t6155_notes_full.png";
-        document.getElementById('answer-crop-thumb').src = firstCrop;
-        currentActiveCrop = firstCrop;
-      }
 
-      // Populate Standardized Answer Card Action Toolbar (Blueprint §15)
-      const toolbar = document.getElementById('answer-card-toolbar');
-      if (toolbar) {
-        toolbar.style.display = "flex";
-        toolbar.innerHTML = `
-          <button class="answer-tool-btn" id="btn-answer-blueprint" onclick="openFullscreenActiveBlueprint()">
-            <span>🔍</span> Blueprint Crop
-          </button>
-          <button class="answer-tool-btn" id="btn-answer-twin" onclick="switchDrawerTab('twin')">
-            <span>📦</span> 3D Twin
-          </button>
-          <button class="answer-tool-btn" id="btn-answer-paths" onclick="renderPathFinderUI('${data.id}', 'std_irs_t10'); switchDrawerTab('paths');">
-            <span>🛤️</span> Trace Paths
-          </button>
-          <button class="answer-tool-btn" id="btn-answer-inspection" onclick="switchDrawerTab('inspection')">
-            <span>📋</span> Field Inspection
-          </button>
-          <button class="answer-tool-btn" id="btn-answer-procurement" onclick="switchDrawerTab('procurement')">
-            <span>📦</span> Spares & BOM
-          </button>
-        `;
+        const provBox = document.getElementById('answer-provenance-box');
+        const linkedFact = rawKGFacts.find(f => f.subject_id === data.id || f.object_id === data.id);
+        if (linkedFact && linkedFact.source) {
+          provBox.style.display = "flex";
+          document.getElementById('prov-dwg-title').innerText = `${linkedFact.source.drawing_id} (${linkedFact.source.revision})`;
+          document.getElementById('prov-meta-line').innerText = `Region: ${linkedFact.source.region} | Method: ${linkedFact.extraction_method}`;
+          const cropImg = (linkedFact.source.crop && linkedFact.source.crop.endsWith('.png')) ? linkedFact.source.crop : "crops/t6155_notes_full.png";
+          document.getElementById('answer-crop-thumb').src = cropImg;
+          currentActiveCrop = cropImg;
+        } else {
+          provBox.style.display = "flex";
+          document.getElementById('prov-dwg-title').innerText = `${currentActiveDossier.drawing_number} (ALT ${currentActiveDossier.alteration_number || 13})`;
+          document.getElementById('prov-meta-line').innerText = `Region: Master Blueprint | Method: Coordinate Crop`;
+          const firstCrop = Object.values(currentActiveDossier.crops || {})[0] || "crops/t6155_notes_full.png";
+          document.getElementById('answer-crop-thumb').src = firstCrop;
+          currentActiveCrop = firstCrop;
+        }
+
+        const toolbar = document.getElementById('answer-card-toolbar');
+        if (toolbar) {
+          toolbar.style.display = "flex";
+          toolbar.innerHTML = `
+            <button class="answer-tool-btn" id="btn-answer-blueprint" onclick="openFullscreenActiveBlueprint()">
+              <span>🔍</span> Blueprint Crop
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-twin" onclick="switchDrawerTab('twin')">
+              <span>📦</span> 3D Twin
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-paths" onclick="renderPathFinderUI('${data.id}', 'std_irs_t10'); switchDrawerTab('paths');">
+              <span>🛤️</span> Trace Paths
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-inspection" onclick="switchDrawerTab('inspection')">
+              <span>📋</span> Field Inspection
+            </button>
+            <button class="answer-tool-btn" id="btn-answer-procurement" onclick="switchDrawerTab('procurement')">
+              <span>📦</span> Spares & BOM
+            </button>
+          `;
+        }
       }
 
       // 2. Render Notes Tab
@@ -4077,41 +4242,53 @@
           `;
         }
 
+        // Governing Drawing Label & Metadata accurately derived:
+        let govDrawing = `${currentActiveDossier.drawing_number} (ALT ${currentActiveDossier.alteration_number || 13})`;
+        let assetTwinLabel = "Digital Twin Asset";
+        let assetTwinValue = data.twinAsset || "Standard Geometry";
+        let riskHeader = "Derailment Hazard & Safeguards";
+        let riskText = "Strict adherence to dimensional tolerances, torque limits (550–650 N·m), and periodic USFD ultrasonic scans prevents derailment hazards.";
+        let riskBadge = "SAFETY CRITICAL";
+        let riskSubnote = "Mandatory maintenance compliance governed by IRPWM 2024 Chapter 4 and IRS specifications.";
+
+        if (data.type === "REVISION" || data.domain === "revision" || data.id.startsWith("rev_")) {
+          const revNum = data.alt || parseInt((data.id.match(/alt(\d+)/i) || [])[1] || 11);
+          govDrawing = `${currentActiveDossier.drawing_number} (ALT ${revNum})`;
+          assetTwinLabel = "Alteration Category";
+          assetTwinValue = "Engineering Revision Directive";
+          riskHeader = "Operational Rationale & Clearance Safeguards";
+          riskBadge = "SPECIFICATION DIRECTIVE";
+          if (data.specs && data.specs["Interface"]) {
+            riskText = `Interface Integrity: Mandated 222 mm drop bend on Detail 'B' to clear ${data.specs["Interface"]} drive rod; eliminates mechanical interlock binding during point operation.`;
+          } else if (data.specs && data.specs["Root Cause"]) {
+            riskText = `Root Cause Remedy: ${data.specs["Root Cause"]}. Mandatory compliance prevents fatigue failure.`;
+          } else {
+            riskText = `Governing engineering alteration; mandatory compliance across Broad Gauge turnout installations.`;
+          }
+          riskSubnote = `Governed by RDSO Track Directorate alteration notification for ${govDrawing}.`;
+        } else if (data.type === "STANDARD" || data.domain === "standard" || data.id.startsWith("std_")) {
+          govDrawing = "IRS / RDSO (Multi-Turnout Scope)";
+          assetTwinLabel = "Standard Authority";
+          assetTwinValue = "RDSO Track Directorate / Railway Board";
+          riskHeader = "Statutory Regulatory Directives";
+          riskBadge = "REGULATORY MANDATE";
+          riskText = `Mandatory compliance under Indian Railways General Rules & IRPWM; unauthorized deviation constitutes a safety violation.`;
+          riskSubnote = `Governed by Railway Board standard enforcement directives.`;
+        } else if (data.id === "comp_detailb") {
+          riskText = `Ensure 222 mm drop bend clears S&T Clamp Point Lock drive rod; mandatory 115 mm switch throw must be maintained without friction or obstruction per IRPWM Para 408.`;
+          riskSubnote = `Mandatory inspection per IRPWM Para 408 and RDSO/T-6155 Note 21.`;
+        } else if (data.desc && (data.desc.toLowerCase().includes('fracture') || data.desc.toLowerCase().includes('wear'))) {
+          riskText = data.desc;
+        }
+
         // Visual Evidence Crop
         const linkedFact = rawKGFacts.find(f => f.subject_id === data.id || f.object_id === data.id);
         const cropImg = (linkedFact && linkedFact.source && linkedFact.source.crop && linkedFact.source.crop.endsWith('.png')) 
           ? linkedFact.source.crop 
-          : (Object.values(currentActiveDossier.crops || {})[0] || "crops/t6155_notes_full.png");
-        const cropRegion = linkedFact?.source?.region || "Master Blueprint Assembly";
-
-        // Failure Risk Text
-        const riskText = (data.desc && (data.desc.toLowerCase().includes('fracture') || data.desc.toLowerCase().includes('wear'))) || data.domain === 'defect' 
-          ? data.desc 
-          : "Strict adherence to dimensional tolerances, torque limits (550–650 N·m), and periodic USFD ultrasonic scans prevents derailment hazards.";
+          : ((data.type === "REVISION" || data.domain === "revision") ? "crops/t6155_title_alt13.png" : (Object.values(currentActiveDossier.crops || {})[0] || "crops/t6155_notes_full.png"));
+        const cropRegion = linkedFact?.source?.region || ((data.type === "REVISION" || data.domain === "revision") ? "Title Block Revision Ledger" : "Master Blueprint Assembly");
 
         container.innerHTML = `
-          <!-- Fast Action Bar for Selected Node -->
-          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <button class="btn btn-primary" onclick="focusNodeIn3D('${data.id}')" style="flex: 1; min-width: 120px; justify-content: center; gap: 6px;">
-              <span>🌐</span> Focus in 3D
-            </button>
-            <button class="btn" onclick="switchDrawerTab('twin')" style="padding: 6px 10px; font-size: 11px;">
-              <span>📦</span> 3D Twin
-            </button>
-            <button class="btn" onclick="openFullscreenBlueprint('${cropImg}', '${data.label}: Evidence Crop')" style="padding: 6px 10px; font-size: 11px;">
-              <span>🔍</span> Blueprint
-            </button>
-            <button class="btn" onclick="renderPathFinderUI('${data.id}', 'std_irs_t10'); switchDrawerTab('paths');" style="padding: 6px 10px; font-size: 11px;">
-              <span>🛤️</span> Paths
-            </button>
-            <button class="btn" onclick="switchDrawerTab('inspection')" style="padding: 6px 10px; font-size: 11px;">
-              <span>📋</span> Inspection
-            </button>
-            <button class="btn" onclick="switchDrawerTab('procurement')" style="padding: 6px 10px; font-size: 11px;">
-              <span>📦</span> Spares
-            </button>
-          </div>
-
           <!-- Section 1: Entity Identity & Classification -->
           <div class="drawing-section">
             <div class="drawing-section-header">
@@ -4128,7 +4305,7 @@
               <div class="drawing-meta-item">
                 <div class="drawing-meta-label">Governing Drawing</div>
                 <div class="drawing-meta-value" style="color: var(--accent-yellow); font-family: var(--font-mono);">
-                  ${currentActiveDossier.drawing_number} (ALT ${currentActiveDossier.alteration_number || 13})
+                  ${govDrawing}
                 </div>
               </div>
               <div class="drawing-meta-item" style="grid-column: span 2;">
@@ -4140,8 +4317,8 @@
                 <div class="drawing-meta-value" style="color: var(--accent-green); font-family: var(--font-mono);">✓ 100% CANONICAL</div>
               </div>
               <div class="drawing-meta-item">
-                <div class="drawing-meta-label">Digital Twin Asset</div>
-                <div class="drawing-meta-value" style="color: var(--accent-purple); font-family: var(--font-mono);">${data.twinAsset || 'Standard Geometry'}</div>
+                <div class="drawing-meta-label">${assetTwinLabel}</div>
+                <div class="drawing-meta-value" style="color: var(--accent-purple); font-family: var(--font-mono);">${assetTwinValue}</div>
               </div>
             </div>
           </div>
@@ -4187,14 +4364,14 @@
           <!-- Section 5: Safety Risk & Preventative Safeguards -->
           <div class="drawing-section">
             <div class="drawing-section-header">
-              <div class="drawing-section-title"><span>⚠️</span> Derailment Hazard & Safeguards</div>
-              <span class="drawing-section-badge" style="color: var(--accent-red); border-color: rgba(255, 51, 102, 0.3);">SAFETY CRITICAL</span>
+              <div class="drawing-section-title"><span>⚠️</span> ${riskHeader}</div>
+              <span class="drawing-section-badge" style="color: var(--accent-red); border-color: rgba(255, 51, 102, 0.3);">${riskBadge}</span>
             </div>
             <div style="background: rgba(255, 51, 102, 0.08); border-left: 3px solid var(--accent-red); padding: 8px 10px; border-radius: 0 5px 5px 0; font-size: 11px; line-height: 1.45; color: #f8d7da;">
               ${riskText}
             </div>
             <div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">
-              Mandatory maintenance compliance governed by IRPWM 2024 Chapter 4 and IRS specifications.
+              ${riskSubnote}
             </div>
           </div>
 
