@@ -575,11 +575,14 @@ def build_canonical_knowledge_graph():
             "doc_tmm_2020": (-8, 11, -10),
             "doc_stmm_2024": (-10, 10, 8)
         }
-        for mid, mobj in man_data.get("manuals", {}).items():
+        man_manuals = man_data.get("manuals", {})
+        if isinstance(man_manuals, list):
+            man_manuals = {m.get("id", m.get("document_id", f"doc_{i}")): m for i, m in enumerate(man_manuals)}
+        for mid, mobj in man_manuals.items():
             cx, cy, cz = manual_coords.get(mid, (0, 10, 0))
-            add_entity(mid, mobj["title"], "DOCUMENT", "manual", "#ff007f",
-                       f"{mobj['scope']} ({mobj['edition']})",
-                       {"Authority": mobj["issuing_authority"], "Pages": mobj["pages"], "File": mobj["filename"]},
+            add_entity(mid, mobj.get("title", mid), "DOCUMENT", "manual", "#ff007f",
+                       f"{mobj.get('scope', '')} ({mobj.get('edition', '')})",
+                       {"Authority": mobj.get("issuing_authority", "RDSO"), "Pages": mobj.get("pages", 0), "File": mobj.get("filename", "")},
                        x=cx, y=cy, z=cz, alt=13)
 
         # 14.2 CLAUSES & REGULATORY SPECIFICATIONS / SOPS
@@ -597,16 +600,18 @@ def build_canonical_knowledge_graph():
             "sop_unimat_switch_tamping": (-6, 9, -8),
             "sop_stmm_bolt_chamfering": (-9, 8, 10)
         }
-        for cl in man_data.get("clauses", []):
-            cid = cl["id"]
+        man_clauses = man_data.get("clauses", {}).values() if isinstance(man_data.get("clauses"), dict) else man_data.get("clauses", [])
+        for cl in man_clauses:
+            cid = cl.get("id")
+            if not cid: continue
             cx, cy, cz = clause_coords.get(cid, (0, 8, 0))
-            rule_sample = cl["governing_rules"][0] if cl.get("governing_rules") else ""
-            add_entity(cid, cl["title"], cl.get("category", "SPECIFICATION"), "manual", "#00f5d4",
-                       cl["verbatim_text"][:280] + "...",
+            rule_sample = cl.get("governing_rules", [""])[0] if cl.get("governing_rules") else ""
+            add_entity(cid, cl.get("title", cid), cl.get("category", "SPECIFICATION"), "manual", "#00f5d4",
+                       cl.get("verbatim_text", cl.get("desc", ""))[:280] + "...",
                        {
-                           "Manual Ref": cl["ref"],
-                           "Chapter": cl["chapter"],
-                           "Page": f"Page {cl['page']}",
+                           "Manual Ref": cl.get("ref", ""),
+                           "Chapter": cl.get("chapter", ""),
+                           "Page": f"Page {cl.get('page', '')}",
                            "Key Rule": rule_sample
                        },
                        x=cx, y=cy, z=cz, alt=13)
@@ -621,16 +626,18 @@ def build_canonical_knowledge_graph():
             "tol_atweld_gap": (9, 6, 11),
             "tol_crossing_gauge": (8, 6, -2)
         }
-        for tol in man_data.get("tolerances", []):
-            tid = tol["id"]
+        man_tolerances = man_data.get("tolerances", {}).values() if isinstance(man_data.get("tolerances"), dict) else man_data.get("tolerances", [])
+        for tol in man_tolerances:
+            tid = tol.get("id")
+            if not tid: continue
             cx, cy, cz = tol_coords.get(tid, (0, 6, 0))
-            add_entity(tid, tol["label"], "TOLERANCE", "tolerance", "#fee440",
-                       tol["purpose"],
+            add_entity(tid, tol.get("label", tid), "TOLERANCE", "tolerance", "#fee440",
+                       tol.get("purpose", tol.get("desc", "")),
                        {
-                           "Value": tol["value"],
-                           "Min": f"{tol['min_val']} mm",
-                           "Max": f"{tol['max_val']} mm",
-                           "Clause": tol["clause"]
+                           "Value": tol.get("value", ""),
+                           "Min": tol.get("min_val", ""),
+                           "Max": tol.get("max_val", ""),
+                           "Unit": tol.get("unit", "")
                        },
                        x=cx, y=cy, z=cz, alt=13)
 

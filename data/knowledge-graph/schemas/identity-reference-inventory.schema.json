@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rdso-drawings.local/schemas/identity-reference-inventory.schema.json",
+  "title": "Canonical Identity Reference Inventory",
+  "description": "Machine-readable, non-destructive inventory of legacy canonical-identity references.",
+  "type": "object",
+  "required": ["schema_version", "generated_by", "repository_root", "aliases", "references"],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "generated_by": {"type": "string", "const": "scripts/audit_identity_references.py"},
+    "repository_root": {"type": "string", "minLength": 1},
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["alias", "canonical_id"],
+        "properties": {
+          "alias": {"type": "string", "minLength": 1},
+          "canonical_id": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "line", "alias", "canonical_id", "context"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "line": {"type": "integer", "minimum": 1},
+          "alias": {"type": "string", "minLength": 1},
+          "canonical_id": {"type": "string", "minLength": 1},
+          "context": {"type": "string", "maxLength": 240}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

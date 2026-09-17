@@ -8,17 +8,18 @@ import json
 import os
 import sys
 
-# Controlled Entity Vocabularies from Blueprint Section 5
+# Controlled Entity Vocabularies from Blueprint Section 5 & REKG Architecture
 CONTROLLED_ENTITY_TYPES = {
     "DOCUMENT", "DRAWING", "REVISION", "COMPONENT", "SUBASSEMBLY", "ASSEMBLY",
     "RAIL", "TONGUE_RAIL", "STOCK_RAIL", "SLEEPER", "FASTENER", "TIE_BAR",
     "SLIDE_CHAIR", "POINT_MACHINE", "LOCKING_DEVICE", "DIMENSION", "TOLERANCE",
     "MATERIAL", "STANDARD", "SPECIFICATION", "NOTE", "BOM_ITEM", "SPARE_PART",
-    "INTERFACE", "CONSTRAINT", "FAILURE_MODE", "HAZARD", "INSPECTION",
-    "MAINTENANCE_ACTION", "SOP", "FIELD_OBSERVATION", "LOCATION", "EQUIPMENT", "ZONE"
+    "INTERFACE", "CONSTRAINT", "FAILURE_MODE", "HAZARD", "FAILUREMODE", "INSPECTION",
+    "MAINTENANCE_ACTION", "SOP", "FIELD_OBSERVATION", "LOCATION", "EQUIPMENT", "ZONE",
+    "CLAUSE", "CHAPTER", "REQUIREMENT", "PROCEDURE"
 }
 
-# Controlled Relationship Vocabularies from Blueprint Section 6
+# Controlled Relationship Vocabularies from Blueprint Section 6 & REKG Architecture
 CONTROLLED_PREDICATES = {
     "HAS_REVISION", "SUPERSEDES", "PRECEDES", "REFERENCES", "GOVERNS", "SPECIFIES",
     "CONTAINS", "HAS_NOTE", "HAS_DIMENSION", "HAS_TOLERANCE", "HAS_BOM_ITEM",
@@ -26,7 +27,8 @@ CONTROLLED_PREDICATES = {
     "INTERFACES_WITH", "CONNECTED_TO", "OPERATED_BY", "CONTROLLED_BY", "REQUIRES",
     "INSPECTED_BY", "MAINTAINED_BY", "HAS_FAILURE_MODE", "CAN_CAUSE", "MITIGATED_BY",
     "APPLIES_TO", "DERIVED_FROM", "SUPPORTED_BY", "CONFLICTS_WITH", "VALID_DURING",
-    "MODIFIED_IN", "INTRODUCED_IN", "REMOVED_IN", "CONTAINS_SLEEPER"
+    "MODIFIED_IN", "INTRODUCED_IN", "REMOVED_IN", "CONTAINS_SLEEPER",
+    "CONTAINS_CLAUSE", "SPECIFIES_TOLERANCE", "MANDATES_EQUIPMENT", "CONTAINS_CHAPTER", "DETECTS_FAILURE"
 }
 
 def validate():
@@ -131,12 +133,12 @@ def validate():
     if errors:
         print(f"[FAIL] Found {len(errors)} critical validation errors:")
         for err in errors[:10]:
-            print(f"  ❌ {err}")
+            print(f"  [X] {err}")
         if len(errors) > 10:
             print(f"  ... and {len(errors) - 10} more errors")
         sys.exit(1)
     else:
-        print(f"[PASS] 0 Schema Errors! Knowledge Core is 100% compliant with Blueprint standards.")
+        print(f"[PASS] 0 Schema Errors! Knowledge Core is 100% compliant with Blueprint & REKG standards.")
         if warnings:
             print(f"       ({len(warnings)} non-fatal provenance warnings logged)")
     print("================================================================================\n")

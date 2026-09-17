@@ -3,9 +3,19 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-const artifactDir = "C:\\Users\\acer\\.gemini\\antigravity-ide\\brain\\5a58433d-2c07-448d-a15f-8232a40ea7a5";
-const tempProfile = "C:\\Users\\acer\\AppData\\Local\\Temp\\chrome_kg_test_profile";
+const chromeCandidates = [
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe')
+];
+const chromePath = chromeCandidates.find(p => fs.existsSync(p)) || chromeCandidates[0];
+const targetUrl = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
+const artifactDir = [
+    "C:\\Users\\LENOVO\\.gemini\\antigravity-ide\\brain\\ea8fa10c-88f4-4a72-b9b0-d40e78abc040",
+    path.join(__dirname, '..', 'artifacts')
+].find(d => fs.existsSync(d)) || path.join(__dirname, '..', 'artifacts');
+if (!fs.existsSync(artifactDir)) { try { fs.mkdirSync(artifactDir, { recursive: true }); } catch (e) {} }
+const tempProfile = path.join(require('os').tmpdir(), 'chrome_kg_test_profile');
 
 async function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
@@ -98,7 +108,7 @@ async function run() {
         const targets = await fetchJson('http://127.0.0.1:9222/json/list');
         let pageTarget = targets.find(t => t.type === 'page');
         if (!pageTarget) {
-            const newTab = await fetchJson('http://127.0.0.1:9222/json/new?file:///F:/git/RDSO-Drawings/index.html');
+            const newTab = await fetchJson('http://127.0.0.1:9222/json/new?' + targetUrl);
             pageTarget = newTab;
         }
 
@@ -116,7 +126,7 @@ async function run() {
         });
 
         console.log('[*] Navigating to index.html...');
-        await client.send('Page.navigate', { url: 'file:///F:/git/RDSO-Drawings/index.html' });
+        await client.send('Page.navigate', { url: targetUrl });
         await sleep(4000);
 
         // Verify title and basic load
