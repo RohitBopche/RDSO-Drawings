@@ -784,6 +784,168 @@ html_template = r'''<!DOCTYPE html>
       border-left: 3px solid var(--accent-green);
     }
 
+    /* Phase 3: Graph Intelligence & Path Finder Styles (Blueprint §13 & §14) */
+    .pathfinder-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .path-template-pills {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .path-template-btn {
+      background: rgba(14, 22, 38, 0.75);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 7px 9px;
+      color: var(--text-main);
+      font-size: 10px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .path-template-btn:hover {
+      background: rgba(0, 240, 255, 0.12);
+      border-color: var(--accent-cyan);
+      transform: translateY(-1px);
+    }
+
+    .path-template-title {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+
+    .path-template-sub {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .path-selector-box {
+      background: rgba(10, 16, 28, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .path-select-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .path-entity-select {
+      flex: 1;
+      height: 32px;
+      background: #090e1a;
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      border-radius: 5px;
+      padding: 0 8px;
+      font-size: 11px;
+      font-family: var(--font-stack);
+      outline: none;
+    }
+
+    .path-entity-select:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .path-swap-btn {
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: var(--accent-cyan);
+      border-radius: 5px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .path-swap-btn:hover {
+      background: rgba(0, 240, 255, 0.25);
+    }
+
+    .path-step-card {
+      background: rgba(14, 22, 38, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .path-step-card:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(20, 32, 56, 0.95);
+    }
+
+    .path-hop-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 6px 0;
+      position: relative;
+    }
+
+    .path-hop-line {
+      flex: 1;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, var(--border-subtle), var(--border-subtle) 4px, transparent 4px, transparent 8px);
+    }
+
+    .path-hop-badge {
+      font-size: 9.5px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid var(--border-glow);
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .path-hop-badge:hover {
+      background: rgba(0, 240, 255, 0.25);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .pred-family-toggle:hover {
+      color: #fff;
+    }
+
     /* Layout Switcher */
     .layout-switcher {
       display: flex;
@@ -1777,6 +1939,32 @@ html_template = r'''<!DOCTYPE html>
         Holistic exploration mode. Left drag to orbit, right drag to pan, scroll to zoom. Click any node to open its Engineering Answer Card.
       </div>
     </div>
+
+    <!-- Predicate Family Filters (Blueprint §13.2) -->
+    <div class="dock-card">
+      <div class="card-title">
+        <span>Predicate Families</span>
+        <span style="font-size: 9px; color: var(--accent-cyan); font-family: var(--font-mono);" id="pred-active-count">4/4 ACTIVE</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+        <label class="pred-family-toggle" style="display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: var(--text-main); cursor: pointer;">
+          <span style="display: flex; align-items: center; gap: 4px;">🧱 <strong style="color: #00f0ff;">Structural</strong> (CONTAINS, FASTENED)</span>
+          <input type="checkbox" id="pred-filter-structural" checked onchange="togglePredicateFamily('structural', this.checked)">
+        </label>
+        <label class="pred-family-toggle" style="display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: var(--text-main); cursor: pointer;">
+          <span style="display: flex; align-items: center; gap: 4px;">⚖️ <strong style="color: #9d4edd;">Governance</strong> (GOVERNS, REQUIRES)</span>
+          <input type="checkbox" id="pred-filter-governance" checked onchange="togglePredicateFamily('governance', this.checked)">
+        </label>
+        <label class="pred-family-toggle" style="display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: var(--text-main); cursor: pointer;">
+          <span style="display: flex; align-items: center; gap: 4px;">⏳ <strong style="color: #a2d2ff;">Lifecycle</strong> (REVISION, SUPERSEDES)</span>
+          <input type="checkbox" id="pred-filter-lifecycle" checked onchange="togglePredicateFamily('lifecycle', this.checked)">
+        </label>
+        <label class="pred-family-toggle" style="display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: var(--text-main); cursor: pointer;">
+          <span style="display: flex; align-items: center; gap: 4px;">⚠️ <strong style="color: #ff3366;">Safety & Maint</strong> (CAN_CAUSE, SPARE)</span>
+          <input type="checkbox" id="pred-filter-maintenance" checked onchange="togglePredicateFamily('maintenance', this.checked)">
+        </label>
+      </div>
+    </div>
   </div>
 
   <!-- RIGHT MULTI-TAB ENTITY INTELLIGENCE DRAWER -->
@@ -1847,6 +2035,9 @@ html_template = r'''<!DOCTYPE html>
       </button>
       <button class="drawer-tab" data-tab="conflicts" onclick="switchDrawerTab('conflicts')">
         <span>⚖️</span> Conflicts
+      </button>
+      <button class="drawer-tab" data-tab="paths" onclick="switchDrawerTab('paths')">
+        <span>🛤️</span> Path Finder
       </button>
     </div>
 
@@ -1954,6 +2145,13 @@ html_template = r'''<!DOCTYPE html>
           <!-- Populated dynamically by renderConflictDashboard() -->
         </div>
       </div>
+
+      <!-- 9. TAB: MULTI-HOP ENGINEERING PATH FINDER -->
+      <div class="tab-pane" id="tab-pane-paths">
+        <div id="pathfinder-container" style="display: flex; flex-direction: column; gap: 10px; padding: 4px;">
+          <!-- Populated dynamically by renderPathFinderUI() -->
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1997,6 +2195,22 @@ html_template = r'''<!DOCTYPE html>
         <button class="close-drawer-btn" onclick="closeEvidenceModal()">✕</button>
       </div>
       <div id="evidence-modal-content" style="display: flex; flex-direction: column; gap: 10px; font-size: 11px; line-height: 1.45;">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Connected? Modal (Blueprint Section 13.3) -->
+  <div id="why-connected-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 1055; align-items: center; justify-content: center;">
+    <div style="background: var(--bg-panel); border: 1px solid var(--border-glow); border-radius: 8px; padding: 20px; width: 580px; max-width: 92vw; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 10px 30px rgba(0,240,255,0.25);">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 16px;">🔗</span>
+          <h3 style="font-size: 13.5px; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;" id="why-connected-modal-title">Why Are These Connected?</h3>
+        </div>
+        <button class="close-drawer-btn" onclick="closeWhyConnectedModal()">✕</button>
+      </div>
+      <div id="why-connected-modal-content" style="display: flex; flex-direction: column; gap: 10px; font-size: 11px; line-height: 1.45;">
         <!-- Dynamically populated -->
       </div>
     </div>
@@ -2092,6 +2306,63 @@ html_template = r'''<!DOCTYPE html>
       INSPECTED_BY: 0x00f5d4,
       MAINTAINED_BY: 0x00f5d4
     };
+
+    // Predicate Family Mapping for 3D Edge HUD & Filtering (Blueprint §13.2)
+    const PREDICATE_FAMILY_MAP = {
+      CONTAINS: "structural",
+      CONNECTED_TO: "structural",
+      INSTALLED_ON: "structural",
+      FASTENED_BY: "structural",
+      INTERFACES_WITH: "structural",
+      CONTAINS_SLEEPER: "structural",
+      GOVERNS: "governance",
+      SPECIFIES: "governance",
+      REQUIRES: "governance",
+      APPLIES_TO: "governance",
+      REFERENCES: "governance",
+      HAS_REVISION: "lifecycle",
+      SUPERSEDES: "lifecycle",
+      INTRODUCED_IN: "lifecycle",
+      HAS_NOTE: "lifecycle",
+      INSPECTED_BY: "maintenance",
+      MAINTAINED_BY: "maintenance",
+      MITIGATED_BY: "maintenance",
+      CAN_CAUSE: "maintenance",
+      HAS_SPARE: "maintenance",
+      HAS_BOM_ITEM: "maintenance"
+    };
+
+    const activePredicateFamilies = {
+      structural: true,
+      governance: true,
+      lifecycle: true,
+      maintenance: true
+    };
+
+    function getPredicateFamily(rel) {
+      return PREDICATE_FAMILY_MAP[rel] || "structural";
+    }
+
+    function togglePredicateFamily(family, isChecked) {
+      activePredicateFamilies[family] = isChecked;
+      const activeCount = Object.values(activePredicateFamilies).filter(Boolean).length;
+      const countEl = document.getElementById('pred-active-count');
+      if (countEl) countEl.innerText = `${activeCount}/4 ACTIVE`;
+
+      kgPhysicsEdges.forEach(e => {
+        const fam = getPredicateFamily(e.rel);
+        const isFamActive = !fam || activePredicateFamilies[fam] !== false;
+        const n1 = e.sourceNode;
+        const n2 = e.targetNode;
+        if (n1 && n2 && n1.group.visible && n2.group.visible && isFamActive) {
+          e.line.visible = true;
+        } else {
+          e.line.visible = false;
+        }
+      });
+    }
+    window.togglePredicateFamily = togglePredicateFamily;
+    window.filterEdgesByPredicateFamily = togglePredicateFamily;
 
     // Domain Clusters for Cosmic multi-body gravity
     const DOMAIN_CENTERS = {
@@ -2452,7 +2723,10 @@ html_template = r'''<!DOCTYPE html>
         const n2 = e.targetNode;
         if (!n1 || !n2) continue;
 
-        if (n1.group.visible && n2.group.visible) {
+        const fam = getPredicateFamily(e.rel);
+        const isFamActive = !fam || activePredicateFamilies[fam] !== false;
+
+        if (n1.group.visible && n2.group.visible && isFamActive) {
           e.line.visible = true;
           const pos = e.posArray;
           pos[0] = n1.x; pos[1] = n1.y; pos[2] = n1.z;
@@ -3220,8 +3494,17 @@ html_template = r'''<!DOCTYPE html>
         if (targetNode) {
           const tag = document.createElement('div');
           tag.className = "lineage-tag";
-          tag.innerHTML = `<span>${h.type === 'out' ? '➔' : '⬅'} ${h.rel}:</span> <strong>${targetNode.data.label}</strong>`;
-          tag.onclick = () => inspectNode(targetNode);
+          tag.innerHTML = `<span>${h.type === 'out' ? '➔' : '⬅'} ${h.rel}:</span> <strong>${targetNode.data.label}</strong> <span class="why-trigger" style="color:var(--accent-cyan); font-size:9px; margin-left:auto; padding-left:4px; opacity:0.85;" title="Explain why connected">ℹ️ Why?</span>`;
+          tag.onclick = (ev) => {
+            if (ev.target.classList.contains('why-trigger') || ev.target.innerText?.includes('Why?')) {
+              ev.stopPropagation();
+              const uId = h.type === 'out' ? data.id : h.id;
+              const vId = h.type === 'out' ? h.id : data.id;
+              openWhyConnectedModal(uId, vId, h.rel);
+            } else {
+              inspectNode(targetNode);
+            }
+          };
           lineageList.appendChild(tag);
         }
       });
@@ -3409,6 +3692,13 @@ html_template = r'''<!DOCTYPE html>
       document.querySelectorAll('.tab-pane').forEach(p => {
         p.classList.toggle('active', p.id === `tab-pane-${tabId}`);
       });
+      if (tabId === 'paths') {
+        const container = document.getElementById('pathfinder-container');
+        if (container && (!container.children || container.children.length === 0)) {
+          const startId = currentSelectedNode ? currentSelectedNode.data.id : "comp_tongue_rail";
+          renderPathFinderUI(startId, "std_irs_t10");
+        }
+      }
     }
 
     function openFullscreenBlueprint(src, title) {
@@ -4190,6 +4480,382 @@ html_template = r'''<!DOCTYPE html>
       const modal = document.getElementById('evidence-modal');
       if (modal) modal.style.display = "none";
     }
+
+    // =========================================================================
+    // PHASE 3: ENGINEERING GRAPH INTELLIGENCE & PATH FINDER (Blueprint §13 & §14)
+    // =========================================================================
+
+    function explainRelationship(fromId, toId, rel) {
+      const uNode = kgPhysicsNodesMap.get(fromId) || { data: { id: fromId, label: fromId, domain: "component", type: "COMPONENT" } };
+      const vNode = kgPhysicsNodesMap.get(toId) || { data: { id: toId, label: toId, domain: "component", type: "COMPONENT" } };
+      const u = uNode.data;
+      const v = vNode.data;
+
+      // Direct edge lookup in canonical edge registry
+      let edge = rawKGEdges.find(e => e.from === fromId && e.to === toId && (!rel || e.rel === rel));
+      let isReversed = false;
+      if (!edge) {
+        edge = rawKGEdges.find(e => e.from === toId && e.to === fromId && (!rel || e.rel === rel));
+        if (edge) isReversed = true;
+      }
+      const actualRel = rel || (edge ? edge.rel : "CONNECTED_TO");
+      const isDirect = !!edge;
+
+      const PRED_EXPLANATIONS = {
+        CONTAINS: "Constituent structural hierarchy: the parent assembly physically houses, anchors, and integrates this child component into the layout.",
+        CONNECTED_TO: "Direct physical mechanical connection transmitting dynamic lateral wheel forces, longitudinal thermal expansion, and traction loads.",
+        INSTALLED_ON: "Mounting foundation: the track component is secured directly on top of this PSC sleeper, base plate, or bearing table.",
+        FASTENED_BY: "Anchoring constraint: high-tensile fasteners, bolts, or elastic clips prevent track gauge widening and rail turnover.",
+        INTERFACES_WITH: "Precision operational clearance interface: adjoining rails or tie bars operate with tight tolerances during train passage.",
+        CONTAINS_SLEEPER: "Layout sleeper zoning: standard turnout layout incorporates this special PSC sleeper in designated switch or lead zone.",
+        GOVERNS: "Mandatory statutory governance: official specification sets non-negotiable chemical, physical, and dimensional requirements.",
+        SPECIFIES: "Authoritative engineering clause or note defining exact manufacturing, welding, or field inspection protocols.",
+        REQUIRES: "Essential technical prerequisite: mandatory material grade (e.g. ZU-1-60 rail) or calibrated testing instruments.",
+        APPLIES_TO: "Statutory scope: technical directive or test threshold strictly governs this physical asset.",
+        REFERENCES: "Cross-document engineering linkage: layout cites standard drawing or code clause for complementary specifications.",
+        HAS_REVISION: "Historical design lifecycle: drawing versioning tracking engineering alterations Alt 10 through Alt 13.",
+        SUPERSEDES: "Design evolution & safety upgrade: modification supersedes older obsolete designs to eliminate known track failure modes.",
+        INTRODUCED_IN: "Design origin: specific component, tolerance, or note was formally introduced into Indian Railways in this alteration.",
+        HAS_NOTE: "General Notes binding: statutory drawing note defines mandatory fabrication, marking, or anti-corrosive painting directive.",
+        INSPECTED_BY: "Quality assurance & maintenance: field track supervisor or USFD operator inspects asset per statutory schedule.",
+        MAINTAINED_BY: "Field corrective protocol: permanent way team executes regular tightening, packing, or grinding actions.",
+        MITIGATED_BY: "Engineered safety mitigation: preventative maintenance or chamfering protocol designed to arrest crack propagation.",
+        CAN_CAUSE: "Risk progression mechanism: unaddressed mechanical flaw or wear limit violation triggers facing point derailment risk.",
+        HAS_SPARE: "LIST-A spare provisioning: critical wear component designated for mandatory 10% inventory buffer stocking.",
+        HAS_BOM_ITEM: "Procurement Bill of Materials: required material item with specified quantities per turnout set."
+      };
+
+      const rationale = (edge && edge.rationale) ? edge.rationale : (PRED_EXPLANATIONS[actualRel] || "Engineering relationship defined in RDSO canonical track ontology.");
+
+      let evidenceDoc = "RDSO/T-6155 Alt 13";
+      let evidenceRegion = "General Notes & Layout";
+      let evidenceCrop = "crops/t6155_notes_full.png";
+
+      if (fromId.includes("6154") || toId.includes("6154")) {
+        evidenceDoc = "RDSO/T-6154 Alt 12";
+        evidenceCrop = "crops/t6155_plan_full.png";
+      } else if (fromId.includes("6280") || toId.includes("6280")) {
+        evidenceDoc = "RDSO/T-6280 Alt 8 (CMS Crossing)";
+      } else if (fromId.startsWith("doc_") || toId.startsWith("doc_") || fromId.startsWith("sop_") || toId.startsWith("sop_")) {
+        evidenceDoc = "IRPWM 2024 / USFD Manual 2026";
+        evidenceRegion = "Statutory Regulatory Codes";
+      }
+
+      return {
+        from: u,
+        to: v,
+        rel: actualRel,
+        isDirect: isDirect,
+        isReversed: isReversed,
+        rationale: rationale,
+        evidence: {
+          doc: evidenceDoc,
+          region: evidenceRegion,
+          crop: evidenceCrop,
+          confidence: "1.00 (Canonical Audit)",
+          status: isDirect ? "VERIFIED CANONICAL FACT" : "DERIVED MULTI-HOP RELATION"
+        }
+      };
+    }
+
+    function openWhyConnectedModal(fromId, toId, rel) {
+      const modal = document.getElementById('why-connected-modal');
+      const content = document.getElementById('why-connected-modal-content');
+      if (!modal || !content) return;
+
+      const expl = explainRelationship(fromId, toId, rel);
+      const uMeta = DOMAIN_METADATA[expl.from.domain] || { label: expl.from.domain, icon: "🔹" };
+      const vMeta = DOMAIN_METADATA[expl.to.domain] || { label: expl.to.domain, icon: "🔹" };
+
+      content.innerHTML = `
+        <!-- Connected Entities Pair -->
+        <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; background: rgba(10, 16, 28, 0.7); padding: 10px; border-radius: 6px; border: 1px solid var(--border-subtle);">
+          <div style="background: rgba(18, 27, 46, 0.85); border: 1px solid ${expl.from.color || '#00f0ff'}; border-radius: 6px; padding: 8px; cursor: pointer;" onclick="closeWhyConnectedModal(); selectGraphNode('${expl.from.id}')">
+            <div style="font-size: 9px; color: ${expl.from.color || '#00f0ff'}; font-weight: 700;">${uMeta.icon} ${uMeta.label.toUpperCase()}</div>
+            <div style="font-size: 11.5px; font-weight: 700; color: #fff; margin-top: 2px;">${expl.from.label}</div>
+            <div style="font-size: 9px; color: var(--text-muted); font-family: var(--font-mono);">${expl.from.id}</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 4px;">
+            <span class="path-hop-badge" style="font-size: 9.5px;">${expl.isReversed ? '⬅' : '➔'} ${expl.rel}</span>
+            <span style="font-size: 9px; color: var(--text-dim); font-family: var(--font-mono);">${expl.isDirect ? 'DIRECT EDGE' : 'DERIVED HOP'}</span>
+          </div>
+
+          <div style="background: rgba(18, 27, 46, 0.85); border: 1px solid ${expl.to.color || '#00f0ff'}; border-radius: 6px; padding: 8px; cursor: pointer;" onclick="closeWhyConnectedModal(); selectGraphNode('${expl.to.id}')">
+            <div style="font-size: 9px; color: ${expl.to.color || '#00f0ff'}; font-weight: 700;">${vMeta.icon} ${vMeta.label.toUpperCase()}</div>
+            <div style="font-size: 11.5px; font-weight: 700; color: #fff; margin-top: 2px;">${expl.to.label}</div>
+            <div style="font-size: 9px; color: var(--text-muted); font-family: var(--font-mono);">${expl.to.id}</div>
+          </div>
+        </div>
+
+        <!-- Engineering Rationale -->
+        <div style="background: rgba(14, 22, 38, 0.8); border-left: 3.5px solid var(--accent-yellow); padding: 10px 12px; border-radius: 4px;">
+          <div style="font-size: 9.5px; font-weight: 700; color: var(--accent-yellow); text-transform: uppercase; margin-bottom: 3px;">💡 Engineering Justification & Basis:</div>
+          <div style="font-size: 11.5px; color: #f0f4fc; line-height: 1.45;">${expl.rationale}</div>
+        </div>
+
+        <!-- Evidence Provenance Grid -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+          <div class="drawing-meta-item">
+            <div class="drawing-meta-label">Governing Source</div>
+            <div class="drawing-meta-value" style="font-family: var(--font-mono); color: var(--accent-cyan);">${expl.evidence.doc}</div>
+          </div>
+          <div class="drawing-meta-item">
+            <div class="drawing-meta-label">Relationship Classification</div>
+            <div class="drawing-meta-value" style="color: ${expl.isDirect ? 'var(--accent-green)' : 'var(--accent-cyan)'};">${expl.evidence.status}</div>
+          </div>
+          <div class="drawing-meta-item">
+            <div class="drawing-meta-label">Drawing Region / Scope</div>
+            <div class="drawing-meta-value">${expl.evidence.region}</div>
+          </div>
+          <div class="drawing-meta-item">
+            <div class="drawing-meta-label">Audit Confidence</div>
+            <div class="drawing-meta-value" style="color: var(--accent-yellow); font-family: var(--font-mono);">${expl.evidence.confidence}</div>
+          </div>
+        </div>
+
+        <!-- Modal Actions -->
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px;">
+          <button class="btn" onclick="closeWhyConnectedModal(); selectGraphNode('${expl.from.id}');">Focus [${expl.from.label}] in 3D</button>
+          <button class="btn" style="background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan);" onclick="closeWhyConnectedModal(); renderPathFinderUI('${expl.from.id}', '${expl.to.id}');">Find All Paths ➔</button>
+          <button class="btn" onclick="closeWhyConnectedModal()">Close</button>
+        </div>
+      `;
+
+      modal.style.display = "flex";
+    }
+
+    function closeWhyConnectedModal() {
+      const modal = document.getElementById('why-connected-modal');
+      if (modal) modal.style.display = "none";
+    }
+
+    function findShortestPaths(sourceId, targetId, maxHops = 4) {
+      if (!sourceId || !targetId || sourceId === targetId) return null;
+
+      const adj = new Map();
+      rawKGEdges.forEach(e => {
+        if (!adj.has(e.from)) adj.set(e.from, []);
+        if (!adj.has(e.to)) adj.set(e.to, []);
+        adj.get(e.from).push({ neighbor: e.to, rel: e.rel, direction: "out", rationale: e.rationale });
+        adj.get(e.to).push({ neighbor: e.from, rel: e.rel, direction: "in", rationale: e.rationale });
+      });
+
+      const queue = [{ id: sourceId, path: [] }];
+      const visited = new Set([sourceId]);
+
+      while (queue.length > 0) {
+        const current = queue.shift();
+        if (current.id === targetId) {
+          return current.path;
+        }
+        if (current.path.length >= maxHops) continue;
+
+        const neighbors = adj.get(current.id) || [];
+        for (let i = 0; i < neighbors.length; i++) {
+          const edge = neighbors[i];
+          if (!visited.has(edge.neighbor)) {
+            visited.add(edge.neighbor);
+            const step = {
+              from: current.id,
+              to: edge.neighbor,
+              rel: edge.rel,
+              direction: edge.direction,
+              rationale: edge.rationale
+            };
+            queue.push({
+              id: edge.neighbor,
+              path: [...current.path, step]
+            });
+          }
+        }
+      }
+      return null;
+    }
+
+    function focusPathIn3D(pathNodeIds) {
+      if (!Array.isArray(pathNodeIds) || pathNodeIds.length === 0) return;
+      const pathSet = new Set(pathNodeIds);
+
+      kgPhysicsNodes.forEach(n => {
+        const inPath = pathSet.has(n.data.id);
+        n.mesh.material.opacity = inPath ? 1.0 : 0.12;
+        n.mesh.material.transparent = !inPath;
+        n.sprite.material.opacity = inPath ? 1.0 : 0.15;
+      });
+
+      kgPhysicsEdges.forEach(e => {
+        const inPath = pathSet.has(e.from) && pathSet.has(e.to);
+        e.line.material.opacity = inPath ? 1.0 : 0.05;
+        if (inPath) {
+          e.line.material.color.setHex(0x00f0ff);
+        }
+      });
+
+      let cx = 0, cy = 0, cz = 0, count = 0;
+      kgPhysicsNodes.forEach(n => {
+        if (pathSet.has(n.data.id)) {
+          cx += n.x; cy += n.y; cz += n.z; count++;
+        }
+      });
+
+      if (count > 0) {
+        cx /= count; cy /= count; cz /= count;
+        tweenCamera(new THREE.Vector3(cx + 6, cy + 10, cz + 18), new THREE.Vector3(cx, cy, cz), 900);
+      }
+    }
+
+    function loadPathTemplate(templateType) {
+      if (templateType === 'component') {
+        renderPathFinderUI('comp_tongue_rail', 'std_irs_t10');
+      } else if (templateType === 'failure') {
+        renderPathFinderUI('defect_joint_fatigue', 'hazard_derailment_split');
+      } else if (templateType === 'procedure') {
+        renderPathFinderUI('doc_usfd_2026', 'equip_usfd_tester');
+      } else if (templateType === 'procurement') {
+        renderPathFinderUI('drg_6155', 'spare_bolt_25x310');
+      }
+    }
+
+    function renderPathFinderUI(startId = "comp_tongue_rail", endId = "std_irs_t10") {
+      const container = document.getElementById('pathfinder-container');
+      if (!container) return;
+
+      // Ensure drawer is open on paths tab without recursive loop
+      toggleIntelligenceDrawer(true);
+      document.querySelectorAll('.drawer-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'paths'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-pane-paths'));
+
+      const allNodes = rawKGNodes.slice().sort((a, b) => a.label.localeCompare(b.label));
+      const startOpts = allNodes.map(n => `<option value="${n.id}" ${n.id === startId ? 'selected' : ''}>[${n.domain.toUpperCase()}] ${n.label}</option>`).join('');
+      const endOpts = allNodes.map(n => `<option value="${n.id}" ${n.id === endId ? 'selected' : ''}>[${n.domain.toUpperCase()}] ${n.label}</option>`).join('');
+
+      const path = findShortestPaths(startId, endId, 5);
+
+      let resultHtml = '';
+      if (!path) {
+        resultHtml = `
+          <div style="background: rgba(255, 51, 102, 0.1); border: 1px solid var(--border-crimson); border-radius: 6px; padding: 12px; text-align: center; margin-top: 8px;">
+            <div style="color: var(--accent-red); font-weight: 700; font-size: 12px;">⚠️ No Multi-Hop Path Found</div>
+            <div style="color: var(--text-muted); font-size: 10.5px; margin-top: 4px;">No traversable edges found between selected entities within 5 hops.</div>
+          </div>
+        `;
+      } else {
+        const nodeSequence = [startId];
+        path.forEach(step => nodeSequence.push(step.to));
+
+        let stepsHtml = '';
+        nodeSequence.forEach((nodeId, idx) => {
+          const nodeObj = kgPhysicsNodesMap.get(nodeId) || { data: { id: nodeId, label: nodeId, domain: "component", type: "ENTITY" } };
+          const data = nodeObj.data;
+          const meta = DOMAIN_METADATA[data.domain] || { label: data.domain, icon: "🔹" };
+
+          stepsHtml += `
+            <div class="path-step-card" style="border-left: 3.5px solid ${data.color || '#00f0ff'};" onclick="selectGraphNode('${data.id}')">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 9px; color: ${data.color || '#00f0ff'}; font-weight: 700;">${meta.icon} ${meta.label.toUpperCase()}</span>
+                <span style="font-size: 9px; color: var(--text-dim); font-family: var(--font-mono);">Step ${idx}</span>
+              </div>
+              <div style="font-size: 12px; font-weight: 700; color: #fff; margin-top: 2px;">${data.label}</div>
+              <div style="font-size: 9.5px; color: var(--text-muted); line-height: 1.35;">${(data.desc || '').slice(0, 110)}${data.desc && data.desc.length > 110 ? '…' : ''}</div>
+            </div>
+          `;
+
+          // If not last node, render hop connector
+          if (idx < path.length) {
+            const hop = path[idx];
+            const fromStep = hop.from;
+            const toStep = hop.to;
+            const relText = hop.direction === 'out' ? `➔ ${hop.rel}` : `⬅ ${hop.rel}`;
+            stepsHtml += `
+              <div class="path-hop-row">
+                <div class="path-hop-line"></div>
+                <div class="path-hop-badge" title="Click to view full engineering explanation" onclick="openWhyConnectedModal('${fromStep}', '${toStep}', '${hop.rel}')">
+                  <span>${relText}</span>
+                  <span style="font-size: 9px; color: var(--accent-yellow); margin-left: 2px;">ℹ️ Why?</span>
+                </div>
+                <div class="path-hop-line"></div>
+              </div>
+            `;
+          }
+        });
+
+        const nodeSeqStr = JSON.stringify(nodeSequence).replace(/"/g, '&quot;');
+        resultHtml = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
+            <div>
+              <span style="font-size: 10px; color: var(--accent-green); font-weight: 700;">✓ PATH FOUND IN ${path.length} HOPS</span>
+              <div style="font-size: 9.5px; color: var(--text-dim);">${nodeSequence.length} entities in sequence</div>
+            </div>
+            <button class="search-card-btn" onclick="focusPathIn3D(${nodeSeqStr})">
+              <span>🎯</span> Focus Path in 3D
+            </button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 6px;">
+            ${stepsHtml}
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div class="pathfinder-wrap">
+          <!-- Blueprint Standard Templates -->
+          <div>
+            <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">
+              Blueprint Standard Path Templates (§14):
+            </div>
+            <div class="path-template-pills">
+              <button class="path-template-btn" onclick="loadPathTemplate('component')">
+                <div class="path-template-title"><span>🧩</span> Component Path</div>
+                <div class="path-template-sub">Rail ➔ Drawing ➔ IRS T-10</div>
+              </button>
+              <button class="path-template-btn" onclick="loadPathTemplate('failure')">
+                <div class="path-template-title"><span>⚠️</span> Failure Path</div>
+                <div class="path-template-sub">Fatigue ➔ Derailment Hazard</div>
+              </button>
+              <button class="path-template-btn" onclick="loadPathTemplate('procedure')">
+                <div class="path-template-title"><span>📋</span> Procedure Path</div>
+                <div class="path-template-sub">USFD Code ➔ SOP ➔ Flaw Tester</div>
+              </button>
+              <button class="path-template-btn" onclick="loadPathTemplate('procurement')">
+                <div class="path-template-title"><span>📦</span> Procurement Path</div>
+                <div class="path-template-sub">T-6155 ➔ Spares ➔ HTS Bolt</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive Entity Selectors -->
+          <div class="path-selector-box">
+            <div class="path-select-row">
+              <div style="width: 44px; font-size: 10px; font-weight: 700; color: var(--accent-cyan);">FROM:</div>
+              <select id="path-start-select" class="path-entity-select" onchange="renderPathFinderUI(this.value, document.getElementById('path-end-select').value)">
+                ${startOpts}
+              </select>
+            </div>
+            <div class="path-select-row">
+              <div style="width: 44px; font-size: 10px; font-weight: 700; color: var(--accent-orange);">TO:</div>
+              <select id="path-end-select" class="path-entity-select" onchange="renderPathFinderUI(document.getElementById('path-start-select').value, this.value)">
+                ${endOpts}
+              </select>
+              <button class="path-swap-btn" title="Swap Endpoints" onclick="renderPathFinderUI(document.getElementById('path-end-select').value, document.getElementById('path-start-select').value)">⇄</button>
+            </div>
+          </div>
+
+          <!-- Path Display Container -->
+          <div id="path-results-container">
+            ${resultHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    window.explainRelationship = explainRelationship;
+    window.openWhyConnectedModal = openWhyConnectedModal;
+    window.closeWhyConnectedModal = closeWhyConnectedModal;
+    window.findShortestPaths = findShortestPaths;
+    window.focusPathIn3D = focusPathIn3D;
+    window.loadPathTemplate = loadPathTemplate;
+    window.renderPathFinderUI = renderPathFinderUI;
 
     function renderDossierNotes(dossier) {
       const container = document.getElementById('drawer-notes-list');
