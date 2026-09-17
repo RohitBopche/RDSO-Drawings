@@ -20,6 +20,8 @@ FILES = {
     "nodes": (CANONICAL_DIR / "nodes.jsonl", SCHEMA_DIR / "entity.schema.json"),
     "edges": (CANONICAL_DIR / "edges.jsonl", SCHEMA_DIR / "edge.schema.json"),
     "requirements": (CANONICAL_DIR / "requirements.jsonl", SCHEMA_DIR / "requirement.schema.json"),
+    "evidence": (CANONICAL_DIR / "evidence.jsonl", SCHEMA_DIR / "evidence.schema.json"),
+    "documents": (CANONICAL_DIR / "documents.jsonl", SCHEMA_DIR / "entity.schema.json"),
 }
 
 

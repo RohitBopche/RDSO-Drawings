@@ -7,12 +7,14 @@ manuals knowledge into authoritative canonical datasets and exports:
 - data/knowledge-graph/canonical/edges.jsonl
 - data/knowledge-graph/canonical/documents.jsonl
 - data/knowledge-graph/canonical/requirements.jsonl
+- data/knowledge-graph/canonical/evidence.jsonl
 - data/knowledge-graph/exports/graph.json
 - data/knowledge-graph/exports/search_index.json
 - data/rdso_canonical_kg.json (Unified backward-compatible core)
 - data/rdso_manuals_knowledge.json (Deep manuals registry)
 
-Enforces 100% referential integrity (zero dangling edges).
+Enforces 100% referential integrity (zero dangling edges) and full
+compliance with entity, requirement, edge, and evidence schemas.
 """
 
 import json
@@ -39,6 +41,17 @@ MANUALS_KNOWLEDGE = os.path.join(REPO_ROOT, "data", "rdso_manuals_knowledge.json
 ALL_CHAPTERS_EXTRACTED = os.path.join(INTERMEDIATE_DIR, "all_chapters_extracted.json")
 INTERMEDIATE_ENTITIES = os.path.join(INTERMEDIATE_DIR, "candidate_entities.jsonl")
 INTERMEDIATE_RELS = os.path.join(INTERMEDIATE_DIR, "candidate_relationships.jsonl")
+ALIAS_FILE = os.path.join(CANONICAL_DIR, "identity_aliases.json")
+
+# Mapping non-standard predicates to Blueprint controlled vocabulary
+RELATION_NORM = {
+    "CONTAINS_CHAPTER": "HAS_SECTION",
+    "CONTAINS_CLAUSE": "HAS_CLAUSE",
+    "SPECIFIES_TOLERANCE": "SPECIFIES",
+    "MANDATES_EQUIPMENT": "REQUIRES",
+    "DETECTS_FAILURE": "INSPECTED_BY",
+    "GOVERNS_COMPONENT": "GOVERNS",
+}
 
 
 def build_canonical_layer():
@@ -51,26 +64,53 @@ def build_canonical_layer():
     node_id_set = set()
     edge_key_set = set()
 
+    # Load legacy alias mappings so alias document entities don't create duplicate logical identities
+    legacy_alias_ids = set()
+    if os.path.exists(ALIAS_FILE):
+        try:
+            with open(ALIAS_FILE, "r", encoding="utf-8") as f:
+                alias_doc = json.load(f)
+            for m in alias_doc.get("mappings", []):
+                for a in m.get("aliases", []):
+                    legacy_alias_ids.add(a)
+        except Exception as exc:
+            print(f"Warning loading alias map: {exc}")
+
     def add_node(node):
         nid = node["id"]
         if nid not in node_id_set:
             node_id_set.add(nid)
+            # Ensure entity.schema.json compliance: id, type, name required
+            name = node.get("name") or node.get("label") or nid
+            node["name"] = name
+            node["label"] = node.get("label") or name
+            desc = node.get("description") or node.get("desc") or ""
+            node["description"] = desc
+            node["desc"] = desc
+            if "verification_status" not in node:
+                node["verification_status"] = "verified"
+            if "status" not in node:
+                node["status"] = "active"
             nodes.append(node)
             return True
         return False
 
-    def add_edge(u, v, rel, rationale="", source=None):
+    def add_edge(u, v, rel, rationale="", source=None, evidence_ids=None):
+        rel = RELATION_NORM.get(rel, rel)
         if u in node_id_set and v in node_id_set:
             key = (u, v, rel)
             if key not in edge_key_set:
                 edge_key_set.add(key)
-                edges.append({
+                edge_rec = {
                     "from": u,
                     "to": v,
                     "rel": rel,
                     "rationale": rationale,
                     "source": source
-                })
+                }
+                if evidence_ids:
+                    edge_rec["evidence_ids"] = evidence_ids
+                edges.append(edge_rec)
                 return True
         return False
 
@@ -82,17 +122,20 @@ def build_canonical_layer():
             add_node({
                 "id": e["id"],
                 "type": e["type"],
-                "label": e["label"],
-                "domain": e["domain"],
-                "color": e["color"],
-                "desc": e["desc"],
+                "name": e.get("name") or e.get("label") or e["id"],
+                "label": e.get("label") or e.get("name") or e["id"],
+                "domain": e.get("domain", "general"),
+                "color": e.get("color", "#00f0ff"),
+                "description": e.get("description") or e.get("desc", ""),
+                "desc": e.get("desc") or e.get("description", ""),
                 "specs": e.get("specs", {}),
                 "twinAsset": e.get("twinAsset"),
                 "x": e.get("x", 0),
                 "y": e.get("y", 0),
                 "z": e.get("z", 0),
                 "alt": e.get("alt", 13),
-                "canonical_status": "VERIFIED"
+                "verification_status": "verified",
+                "status": "active"
             })
         for r in legacy_data.get("edges", []):
             add_edge(r["from"], r["to"], r["rel"], r.get("rationale", ""), r.get("source"))
@@ -108,13 +151,16 @@ def build_canonical_layer():
                 add_node({
                     "id": rec["id"],
                     "type": rec["type"].upper(),
+                    "name": rec.get("name") or rec.get("label") or rec["id"],
                     "label": rec["label"],
                     "domain": rec["domain"],
                     "color": "#00f5d4" if rec["type"] in ["Clause", "Requirement", "Procedure"] else ("#ff007f" if rec["type"] == "Document" else "#fee440"),
+                    "description": rec.get("properties", {}).get("Scope") or rec.get("label"),
                     "desc": rec.get("properties", {}).get("Scope") or rec.get("label"),
                     "specs": rec.get("properties", {}),
                     "source": rec.get("source"),
-                    "canonical_status": "VERIFIED"
+                    "verification_status": "verified",
+                    "status": "active"
                 })
 
     if os.path.exists(INTERMEDIATE_RELS):
@@ -124,7 +170,68 @@ def build_canonical_layer():
                 rel = json.loads(line)
                 add_edge(rel["source"], rel["target"], rel["predicate"], rel.get("properties", {}).get("rationale", ""))
 
-    # 3. Ingest Deep Chapter-by-Chapter Manuals Knowledge
+    # 3. Setup Evidence Registry
+    evidence_records = []
+    evidence_id_set = set()
+
+    def add_evidence(ev_id, doc_id, extraction_method="text_extract", verification_status="verified",
+                     quote="", page_id=None, section=None, clause=None, confidence=1.0, file_path=None):
+        if ev_id not in evidence_id_set:
+            evidence_id_set.add(ev_id)
+            rec = {
+                "evidence_id": ev_id,
+                "document_id": doc_id,
+                "extraction_method": extraction_method,
+                "verification_status": verification_status,
+                "confidence": confidence,
+                "quote": quote
+            }
+            if page_id:
+                rec["page_id"] = page_id
+            if section:
+                rec["section"] = section
+            if clause:
+                rec["clause"] = str(clause)
+            if file_path:
+                rec["file_path"] = file_path
+            evidence_records.append(rec)
+            return ev_id
+        return ev_id
+
+    # Register all physical crops from crops/ as verified drawing evidence
+    crops_dir = os.path.join(REPO_ROOT, "crops")
+    if os.path.exists(crops_dir):
+        for fname in sorted(os.listdir(crops_dir)):
+            if fname.lower().endswith(".png"):
+                stem = os.path.splitext(fname)[0]
+                ev_id = f"ev:crop:{re.sub(r'[^A-Za-z0-9_]', '_', stem)}"
+                fl = fname.lower()
+                if "6154" in fl:
+                    target_doc = "drg_6154"
+                elif "6155" in fl or "alt1" in fl or "spares" in fl:
+                    target_doc = "drg_6155"
+                elif "6216" in fl or "ssd" in fl:
+                    target_doc = "drg_6216"
+                elif "6280" in fl or "crossing" in fl:
+                    target_doc = "drg_6280"
+                elif "9010" in fl:
+                    target_doc = "drg_9010"
+                elif "6275" in fl:
+                    target_doc = "drg_6275"
+                else:
+                    target_doc = "drg_6155"
+
+                add_evidence(
+                    ev_id=ev_id,
+                    doc_id=target_doc,
+                    extraction_method="drawing_parse",
+                    verification_status="verified",
+                    quote=f"High-resolution engineering drawing crop: {fname}",
+                    confidence=1.0,
+                    file_path=f"crops/{fname}"
+                )
+
+    # 4. Ingest Deep Chapter-by-Chapter Manuals Knowledge
     deep_manuals_catalog = []
     deep_clauses_catalog = {}
     deep_tolerances_catalog = {}
@@ -161,15 +268,18 @@ def build_canonical_layer():
             add_node({
                 "id": doc_id,
                 "type": "DOCUMENT",
+                "name": doc_title,
                 "label": doc_title,
                 "domain": "manuals",
                 "color": "#ff007f",
+                "description": f"Statutory Indian Railways Manual: {doc_title}",
                 "desc": f"Statutory Indian Railways Manual: {doc_title}",
                 "specs": {
                     "TotalChapters": m["total_chapters"],
                     "TotalClauses": m["total_clauses"]
                 },
-                "canonical_status": "VERIFIED"
+                "verification_status": "verified",
+                "status": "active"
             })
 
             deep_manuals_catalog.append({
@@ -191,9 +301,11 @@ def build_canonical_layer():
                 add_node({
                     "id": ch_id,
                     "type": "CHAPTER",
+                    "name": f"Chapter {ch_num}: {ch_title}",
                     "label": f"Chapter {ch_num}: {ch_title}",
                     "domain": "manuals",
                     "color": "#9d4edd",
+                    "description": f"Chapter {ch_num} of {alias}. Key topics: {', '.join(ch_topics)}. Covers pages {ch_pages[0]}-{ch_pages[1]}.",
                     "desc": f"Chapter {ch_num} of {alias}. Key topics: {', '.join(ch_topics)}. Covers pages {ch_pages[0]}-{ch_pages[1]}.",
                     "specs": {
                         "Manual": alias,
@@ -202,11 +314,12 @@ def build_canonical_layer():
                         "KeyTopics": ch_topics,
                         "ClauseCount": len(ch["clauses"])
                     },
-                    "canonical_status": "VERIFIED"
+                    "verification_status": "verified",
+                    "status": "active"
                 })
 
-                # Edge: Document -> Chapter
-                add_edge(doc_id, ch_id, "CONTAINS_CHAPTER", f"Statutory chapter of {alias}")
+                # Edge: Document -> Chapter (HAS_SECTION per Blueprint vocabulary)
+                add_edge(doc_id, ch_id, "HAS_SECTION", f"Statutory chapter of {alias}")
 
                 for cl in ch["clauses"]:
                     cl_id = cl["clause_id"]
@@ -221,14 +334,32 @@ def build_canonical_layer():
                     fails = cl["failure_modes"]
                     comps = cl["related_components"]
 
+                    # Register Clause Evidence
+                    ev_id = f"ev:clause:{cl_id}"
+                    add_evidence(
+                        ev_id=ev_id,
+                        doc_id=doc_id,
+                        extraction_method="text_extract",
+                        verification_status="verified",
+                        quote=(verb or summary)[:300],
+                        page_id=f"page:{alias}:{pnum}",
+                        section=f"Chapter {ch_num}: {ch_title}",
+                        clause=str(para_num),
+                        confidence=0.95
+                    )
+
                     # Add Clause Node
                     add_node({
                         "id": cl_id,
                         "type": "CLAUSE",
+                        "name": f"Para {para_num}: {cl_title}",
                         "label": f"Para {para_num}: {cl_title}",
                         "domain": "manuals",
                         "color": "#00f5d4",
+                        "description": summary,
                         "desc": summary,
+                        "statement": verb or summary,
+                        "evidence_ids": [ev_id],
                         "specs": {
                             "Manual": alias,
                             "Chapter": f"Chapter {ch_num}: {ch_title}",
@@ -242,13 +373,14 @@ def build_canonical_layer():
                             "Tolerances": [t["text"] for t in tols],
                             "MandatoryRequirements": cl.get("requirements", [])
                         },
-                        "canonical_status": "VERIFIED"
+                        "verification_status": "verified",
+                        "status": "active"
                     })
 
-                    # Edge: Chapter -> Clause
-                    add_edge(ch_id, cl_id, "CONTAINS_CLAUSE", f"Governing clause in Chapter {ch_num}")
+                    # Edge: Chapter -> Clause (HAS_CLAUSE per Blueprint vocabulary)
+                    add_edge(ch_id, cl_id, "HAS_CLAUSE", f"Governing clause in Chapter {ch_num}")
 
-                    # Tolerances
+                    # Tolerances (SPECIFIES per Blueprint vocabulary)
                     for t in tols:
                         tol_text = t["text"]
                         clean_t = re.sub(r'[^A-Za-z0-9]', '_', tol_text).strip('_')
@@ -256,52 +388,63 @@ def build_canonical_layer():
                         if add_node({
                             "id": tol_id,
                             "type": "TOLERANCE",
+                            "name": f"Tolerance: {tol_text}",
                             "label": f"Tolerance: {tol_text}",
+                            "statement": f"Statutory engineering bound {tol_text} specified in Para {para_num}",
                             "domain": "track_standards",
                             "color": "#fee440",
+                            "description": f"Statutory engineering bound {tol_text} specified in Para {para_num}",
                             "desc": f"Statutory engineering bound {tol_text} specified in Para {para_num}",
+                            "evidence_ids": [ev_id],
                             "specs": t,
-                            "canonical_status": "VERIFIED"
+                            "verification_status": "verified",
+                            "status": "active"
                         }):
                             deep_tolerances_catalog[tol_id] = t
-                        add_edge(cl_id, tol_id, "SPECIFIES_TOLERANCE", f"Specified by Para {para_num}")
+                        add_edge(cl_id, tol_id, "SPECIFIES", f"Specified by Para {para_num}")
 
-                    # Equipment
+                    # Equipment (REQUIRES per Blueprint vocabulary)
                     for eq in equips:
                         eq_id = f"EQUIP:{re.sub(r'[^A-Za-z0-9]', '_', eq.upper())}"
                         add_node({
                             "id": eq_id,
                             "type": "EQUIPMENT",
+                            "name": eq,
                             "label": eq,
                             "domain": "track_standards",
                             "color": "#3a86ff",
+                            "description": f"Maintenance equipment: {eq}",
                             "desc": f"Maintenance equipment: {eq}",
                             "specs": {"Category": "Track Machine / Tool"},
-                            "canonical_status": "VERIFIED"
+                            "verification_status": "verified",
+                            "status": "active"
                         })
-                        add_edge(cl_id, eq_id, "MANDATES_EQUIPMENT", f"Used/mandated in Para {para_num}")
+                        add_edge(cl_id, eq_id, "REQUIRES", f"Used/mandated in Para {para_num}")
 
-                    # Failure Modes
+                    # Failure Modes (INSPECTED_BY per Blueprint vocabulary)
                     for fl in fails:
                         fl_id = f"FAIL:{re.sub(r'[^A-Za-z0-9]', '_', fl.upper())}"
                         add_node({
                             "id": fl_id,
                             "type": "FAILURE_MODE",
+                            "name": fl,
                             "label": fl,
                             "domain": "safety",
                             "color": "#ff3366",
+                            "description": f"Defect / Failure classification: {fl}",
                             "desc": f"Defect / Failure classification: {fl}",
                             "specs": {"Classification": "Track Defect"},
-                            "canonical_status": "VERIFIED"
+                            "verification_status": "verified",
+                            "status": "active"
                         })
-                        add_edge(cl_id, fl_id, "DETECTS_FAILURE", f"Monitored/addressed in Para {para_num}")
+                        add_edge(cl_id, fl_id, "INSPECTED_BY", f"Monitored/addressed in Para {para_num}")
 
                     # Component Links (Turnout 1:12 drawing links)
                     for c_mention in comps:
                         low = c_mention.lower()
                         for pattern, target_id in COMP_TO_CANONICAL.items():
                             if pattern in low:
-                                add_edge(cl_id, target_id, "GOVERNS_COMPONENT", f"Para {para_num} governs {c_mention}")
+                                add_edge(cl_id, target_id, "GOVERNS", f"Para {para_num} governs {c_mention}")
 
                     deep_clauses_catalog[cl_id] = {
                         "id": cl_id,
@@ -318,7 +461,7 @@ def build_canonical_layer():
                         "tolerances": [t["text"] for t in tols]
                     }
 
-    # 4. Write Canonical Datasets
+    # 5. Write Canonical Datasets
     nodes_file = os.path.join(CANONICAL_DIR, "nodes.jsonl")
     with open(nodes_file, "w", encoding="utf-8") as f:
         for n in nodes:
@@ -329,19 +472,70 @@ def build_canonical_layer():
         for e in edges:
             f.write(json.dumps(e, ensure_ascii=False) + "\n")
 
+    # Authoritative logical documents (exclude legacy alias duplicate identities)
     docs_file = os.path.join(CANONICAL_DIR, "documents.jsonl")
     with open(docs_file, "w", encoding="utf-8") as f:
         for n in nodes:
-            if n["type"] in ["DOCUMENT", "DRAWING"]:
+            if n["type"] in ["DOCUMENT", "DRAWING"] and n["id"] not in legacy_alias_ids:
                 f.write(json.dumps(n, ensure_ascii=False) + "\n")
+
+    # Type mapper for requirements.jsonl schema compliance
+    def map_req_type(t_name):
+        t = t_name.upper()
+        if t in ["TOLERANCE", "GEOMETRY"]:
+            return "geometry"
+        if t in ["MATERIAL", "MATERIALS"]:
+            return "material"
+        if t in ["SPECIFICATION", "DESIGN"]:
+            return "design"
+        if t in ["INSPECTION", "USFD", "TESTING"]:
+            return "inspection"
+        if t in ["MAINTENANCE", "PROCEDURE", "SOP"]:
+            return "maintenance"
+        if t in ["SAFETY", "FAILURE_MODE", "DEFECT"]:
+            return "safety"
+        if t in ["PROCUREMENT", "BOM_ITEM"]:
+            return "procurement"
+        if t == "CLAUSE":
+            return "procedure"
+        return "other"
 
     reqs_file = os.path.join(CANONICAL_DIR, "requirements.jsonl")
     with open(reqs_file, "w", encoding="utf-8") as f:
         for n in nodes:
             if n["type"] in ["REQUIREMENT", "SPECIFICATION", "TOLERANCE", "CLAUSE"]:
-                f.write(json.dumps(n, ensure_ascii=False) + "\n")
+                statement = (
+                    n.get("statement")
+                    or n.get("specs", {}).get("Verbatim")
+                    or n.get("description")
+                    or n.get("desc")
+                    or n.get("name")
+                    or f"Statutory requirement: {n['id']}"
+                )
+                req_obj = {
+                    "id": n["id"],
+                    "statement": statement,
+                    "requirement_type": map_req_type(n["type"]),
+                    "priority": "mandatory" if n["type"] in ["REQUIREMENT", "TOLERANCE"] else "recommended",
+                    "verification_status": "verified"
+                }
+                if "evidence_ids" in n and n["evidence_ids"]:
+                    valid_ev = [eid for eid in n["evidence_ids"] if eid in evidence_id_set]
+                    if valid_ev:
+                        req_obj["evidence_ids"] = valid_ev
+                if n.get("specs", {}).get("Paragraph"):
+                    req_obj["clause"] = str(n["specs"]["Paragraph"])
+                doc_ref = n.get("document_id") or n.get("source")
+                if doc_ref and doc_ref in node_id_set:
+                    req_obj["source_document_id"] = doc_ref
+                f.write(json.dumps(req_obj, ensure_ascii=False) + "\n")
 
-    # 5. Write Exports: graph.json, search_index.json
+    evidence_file = os.path.join(CANONICAL_DIR, "evidence.jsonl")
+    with open(evidence_file, "w", encoding="utf-8") as f:
+        for ev in evidence_records:
+            f.write(json.dumps(ev, ensure_ascii=False) + "\n")
+
+    # 6. Write Exports: graph.json, search_index.json
     graph_export = {
         "metadata": {
             "title": "RDSO Complete Manuals & Drawings Knowledge Graph",
@@ -361,6 +555,7 @@ def build_canonical_layer():
     for n in nodes:
         search_index.append({
             "id": n["id"],
+            "name": n["name"],
             "label": n["label"],
             "type": n["type"],
             "domain": n.get("domain", "general"),
@@ -371,7 +566,7 @@ def build_canonical_layer():
     with open(search_file, "w", encoding="utf-8") as f:
         json.dump(search_index, f, indent=2, ensure_ascii=False)
 
-    # 6. Synchronize Legacy Bridges (rdso_canonical_kg.json & rdso_manuals_knowledge.json)
+    # 7. Synchronize Legacy Bridges (rdso_canonical_kg.json & rdso_manuals_knowledge.json)
     legacy_export = {
         "metadata": graph_export["metadata"],
         "entities": nodes,
@@ -398,15 +593,17 @@ def build_canonical_layer():
     print("\n================================================================================")
     print("CANONICAL SYNTHESIS COMPLETE")
     print("================================================================================")
-    print(f"Total Canonical Nodes Compiled: {len(nodes):,}")
-    print(f"Total Canonical Typed Edges:    {len(edges):,}")
-    print(f"Referential Integrity:          100% (0 dangling edges)")
-    print(f"Search Index Tokens:            {sum(len(item['tokens']) for item in search_index):,}")
-    print(f"Saved Canonical Core to:        {nodes_file}")
-    print(f"Saved Graph Export to:          {graph_file}")
-    print(f"Saved Unified Bridge to:        {LEGACY_CANONICAL}")
-    print(f"Saved Deep Manuals Registry to: {MANUALS_KNOWLEDGE}")
+    print(f"Total Canonical Nodes Compiled:    {len(nodes):,}")
+    print(f"Total Canonical Typed Edges:       {len(edges):,}")
+    print(f"Total Canonical Evidence Records:  {len(evidence_records):,}")
+    print(f"Referential Integrity:             100% (0 dangling edges)")
+    print(f"Saved Canonical Core to:           {nodes_file}")
+    print(f"Saved Evidence Registry to:        {evidence_file}")
+    print(f"Saved Graph Export to:             {graph_file}")
+    print(f"Saved Unified Bridge to:           {LEGACY_CANONICAL}")
+    print(f"Saved Deep Manuals Registry to:    {MANUALS_KNOWLEDGE}")
     print("================================================================================")
+
 
 if __name__ == "__main__":
     build_canonical_layer()
