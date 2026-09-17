@@ -883,6 +883,195 @@
       color: #fff;
     }
 
+    /* =========================================================================
+       PHASE 4: WORKFLOW STYLES (Field Inspection, Procurement, Answer Cards)
+       ========================================================================= */
+    .inspection-header {
+      background: rgba(14, 22, 38, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .compliance-meter-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .compliance-meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+      transition: width 0.3s ease;
+    }
+
+    .inspection-card {
+      background: rgba(10, 16, 28, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .inspection-card-pass {
+      border-left: 3.5px solid var(--accent-green);
+    }
+
+    .inspection-card-defect {
+      border-left: 3.5px solid var(--accent-red);
+      background: rgba(255, 51, 102, 0.06);
+    }
+
+    .inspection-pill {
+      font-size: 9.5px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      padding: 2px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .inspection-pill-pass {
+      background: rgba(0, 255, 136, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(0, 255, 136, 0.35);
+    }
+
+    .inspection-pill-defect {
+      background: rgba(255, 51, 102, 0.2);
+      color: var(--accent-red);
+      border: 1px solid rgba(255, 51, 102, 0.45);
+      animation: pulseAlert 1.5s infinite;
+    }
+
+    @keyframes pulseAlert {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+
+    .inspection-input {
+      width: 80px;
+      height: 28px;
+      background: #090e1a;
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 0 6px;
+      text-align: right;
+      outline: none;
+    }
+
+    .inspection-input:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    /* Procurement & Spares Calculator */
+    .procurement-calc-bar {
+      background: rgba(14, 22, 38, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .procurement-input {
+      width: 60px;
+      height: 30px;
+      background: #090e1a;
+      border: 1px solid var(--border-glow);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .procurement-preset-btn {
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      color: var(--accent-cyan);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .procurement-preset-btn:hover {
+      background: rgba(0, 240, 255, 0.2);
+    }
+
+    .list-a-pill {
+      font-size: 8.5px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      background: rgba(247, 37, 133, 0.2);
+      color: var(--accent-pink);
+      border: 1px solid rgba(247, 37, 133, 0.4);
+      padding: 1px 5px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    .formula-pill {
+      font-size: 9.5px;
+      font-family: var(--font-mono);
+      color: var(--accent-yellow);
+      background: rgba(255, 214, 10, 0.08);
+      padding: 2px 6px;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 214, 10, 0.2);
+      display: inline-block;
+    }
+
+    /* Unified Answer Card Toolbar */
+    .answer-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .answer-tool-btn {
+      background: rgba(14, 22, 38, 0.7);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-size: 9.5px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .answer-tool-btn:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+
     /* Layout Switcher */
     .layout-switcher {
       display: flex;
@@ -1942,6 +2131,10 @@
           <div style="color: var(--accent-cyan); font-size: 9px; cursor: pointer; margin-top: 2px;" onclick="openFullscreenActiveBlueprint()">🔍 Inspect Source Crop</div>
         </div>
       </div>
+      <!-- Standardized Action Toolbar (Blueprint Section 15) -->
+      <div class="answer-toolbar" id="answer-card-toolbar" style="display: none;">
+        <!-- Populated dynamically by inspectNode() -->
+      </div>
     </div>
 
     <!-- Multi-Tab Navigation Bar -->
@@ -1975,6 +2168,12 @@
       </button>
       <button class="drawer-tab" data-tab="paths" onclick="switchDrawerTab('paths')">
         <span>🛤️</span> Path Finder
+      </button>
+      <button class="drawer-tab" data-tab="inspection" onclick="switchDrawerTab('inspection')">
+        <span>📋</span> Field Inspection
+      </button>
+      <button class="drawer-tab" data-tab="procurement" onclick="switchDrawerTab('procurement')">
+        <span>📦</span> Spares & BOM
       </button>
     </div>
 
@@ -2087,6 +2286,20 @@
       <div class="tab-pane" id="tab-pane-paths">
         <div id="pathfinder-container" style="display: flex; flex-direction: column; gap: 10px; padding: 4px;">
           <!-- Populated dynamically by renderPathFinderUI() -->
+        </div>
+      </div>
+
+      <!-- 10. TAB: FIELD INSPECTION CHECKLIST WORKFLOW (§18) -->
+      <div class="tab-pane" id="tab-pane-inspection">
+        <div id="inspection-container" style="display: flex; flex-direction: column; gap: 10px; padding: 4px;">
+          <!-- Populated dynamically by renderFieldInspectionWorkflow() -->
+        </div>
+      </div>
+
+      <!-- 11. TAB: TURNOUT SPARES & BOM CALCULATOR (§19) -->
+      <div class="tab-pane" id="tab-pane-procurement">
+        <div id="procurement-container" style="display: flex; flex-direction: column; gap: 10px; padding: 4px;">
+          <!-- Populated dynamically by renderProcurementCalculator() -->
         </div>
       </div>
     </div>
@@ -3375,7 +3588,55 @@
           <div style="margin-top:8px; font-size:11px; color:var(--accent-green);">Source Code: ${eqSource}</div>
         `;
       } else {
-        descEl.innerText = data.desc || "Canonical railway track infrastructure asset governed by official RDSO technical specifications.";
+        const specs = data.specs || {};
+        const specEntries = Object.entries(specs);
+        const connectedEdges = kgPhysicsEdges.filter(e => e.from === data.id || e.to === data.id);
+        const relatedNames = connectedEdges.slice(0, 4).map(e => {
+          const targetId = e.from === data.id ? e.to : e.from;
+          const targetNode = kgPhysicsNodes.find(n => n.data.id === targetId);
+          return targetNode ? targetNode.data.label : targetId;
+        });
+
+        descEl.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 11.5px; line-height: 1.45; color: #e0e8f8;">
+              ${data.desc || "Canonical railway track infrastructure asset governed by official RDSO technical specifications."}
+            </div>
+
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 10px;">
+              <span style="background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3); color: var(--accent-cyan); padding: 2px 6px; border-radius: 4px; font-weight: 600;">
+                📜 ${currentActiveDossier.drawing_number} (ALT ${currentActiveDossier.alteration_number || 13})
+              </span>
+              <span style="background: rgba(157, 78, 221, 0.15); border: 1px solid rgba(157, 78, 221, 0.35); color: var(--text-main); padding: 2px 6px; border-radius: 4px;">
+                📏 BG 1676 mm
+              </span>
+              <span style="background: rgba(76, 201, 240, 0.1); border: 1px solid rgba(76, 201, 240, 0.3); color: var(--accent-blue); padding: 2px 6px; border-radius: 4px;">
+                IRS: T 10 / T 29
+              </span>
+            </div>
+
+            ${specEntries.length > 0 ? `
+              <div style="background: rgba(14, 22, 38, 0.6); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 6px 8px;">
+                <div style="font-size: 9.5px; font-weight: 700; color: var(--accent-yellow); text-transform: uppercase; margin-bottom: 4px;">Critical Parameters & Bounds:</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 10.5px;">
+                  ${specEntries.slice(0, 4).map(([k, v]) => `
+                    <div style="color: var(--text-dim);"><strong style="color: var(--text-main);">${k}:</strong> ${v}</div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            ${relatedNames.length > 0 ? `
+              <div style="font-size: 10px; color: var(--text-muted);">
+                <strong style="color: var(--accent-cyan);">Kinematic Context:</strong> Interconnected with ${relatedNames.join(', ')}.
+              </div>
+            ` : ''}
+
+            <div style="font-size: 10px; color: var(--accent-orange); background: rgba(247, 37, 133, 0.08); border-left: 2px solid var(--accent-pink); padding: 4px 8px; border-radius: 0 4px 4px 0;">
+              ⚠️ <strong>Safeguard:</strong> Strict compliance with IRPWM Chapter 4 & Note 28 maintenance directives.
+            </div>
+          </div>
+        `;
       }
       
       const provBox = document.getElementById('answer-provenance-box');
@@ -3394,6 +3655,29 @@
         const firstCrop = Object.values(currentActiveDossier.crops || {})[0] || "crops/t6155_notes_full.png";
         document.getElementById('answer-crop-thumb').src = firstCrop;
         currentActiveCrop = firstCrop;
+      }
+
+      // Populate Standardized Answer Card Action Toolbar (Blueprint §15)
+      const toolbar = document.getElementById('answer-card-toolbar');
+      if (toolbar) {
+        toolbar.style.display = "flex";
+        toolbar.innerHTML = `
+          <button class="answer-tool-btn" id="btn-answer-blueprint" onclick="openFullscreenActiveBlueprint()">
+            <span>🔍</span> Blueprint Crop
+          </button>
+          <button class="answer-tool-btn" id="btn-answer-twin" onclick="switchDrawerTab('twin')">
+            <span>📦</span> 3D Twin
+          </button>
+          <button class="answer-tool-btn" id="btn-answer-paths" onclick="renderPathFinderUI('${data.id}', 'std_irs_t10'); switchDrawerTab('paths');">
+            <span>🛤️</span> Trace Paths
+          </button>
+          <button class="answer-tool-btn" id="btn-answer-inspection" onclick="switchDrawerTab('inspection')">
+            <span>📋</span> Field Inspection
+          </button>
+          <button class="answer-tool-btn" id="btn-answer-procurement" onclick="switchDrawerTab('procurement')">
+            <span>📦</span> Spares & BOM
+          </button>
+        `;
       }
 
       // 2. Render Notes Tab
@@ -3634,6 +3918,18 @@
         if (container && (!container.children || container.children.length === 0)) {
           const startId = currentSelectedNode ? currentSelectedNode.data.id : "comp_tongue_rail";
           renderPathFinderUI(startId, "std_irs_t10");
+        }
+      }
+      if (tabId === 'inspection') {
+        const container = document.getElementById('inspection-container');
+        if (container && (!container.children || container.children.length === 0)) {
+          renderFieldInspectionWorkflow();
+        }
+      }
+      if (tabId === 'procurement') {
+        const container = document.getElementById('procurement-container');
+        if (container && (!container.children || container.children.length === 0)) {
+          renderProcurementCalculator(1);
         }
       }
     }
@@ -4793,6 +5089,388 @@
     window.focusPathIn3D = focusPathIn3D;
     window.loadPathTemplate = loadPathTemplate;
     window.renderPathFinderUI = renderPathFinderUI;
+
+    // =========================================================================
+    // PHASE 4: ENGINEERING WORKFLOWS (Field Inspection, Procurement, Answer Cards)
+    // =========================================================================
+
+    const CANONICAL_INSPECTION_ITEMS = [
+      {
+        id: "check_rail",
+        param: "check_rail_clearance",
+        title: "Check Rail Clearance at Crossing",
+        standard: "41.0 – 45.0 mm (IRPWM Para 429 & IRS: T 10)",
+        min: 41.0,
+        max: 45.0,
+        defaultVal: 43.0,
+        unit: "mm",
+        risk: "Clearance tight (<41 mm) risks wheel flange striking nose; slack (>45 mm) permits unguided wheel climb.",
+        remedy: "Adjust check rail packing washers or replace worn check rail blocks (LIST-A)."
+      },
+      {
+        id: "switch_throw",
+        param: "switch_throw",
+        title: "Switch Opening at Toe of Switch (Throw)",
+        standard: "160.0 – 163.0 mm (RDSO/T-6155 & Note 12)",
+        min: 160.0,
+        max: 163.0,
+        defaultVal: 160.0,
+        unit: "mm",
+        risk: "Insufficient throw (<160 mm) risks facing point wheel flange splitting; excessive (>163 mm) overloads point motor.",
+        remedy: "Adjust drive rod stroke on point machine (S-3454) or stroke limiter."
+      },
+      {
+        id: "joh_opening",
+        param: "joh_opening",
+        title: "Junction Opening at Heel (JOH)",
+        standard: ">= 57.0 mm (Nominal 60.0 mm per Layout Plan)",
+        min: 57.0,
+        max: 75.0,
+        defaultVal: 60.0,
+        unit: "mm",
+        risk: "Flange pinching against stock rail machined housing; potential switch rail fracture.",
+        remedy: "Inspect heel block spacers and verify SSD spring arm tension."
+      },
+      {
+        id: "toe_load",
+        param: "toe_load",
+        title: "ERC Mk-V Fastener Toe Load",
+        standard: ">= 1200 kg (IRS:T-12:2009 / RDSO/T-5919)",
+        min: 1200.0,
+        max: 2000.0,
+        defaultVal: 1250.0,
+        unit: "kg",
+        risk: "Sub-standard clamping (<1200 kg) permits rail creep, track gauge widening, and rail turnover under 25t axle load.",
+        remedy: "Replace exhausted elastic clips with new ERC Mk-V and renew GFN liners."
+      },
+      {
+        id: "bolt_torque",
+        param: "bolt_torque",
+        title: "Fishbolt & Tie Bar Tightening Torque",
+        standard: "550 – 650 N·m (IRS Standard P-Way Practice)",
+        min: 550.0,
+        max: 650.0,
+        defaultVal: 580.0,
+        unit: "N·m",
+        risk: "Loose bolts allow tie bar vibration and bolt hole ovalization leading to star cracks.",
+        remedy: "Retorque with calibrated torque wrench and insert new split pins."
+      },
+      {
+        id: "usfd_scan",
+        param: "usfd_scan",
+        title: "USFD 3-Zone Tongue Rail Ultrasonic Scan",
+        standard: "Zone 1, 2, 3 Flaw-Free (USFD Manual 2026 Chapter 10)",
+        min: 1,
+        max: 1,
+        defaultVal: 1,
+        unit: "status",
+        isCheckbox: true,
+        risk: "Undetected internal fatigue fracture in machined rail web triggers sudden rail break under traffic.",
+        remedy: "Immediate joggled fishplating with clamps per USFD emergency protocol."
+      }
+    ];
+
+    function renderFieldInspectionWorkflow() {
+      const container = document.getElementById('inspection-container');
+      if (!container) return;
+
+      let cardsHtml = '';
+      CANONICAL_INSPECTION_ITEMS.forEach(it => {
+        cardsHtml += `
+          <div class="inspection-card inspection-card-pass" id="insp-card-${it.id}">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong style="color: #fff; font-size: 12px;">${it.title}</strong>
+                <div style="font-size: 9.5px; color: var(--accent-cyan); font-family: var(--font-mono); margin-top: 1px;">Standard: ${it.standard}</div>
+              </div>
+              <span class="inspection-pill inspection-pill-pass" id="insp-badge-${it.id}">PASS</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(8, 14, 26, 0.6); padding: 6px 8px; border-radius: 4px; margin-top: 4px;">
+              <span style="font-size: 10px; color: var(--text-muted);">Measured Field Value:</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                ${it.isCheckbox ? `
+                  <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--accent-green); cursor: pointer;">
+                    <input type="checkbox" id="insp-val-${it.id}" checked onchange="evaluateFieldInspection()">
+                    <span>Flaw-Free (Certified)</span>
+                  </label>
+                ` : `
+                  <input type="number" step="0.5" class="inspection-input" id="insp-val-${it.id}" value="${it.defaultVal}" oninput="evaluateFieldInspection()">
+                  <span style="font-size: 11px; color: var(--text-dim); font-family: var(--font-mono);">${it.unit}</span>
+                `}
+              </div>
+            </div>
+
+            <div style="font-size: 10px; color: var(--text-muted); line-height: 1.35; margin-top: 2px;" id="insp-msg-${it.id}">
+              💡 <strong>Safety Risk:</strong> ${it.risk}
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = `
+        <div class="inspection-header">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 16px;">📋</span>
+              <div>
+                <strong style="color: #fff; font-size: 12.5px;">Turnout Field Inspection Checklist</strong>
+                <div style="font-size: 9.5px; color: var(--text-dim);">RDSO/T-6155 (Curved Switch) · Broad Gauge 1676 mm · IRPWM 2024</div>
+              </div>
+            </div>
+            <button class="search-card-btn" onclick="exportInspectionReport()">
+              <span>🖨️</span> Export Certificate
+            </button>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+            <span style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Compliance Status:</span>
+            <span id="insp-compliance-label" style="font-size: 10.5px; font-weight: 800; color: var(--accent-green); font-family: var(--font-mono);">6/6 CHECKS PASSED (100%)</span>
+          </div>
+          <div class="compliance-meter-bar">
+            <div id="insp-compliance-bar" class="compliance-meter-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          ${cardsHtml}
+        </div>
+      `;
+
+      evaluateFieldInspection();
+    }
+
+    function evaluateFieldInspection() {
+      let passCount = 0;
+      const totalCount = CANONICAL_INSPECTION_ITEMS.length;
+
+      CANONICAL_INSPECTION_ITEMS.forEach(it => {
+        const card = document.getElementById(`insp-card-${it.id}`);
+        const badge = document.getElementById(`insp-badge-${it.id}`);
+        const msg = document.getElementById(`insp-msg-${it.id}`);
+        const input = document.getElementById(`insp-val-${it.id}`);
+        if (!card || !badge || !input) return;
+
+        let isPass = false;
+        let note = "";
+
+        if (it.isCheckbox) {
+          isPass = input.checked;
+          note = isPass ? "✓ USFD scan complete: No ultrasonic flaw echoes recorded in tongue rail." : "⚠️ PENDING / FLAW DETECTED: Ultrasonic inspection incomplete or flaw identified.";
+        } else {
+          const val = parseFloat(input.value);
+          if (isNaN(val)) {
+            isPass = false;
+            note = "⚠️ Enter valid numeric measurement.";
+          } else if (val >= it.min && val <= it.max) {
+            isPass = true;
+            note = `✓ Value ${val} ${it.unit} is within statutory tolerance [${it.min} - ${it.max} ${it.unit}].`;
+          } else if (val < it.min) {
+            isPass = false;
+            note = `❌ DEFECT: Measured ${val} ${it.unit} is BELOW statutory limit (min ${it.min} ${it.unit}). ${it.risk}`;
+          } else {
+            isPass = false;
+            note = `❌ DEFECT: Measured ${val} ${it.unit} is ABOVE statutory limit (max ${it.max} ${it.unit}). ${it.risk}`;
+          }
+        }
+
+        if (isPass) {
+          passCount++;
+          card.classList.remove('inspection-card-defect');
+          card.classList.add('inspection-card-pass');
+          badge.className = 'inspection-pill inspection-pill-pass';
+          badge.innerText = 'PASS';
+          msg.innerHTML = `<span style="color: var(--accent-green);">${note}</span>`;
+        } else {
+          card.classList.remove('inspection-card-pass');
+          card.classList.add('inspection-card-defect');
+          badge.className = 'inspection-pill inspection-pill-defect';
+          badge.innerText = 'DEFECT';
+          msg.innerHTML = `<span style="color: var(--accent-red); font-weight: 600;">${note}</span><div style="color: var(--accent-yellow); font-size: 9.5px; margin-top: 2px;">🔧 Remedy: ${it.remedy}</div>`;
+        }
+      });
+
+      const label = document.getElementById('insp-compliance-label');
+      const bar = document.getElementById('insp-compliance-bar');
+      const pct = Math.round((passCount / totalCount) * 100);
+
+      if (label) {
+        if (passCount === totalCount) {
+          label.innerText = `${passCount}/${totalCount} CHECKS PASSED (100%) · FIT FOR SPEED`;
+          label.style.color = "var(--accent-green)";
+        } else {
+          label.innerText = `${passCount}/${totalCount} CHECKS PASSED (${pct}%) · SPEED RESTRICTION REQUIRED`;
+          label.style.color = "var(--accent-red)";
+        }
+      }
+      if (bar) {
+        bar.style.width = `${pct}%`;
+        bar.style.background = passCount === totalCount ? "linear-gradient(90deg, var(--accent-green), var(--accent-cyan))" : "linear-gradient(90deg, var(--accent-red), var(--accent-orange))";
+      }
+    }
+
+    function exportInspectionReport() {
+      let report = `================================================================================\n`;
+      report += `INDIAN RAILWAYS PERMANENT WAY FIELD INSPECTION COMPLIANCE CERTIFICATE\n`;
+      report += `Governing Standard: IRPWM 2024 / IRS: T 10 / RDSO/T-6155 (Alt 13)\n`;
+      report += `Inspection Date: ${new Date().toISOString().split('T')[0]}  Time: ${new Date().toLocaleTimeString()}\n`;
+      report += `Track Asset: 1 in 12 Curved Switch Assembly 60 kg (RDSO/T-6155)\n`;
+      report += `Nominal Track Gauge: 1676 mm Broad Gauge\n`;
+      report += `================================================================================\n\n`;
+
+      CANONICAL_INSPECTION_ITEMS.forEach((it, idx) => {
+        const input = document.getElementById(`insp-val-${it.id}`);
+        const val = it.isCheckbox ? (input && input.checked ? "Certified Flaw-Free" : "Pending") : (input ? `${input.value} ${it.unit}` : "N/A");
+        report += `[Check ${idx+1}] ${it.title}\n`;
+        report += `  - Standard: ${it.standard}\n`;
+        report += `  - Measured Value: ${val}\n\n`;
+      });
+
+      report += `================================================================================\n`;
+      report += `Inspecting Official Signature: ______________________  Designation: SSE / P-Way\n`;
+
+      const blob = new Blob([report], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `RDSO_T6155_Field_Inspection_${new Date().toISOString().split('T')[0]}.txt`;
+      a.click();
+    }
+
+    // =========================================================================
+    // TURNOUT PROCUREMENT & NOTE 28 LIST-A SPARES CALCULATOR (Blueprint §19)
+    // =========================================================================
+
+    const CANONICAL_BOM_CATALOG = [
+      { code: "comp_tongue_rail", name: "Tongue Rail ZU-1-60 LH & RH Set", drg: "RDSO/T-6155", base: 1, unit: "Set", isListA: true },
+      { code: "comp_stock_rail", name: "Stock Rail 60 kg Machined LH & RH", drg: "RDSO/T-6155", base: 1, unit: "Set", isListA: true },
+      { code: "comp_detailb", name: "Detail 'B' Flat Tie Bar (222 mm Drop)", drg: "RDSO/T-6155", base: 2, unit: "Nos", isListA: true },
+      { code: "spare_bolt_25x310", name: "HTS Fishbolt 25x310 mm With Nut & Split Pin", drg: "RDSO/T-6155", base: 24, unit: "Nos", isListA: true },
+      { code: "comp_ssd_unit", name: "Spring Setting Device (SSD) Unit", drg: "RDSO/T-6216", base: 1, unit: "Set", isListA: true },
+      { code: "comp_cms_crossing", name: "Cast Manganese Steel (CMS) Crossing 1 in 12", drg: "RDSO/T-6280", base: 1, unit: "No", isListA: false },
+      { code: "turnout_layout_pscs", name: "Special PSC Turnout Sleepers (Sleeper 01-64)", drg: "RDSO/T-6154", base: 64, unit: "Nos", isListA: false },
+      { code: "fastener_erc_mkv", name: "ERC Mk-V High-Toe-Load Elastic Rail Clips", drg: "RDSO/T-5919", base: 256, unit: "Nos", isListA: true },
+      { code: "fastener_gfn_liners", name: "GFN-66 Glass-Filled Nylon Liners", drg: "RDSO/T-3706", base: 256, unit: "Nos", isListA: true }
+    ];
+
+    function calculateProcurementBOM(orderSets = 1) {
+      const sets = Math.max(1, parseInt(orderSets) || 1);
+      return CANONICAL_BOM_CATALOG.map(item => {
+        const baseReq = item.base * sets;
+        const buffer = item.isListA ? Math.ceil(baseReq * 0.10) : 0;
+        const total = baseReq + buffer;
+        return {
+          ...item,
+          orderSets: sets,
+          baseReq: baseReq,
+          buffer: buffer,
+          total: total,
+          formula: item.isListA ? `${item.base} × ${sets} sets + ${buffer} (10% buffer)` : `${item.base} × ${sets} sets`
+        };
+      });
+    }
+
+    function renderProcurementCalculator(orderSets = 1) {
+      const container = document.getElementById('procurement-container');
+      if (!container) return;
+
+      const sets = Math.max(1, parseInt(orderSets) || 1);
+      const items = calculateProcurementBOM(sets);
+
+      let rowsHtml = '';
+      items.forEach(it => {
+        rowsHtml += `
+          <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 11px;">
+            <td style="padding: 6px 8px;">
+              <strong style="color: #fff;">${it.name}</strong>
+              <div style="font-size: 9.5px; color: var(--text-dim); font-family: var(--font-mono);">${it.drg}</div>
+            </td>
+            <td style="padding: 6px 4px; text-align: center;">
+              ${it.isListA ? `<span class="list-a-pill">LIST-A (+10%)</span>` : `<span style="font-size: 9px; color: var(--text-dim);">ASSEMBLY</span>`}
+            </td>
+            <td style="padding: 6px 4px; text-align: center; color: var(--text-muted); font-family: var(--font-mono);">${it.base} ${it.unit}</td>
+            <td style="padding: 6px 8px; font-family: var(--font-mono); font-size: 10px;">
+              <span class="formula-pill">${it.formula}</span>
+            </td>
+            <td style="padding: 6px 8px; text-align: right; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-mono); font-size: 12.5px;">
+              ${it.total} ${it.unit}
+            </td>
+          </tr>
+        `;
+      });
+
+      container.innerHTML = `
+        <div class="procurement-wrap">
+          <!-- Multiplier Control Bar -->
+          <div class="procurement-calc-bar">
+            <div>
+              <strong style="color: #fff; font-size: 12px;">📦 Turnout Procurement Quantity Calculator</strong>
+              <div style="font-size: 9.5px; color: var(--text-muted); margin-top: 2px;">
+                Note 28 Mandate: 10% statutory wear buffer automatically added for LIST-A depot spares.
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11px; color: var(--text-muted);">Sets on Order:</span>
+              <input type="number" min="1" max="500" value="${sets}" class="procurement-input" id="proc-sets-input" oninput="renderProcurementCalculator(this.value)">
+              <button class="search-card-btn" onclick="exportProcurementCSV()">
+                <span>💾</span> Export CSV
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Presets -->
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <span style="font-size: 10px; color: var(--text-dim); font-weight: 600;">QUICK PRESETS:</span>
+            <button class="procurement-preset-btn" onclick="renderProcurementCalculator(1)">1 Set</button>
+            <button class="procurement-preset-btn" onclick="renderProcurementCalculator(5)">5 Sets</button>
+            <button class="procurement-preset-btn" onclick="renderProcurementCalculator(10)">10 Sets</button>
+            <button class="procurement-preset-btn" onclick="renderProcurementCalculator(25)">25 Sets</button>
+            <button class="procurement-preset-btn" onclick="renderProcurementCalculator(50)">50 Sets</button>
+          </div>
+
+          <!-- Calculation Table -->
+          <div style="background: rgba(10, 16, 28, 0.7); border: 1px solid var(--border-subtle); border-radius: 6px; overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+              <thead>
+                <tr style="background: rgba(14, 22, 38, 0.9); font-size: 9.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-subtle);">
+                  <th style="padding: 8px;">Component Description</th>
+                  <th style="padding: 8px; text-align: center;">Category</th>
+                  <th style="padding: 8px; text-align: center;">Per Set</th>
+                  <th style="padding: 8px;">Note 28 Formula</th>
+                  <th style="padding: 8px; text-align: right;">Total Required</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function exportProcurementCSV() {
+      const input = document.getElementById('proc-sets-input');
+      const sets = input ? parseInt(input.value) || 1 : 1;
+      const items = calculateProcurementBOM(sets);
+
+      let csv = "Code,Item Description,Drawing Reference,Classification,Base Quantity Per Set,Order Sets,Base Requirement,Note 28 Spares Buffer (10%),Total Requisition Quantity,Unit\n";
+      items.forEach(it => {
+        csv += `"${it.code}","${it.name}","${it.drg}","${it.isListA ? 'LIST-A SPARE' : 'ASSEMBLY'}",${it.base},${sets},${it.baseReq},${it.buffer},${it.total},"${it.unit}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `RDSO_T6155_Turnout_Procurement_Manifest_${sets}_Sets.csv`;
+      a.click();
+    }
+
+    window.renderFieldInspectionWorkflow = renderFieldInspectionWorkflow;
+    window.evaluateFieldInspection = evaluateFieldInspection;
+    window.exportInspectionReport = exportInspectionReport;
+    window.calculateProcurementBOM = calculateProcurementBOM;
+    window.renderProcurementCalculator = renderProcurementCalculator;
+    window.exportProcurementCSV = exportProcurementCSV;
 
     function renderDossierNotes(dossier) {
       const container = document.getElementById('drawer-notes-list');
