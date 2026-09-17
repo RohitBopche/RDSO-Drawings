@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rdso-drawings.local/schema/vocabularies/relationship-types.json",
+  "title": "RDSO Knowledge Graph Relationship Types",
+  "type": "array",
+  "uniqueItems": true,
+  "items": {
+    "type": "string",
+    "enum": [
+      "HAS_EDITION", "HAS_REVISION", "HAS_PAGE", "HAS_SECTION", "HAS_CLAUSE", "HAS_NOTE",
+      "HAS_EVIDENCE", "SUPPORTS", "CITES", "REFERENCES", "APPLIES_TO", "CONTAINS", "PART_OF",
+      "ASSEMBLES", "MATES_WITH", "INTERFACES_WITH", "CONNECTED_TO", "INSTALLED_ON", "FASTENED_BY",
+      "SPECIFIED_BY", "SPECIFIES", "REQUIRES", "CONSTRAINED_BY", "MEASURED_BY", "INSPECTED_BY",
+      "TESTED_BY", "ACCEPTED_BY", "GOVERNS", "INTRODUCED_IN", "SUPERSEDES", "AMENDS", "CORRECTS",
+      "CAUSES", "CAN_CAUSE", "RESULTS_IN", "MITIGATED_BY", "USED_IN", "PROCURED_AS", "REPLACED_BY",
+      "HAS_BOM_ITEM", "HAS_SPARE", "CONTAINS_SLEEPER"
+    ]
+  }
+}
