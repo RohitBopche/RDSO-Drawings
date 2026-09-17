@@ -1715,6 +1715,123 @@ html_template = r'''<!DOCTYPE html>
       transition: width 0.3s ease;
     }
 
+    /* =========================================================================
+       PHASE 7: SEMANTIC INTELLIGENCE & HYBRID RETRIEVAL (§24, §36)
+       ========================================================================= */
+    .semantic-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 4px;
+    }
+
+    .semantic-subnav {
+      display: flex;
+      gap: 6px;
+      background: rgba(10, 16, 28, 0.7);
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .semantic-subnav-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+
+    .semantic-subnav-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .semantic-subnav-btn.active {
+      background: rgba(180, 80, 255, 0.2);
+      color: var(--accent-purple);
+      border: 1px solid rgba(180, 80, 255, 0.4);
+    }
+
+    .concept-neighbor-card {
+      background: linear-gradient(135deg, rgba(16, 24, 42, 0.9), rgba(10, 16, 28, 0.95));
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .concept-neighbor-card:hover {
+      border-color: var(--accent-purple);
+      box-shadow: 0 4px 16px rgba(180, 80, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .knowledge-gap-card {
+      background: rgba(14, 22, 38, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .query-expansion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 8px 10px;
+      background: rgba(180, 80, 255, 0.08);
+      border: 1px dashed rgba(180, 80, 255, 0.35);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .expansion-chip {
+      background: rgba(180, 80, 255, 0.18);
+      color: #d8b4fe;
+      border: 1px solid rgba(180, 80, 255, 0.35);
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+
+    .expansion-chip:hover {
+      background: var(--accent-purple);
+      color: #fff;
+      border-color: var(--accent-purple);
+    }
+
+    .semantic-expansion-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(180, 80, 255, 0.04);
+    }
+
     /* Layout Switcher */
     .layout-switcher {
       display: flex;
@@ -2863,6 +2980,9 @@ html_template = r'''<!DOCTYPE html>
       <button class="drawer-tab" data-tab="learning" id="drawer-tab-learning" onclick="switchDrawerTab('learning')">
         <span>🎓</span> Academy
       </button>
+      <button class="drawer-tab" data-tab="semantic" id="drawer-tab-semantic" onclick="switchDrawerTab('semantic')">
+        <span>🧠</span> Semantic
+      </button>
     </div>
 
     <div class="drawer-content">
@@ -3002,6 +3122,13 @@ html_template = r'''<!DOCTYPE html>
       <div class="tab-pane" id="tab-pane-learning">
         <div id="learning-container" class="learning-container">
           <!-- Populated dynamically by renderLearningModule() -->
+        </div>
+      </div>
+
+      <!-- 14. TAB: SEMANTIC INTELLIGENCE & CONCEPT RETRIEVAL (§24, §36) -->
+      <div class="tab-pane" id="tab-pane-semantic">
+        <div id="semantic-container" class="semantic-container">
+          <!-- Populated dynamically by renderSemanticModule() -->
         </div>
       </div>
     </div>
@@ -5192,6 +5319,12 @@ html_template = r'''<!DOCTYPE html>
         const container = document.getElementById('learning-container');
         if (container && (!container.children || container.children.length === 0)) {
           renderLearningModule('tracks');
+        }
+      }
+      if (tabId === 'semantic') {
+        const container = document.getElementById('semantic-container');
+        if (container && (!container.children || container.children.length === 0)) {
+          renderSemanticModule('neighbors');
         }
       }
     }
@@ -8501,6 +8634,533 @@ html_template = r'''<!DOCTYPE html>
     window.resetQuizAssessment = resetQuizAssessment;
     window.renderCompetencySubView = renderCompetencySubView;
 
+    /* =========================================================================
+       PHASE 7: SEMANTIC INTELLIGENCE & HYBRID RETRIEVAL (§24, §36)
+       ========================================================================= */
+
+    const SEMANTIC_SYNONYM_REGISTRY = {
+      "turnout":   ["tongue rail", "curved switch", "t-6155", "t-6154", "thick-web", "1:12", "comp_tongue_rail", "switch assembly"],
+      "points":    ["tongue rail", "curved switch", "t-6155", "switch assembly", "comp_tongue_rail", "point machine"],
+      "switch":    ["tongue rail", "stock rail", "t-6155", "curved switch", "comp_tongue_rail"],
+      "pad":       ["grsp", "grooved rubber sole pad", "irs:t-46", "composite pad", "10mm", "comp_grsp", "elastomeric"],
+      "rubber":    ["grsp", "irs:t-46", "elastomeric", "sole pad", "comp_grsp"],
+      "clip":      ["erc mk-v", "elastic rail clip", "irs:t-10", "toe load", "comp_erc", "1200 kg"],
+      "clamp":     ["erc mk-v", "emergency clamp", "fishplate clamp", "comp_erc"],
+      "fastener":  ["erc mk-v", "elastic rail clip", "irs:t-10", "bolt", "fish bolt", "comp_erc"],
+      "crack":     ["star crack", "bolt hole", "ultrasonic", "usfd", "imr", "obs", "fatigue", "man_usfd_ch10"],
+      "defect":    ["imr", "obs", "star crack", "usfd", "flaking", "man_usfd_ch10", "gauge corner"],
+      "flaw":      ["ultrasonic", "usfd", "imr", "star crack", "echo", "man_usfd_ch10"],
+      "tie bar":   ["detail b", "flat tie bar", "222 mm drop", "alt 11", "tamping", "comp_detailb"],
+      "stretcher": ["detail b", "flat tie bar", "222 mm drop", "comp_detailb"],
+      "tamping":   ["222 mm drop", "detail b", "tamping tool tines", "mechanized maintenance", "comp_detailb"],
+      "wear":      ["permissible wear", "tongue rail wear", "check rail clearance", "6.0 mm", "8.0 mm", "irpwm 2024 para 429", "man_irpwm_ch4"],
+      "clearance": ["check rail clearance", "41-45 mm", "switch throw", "115 mm", "irpwm 2024 para 429"],
+      "tolerance": ["permissible", "gauge", "cross-level", "twist", "irpwm 2024", "man_irpwm_ch4"],
+      "inspection":["usfd", "keyman", "joint inspection", "monthly", "quarterly", "man_usfd_ch10", "man_irpwm_ch4"],
+      "ultrasonic":["usfd", "3-zone", "probe", "45 degree", "70 degree", "echo", "man_usfd_ch10"],
+      "sleeper":   ["psc", "pre-stressed concrete", "fan-shaped", "turnout sleeper", "rdso layout"],
+      "gauge":     ["1676 mm", "broad gauge", "bg", "gauge face", "check rail"],
+      "spares":    ["list-a", "note 28", "10%", "procurement", "depot stock", "bom"],
+      "bolt":      ["fish bolt", "hts", "25x310", "split pin", "bolt hole", "star crack"],
+      "revision":  ["alteration", "alt 10", "alt 11", "alt 12", "alt 13", "amendment", "superseded"],
+      "crossing":  ["nose", "vee", "check rail", "wing rail", "crossing nose"],
+      "weld":      ["alumino-thermic", "flash butt", "at weld", "fbw", "rail joint"]
+    };
+
+    function expandSearchQuery(query) {
+      const tokens = query.toLowerCase().trim().split(/\s+/);
+      const expanded = new Set(tokens);
+
+      // Single-token expansion
+      tokens.forEach(t => {
+        if (SEMANTIC_SYNONYM_REGISTRY[t]) {
+          SEMANTIC_SYNONYM_REGISTRY[t].forEach(syn => expanded.add(syn.toLowerCase()));
+        }
+      });
+
+      // Bigram expansion (e.g. "tie bar", "star crack")
+      for (let i = 0; i < tokens.length - 1; i++) {
+        const bigram = tokens[i] + ' ' + tokens[i + 1];
+        if (SEMANTIC_SYNONYM_REGISTRY[bigram]) {
+          SEMANTIC_SYNONYM_REGISTRY[bigram].forEach(syn => expanded.add(syn.toLowerCase()));
+        }
+      }
+
+      return Array.from(expanded).sort();
+    }
+
+    function getSemanticMatchTier(lexicalScore, semanticHits) {
+      if (lexicalScore >= 1000) return { tier: 'EXACT_ID', icon: '🎯', color: 'var(--accent-cyan)' };
+      if (lexicalScore >= 400) return { tier: 'LEXICAL', icon: '🔤', color: 'var(--accent-green)' };
+      if (semanticHits >= 2) return { tier: 'SEMANTIC', icon: '✨', color: 'var(--accent-purple)' };
+      if (semanticHits >= 1 || lexicalScore > 0) return { tier: 'HYBRID', icon: '⚡', color: '#ffaa00' };
+      return { tier: 'GENERAL', icon: '🔍', color: 'var(--text-muted)' };
+    }
+
+    function rankHybridSearchResults(query) {
+      const q = query.trim().toLowerCase();
+      if (!q) return [];
+      const qNorm = q.replace(/[-_/\\s]/g, '');
+      const expanded = expandSearchQuery(q);
+      const extraTerms = expanded.filter(t => !q.split(/\s+/).includes(t));
+
+      const scored = [];
+      kgPhysicsNodes.forEach(node => {
+        const data = node.data;
+        const id = (data.id || '').toLowerCase();
+        const idNorm = id.replace(/[-_/\\s]/g, '');
+        const label = (data.label || '').toLowerCase();
+        const labelNorm = label.replace(/[-_/\\s]/g, '');
+        const type = (data.type || '').toUpperCase();
+        const domain = (data.domain || '').toLowerCase();
+        const desc = (data.desc || '').toLowerCase();
+        const specsStr = JSON.stringify(data.specs || {}).toLowerCase();
+        const allText = id + ' ' + label + ' ' + desc + ' ' + specsStr;
+
+        let sLexical = 0;
+        let sMetadata = 0;
+        let sSemantic = 0;
+        let sGraph = 0;
+        let semanticHits = 0;
+
+        // Level 1: Lexical
+        if (q === id || qNorm === idNorm) {
+          sLexical += 1000;
+        } else if (qNorm.replace('t', '').replace('rdso', '') === idNorm.replace('drg', '').replace('rdso', '') && qNorm.length >= 4) {
+          sLexical += 1000;
+        } else if (id.includes(q) || idNorm.includes(qNorm)) {
+          sLexical += 500;
+        }
+        if (label.startsWith(q) || labelNorm.startsWith(qNorm)) {
+          sLexical += 400;
+        } else if (label.includes(q) || labelNorm.includes(qNorm)) {
+          sLexical += 250;
+        }
+        if (desc.includes(q)) sLexical += 80;
+        if (specsStr.includes(q)) sLexical += 60;
+
+        // Level 2: Metadata
+        const isDrawingQuery = ['6155', '6154', '6216', '6280', '6275', 'drg', 'drawing', 't-'].some(k => q.includes(k));
+        if (type === 'DRAWING' && isDrawingQuery) sMetadata += 300;
+        else if (type === 'DRAWING') sMetadata += 100;
+        if (type.toLowerCase() === q || domain === q) sMetadata += 150;
+
+        // Level 3: Graph centrality
+        const edges = (data.edges || []);
+        sGraph += Math.min(edges.length * 10, 80);
+        if (currentSelectedNode && currentSelectedNode.data) {
+          const selId = currentSelectedNode.data.id;
+          if (edges.some(e => e.target === selId || e.source === selId)) {
+            sGraph += 120;
+          }
+        }
+
+        // Level 4: Semantic expansion
+        extraTerms.forEach(term => {
+          if (allText.includes(term)) {
+            semanticHits += 1;
+            sSemantic += 120;
+          }
+        });
+
+        // Notes match for drg_6155
+        if (q.length >= 3 && data.id === 'drg_6155') {
+          const d = RDSO_EXTRACTED_KNOWLEDGE['RDSO_T_6155'];
+          if (d && d.general_notes) {
+            const matchingNotes = d.general_notes.filter(n => (n.text || '').toLowerCase().includes(q));
+            if (matchingNotes.length > 0) {
+              sLexical += 120 + (matchingNotes.length * 10);
+            }
+          }
+        }
+
+        const totalScore = sLexical + sMetadata + sSemantic + sGraph;
+        if (totalScore > 0) {
+          const matchInfo = getSemanticMatchTier(sLexical, semanticHits);
+          scored.push({
+            score: totalScore,
+            node: node,
+            matchTier: matchInfo.tier,
+            matchIcon: matchInfo.icon,
+            matchColor: matchInfo.color,
+            semanticHits: semanticHits,
+            breakdown: { lexical: sLexical, metadata: sMetadata, semantic: sSemantic, graph: sGraph }
+          });
+        }
+      });
+
+      scored.sort((a, b) => b.score - a.score);
+      return scored;
+    }
+
+    function findConceptNeighbors(nodeId, topK = 5) {
+      const targetNode = kgPhysicsNodes.find(n => n.data.id === nodeId);
+      if (!targetNode) return [];
+
+      const targetData = targetNode.data;
+      const targetFeatures = new Set([
+        targetData.type || '',
+        targetData.domain || '',
+        ...(targetData.edges || []).map(e => e.target || e.source || ''),
+        ...(targetData.label || '').toLowerCase().split(/\s+/)
+      ].filter(Boolean));
+
+      const neighbors = [];
+      kgPhysicsNodes.forEach(n => {
+        if (n.data.id === nodeId) return;
+        const nData = n.data;
+        const nFeatures = new Set([
+          nData.type || '',
+          nData.domain || '',
+          ...(nData.edges || []).map(e => e.target || e.source || ''),
+          ...(nData.label || '').toLowerCase().split(/\s+/)
+        ].filter(Boolean));
+
+        const intersection = [...targetFeatures].filter(f => nFeatures.has(f)).length;
+        const union = new Set([...targetFeatures, ...nFeatures]).size;
+        let jaccard = union > 0 ? intersection / union : 0;
+
+        // Connection boost
+        const isConnected = (targetData.edges || []).some(e =>
+          e.target === nData.id || e.source === nData.id
+        );
+        if (isConnected) jaccard = Math.min(jaccard + 0.30, 1.0);
+
+        // Same domain boost
+        if (targetData.domain && targetData.domain === nData.domain) {
+          jaccard = Math.min(jaccard + 0.10, 1.0);
+        }
+
+        if (jaccard > 0.05) {
+          neighbors.push({
+            id: nData.id,
+            label: nData.label,
+            type: nData.type,
+            domain: nData.domain,
+            similarity: Math.round(jaccard * 100),
+            isConnected: isConnected
+          });
+        }
+      });
+
+      neighbors.sort((a, b) => b.similarity - a.similarity);
+      return neighbors.slice(0, topK);
+    }
+
+    function auditKnowledgeGaps() {
+      const gaps = [];
+      let completeCount = 0;
+      const total = kgPhysicsNodes.length;
+
+      kgPhysicsNodes.forEach(n => {
+        const data = n.data;
+        const nodeGaps = [];
+
+        // Check for missing evidence
+        const hasEvidence = data.specs && (data.specs.source_page || data.specs.source_doc || data.specs.DrawingNumber);
+        if (!hasEvidence && data.type !== 'MANUAL_CHAPTER') {
+          nodeGaps.push('MISSING_EVIDENCE');
+        }
+
+        // Check for missing tolerances on components
+        if (data.type === 'COMPONENT') {
+          const hasTolerances = data.specs && Object.keys(data.specs).some(k =>
+            k.toLowerCase().includes('tolerance') || k.toLowerCase().includes('wear') ||
+            k.toLowerCase().includes('clearance') || k.toLowerCase().includes('limit')
+          );
+          if (!hasTolerances) {
+            nodeGaps.push('MISSING_TOLERANCE');
+          }
+        }
+
+        // Check for untracked revisions on drawings
+        if (data.type === 'DRAWING') {
+          const hasRevisions = (data.edges || []).some(e => e.type === 'HAS_REVISION');
+          if (!hasRevisions) {
+            nodeGaps.push('UNTRACKED_REVISIONS');
+          }
+        }
+
+        // Check for orphan nodes (no edges)
+        if (!data.edges || data.edges.length === 0) {
+          nodeGaps.push('ORPHAN_NODE');
+        }
+
+        if (nodeGaps.length > 0) {
+          gaps.push({ id: data.id, label: data.label, type: data.type, gaps: nodeGaps });
+        } else {
+          completeCount += 1;
+        }
+      });
+
+      const completeness = total > 0 ? Math.round((completeCount / total) * 100 * 10) / 10 : 100;
+      return {
+        completeness_pct: completeness,
+        total_nodes: total,
+        complete_nodes: completeCount,
+        nodes_with_gaps: gaps.length,
+        gaps: gaps,
+        gap_breakdown: {
+          missing_evidence: gaps.filter(g => g.gaps.includes('MISSING_EVIDENCE')).length,
+          missing_tolerance: gaps.filter(g => g.gaps.includes('MISSING_TOLERANCE')).length,
+          untracked_revisions: gaps.filter(g => g.gaps.includes('UNTRACKED_REVISIONS')).length,
+          orphan_nodes: gaps.filter(g => g.gaps.includes('ORPHAN_NODE')).length
+        }
+      };
+    }
+
+    // ===================== SEMANTIC DRAWER MODULE =====================
+
+    function renderSemanticModule(subTab = 'neighbors') {
+      const container = document.getElementById('semantic-container');
+      if (!container) return;
+
+      container.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="semantic-subnav">
+            <button class="semantic-subnav-btn ${subTab === 'neighbors' ? 'active' : ''}" onclick="renderSemanticModule('neighbors')">
+              <span>🔮</span> Similar Concepts
+            </button>
+            <button class="semantic-subnav-btn ${subTab === 'taxonomy' ? 'active' : ''}" onclick="renderSemanticModule('taxonomy')">
+              <span>🧬</span> Semantic Taxonomy
+            </button>
+            <button class="semantic-subnav-btn ${subTab === 'gaps' ? 'active' : ''}" onclick="renderSemanticModule('gaps')">
+              <span>🔍</span> Knowledge Gaps
+            </button>
+          </div>
+          <div id="semantic-subview-mount"></div>
+        </div>
+      `;
+
+      const mount = document.getElementById('semantic-subview-mount');
+      if (subTab === 'neighbors') renderNeighborsSubView(mount);
+      else if (subTab === 'taxonomy') renderTaxonomySubView(mount);
+      else if (subTab === 'gaps') renderGapsSubView(mount);
+    }
+
+    function renderNeighborsSubView(mount) {
+      const selectedId = currentSelectedNode ? currentSelectedNode.data.id : 'drg_6155';
+      const selectedLabel = currentSelectedNode ? currentSelectedNode.data.label : 'RDSO/T-6155';
+      const neighbors = findConceptNeighbors(selectedId, 8);
+
+      let html = `
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 12px; font-weight: 700; color: #fff;">
+                Concept Proximity Explorer
+              </div>
+              <div style="font-size: 10px; color: var(--text-muted); margin-top: 1px;">
+                Multi-attribute Jaccard similarity for <span style="color: var(--accent-purple); font-weight: 700;">${selectedLabel}</span>
+              </div>
+            </div>
+            <span class="search-card-type-badge" style="background: rgba(180,80,255,0.15); color: var(--accent-purple); border: 1px solid rgba(180,80,255,0.4);">
+              ${neighbors.length} NEIGHBORS
+            </span>
+          </div>
+      `;
+
+      if (neighbors.length === 0) {
+        html += `<div style="padding: 16px; text-align: center; color: var(--text-dim); font-size: 11px;">Select a node in the 3D graph to view its conceptual neighbors.</div>`;
+      } else {
+        neighbors.forEach((nb, idx) => {
+          const simColor = nb.similarity >= 70 ? 'var(--accent-green)' : nb.similarity >= 40 ? '#ffaa00' : 'var(--accent-purple)';
+          const typeIcons = { DRAWING: '📐', COMPONENT: '🔩', STANDARD: '📜', MANUAL_CHAPTER: '📖', REVISION: '🔄' };
+          const icon = typeIcons[nb.type] || '📦';
+
+          html += `
+            <div class="concept-neighbor-card" onclick="inspectNodeById('${nb.id}')" style="border-left: 3px solid ${simColor};">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 14px;">${icon}</span>
+                  <div>
+                    <div style="font-weight: 700; color: #fff; font-size: 11.5px;">${nb.label}</div>
+                    <div style="font-size: 9.5px; color: var(--text-dim); font-family: var(--font-mono);">${nb.id} · ${nb.type}</div>
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-family: var(--font-mono); font-weight: 800; font-size: 13px; color: ${simColor};">
+                    ${nb.similarity}%
+                  </div>
+                  <div style="font-size: 8.5px; color: var(--text-dim); text-transform: uppercase;">SIMILARITY</div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                ${nb.isConnected ? '<span class="expansion-chip" style="background: rgba(0,255,136,0.15); color: var(--accent-green); border-color: var(--accent-green);"><span>🔗</span> Direct Edge</span>' : ''}
+                ${nb.domain ? `<span class="expansion-chip"><span>🏷️</span> ${nb.domain}</span>` : ''}
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      html += `</div>`;
+      mount.innerHTML = html;
+    }
+
+    function renderTaxonomySubView(mount) {
+      const categories = [
+        { name: "Turnout & Switch Assembly", color: "var(--accent-cyan)", keys: ["turnout", "points", "switch"] },
+        { name: "Fastenings & Pads", color: "var(--accent-green)", keys: ["clip", "clamp", "fastener", "pad", "rubber"] },
+        { name: "NDT & Defect Detection", color: "var(--accent-red)", keys: ["crack", "defect", "flaw", "ultrasonic", "inspection"] },
+        { name: "Maintenance & Tolerances", color: "#ffaa00", keys: ["wear", "clearance", "tolerance", "tamping"] },
+        { name: "Track Geometry & Layout", color: "var(--accent-purple)", keys: ["gauge", "sleeper", "crossing"] },
+        { name: "Procurement & Spares", color: "#66b3ff", keys: ["spares", "bolt"] },
+        { name: "Revision History", color: "#ff99aa", keys: ["revision"] },
+        { name: "Welding Technology", color: "#88ddbb", keys: ["weld"] }
+      ];
+
+      let html = `
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div>
+            <div style="font-size: 12px; font-weight: 700; color: #fff;">
+              Railway Engineering Semantic Taxonomy
+            </div>
+            <div style="font-size: 10px; color: var(--text-muted); margin-top: 1px;">
+              ${Object.keys(SEMANTIC_SYNONYM_REGISTRY).length} concept clusters · Bridging colloquial terminology to statutory engineering codes
+            </div>
+          </div>
+      `;
+
+      categories.forEach(cat => {
+        const allSynonyms = new Set();
+        cat.keys.forEach(k => {
+          if (SEMANTIC_SYNONYM_REGISTRY[k]) {
+            SEMANTIC_SYNONYM_REGISTRY[k].forEach(s => allSynonyms.add(s));
+          }
+        });
+
+        html += `
+          <div class="knowledge-gap-card" style="border-left: 3px solid ${cat.color};">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="font-weight: 700; color: #fff; font-size: 11.5px;">${cat.name}</div>
+              <span class="search-card-type-badge" style="background: ${cat.color}22; color: ${cat.color}; border: 1px solid ${cat.color}44; font-size: 9px;">
+                ${allSynonyms.size} TERMS
+              </span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+              ${cat.keys.map(k => `<span class="expansion-chip" onclick="performSemanticSearch('${k}')" style="cursor: pointer;"><span>🔑</span> ${k}</span>`).join('')}
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.04);">
+              ${Array.from(allSynonyms).slice(0, 12).map(s => `<span style="font-size: 9px; color: var(--text-dim); background: rgba(255,255,255,0.04); padding: 1px 5px; border-radius: 3px;">${s}</span>`).join('')}
+              ${allSynonyms.size > 12 ? `<span style="font-size: 9px; color: var(--text-muted);">+${allSynonyms.size - 12} more</span>` : ''}
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      mount.innerHTML = html;
+    }
+
+    function renderGapsSubView(mount) {
+      const audit = auditKnowledgeGaps();
+      const compColor = audit.completeness_pct >= 90 ? 'var(--accent-green)' : audit.completeness_pct >= 70 ? '#ffaa00' : 'var(--accent-red)';
+
+      let html = `
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Completeness Index Summary -->
+          <div style="background: rgba(14, 22, 38, 0.9); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 12.5px; font-weight: 700; color: #fff;">
+                Knowledge Core Completeness Index
+              </div>
+              <div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">
+                ${audit.total_nodes} entities scanned · ${audit.nodes_with_gaps} with gaps · ${audit.complete_nodes} fully verified
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 20px; font-weight: 800; font-family: var(--font-mono); color: ${compColor};">
+                ${audit.completeness_pct}%
+              </div>
+              <div style="font-size: 9px; text-transform: uppercase; font-weight: 700; color: var(--text-dim);">
+                ${audit.completeness_pct >= 90 ? 'HEALTHY' : audit.completeness_pct >= 70 ? 'FAIR' : 'NEEDS WORK'}
+              </div>
+            </div>
+          </div>
+
+          <!-- Gap Breakdown Cards -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+      `;
+
+      const gapTypes = [
+        { key: 'missing_evidence', label: 'Missing Evidence', icon: '📄', color: 'var(--accent-red)', desc: 'Entities without primary source references' },
+        { key: 'missing_tolerance', label: 'Missing Tolerances', icon: '📏', color: '#ffaa00', desc: 'Components without quantified limits' },
+        { key: 'untracked_revisions', label: 'Untracked Revisions', icon: '🔄', color: 'var(--accent-purple)', desc: 'Drawings without revision lineage' },
+        { key: 'orphan_nodes', label: 'Orphan Nodes', icon: '🏝️', color: 'var(--text-muted)', desc: 'Entities with zero edges' }
+      ];
+
+      gapTypes.forEach(gt => {
+        const count = audit.gap_breakdown[gt.key] || 0;
+        html += `
+          <div class="knowledge-gap-card" style="border-top: 2px solid ${gt.color};">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 13px;">${gt.icon}</span>
+              <span style="font-family: var(--font-mono); font-weight: 800; font-size: 16px; color: ${count > 0 ? gt.color : 'var(--accent-green)'};">
+                ${count}
+              </span>
+            </div>
+            <div style="font-weight: 700; color: #fff; font-size: 10.5px;">${gt.label}</div>
+            <div style="font-size: 9px; color: var(--text-dim); line-height: 1.3;">${gt.desc}</div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+
+      // Top-priority gap items
+      const highPriority = audit.gaps.slice(0, 6);
+      if (highPriority.length > 0) {
+        html += `
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 6px;">
+              🔺 High-Priority Remediation Items
+            </div>
+        `;
+        highPriority.forEach(g => {
+          html += `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 10.5px;">
+              <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
+                <span style="color: var(--text-dim); font-family: var(--font-mono); font-size: 9px; min-width: 90px;">${g.id}</span>
+                <span style="color: #fff; font-weight: 600;">${g.label || g.id}</span>
+              </div>
+              <div style="display: flex; gap: 4px;">
+                ${g.gaps.map(gap => {
+                  const gapColors = { MISSING_EVIDENCE: 'var(--accent-red)', MISSING_TOLERANCE: '#ffaa00', UNTRACKED_REVISIONS: 'var(--accent-purple)', ORPHAN_NODE: 'var(--text-muted)' };
+                  return `<span style="font-size: 8px; padding: 1px 4px; border-radius: 3px; background: ${gapColors[gap] || 'var(--text-dim)'}22; color: ${gapColors[gap] || 'var(--text-dim)'}; border: 1px solid ${gapColors[gap] || 'var(--text-dim)'}44;">${gap.replace('_', ' ')}</span>`;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+      }
+
+      html += `</div>`;
+      mount.innerHTML = html;
+    }
+
+    function performSemanticSearch(term) {
+      const input = document.getElementById('global-search');
+      if (input) {
+        input.value = term;
+        input.dispatchEvent(new Event('input'));
+        input.focus();
+      }
+    }
+
+    window.SEMANTIC_SYNONYM_REGISTRY = SEMANTIC_SYNONYM_REGISTRY;
+    window.expandSearchQuery = expandSearchQuery;
+    window.getSemanticMatchTier = getSemanticMatchTier;
+    window.rankHybridSearchResults = rankHybridSearchResults;
+    window.findConceptNeighbors = findConceptNeighbors;
+    window.auditKnowledgeGaps = auditKnowledgeGaps;
+    window.renderSemanticModule = renderSemanticModule;
+    window.renderNeighborsSubView = renderNeighborsSubView;
+    window.renderTaxonomySubView = renderTaxonomySubView;
+    window.renderGapsSubView = renderGapsSubView;
+    window.performSemanticSearch = performSemanticSearch;
+
     function renderDossierNotes(dossier) {
       const container = document.getElementById('drawer-notes-list');
       const countBadge = document.getElementById('notes-tab-count');
@@ -8995,7 +9655,10 @@ html_template = r'''<!DOCTYPE html>
           return;
         }
 
-        currentMatches = rankSearchResults(q);
+        const hybridResults = rankHybridSearchResults(q);
+        currentMatches = hybridResults.map(r => r.node);
+        const hybridMeta = {};
+        hybridResults.forEach(r => { hybridMeta[r.node.data.id] = r; });
         const ansMatch = answerEngineeringQuestion(q);
         activeCardIndex = currentMatches.length > 0 || ansMatch ? 0 : -1;
 
@@ -9006,6 +9669,18 @@ html_template = r'''<!DOCTYPE html>
         }
 
         dropdown.innerHTML = '';
+
+        // Phase 7: Semantic expansion chips
+        const expanded = expandSearchQuery(q);
+        const extraTerms = expanded.filter(t => !q.toLowerCase().split(/\s+/).includes(t));
+        if (extraTerms.length > 0) {
+          const chipBar = document.createElement('div');
+          chipBar.className = 'semantic-expansion-bar';
+          chipBar.innerHTML = `<span style="font-size: 9px; color: var(--text-muted); margin-right: 4px;">✨ Also searching:</span>` +
+            extraTerms.slice(0, 8).map(t => `<span class="expansion-chip" onclick="performSemanticSearch('${t.replace(/'/g, "\\'")}')"><span>🔗</span> ${t}</span>`).join('') +
+            (extraTerms.length > 8 ? `<span style="font-size: 9px; color: var(--text-muted);">+${extraTerms.length - 8} more</span>` : '');
+          dropdown.appendChild(chipBar);
+        }
 
         if (ansMatch) {
           const previewCard = document.createElement('div');
@@ -9070,6 +9745,12 @@ html_template = r'''<!DOCTYPE html>
             evidenceHtml = '<span class="search-card-evidence"><span>🔗</span> RDSO Knowledge Core</span>';
           }
 
+          const meta = hybridMeta[d.id];
+          const tierIcon = meta ? meta.matchIcon : '🔍';
+          const tierLabel = meta ? meta.matchTier : '';
+          const tierColor = meta ? meta.matchColor : color;
+          const semHits = meta ? meta.semanticHits : 0;
+
           const card = document.createElement('div');
           card.className = `search-card search-item ${idx === 0 ? 'selected' : ''}`;
           card.innerHTML = `
@@ -9079,6 +9760,8 @@ html_template = r'''<!DOCTYPE html>
                 <span>${d.label}</span>
               </div>
               <div style="display: flex; gap: 4px; align-items: center;">
+                ${semHits > 0 ? `<span class="search-card-type-badge" style="background: rgba(180,80,255,0.15); color: var(--accent-purple); border: 1px solid rgba(180,80,255,0.4); font-size: 8px;">✨ ${semHits} semantic</span>` : ''}
+                <span class="search-card-type-badge" style="background: ${tierColor}22; color: ${tierColor}; border: 1px solid ${tierColor}44; font-size: 8px;">${tierIcon} ${tierLabel}</span>
                 ${revPill}
                 <span class="search-card-type-badge" style="background: ${color}22; color: ${color}; border: 1px solid ${color}44;">${typeName}</span>
               </div>
