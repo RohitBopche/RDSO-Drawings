@@ -68,33 +68,37 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 0 16px;
+      gap: 8px;
     }
 
     .brand-section {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .brand-icon {
-      font-size: 26px;
+      font-size: 22px;
       filter: drop-shadow(0 0 10px var(--accent-cyan));
     }
 
     .brand-titles h1 {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      white-space: nowrap;
     }
 
     .badge-ver {
-      font-size: 9px;
-      padding: 2px 7px;
+      font-size: 8.5px;
+      padding: 1.5px 5px;
       border-radius: 4px;
       background: rgba(0, 240, 255, 0.18);
       border: 1px solid var(--accent-cyan);
@@ -104,9 +108,10 @@
     }
 
     .brand-titles p {
-      font-size: 10.5px;
+      font-size: 9.5px;
       color: var(--text-muted);
-      margin-top: 2px;
+      margin-top: 1px;
+      white-space: nowrap;
     }
 
     /* Semantic Modes Selector */
@@ -147,15 +152,116 @@
       box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
     }
 
+    /* Segregated Knowledge Universes Switcher (Blueprint §2.1 & §8.3) */
+    .universe-switcher-bar {
+      display: flex;
+      align-items: center;
+      background: rgba(10, 16, 28, 0.95);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 4px;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
+    }
+
+    .universe-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .universe-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+    }
+
+    .universe-btn.active[data-universe="drawings"] {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.25) 0%, rgba(0, 150, 255, 0.35) 100%);
+      border-color: var(--accent-cyan);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+    }
+
+    .universe-btn.active[data-universe="manuals"] {
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.28) 0%, rgba(247, 37, 133, 0.38) 100%);
+      border-color: var(--accent-purple);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(157, 78, 221, 0.4);
+    }
+
+    .universe-btn.active[data-universe="combined"] {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2) 0%, rgba(157, 78, 221, 0.28) 100%);
+      border-color: #72efdd;
+      color: #fff;
+      box-shadow: 0 0 14px rgba(114, 239, 221, 0.45);
+    }
+
+    /* Hierarchy Expansion & Level Controls */
+    .hierarchy-controls-bar {
+      display: flex;
+      align-items: center;
+      background: rgba(14, 22, 38, 0.92);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 3px 6px;
+      gap: 5px;
+    }
+
+    .hierarchy-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.18s ease;
+    }
+
+    .hierarchy-btn:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .hierarchy-status-badge {
+      font-size: 9.5px;
+      font-family: var(--font-mono);
+      color: var(--accent-green);
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.25);
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
     /* Global Search & Result Cards */
     .search-wrapper {
       position: relative;
-      width: 320px;
+      width: 220px;
+      flex-shrink: 1;
       transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .search-wrapper:focus-within {
-      width: 440px;
+      width: 320px;
     }
 
     .search-input {
@@ -1150,7 +1256,7 @@
     /* Left Floating Dock */
     #left-tools-dock {
       position: absolute;
-      top: 76px;
+      top: 82px;
       left: 16px;
       width: 250px;
       display: flex;
@@ -1977,6 +2083,36 @@
       </div>
     </div>
 
+    <!-- Segregated Knowledge Universes Switcher (Blueprint §2.1 & §8.3) -->
+    <div class="universe-switcher-bar" id="universe-switcher-bar">
+      <button class="universe-btn active" id="btn-univ-drawings" data-universe="drawings" onclick="switchKnowledgeUniverse('drawings')">
+        <span>📐</span> Drawings Universe
+      </button>
+      <button class="universe-btn" id="btn-univ-manuals" data-universe="manuals" onclick="switchKnowledgeUniverse('manuals')">
+        <span>📖</span> Manuals Universe
+      </button>
+      <button class="universe-btn" id="btn-univ-combined" data-universe="combined" onclick="switchKnowledgeUniverse('combined')">
+        <span>🌐</span> Combined Cosmos
+      </button>
+    </div>
+
+    <!-- Hierarchy Expansion & Level Controls -->
+    <div class="hierarchy-controls-bar" id="hierarchy-controls-bar">
+      <button class="hierarchy-btn" id="btn-hierarchy-expand-level" onclick="expandHierarchyOneLevel()" title="Expand Next Hierarchy Depth">
+        <span>➕</span> Level +1
+      </button>
+      <button class="hierarchy-btn" id="btn-hierarchy-collapse-roots" onclick="collapseAllToRoots()" title="Collapse back to Top Roots">
+        <span>⊟</span> Roots Only
+      </button>
+      <button class="hierarchy-btn" id="btn-hierarchy-expand-all" onclick="expandAllHierarchy()" title="Expand All Nodes">
+        <span>⊞</span> Expand All
+      </button>
+      <div class="hierarchy-status-badge" id="hierarchy-status-badge">
+        <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--accent-green); box-shadow:0 0 6px var(--accent-green);"></span>
+        <span id="hierarchy-visible-count">Visible: 24 / 2,157</span>
+      </div>
+    </div>
+
     <!-- Semantic Graph Modes Switcher -->
     <div class="semantic-modes-bar">
       <button class="semantic-mode-btn active" data-mode="explore" onclick="switchSemanticMode('explore')">
@@ -2543,11 +2679,305 @@
       standards: { x: -6, y: 18, z: 10 }
     };
 
+    // Segregated Knowledge Universes & Hierarchy Engine State (Blueprint §2.1, §8.3 & §14)
+    let currentKnowledgeUniverse = 'drawings'; // 'drawings' | 'manuals' | 'combined'
+    let currentHierarchyDepth = 2;
+    const expandedNodeIds = new Set();
+    const nodeHierarchyMap = new Map(); // id -> { id, universe, parentId, childrenIds: [], depth: 1, isRoot: bool }
+
+    function getNodeUniverse(data) {
+      if (!data) return 'drawings';
+      const id = data.id || '';
+      const type = data.type || '';
+      const domain = data.domain || '';
+      if (type === 'DOCUMENT' || type === 'CHAPTER' || type === 'CLAUSE' || 
+          type === 'TOLERANCE' || type === 'EQUIPMENT' ||
+          domain === 'manuals' || domain === 'manual' || domain === 'track_standards' || 
+          domain === 'tolerance' || domain === 'equipment' ||
+          id.startsWith('doc_') || id.startsWith('DOC:') || 
+          id.startsWith('ch_') || id.startsWith('CHAPTER:') || 
+          id.startsWith('cl_') || id.startsWith('CLAUSE:') || 
+          id.startsWith('tol_') || id.startsWith('TOL:') || 
+          id.startsWith('equip_') || id.startsWith('REQ:') || 
+          id.startsWith('PROC:') || id.startsWith('FAIL:')) {
+        return 'manuals';
+      }
+      return 'drawings';
+    }
+
+    function buildHierarchyStructure() {
+      const HIERARCHY_RELS = new Set([
+        'HAS_SECTION', 'HAS_CLAUSE', 'SPECIFIES', 'REQUIRES',
+        'HAS_REVISION', 'SUPERSEDES', 'CONTAINS', 'HAS_NOTE',
+        'CONTAINS_SLEEPER', 'HAS_BOM_ITEM', 'HAS_SPARE',
+        'CAN_CAUSE', 'MITIGATED_BY', 'INSPECTED_BY', 'GOVERNS',
+        'APPLIES_TO', 'FASTENED_BY', 'CONNECTED_TO', 'INTERFACES_WITH'
+      ]);
+
+      const rawNodes = CANONICAL_DATA.entities || [];
+      const rawEdges = CANONICAL_DATA.edges || [];
+
+      // Initialize hierarchy nodes
+      rawNodes.forEach(n => {
+        const u = getNodeUniverse(n);
+        nodeHierarchyMap.set(n.id, {
+          id: n.id,
+          universe: u,
+          parentId: null,
+          childrenIds: [],
+          depth: 1,
+          isRoot: false
+        });
+      });
+
+      // Child -> parent links
+      rawEdges.forEach(e => {
+        if (!HIERARCHY_RELS.has(e.rel)) return;
+        const parentEntry = nodeHierarchyMap.get(e.from);
+        const childEntry = nodeHierarchyMap.get(e.to);
+        if (!parentEntry || !childEntry) return;
+
+        if (!childEntry.parentId && childEntry.id !== parentEntry.id) {
+          childEntry.parentId = parentEntry.id;
+          if (!parentEntry.childrenIds.includes(childEntry.id)) {
+            parentEntry.childrenIds.push(childEntry.id);
+          }
+        }
+      });
+
+      // Root designation: nodes with no parent or cross-universe parent
+      rawNodes.forEach(n => {
+        const entry = nodeHierarchyMap.get(n.id);
+        if (!entry) return;
+        const pEntry = entry.parentId ? nodeHierarchyMap.get(entry.parentId) : null;
+        if (!pEntry || pEntry.universe !== entry.universe || n.type === 'DRAWING' || n.type === 'DOCUMENT' || n.type === 'STANDARD') {
+          entry.isRoot = true;
+          entry.depth = 1;
+          entry.parentId = null;
+        }
+      });
+
+      // Recursive depth assignment
+      function assignDepths(nodeId, depth) {
+        const entry = nodeHierarchyMap.get(nodeId);
+        if (!entry) return;
+        entry.depth = depth;
+        entry.childrenIds.forEach(cid => {
+          const centry = nodeHierarchyMap.get(cid);
+          if (centry && centry.parentId === nodeId && centry.depth <= depth) {
+            assignDepths(cid, depth + 1);
+          }
+        });
+      }
+
+      nodeHierarchyMap.forEach(entry => {
+        if (entry.isRoot) {
+          assignDepths(entry.id, 1);
+        }
+      });
+
+      // Initial expansion: pre-expand drawings roots and level 2 components/revisions
+      nodeHierarchyMap.forEach(entry => {
+        if (entry.universe === 'drawings') {
+          if (entry.isRoot || entry.depth <= 2) {
+            expandedNodeIds.add(entry.id);
+          }
+        }
+      });
+    }
+
+    function isNodeHierarchyVisible(nodeId) {
+      const h = nodeHierarchyMap.get(nodeId);
+      if (!h) return true;
+      if (h.isRoot) return true;
+
+      let curr = h.parentId;
+      let guard = 0;
+      while (curr && guard < 15) {
+        guard++;
+        if (!expandedNodeIds.has(curr)) return false;
+        const pEntry = nodeHierarchyMap.get(curr);
+        if (!pEntry || pEntry.isRoot) break;
+        curr = pEntry.parentId;
+      }
+      return true;
+    }
+
+    function updateGraphVisibility() {
+      let visibleCount = 0;
+      let universeTotal = 0;
+
+      kgPhysicsNodes.forEach(n => {
+        const u = n.universe || getNodeUniverse(n.data);
+        n.universe = u;
+
+        let inUniverse = false;
+        if (currentKnowledgeUniverse === 'combined') {
+          inUniverse = true;
+          universeTotal++;
+        } else if (currentKnowledgeUniverse === u) {
+          inUniverse = true;
+          universeTotal++;
+        }
+
+        if (!inUniverse) {
+          n.group.visible = false;
+          return;
+        }
+
+        const isVisible = isNodeHierarchyVisible(n.data.id);
+        n.group.visible = isVisible;
+        if (isVisible) visibleCount++;
+      });
+
+      isPhysicsSleeping = false;
+      updateHierarchyStatusBadge(visibleCount, universeTotal);
+      updateTelemetryCounters();
+    }
+
+    function updateHierarchyStatusBadge(visCount, totalCount) {
+      const badge = document.getElementById('hierarchy-visible-count');
+      if (badge) {
+        const v = visCount !== undefined ? visCount : kgPhysicsNodes.filter(n => n.group.visible).length;
+        const t = totalCount !== undefined ? totalCount : kgPhysicsNodes.length;
+        badge.innerText = `Visible: ${v} / ${t}`;
+      }
+    }
+
+    function switchKnowledgeUniverse(universe) {
+      currentKnowledgeUniverse = universe;
+
+      document.querySelectorAll('.universe-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.universe === universe);
+      });
+
+      if (universe === 'drawings') {
+        kgControls.target.set(0, 8, 0);
+        kgCamera.position.set(0, 16, 38);
+        if (!currentSelectedNode || currentSelectedNode.universe !== 'drawings') {
+          const d6155 = kgPhysicsNodes.find(n => n.data.id === 'drg_6155');
+          if (d6155) inspectNode(d6155);
+        }
+      } else if (universe === 'manuals') {
+        kgControls.target.set(0, 14, 0);
+        kgCamera.position.set(0, 22, 45);
+        const docNode = kgPhysicsNodes.find(n => n.data.id === 'DOC:IRPWM:2024:ACS14' || n.data.id === 'doc_irpwm_2024');
+        if (docNode) inspectNode(docNode);
+        switchDrawerTab('manuals');
+      } else if (universe === 'combined') {
+        kgControls.target.set(0, 6, 0);
+        kgCamera.position.set(0, 30, 85);
+      }
+      kgControls.update();
+
+      updateGraphVisibility();
+      updateExpansionBillboards();
+    }
+    window.switchKnowledgeUniverse = switchKnowledgeUniverse;
+
+    function toggleNodeExpansion(nodeId) {
+      const entry = nodeHierarchyMap.get(nodeId);
+      if (!entry || entry.childrenIds.length === 0) return;
+
+      if (expandedNodeIds.has(nodeId)) {
+        function collapseSubtree(id) {
+          expandedNodeIds.delete(id);
+          const e = nodeHierarchyMap.get(id);
+          if (e) {
+            e.childrenIds.forEach(cid => collapseSubtree(cid));
+          }
+        }
+        collapseSubtree(nodeId);
+      } else {
+        // Expand: ensure all ancestors up to root are also expanded
+        let curr = entry.parentId;
+        let guard = 0;
+        while (curr && guard < 15) {
+          guard++;
+          expandedNodeIds.add(curr);
+          const pEntry = nodeHierarchyMap.get(curr);
+          if (!pEntry || pEntry.isRoot) break;
+          curr = pEntry.parentId;
+        }
+        expandedNodeIds.add(nodeId);
+      }
+
+      updateGraphVisibility();
+      updateExpansionBillboards();
+      if (currentSelectedNode) {
+        renderDrawingOverview(currentSelectedNode.data, currentActiveDossier);
+      }
+    }
+    window.toggleNodeExpansion = toggleNodeExpansion;
+
+    function expandHierarchyOneLevel() {
+      currentHierarchyDepth = Math.min(currentHierarchyDepth + 1, 6);
+      nodeHierarchyMap.forEach(entry => {
+        let matchUniv = (currentKnowledgeUniverse === 'combined' || currentKnowledgeUniverse === entry.universe);
+        if (matchUniv && entry.depth < currentHierarchyDepth) {
+          expandedNodeIds.add(entry.id);
+        }
+      });
+      updateGraphVisibility();
+      updateExpansionBillboards();
+    }
+    window.expandHierarchyOneLevel = expandHierarchyOneLevel;
+
+    function collapseAllToRoots() {
+      currentHierarchyDepth = 1;
+      expandedNodeIds.clear();
+      updateGraphVisibility();
+      updateExpansionBillboards();
+    }
+    window.collapseAllToRoots = collapseAllToRoots;
+
+    function expandAllHierarchy() {
+      currentHierarchyDepth = 6;
+      nodeHierarchyMap.forEach(entry => {
+        let matchUniv = (currentKnowledgeUniverse === 'combined' || currentKnowledgeUniverse === entry.universe);
+        if (matchUniv) {
+          expandedNodeIds.add(entry.id);
+        }
+      });
+      updateGraphVisibility();
+      updateExpansionBillboards();
+    }
+    window.expandAllHierarchy = expandAllHierarchy;
+
+    function ensureNodeVisibleAndExpanded(nodeId) {
+      if (!nodeId) return;
+      const entry = nodeHierarchyMap.get(nodeId);
+      if (!entry) return;
+
+      if (currentKnowledgeUniverse !== 'combined' && currentKnowledgeUniverse !== entry.universe) {
+        switchKnowledgeUniverse(entry.universe);
+      }
+
+      let curr = entry.parentId;
+      let guard = 0;
+      while (curr && guard < 15) {
+        guard++;
+        expandedNodeIds.add(curr);
+        const pEntry = nodeHierarchyMap.get(curr);
+        if (!pEntry) break;
+        curr = pEntry.parentId;
+      }
+
+      updateGraphVisibility();
+      updateExpansionBillboards();
+    }
+    window.ensureNodeVisibleAndExpanded = ensureNodeVisibleAndExpanded;
+    window.nodeHierarchyMap = nodeHierarchyMap;
+    window.expandedNodeIds = expandedNodeIds;
+
     // Global State
     let kgScene, kgCamera, kgRenderer, kgControls;
     let kgPhysicsNodes = [];
     let kgPhysicsEdges = [];
     const kgPhysicsNodesMap = new Map();
+    window.kgPhysicsNodes = kgPhysicsNodes;
+    window.kgPhysicsEdges = kgPhysicsEdges;
+    window.kgPhysicsNodesMap = kgPhysicsNodesMap;
     let currentLayout = "cosmic";
     let currentSemanticMode = "explore";
     let currentSelectedNode = null;
@@ -2645,7 +3075,8 @@
       dir2.position.set(-20, -30, -20);
       kgScene.add(dir2);
 
-      // 4. Ingest Canonical Entities & Edges
+      // 4. Build Hierarchy & Ingest Canonical Entities & Edges
+      buildHierarchyStructure();
       rawKGNodes.forEach(n => addNodeToGraph(n));
       rawKGEdges.forEach(e => addEdgeToGraph(e));
 
@@ -2654,6 +3085,10 @@
         e.sourceNode = kgPhysicsNodesMap.get(e.from);
         e.targetNode = kgPhysicsNodesMap.get(e.to);
       });
+
+      // Apply initial universe segregation & expansion
+      updateGraphVisibility();
+      updateExpansionBillboards();
 
       // 5. Initialize UI
       renderDomainChips();
@@ -2684,8 +3119,8 @@
       window.addEventListener('resize', onWindowResize);
     }
 
-    // High-Contrast Glassmorphic Billboard Badge
-    function createBillboardSprite(text, color, domain, isPrimary = true) {
+    // High-Contrast Glassmorphic Billboard Badge with Hierarchy Status
+    function createBillboardSprite(text, color, domain, isPrimary = true, childCount = 0, isExpanded = false) {
       if (!isPrimary) {
         // Shared micro-sprite for regulatory clauses to avoid memory bloat
         const canvas = document.createElement('canvas');
@@ -2733,8 +3168,30 @@
       const meta = DOMAIN_METADATA[domain] || { label: domain, icon: "🔹" };
       ctx.fillStyle = color || '#00f0ff';
       ctx.font = "bold 13px -apple-system, sans-serif";
-      const domainLabel = `${meta.icon || '🔹'} ${(meta.label || domain).toUpperCase()}`.slice(0, 26);
+      const domainLabel = `${meta.icon || '🔹'} ${(meta.label || domain).toUpperCase()}`.slice(0, childCount > 0 ? 17 : 26);
       ctx.fillText(domainLabel, 14, 25);
+
+      // Top-right expansion badge if node has child entities
+      if (childCount > 0) {
+        const badgeWidth = 60;
+        const badgeHeight = 22;
+        const badgeX = 260 - badgeWidth - 10;
+        const badgeY = 8;
+        ctx.fillStyle = isExpanded ? "rgba(255, 51, 102, 0.22)" : "rgba(0, 240, 255, 0.22)";
+        ctx.strokeStyle = isExpanded ? "#ff3366" : "#00f0ff";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(badgeX, badgeY, badgeWidth, badgeHeight, 5) : ctx.rect(badgeX, badgeY, badgeWidth, badgeHeight);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = isExpanded ? "#ff3366" : "#00f0ff";
+        ctx.font = "bold 11px -apple-system, sans-serif";
+        ctx.textAlign = "center";
+        const badgeText = isExpanded ? `[-] ${childCount}` : `[+] ${childCount}`;
+        ctx.fillText(badgeText, badgeX + badgeWidth / 2, badgeY + 15);
+        ctx.textAlign = "start";
+      }
 
       // Bottom crisp title
       ctx.fillStyle = "#ffffff";
@@ -2751,8 +3208,29 @@
       return sprite;
     }
 
+    function updateExpansionBillboards() {
+      kgPhysicsNodes.forEach(n => {
+        if (!n.group.visible) return;
+        const h = nodeHierarchyMap.get(n.data.id);
+        const childCount = h ? h.childrenIds.length : 0;
+        if (childCount === 0 && !n.hasBadge) return;
+        n.hasBadge = true;
+
+        const isExp = expandedNodeIds.has(n.data.id);
+        if (n.sprite) {
+          n.group.remove(n.sprite);
+          if (n.sprite.material?.map) n.sprite.material.map.dispose();
+          if (n.sprite.material) n.sprite.material.dispose();
+        }
+        const newSprite = createBillboardSprite(n.data.label, n.data.color, n.data.domain, n.isPrimary, childCount, isExp);
+        n.group.add(newSprite);
+        n.sprite = newSprite;
+      });
+    }
+
     function addNodeToGraph(data) {
       const isPrimary = isPrimaryEngineeringEntity(data);
+      const u = getNodeUniverse(data);
       const nodeGroup = new THREE.Group();
       let coreMesh;
       const colorObj = new THREE.Color(data.color || DOMAIN_METADATA[data.domain]?.color || 0x00f0ff);
@@ -2800,27 +3278,32 @@
         nodeGroup.add(coreMesh);
       }
 
-      const sprite = createBillboardSprite(data.label, data.color, data.domain, isPrimary);
+      const hEntry = nodeHierarchyMap.get(data.id);
+      const childCount = hEntry ? hEntry.childrenIds.length : 0;
+      const isExp = expandedNodeIds.has(data.id);
+      const sprite = createBillboardSprite(data.label, data.color, data.domain, isPrimary, childCount, isExp);
       nodeGroup.add(sprite);
 
-      // In non-manuals modes, hide non-primary clause nodes to eliminate the card jungle
-      if (!isPrimary && currentSemanticMode !== "manuals") {
-        nodeGroup.visible = false;
-      }
-
-      const initX = data.x !== undefined ? data.x : (Math.random() - 0.5) * 24;
+      let initX = data.x !== undefined ? data.x : (Math.random() - 0.5) * 24;
       const initY = data.y !== undefined ? data.y : (Math.random() - 0.5) * 16;
       const initZ = data.z !== undefined ? data.z : (Math.random() - 0.5) * 20;
 
+      // Galaxy segregation offset
+      if (u === 'drawings') initX -= 10;
+      else initX += 10;
+
       nodeGroup.position.set(initX, initY, initZ);
+      nodeGroup.visible = isNodeHierarchyVisible(data.id) && (currentKnowledgeUniverse === 'combined' || currentKnowledgeUniverse === u);
       kgScene.add(nodeGroup);
 
       const nodeObj = {
         data: data,
+        universe: u,
         group: nodeGroup,
         mesh: coreMesh,
         sprite: sprite,
         isPrimary: isPrimary,
+        hasBadge: childCount > 0,
         x: initX,
         y: initY,
         z: initZ,
@@ -2891,6 +3374,15 @@
           pos[0] = n1.x; pos[1] = n1.y; pos[2] = n1.z;
           pos[3] = n2.x; pos[4] = n2.y; pos[5] = n2.z;
           e.line.geometry.attributes.position.needsUpdate = true;
+
+          // Cross-universe bridge styling in Combined mode
+          if (currentKnowledgeUniverse === 'combined' && n1.universe !== n2.universe) {
+            e.line.material.color.setHex(0x00ffff);
+            e.line.material.opacity = 0.8;
+          } else {
+            e.line.material.color.setHex(e.color);
+            e.line.material.opacity = 0.45;
+          }
         } else {
           e.line.visible = false;
         }
@@ -2906,11 +3398,15 @@
       const count = visibleNodes.length;
       if (count === 0) return;
 
-      // 1. Domain Cluster Centering Gravity
+      // 1. Domain Cluster Centering Gravity & Galaxy Offsets
       for (let i = 0; i < count; i++) {
         const n = visibleNodes[i];
         const center = DOMAIN_CENTERS[n.data.domain] || { x: 0, y: 0, z: 0 };
-        n.vx += (center.x - n.x) * 0.004;
+        let galaxyX = 0;
+        if (currentKnowledgeUniverse === 'combined') {
+          galaxyX = (n.universe === 'drawings') ? -32 : +32;
+        }
+        n.vx += (center.x + galaxyX - n.x) * 0.004;
         n.vy += (center.y - n.y) * 0.004;
         n.vz += (center.z - n.z) * 0.004;
       }
@@ -3456,6 +3952,24 @@
           }
         }
       });
+
+      // Double-click to expand or collapse hierarchical subtrees
+      kgRenderer.domElement.addEventListener('dblclick', (e) => {
+        if (e.target !== kgRenderer.domElement) return;
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouse, kgCamera);
+        const visibleNodes = kgPhysicsNodes.filter(n => n.group.visible);
+        const meshes = visibleNodes.map(n => n.mesh);
+        const intersects = raycaster.intersectObjects(meshes);
+        if (intersects.length > 0) {
+          const hitMesh = intersects[0].object;
+          const hit = visibleNodes.find(n => n.mesh === hitMesh);
+          if (hit) {
+            toggleNodeExpansion(hit.data.id);
+          }
+        }
+      });
     }
 
     function inspectNode(node) {
@@ -3954,6 +4468,7 @@
         });
       }
       if (node) {
+        ensureNodeVisibleAndExpanded(node.data.id);
         inspectNode(node);
         return true;
       }
@@ -4288,6 +4803,20 @@
           : ((data.type === "REVISION" || data.domain === "revision") ? "crops/t6155_title_alt13.png" : (Object.values(currentActiveDossier.crops || {})[0] || "crops/t6155_notes_full.png"));
         const cropRegion = linkedFact?.source?.region || ((data.type === "REVISION" || data.domain === "revision") ? "Title Block Revision Ledger" : "Master Blueprint Assembly");
 
+        const hEntry = nodeHierarchyMap?.get(data.id);
+        const childCount = hEntry ? hEntry.childrenIds.length : 0;
+        const isExp = expandedNodeIds?.has(data.id);
+        let hierarchyBtnHtml = '';
+        if (childCount > 0) {
+          hierarchyBtnHtml = `
+            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
+              <button class="btn" style="width: 100%; justify-content: center; font-size: 11px; font-weight: 700; background: ${isExp ? 'rgba(255,51,102,0.15)' : 'rgba(0,240,255,0.15)'}; border-color: ${isExp ? 'var(--accent-red)' : 'var(--accent-cyan)'}; color: ${isExp ? 'var(--accent-red)' : 'var(--accent-cyan)'};" onclick="window.toggleNodeExpansion('${data.id}')">
+                <span>${isExp ? '⊟ Collapse ' + childCount + ' Child Entities in 3D' : '⊞ Expand ' + childCount + ' Child Entities in 3D'}</span>
+              </button>
+            </div>
+          `;
+        }
+
         container.innerHTML = `
           <!-- Section 1: Entity Identity & Classification -->
           <div class="drawing-section">
@@ -4321,6 +4850,7 @@
                 <div class="drawing-meta-value" style="color: var(--accent-purple); font-family: var(--font-mono);">${assetTwinValue}</div>
               </div>
             </div>
+            ${hierarchyBtnHtml}
           </div>
 
           <!-- Section 2: Technical Specifications & Engineering Bounds -->
