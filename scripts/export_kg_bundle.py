@@ -21,6 +21,35 @@ with open(ext_path, "r", encoding="utf-8") as f:
 with open(can_path, "r", encoding="utf-8") as f:
     can_data = json.load(f)
 
+# The canonical KG is the authoritative source and may contain a large Manuals
+# universe. The browser bootstrap must remain lightweight: manuals are built from
+# manual_structure.js + manual_content_index.js and are intentionally isolated.
+drawing_entities = [
+    e for e in can_data.get("entities", [])
+    if e.get("domain") != "manual" and e.get("universe") != "manuals"
+]
+drawing_ids = {e.get("id") for e in drawing_entities}
+drawing_edges = [
+    e for e in can_data.get("edges", [])
+    if e.get("from") in drawing_ids and e.get("to") in drawing_ids
+]
+drawing_facts = [
+    fact for fact in can_data.get("facts", [])
+    if fact.get("subject_id") in drawing_ids and fact.get("object_id") in drawing_ids
+]
+drawing_data = {
+    "metadata": {
+        **can_data.get("metadata", {}),
+        "universe": "drawings",
+        "total_entities": len(drawing_entities),
+        "total_edges": len(drawing_edges),
+        "total_facts": len(drawing_facts),
+    },
+    "entities": drawing_entities,
+    "edges": drawing_edges,
+    "facts": drawing_facts,
+}
+
 man_data = {}
 if os.path.exists(man_path):
     with open(man_path, "r", encoding="utf-8") as f:
