@@ -722,6 +722,7 @@ def build_canonical_knowledge_graph():
         add_edge("sop_usfd_switch_testing", "equip_usfd_tester", "REQUIRES", "Ultrasonic inspection requires digital flaw detector")
         add_edge("sop_usfd_crossing_testing", "equip_usfd_tester", "REQUIRES", "Depot ultrasonic inspection requires digital flaw detector")
         add_edge("sop_usfd_atweld_testing", "equip_usfd_tester", "REQUIRES", "Thermit weld testing requires 0°, 70°, 45° probes")
+        add_edge("sop_usfd_switch_testing", "equip_usfd_tester", "INSPECTED_BY", "USFD switch testing is performed with the digital flaw detector")
         add_edge("sop_unimat_switch_tamping", "equip_unimat_tamper", "REQUIRES", "Mechanized tamping requires UNIMAT machine")
         add_edge("sop_atweld_execution", "equip_atweld_kit", "REQUIRES", "Joint preheating requires air-petrol burner kit")
         add_edge("sop_stmm_bolt_chamfering", "equip_chamfering_kit", "REQUIRES", "Hole chamfering requires 45° chamfering tool")
