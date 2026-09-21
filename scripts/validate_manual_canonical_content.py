@@ -105,6 +105,12 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
             errors.append(f"{child}: parent_chapter_id {declared_parent} disagrees with chapter owner {parent_chapter}")
         if child_node.get("type") in {"SECTION", "SUBSECTION"} and not declared_parent:
             errors.append(f"{child}: missing parent_chapter_id")
+        if child_node.get("type") in {"SECTION", "SUBSECTION"} and child_node.get("source_heading"):
+            if not child_node.get("source_heading_reference") or child_node.get("source_heading_page") is None:
+                errors.append(f"{child}: incomplete source heading provenance")
+            heading_confidence = child_node.get("heading_confidence")
+            if not isinstance(heading_confidence, (int, float)) or not 0 <= heading_confidence <= 1:
+                errors.append(f"{child}: invalid heading confidence provenance")
 
     # Every source-derived structural child must have exactly one direct chapter
     # owner, even when it is nested beneath Section/Subsection for UI traversal.
