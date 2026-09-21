@@ -142,3 +142,8 @@ The manual ingestion pipeline now materializes explicitly labeled source artifac
 Each artifact uses a deterministic chapter/page/ordinal/hash ID and carries `source_document`, `source_page`, `source_section`, `source_text`, `extraction_method`, `confidence`, and `parent_chapter_id`. Artifacts are direct Chapter children by default; the pipeline does not infer semantic Section/Subsection ownership for them. The canonical validator enforces ID shape, provenance completeness, confidence bounds, chapter page bounds, exactly one direct Chapter owner, structural relation parent types, and Manuals/Drawing isolation.
 
 The extraction is deliberately label-driven. Unlabeled semantic mentions of tables, figures, or evidence do not become structural nodes. This keeps the Manual graph deterministic and prevents the earlier problem of random drawing-derived information appearing under Manuals.
+
+
+## Source-heading enrichment (current phase)
+
+Section/Subsection nodes now receive conservative source-heading evidence when a numbered heading can be detected deterministically on an owning chapter page. Heading enrichment includes the reference, title, page, source text, extraction method, and confidence. The existing numbering-derived hierarchy remains the fallback and still controls ownership. Heading detection intentionally rejects long procedural sentences and requirement-like lines; it does not use LLM inference and does not create cross-universe relationships.
