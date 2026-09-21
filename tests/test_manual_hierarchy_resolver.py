@@ -576,6 +576,31 @@ def test_manual_validator_reports_empty_corpus_artifact_as_blocker(tmp_path, mon
 
 
 
+def test_manual_validator_rejects_empty_manual_list(tmp_path, monkeypatch, capsys):
+    import validate_manual_hierarchy as validator
+
+    artifact = tmp_path / "all_chapters_extracted.json"
+    artifact.write_text(json.dumps({"manuals": []}), encoding="utf-8")
+    monkeypatch.setattr(validator, "ROOT", tmp_path)
+    result = validator.main()
+    output = capsys.readouterr().out
+    assert result == 2
+    assert "BLOCKED: Manual corpus artifact contains no manuals" in output
+
+
+def test_manual_validator_rejects_invalid_top_level_schema(tmp_path, monkeypatch, capsys):
+    import validate_manual_hierarchy as validator
+
+    artifact = tmp_path / "all_chapters_extracted.json"
+    artifact.write_text(json.dumps({"chapters": []}), encoding="utf-8")
+    monkeypatch.setattr(validator, "ROOT", tmp_path)
+    result = validator.main()
+    output = capsys.readouterr().out
+    assert result == 2
+    assert "BLOCKED: Manual corpus artifact has invalid top-level schema" in output
+
+
+
 def test_chapter_readiness_preserves_multiple_attention_reasons():
     from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
 
