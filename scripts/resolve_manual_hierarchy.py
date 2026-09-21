@@ -80,13 +80,16 @@ def resolve_heading_sequence(headings: list[dict], page_range: list[int]) -> tup
     numeric = [h for h in normalized if NUMERIC_REF.fullmatch(h["reference"])]
     for current in numeric:
         parent = current["parent_heading_ref"]
-        if parent and parent not in seen:
-            errors.append(f"{current['reference']}: missing parent heading {parent}")
         if parent:
             parent_index = next((i for i, h in enumerate(normalized) if h["reference"] == parent), -1)
             current_index = next((i for i, h in enumerate(normalized) if h["reference"] == current["reference"]), -1)
-            if parent_index >= current_index:
+            if parent_index >= 0 and parent_index >= current_index:
                 errors.append(f"{current['reference']}: parent {parent} appears after child")
+            current["parent_resolution"] = "SOURCE_HEADING" if parent_index >= 0 else "CHAPTER_FALLBACK"
+            current["parent_available_in_source"] = parent_index >= 0
+        else:
+            current["parent_resolution"] = "CHAPTER"
+            current["parent_available_in_source"] = True
         previous = None
         for h in numeric:
             if h is current:
@@ -178,6 +181,8 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
                     "depth": heading["depth"],
                     "order": heading["order"],
                     "parent_heading_ref": parent_ref,
+                    "parent_resolution": heading.get("parent_resolution", "CHAPTER"),
+                    "parent_available_in_source": heading.get("parent_available_in_source", True),
                 }
                 entity = by_id.get(hid)
                 if entity is None:
@@ -211,6 +216,8 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
                     "heading_depth": heading["depth"],
                     "heading_order": heading["order"],
                     "parent_heading_ref": parent_ref,
+                    "parent_resolution": heading.get("parent_resolution", "CHAPTER"),
+                    "parent_available_in_source": heading.get("parent_available_in_source", True),
                     "provenance": provenance,
                     "specs": {
                         **(entity.get("specs") or {}),
@@ -218,13 +225,32 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
                         "Page": page,
                         "Chapter": chapter.get("title", ""),
                         "Manual": manual_id,
-                        "Structure Status": "AUTHORITATIVE_SOURCE_HEADING",
+                        "Structure Status": (
+                            "AUTHORITATIVE_SOURCE_HEADING"
+                            if heading.get("parent_resolution") != "CHAPTER_FALLBACK"
+                            else "AUTHORITATIVE_SOURCE_HEADING_ORPHAN"
+                        ),
+                        "Parent Resolution": heading.get("parent_resolution", "CHAPTER"),
+                        "Parent Available In Source": heading.get("parent_available_in_source", True),
                     },
                 })
 
                 owner = parent_id or chapter_id
                 rel = "HAS_SECTION"
-                add_edge(owner, hid, rel, f"Source heading {ref}: {heading['title']}", manual_id, page, ref)
+                add_edge(
+                    owner,
+                    hid,
+                    rel,
+                    (
+                        f"Source heading {ref}: {heading['title']}"
+                        if parent_id
+                        else f"Source heading {ref}: {heading['title']} "
+                             f"(parent {parent_ref or 'none'} unavailable; chapter fallback)"
+                    ),
+                    manual_id,
+                    page,
+                    ref,
+                )
                 previous_id = hid
                 resolved_count += 1
 
