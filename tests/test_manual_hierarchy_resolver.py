@@ -32,12 +32,15 @@ def test_valid_nested_heading_sequence():
     assert headings[4]["heading_kind"] == "ANNEXURE"
 
 
-def test_reject_missing_parent_and_depth_jump():
-    _, errors = resolve_heading_sequence([
+def test_missing_parent_is_preserved_as_chapter_fallback():
+    headings, errors = resolve_heading_sequence([
         {"reference": "2", "title": "Track Structure", "source_page": 10},
         {"reference": "2.1.1", "title": "Rail Selection", "source_page": 11},
     ], [10, 20])
-    assert any("missing parent heading 2.1" in e for e in errors)
+    assert not errors
+    assert headings[1]["parent_heading_ref"] == "2.1"
+    assert headings[1]["parent_resolution"] == "CHAPTER_FALLBACK"
+    assert headings[1]["parent_available_in_source"] is False
 
 
 def test_reject_duplicate_and_out_of_range_heading():
@@ -96,6 +99,43 @@ def test_canonical_graph_materializes_authoritative_nested_headings_and_deepest_
     assert any(e["from"] == "SUBSECTION:TEST:CHAPTER_TEST_CH_02:SEC_2_1_1" and e["to"] == clause_id and e["rel"] == "HAS_CLAUSE" for e in result["edges"])
     assert not any(e["from"] == "SUBSECTION:TEST:CHAPTER_TEST_CH_02:SEC_2_1" and e["to"] == clause_id and e["rel"] == "HAS_CLAUSE" for e in result["edges"])
     assert result["metadata"]["manual_hierarchy_resolved_headings"] == 3
+
+
+def test_canonical_graph_materializes_orphan_heading_under_chapter():
+    from resolve_manual_hierarchy import resolve_canonical_graph
+
+    chapter_id = "CHAPTER:TEST:CH_08"
+    canonical = {
+        "entities": [{"id": chapter_id, "type": "CHAPTER", "domain": "manual", "universe": "manuals"}],
+        "edges": [],
+        "facts": [],
+        "metadata": {},
+    }
+    intermediate = {
+        "manuals": [{
+            "document_id": "DOC:TEST:2026",
+            "alias": "TEST",
+            "chapters": [{
+                "chapter_id": chapter_id,
+                "title": "Test Chapter",
+                "page_range": [10, 20],
+                "headings": [
+                    {"reference": "8.5.2", "title": "Detailed Requirement", "source_page": 12},
+                ],
+                "clauses": [],
+            }],
+        }],
+    }
+    result, errors = resolve_canonical_graph(intermediate, canonical)
+    assert not errors
+    hid = "SUBSECTION:TEST:CHAPTER_TEST_CH_08:SEC_8_5_2"
+    entity = next(e for e in result["entities"] if e["id"] == hid)
+    assert entity["specs"]["Structure Status"] == "AUTHORITATIVE_SOURCE_HEADING_ORPHAN"
+    assert entity["parent_resolution"] == "CHAPTER_FALLBACK"
+    assert any(
+        e["from"] == chapter_id and e["to"] == hid and e["rel"] == "HAS_SECTION"
+        for e in result["edges"]
+    )
 
 
 def test_coverage_audit_flags_sparse_chapters_as_warnings():
