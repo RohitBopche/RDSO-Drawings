@@ -69,3 +69,25 @@ def test_manual_chapter_ranges_do_not_overlap():
                     f"{title} starts at {page_start}, previous ended at {previous_end}"
                 )
             previous_end = page_end
+
+
+def test_canonical_kg_has_no_duplicate_authoritative_manual_ids():
+    canonical = ROOT / "data" / "rdso_canonical_kg.json"
+    data = json.loads(canonical.read_text(encoding="utf-8"))
+    ids = [node["id"] for node in data["entities"]]
+    legacy_ids = {
+        "doc_irpwm_2024",
+        "doc_usfd_2026",
+        "doc_atweld_2022",
+        "doc_fbw_2022",
+        "doc_tmm_2020",
+        "doc_stmm_2024",
+    }
+    authoritative_ids = {
+        manual["id"] for manual in load_structure()["manuals"]
+    }
+    assert authoritative_ids.issubset(set(ids))
+    # Legacy roots may remain in the source KG for backward compatibility, but
+    # the runtime hierarchy must treat the authoritative IDs as the only roots.
+    assert len(legacy_ids.intersection(set(ids))) == 6
+    assert len(authoritative_ids.intersection(set(ids))) == 6
