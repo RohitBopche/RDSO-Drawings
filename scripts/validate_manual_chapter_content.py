@@ -32,6 +32,7 @@ def validate_payload(payload: dict) -> tuple[list[str], list[str]]:
         errors.append(f"unexpected manuals in extracted payload: {', '.join(extra)}")
 
     seen_chapter_ids: set[str] = set()
+    seen_clause_owners: dict[str, str] = {}
     for manual in manuals:
         doc_id = manual.get("document_id")
         registry = MANUAL_CHAPTER_REGISTRY.get(doc_id)
@@ -114,6 +115,10 @@ def validate_payload(payload: dict) -> tuple[list[str], list[str]]:
                 if cid in seen_clause_ids:
                     errors.append(f"{chapter_id}: duplicate clause_id {cid}")
                 seen_clause_ids.add(cid)
+                previous_owner = seen_clause_owners.get(cid)
+                if previous_owner and previous_owner != chapter_id:
+                    errors.append(f"{cid}: assigned to multiple chapters ({previous_owner}, {chapter_id})")
+                seen_clause_owners[cid] = chapter_id
 
                 page = clause.get("page_number")
                 if not isinstance(page, int):
