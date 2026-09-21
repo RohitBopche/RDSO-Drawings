@@ -126,3 +126,41 @@ def test_coverage_audit_rejects_malformed_heading_references():
         "headings": [{"reference": "not-a-reference", "source_page": 10, "title": "Bad"}],
     })
     assert any("malformed heading reference" in error for error in errors)
+
+
+def test_coverage_audit_classifies_health_states():
+    from validate_manual_hierarchy import _coverage_audit
+
+    base = {
+        "chapter_id": "CHAPTER:TEST:CH_01",
+        "page_range": [10, 10],
+        "pages_seen": [10],
+        "clauses": [],
+    }
+    errors, warnings, metrics = _coverage_audit({**base, "headings": []})
+    assert not errors
+    assert metrics["coverage_class"] == "NO_SOURCE_HEADINGS"
+
+    errors, warnings, metrics = _coverage_audit({
+        **base,
+        "headings": [
+            {"reference": "2", "source_page": 10, "title": "Section"},
+            {"reference": "2.1", "source_page": 10, "title": "Subsection"},
+        ],
+    })
+    assert not errors
+    assert metrics["coverage_class"] == "HEALTHY"
+
+    errors, warnings, metrics = _coverage_audit({
+        **base,
+        "headings": [{"reference": "2", "source_page": 10, "title": "Section"}],
+    })
+    assert not errors
+    assert metrics["coverage_class"] == "SPARSE"
+
+    errors, warnings, metrics = _coverage_audit({
+        **base,
+        "headings": [{"reference": "bad", "source_page": 10, "title": "Bad"}],
+    })
+    assert errors
+    assert metrics["coverage_class"] == "MALFORMED"
