@@ -10,8 +10,8 @@ def make_kg():
             "alias": "M",
             "title": "Test Manual",
             "chapters": [
-                {"chapter_id": "CHAPTER:M:CH_01", "chapter_number": 1, "title": "First", "page_start": 1, "page_end": 10},
-                {"chapter_id": "CHAPTER:M:CH_02", "chapter_number": 2, "title": "Second", "page_start": 11, "page_end": 20},
+                {"chapter_id": "CHAPTER:M:CH_01", "chapter_number": 1, "title": "First", "page_range": [1, 10]},
+                {"chapter_id": "CHAPTER:M:CH_02", "chapter_number": 2, "title": "Second", "page_range": [11, 20]},
             ],
         }]
     }
