@@ -338,6 +338,9 @@ def test_corpus_audit_emits_chapter_and_manual_readiness_status():
     report = audit_manual_corpus(payload)
     assert report["chapters"][0]["status"] == "ATTENTION"
     assert report["manuals"][0]["status"] == "ATTENTION"
+    assert report["chapters"][0]["readiness_status"] == "ATTENTION"
+    assert report["chapters"][0]["readiness_reasons"] == ["no_source_headings"]
+    assert report["chapters"][0]["ownership_status"] == "CLEAN"
 
 
 def test_corpus_audit_summary_aggregates_readiness_and_page_gaps():
