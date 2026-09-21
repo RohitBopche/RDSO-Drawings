@@ -6,6 +6,7 @@ in strict accordance with docs/RDSO_Knowledge_Graph_Improvement_Blueprint.md.
 
 import json
 import os
+import re
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
