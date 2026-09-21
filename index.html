@@ -4567,27 +4567,14 @@
           const hit = visibleNodes.find(n => n.mesh === hitMesh);
           if (hit) {
             inspectNode(hit);
+            // Progressive drill-down: expand/collapse children on single click
+            const hEntry = nodeHierarchyMap.get(hit.data.id);
+            if (hEntry && hEntry.childrenIds.length > 0) {
+              toggleNodeExpansion(hit.data.id);
+            }
             if (currentLayout === "concentric") {
               applyConcentricLayout(hit.data.id);
             }
-          }
-        }
-      });
-
-      // Double-click to expand or collapse hierarchical subtrees
-      kgRenderer.domElement.addEventListener('dblclick', (e) => {
-        if (e.target !== kgRenderer.domElement) return;
-        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-        raycaster.setFromCamera(mouse, kgCamera);
-        const visibleNodes = kgPhysicsNodes.filter(n => n.group.visible);
-        const meshes = visibleNodes.map(n => n.mesh);
-        const intersects = raycaster.intersectObjects(meshes);
-        if (intersects.length > 0) {
-          const hitMesh = intersects[0].object;
-          const hit = visibleNodes.find(n => n.mesh === hitMesh);
-          if (hit) {
-            toggleNodeExpansion(hit.data.id);
           }
         }
       });
@@ -4617,13 +4604,29 @@
         tabLabel.innerText = isDrawingNode ? "Drawing Overview" : "Node Dossier";
       }
 
-      // Find governing drawing dossier
-      let dossierKey = "RDSO_T_6155";
-      if (data.id.includes("6154")) dossierKey = "RDSO_T_6154";
+      // Find governing drawing dossier — only match if node is actually related to a known drawing
+      let dossierKey = null;
+      if (data.id.includes("6155")) dossierKey = "RDSO_T_6155";
+      else if (data.id.includes("6154")) dossierKey = "RDSO_T_6154";
       else if (data.id.includes("6216")) dossierKey = "RDSO_T_6216";
       else if (data.id.includes("6280")) dossierKey = "RDSO_T_6280";
       else if (data.id.includes("6275")) dossierKey = "RDSO_T_6275";
-      currentActiveDossier = RDSO_EXTRACTED_KNOWLEDGE[dossierKey] || RDSO_EXTRACTED_KNOWLEDGE["RDSO_T_6155"];
+      else {
+        // Try to find governing drawing from graph edges
+        const govEdge = kgPhysicsEdges.find(e =>
+          (e.from === data.id || e.to === data.id) &&
+          (e.rel === "GOVERNS" || e.rel === "GOVERNED_BY" || e.rel === "CONTAINS" || e.rel === "PART_OF")
+        );
+        if (govEdge) {
+          const linkedId = govEdge.from === data.id ? govEdge.to : govEdge.from;
+          if (linkedId.includes("6155")) dossierKey = "RDSO_T_6155";
+          else if (linkedId.includes("6154")) dossierKey = "RDSO_T_6154";
+          else if (linkedId.includes("6216")) dossierKey = "RDSO_T_6216";
+          else if (linkedId.includes("6280")) dossierKey = "RDSO_T_6280";
+          else if (linkedId.includes("6275")) dossierKey = "RDSO_T_6275";
+        }
+      }
+      currentActiveDossier = (dossierKey && RDSO_EXTRACTED_KNOWLEDGE[dossierKey]) || {};
 
       // 1. POPULATE ENGINEERING ANSWER CARD
       const descEl = document.getElementById('answer-card-desc');
@@ -4743,7 +4746,7 @@
         `;
       } else if (data.type === "REVISION" || data.domain === "revision" || data.id.startsWith("rev_")) {
         const altNum = data.alt || parseInt((data.id.match(/alt(\d+)/i) || [])[1] || 11);
-        const parentDwg = data.id.includes("6154") ? "RDSO/T-6154" : (currentActiveDossier.drawing_number || "RDSO/T-6155");
+        const parentDwg = data.id.includes("6154") ? "RDSO/T-6154" : (currentActiveDossier.drawing_number || data.label || "Revision Record");
         const specs = data.specs || {};
         const effDate = specs["Effective Date"] || "";
         const upgrade = specs["Key Upgrade"] || "";
@@ -5312,8 +5315,8 @@
       const container = document.getElementById('drawing-overview-container');
       if (!container) return;
 
-      const d = dossier || RDSO_EXTRACTED_KNOWLEDGE["RDSO_T_6155"] || {};
-      const dwgNo = d.drawing_number || (data.specs && (data.specs.DrawingNumber || data.specs["Drawing No"])) || data.label || "RDSO/T-6155";
+      const d = dossier || {};
+      const dwgNo = d.drawing_number || (data.specs && (data.specs.DrawingNumber || data.specs["Drawing No"])) || data.label;
       const title = d.title || data.desc || data.label;
       const isDrawing = (data.type === "DRAWING" || data.domain === "drawing" || data.id.startsWith("drg_"));
 
@@ -5397,7 +5400,9 @@
         }
 
         // Governing Drawing Label & Metadata accurately derived:
-        let govDrawing = `${currentActiveDossier.drawing_number} (ALT ${currentActiveDossier.alteration_number || 13})`;
+        let govDrawing = currentActiveDossier.drawing_number
+          ? `${currentActiveDossier.drawing_number} (ALT ${currentActiveDossier.alteration_number || 13})`
+          : (data.specs?.DrawingNumber || data.specs?.["Drawing No"] || "N/A \u2014 Independent Entity");
         let assetTwinLabel = "Digital Twin Asset";
         let assetTwinValue = data.twinAsset || "Standard Geometry";
         let riskHeader = "Derailment Hazard & Safeguards";
@@ -5407,7 +5412,9 @@
 
         if (data.type === "REVISION" || data.domain === "revision" || data.id.startsWith("rev_")) {
           const revNum = data.alt || parseInt((data.id.match(/alt(\d+)/i) || [])[1] || 11);
-          govDrawing = `${currentActiveDossier.drawing_number} (ALT ${revNum})`;
+          govDrawing = currentActiveDossier.drawing_number
+            ? `${currentActiveDossier.drawing_number} (ALT ${revNum})`
+            : `Revision ALT ${revNum}`;
           assetTwinLabel = "Alteration Category";
           assetTwinValue = "Engineering Revision Directive";
           riskHeader = "Operational Rationale & Clearance Safeguards";
@@ -5920,7 +5927,7 @@
     function computeRevisionDiff(baseAlt, targetAlt) {
       const b = parseInt(baseAlt, 10);
       const t = parseInt(targetAlt, 10);
-      const notes = RDSO_EXTRACTED_KNOWLEDGE["RDSO_T_6155"]?.general_notes || [];
+      const notes = currentActiveDossier?.general_notes || [];
 
       const diffItems = [];
       let addedCount = 0;
@@ -8700,13 +8707,21 @@
           }
         });
 
-        // Notes match for drg_6155
-        if (q.length >= 3 && data.id === 'drg_6155') {
-          const d = RDSO_EXTRACTED_KNOWLEDGE['RDSO_T_6155'];
-          if (d && d.general_notes) {
-            const matchingNotes = d.general_notes.filter(n => (n.text || '').toLowerCase().includes(q));
-            if (matchingNotes.length > 0) {
-              sLexical += 120 + (matchingNotes.length * 10);
+        // Notes match for drawing nodes with dossiers
+        if (q.length >= 3 && (data.type === 'DRAWING' || data.domain === 'drawing' || data.id.startsWith('drg_'))) {
+          let dossierLookupKey = null;
+          if (data.id.includes('6155')) dossierLookupKey = 'RDSO_T_6155';
+          else if (data.id.includes('6154')) dossierLookupKey = 'RDSO_T_6154';
+          else if (data.id.includes('6216')) dossierLookupKey = 'RDSO_T_6216';
+          else if (data.id.includes('6280')) dossierLookupKey = 'RDSO_T_6280';
+          else if (data.id.includes('6275')) dossierLookupKey = 'RDSO_T_6275';
+          if (dossierLookupKey) {
+            const dsr = RDSO_EXTRACTED_KNOWLEDGE[dossierLookupKey];
+            if (dsr && dsr.general_notes) {
+              const matchingNotes = dsr.general_notes.filter(n => (n.text || '').toLowerCase().includes(q));
+              if (matchingNotes.length > 0) {
+                sLexical += 120 + (matchingNotes.length * 10);
+              }
             }
           }
         }
@@ -9535,12 +9550,20 @@
         }
 
         // Verbatim notes match (if it's a drawing or has dossier)
-        if (q.length >= 3 && data.id === 'drg_6155') {
-          const d = RDSO_EXTRACTED_KNOWLEDGE['RDSO_T_6155'];
-          if (d && d.general_notes) {
-            const matchingNotes = d.general_notes.filter(n => (n.text || '').toLowerCase().includes(q));
-            if (matchingNotes.length > 0) {
-              score += 120 + (matchingNotes.length * 10);
+        if (q.length >= 3 && (data.type === 'DRAWING' || data.domain === 'drawing' || data.id.startsWith('drg_'))) {
+          let dossierLookupKey = null;
+          if (data.id.includes('6155')) dossierLookupKey = 'RDSO_T_6155';
+          else if (data.id.includes('6154')) dossierLookupKey = 'RDSO_T_6154';
+          else if (data.id.includes('6216')) dossierLookupKey = 'RDSO_T_6216';
+          else if (data.id.includes('6280')) dossierLookupKey = 'RDSO_T_6280';
+          else if (data.id.includes('6275')) dossierLookupKey = 'RDSO_T_6275';
+          if (dossierLookupKey) {
+            const dsr = RDSO_EXTRACTED_KNOWLEDGE[dossierLookupKey];
+            if (dsr && dsr.general_notes) {
+              const matchingNotes = dsr.general_notes.filter(n => (n.text || '').toLowerCase().includes(q));
+              if (matchingNotes.length > 0) {
+                score += 120 + (matchingNotes.length * 10);
+              }
             }
           }
         }
