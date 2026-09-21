@@ -411,3 +411,75 @@ def test_corpus_audit_attributes_registry_ownership_mismatch_to_affected_chapter
     assert second_row["readiness_status"] == "BLOCKED"
     assert any("ownership mismatch" in e for e in second_row["errors"])
     assert report["error_count"] > 0
+
+
+def test_manual_readiness_aggregates_explicit_chapter_states():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    first, second = registry["chapters"][:2]
+    first_id = f"CHAPTER:{registry['alias']}:CH_{first['num']:02d}"
+    second_id = f"CHAPTER:{registry['alias']}:CH_{second['num']:02d}"
+    payload = {"manuals": [{
+        "document_id": doc_id,
+        "alias": registry["alias"],
+        "chapters": [
+            {
+                "chapter_id": first_id,
+                "page_range": [first["page_start"], first["page_start"] + 1],
+                "pages_seen": [first["page_start"], first["page_start"] + 1],
+                "headings": [
+                    {"reference": "1", "source_page": first["page_start"], "title": "SECTION ONE"},
+                    {"reference": "1.1", "source_page": first["page_start"] + 1, "title": "SUBSECTION ONE"},
+                ],
+                "clauses": [],
+            },
+            {
+                "chapter_id": second_id,
+                "page_range": [second["page_start"], second["page_start"] + 1],
+                "pages_seen": [second["page_start"], second["page_start"] + 1],
+                "headings": [
+                    {"reference": "not-a-heading", "source_page": second["page_start"], "title": "INVALID"},
+                ],
+                "clauses": [],
+            },
+        ],
+    }]}
+
+    report = audit_manual_corpus(payload)
+    manual = report["manuals"][0]
+    assert manual["status"] == "BLOCKED"
+    assert manual["chapter_status_counts"]["HEALTHY"] == 1
+    assert manual["chapter_status_counts"]["BLOCKED"] == 1
+    assert manual["chapter_status_counts"]["ATTENTION"] == 0
+
+
+def test_manual_readiness_treats_unmapped_pages_as_manual_attention_not_ownership_block():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    spec = registry["chapters"][0]
+    chapter_id = f"CHAPTER:{registry['alias']}:CH_{spec['num']:02d}"
+    payload = {"manuals": [{
+        "document_id": doc_id,
+        "alias": registry["alias"],
+        "unmapped_pages": [9999],
+        "chapters": [{
+            "chapter_id": chapter_id,
+            "page_range": [spec["page_start"], spec["page_start"] + 1],
+            "pages_seen": [spec["page_start"], spec["page_start"] + 1],
+            "headings": [
+                {"reference": "1", "source_page": spec["page_start"], "title": "SECTION ONE"},
+                {"reference": "1.1", "source_page": spec["page_start"] + 1, "title": "SUBSECTION ONE"},
+            ],
+            "clauses": [],
+        }]
+    }]}
+
+    report = audit_manual_corpus(payload)
+    manual = report["manuals"][0]
+    chapter = report["chapters"][0]
+    assert chapter["readiness_status"] == "HEALTHY"
+    assert chapter["ownership_status"] == "CLEAN"
+    assert manual["status"] == "ATTENTION"
+    assert manual["unmapped_pages"] == [9999]
