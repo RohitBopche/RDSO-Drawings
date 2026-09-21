@@ -71,9 +71,9 @@ def validate_payload(payload: dict) -> tuple[list[str], list[str]]:
                 errors.append(
                     f"{doc_id}: chapter {num} has invalid chapter_id {chapter_id!r}; expected {expected_id!r}"
                 )
-            if seen_chapter_ids.get(chapter_id, doc_id) != doc_id:
+            if chapter_id in seen_chapter_ids:
                 errors.append(f"duplicate chapter ownership: {chapter_id}")
-            seen_chapter_ids[chapter_id] = doc_id
+            seen_chapter_ids.add(chapter_id)
 
             if ch.get("parent_manual_id") != doc_id:
                 errors.append(f"{chapter_id}: parent_manual_id does not match manual")
