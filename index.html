@@ -2927,6 +2927,7 @@
       <!-- 0. TAB: CANONICAL 9-SECTION DRAWING OVERVIEW -->
       <div class="tab-pane active" id="tab-pane-overview">
         <div id="drawing-overview-container" style="display: flex; flex-direction: column; gap: 12px; padding: 4px;">
+          <div id="manual-readiness-card" style="display:none;"></div>
           <!-- Populated dynamically by renderDrawingOverview(data, dossier) -->
         </div>
       </div>
@@ -3306,6 +3307,66 @@
     let currentHierarchyDepth = 2;
     const expandedNodeIds = new Set();
     const nodeHierarchyMap = new Map(); // id -> { id, universe, parentId, childrenIds: [], depth: 1, isRoot: bool }
+
+    // Manual readiness is a QA signal only. It never participates in hierarchy construction.
+    let manualReadinessAudit = null;
+    let manualReadinessLoadPromise = null;
+
+    function getManualReadinessEntry(data) {
+      if (!data || getNodeUniverse(data) !== 'manuals') return null;
+      const direct = data.readiness_status || data.readinessStatus || data.manual_readiness;
+      if (direct && typeof direct === 'object') return direct;
+      if (manualReadinessAudit?.chapters) {
+        const byId = manualReadinessAudit.chapters.find(c => c.chapter_id === data.id || c.id === data.id);
+        if (byId) return byId;
+      }
+      return null;
+    }
+
+    async function loadManualReadinessAudit() {
+      if (manualReadinessLoadPromise) return manualReadinessLoadPromise;
+      manualReadinessLoadPromise = fetch('./data/knowledge-graph/reports/manual_hierarchy_audit.json', { cache: 'no-store' })
+        .then(response => response.ok ? response.json() : null)
+        .then(payload => {
+          manualReadinessAudit = payload && payload.schema === 'manual_hierarchy_audit_v1' ? payload : null;
+          return manualReadinessAudit;
+        })
+        .catch(() => null);
+      return manualReadinessLoadPromise;
+    }
+
+    function renderManualReadiness(data) {
+      const container = document.getElementById('manual-readiness-card');
+      if (!container) return;
+      if (getNodeUniverse(data) !== 'manuals' || !['CHAPTER', 'DOCUMENT'].includes(String(data.type || '').toUpperCase())) {
+        container.style.display = 'none';
+        container.innerHTML = '';
+        return;
+      }
+
+      const entry = getManualReadinessEntry(data);
+      const status = entry?.readiness_status || entry?.status || 'UNAVAILABLE';
+      const reasons = Array.isArray(entry?.readiness_reasons) ? entry.readiness_reasons : [];
+      const ownership = entry?.ownership_status || 'UNAVAILABLE';
+      const coverage = entry?.coverage_class || 'UNAVAILABLE';
+      const missing = Array.isArray(entry?.missing_pages) ? entry.missing_pages.length : null;
+      const empty = Array.isArray(entry?.content_empty_pages) ? entry.content_empty_pages.length : null;
+      const issuePages = Array.isArray(entry?.ownership_issue_pages) ? entry.ownership_issue_pages.length : null;
+      const tone = status === 'HEALTHY' ? 'var(--accent-green)' : status === 'BLOCKED' ? 'var(--accent-red)' : status === 'ATTENTION' ? 'var(--accent-yellow)' : 'var(--text-muted)';
+      const reasonText = reasons.length ? reasons.join(', ') : (status === 'UNAVAILABLE' ? 'Audit report not available in this build' : 'No additional readiness reasons');
+
+      container.style.display = 'block';
+      container.innerHTML =
+        '<div class="card-title">Manual Structural Readiness</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;">' +
+        '<div class="drawing-meta-item"><div class="drawing-meta-label">Readiness</div><div class="drawing-meta-value" style="color:' + tone + ';">' + status + '</div></div>' +
+        '<div class="drawing-meta-item"><div class="drawing-meta-label">Ownership</div><div class="drawing-meta-value">' + ownership + '</div></div>' +
+        '<div class="drawing-meta-item"><div class="drawing-meta-label">Coverage</div><div class="drawing-meta-value">' + coverage + '</div></div>' +
+        '<div class="drawing-meta-item"><div class="drawing-meta-label">Page Gaps</div><div class="drawing-meta-value">' + (missing === null ? '—' : missing + ' missing / ' + (empty ?? 0) + ' empty') + '</div></div>' +
+        '</div>' +
+        '<div style="font-size:10px;color:var(--text-muted);line-height:1.45;">Reasons: ' + reasonText + (issuePages !== null ? ' · Ownership issue pages: ' + issuePages : '') + '</div>';
+    }
+    window.loadManualReadinessAudit = loadManualReadinessAudit;
 
     function getNodeUniverse(data) {
       if (!data) return 'drawings';
@@ -3816,6 +3877,7 @@
       updateExpansionBillboards();
       if (currentSelectedNode) {
         renderDrawingOverview(currentSelectedNode.data, currentActiveDossier);
+      renderManualReadiness(data);
       }
     }
     window.toggleNodeExpansion = toggleNodeExpansion;
@@ -10187,6 +10249,7 @@
       kgRenderer.setSize(w, h);
     }
 
+    window.addEventListener('DOMContentLoaded', () => { loadManualReadinessAudit().then(() => { if (currentSelectedNode) renderManualReadiness(currentSelectedNode.data); }); });
     window.addEventListener('DOMContentLoaded', initKnowledgeGraphApp);
   </script>
 </body>
