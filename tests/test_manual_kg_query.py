@@ -20,7 +20,7 @@ def make_kg():
             {"id": "DOC:M:1", "domain": "manual", "type": "DOCUMENT", "label": "Test Manual"},
             {"id": "CHAPTER:M:CH_01", "domain": "manual", "type": "CHAPTER", "label": "Chapter 1 — First", "specs": {"ChapterNumber": 1, "PageRange": "1–10"}},
             {"id": "CHAPTER:M:CH_02", "domain": "manual", "type": "CHAPTER", "label": "Chapter 2 — Second", "specs": {"ChapterNumber": 2, "PageRange": "11–20"}},
-            {"id": "SECTION:M:CH_01:P1:01", "domain": "manual", "type": "SECTION", "label": "Overview", "page": 1},
+            {"id": "SECTION:M:CH_01:P1:01", "domain": "manual", "type": "SECTION", "label": "Overview", "page": 1, "source_page": 1, "source_section": "1.1", "source_text": "Overview text", "confidence": 0.98, "extraction_method": "deterministic"},
             {"id": "drg_6155", "domain": "drawing", "type": "DRAWING", "label": "Drawing"},
         ],
         "edges": [
@@ -49,3 +49,19 @@ def test_chapter_query_filters_to_structural_children():
 def test_search_cannot_return_drawing_nodes():
     result = make_kg().search("drawing")
     assert result == []
+
+
+def test_manual_chapter_uses_authoritative_page_range():
+    result = make_kg().get_manual("DOC:M:1")
+    assert result["chapters"][0]["page_start"] == 1
+    assert result["chapters"][0]["page_end"] == 10
+
+
+def test_chapter_children_expose_evidence_metadata_when_present():
+    result = make_kg().chapter_children("CHAPTER:M:CH_01")
+    child = result[0]
+    assert child["source_page"] == 1
+    assert child["source_section"] == "1.1"
+    assert child["source_text"] == "Overview text"
+    assert child["confidence"] == 0.98
+    assert child["extraction_method"] == "deterministic"
