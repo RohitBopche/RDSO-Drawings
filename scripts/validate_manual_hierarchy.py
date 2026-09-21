@@ -208,7 +208,15 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
             class_name = metrics["coverage_class"]
             class_counts[class_name] += 1
             manual_counts[class_name] += 1
-            row = {"manual_id": manual.get("document_id"), "manual_alias": manual.get("alias"), "chapter_id": chapter.get("chapter_id"), **metrics, "errors": chapter_errors, "warnings": chapter_warnings}
+            row = {
+                "manual_id": manual.get("document_id"),
+                "manual_alias": manual.get("alias"),
+                "chapter_id": chapter.get("chapter_id"),
+                **metrics,
+                "errors": chapter_errors,
+                "warnings": chapter_warnings,
+                "status": "BLOCKED" if chapter_errors else ("ATTENTION" if chapter_warnings else "HEALTHY"),
+            }
             rows.append(row)
 
             refs = [h["reference"] for h in headings]
@@ -241,9 +249,16 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
                     if not any(e.get("from") == owner and e.get("to") == hid and e.get("rel") == "HAS_SECTION" for e in canonical_edges):
                         errors.append(f"{chapter_id}: missing canonical HAS_SECTION for heading {ref}")
 
+        manual_status = (
+            "BLOCKED"
+            if ownership_errors or any(row["manual_id"] == manual.get("document_id") and row["errors"] for row in rows[-manual_counts["chapters"]:])
+            else ("ATTENTION" if ownership_warnings or any(row["manual_id"] == manual.get("document_id") and row["warnings"] for row in rows[-manual_counts["chapters"]:])
+                  else "HEALTHY")
+        )
         manual_rows.append({
             "manual_id": manual.get("document_id"),
             "alias": manual.get("alias"),
+            "status": manual_status,
             **manual_counts,
             "pages_expected": len(manual_expected_pages),
             "pages_seen": len(manual_page_seen),
