@@ -125,3 +125,26 @@ def test_manual_clause_metadata_maps_to_exactly_one_registered_chapter():
                 ambiguous.append(clause.get("id"))
     assert not unresolved, f"Unmapped manual clauses: {unresolved[:20]}"
     assert not ambiguous, f"Ambiguous manual clauses: {ambiguous[:20]}"
+
+
+def test_manual_content_index_is_chapter_scoped():
+    content_path = ROOT / "data" / "manual_content_index.js"
+    text = content_path.read_text(encoding="utf-8")
+    payload = text.split(" = ", 1)[1].rsplit(";", 1)[0]
+    content = json.loads(payload)
+    assert content["schema"] == "manual-content-index-v1"
+    assert content["universe"] == "manuals"
+
+    structure = load_manual_structure()
+    valid = {m["alias"]: {f"CH_{i+1:02d}" for i, _ in enumerate(m["chapters"])} for m in structure["manuals"]}
+    total_pages = 0
+    total_content = 0
+    for manual_id, manual in content["manuals"].items():
+        alias = next(m["alias"] for m in structure["manuals"] if m["id"] == manual_id)
+        for page in manual["pages"].values():
+            total_pages += 1
+            assert page["chapter"] in valid[alias], (manual_id, page)
+            total_content += len(page["headings"]) + len(page["tables"]) + len(page["figures"])
+            assert page["evidence_id"].startswith(f"EVIDENCE:{manual_id}:PAGE_")
+    assert total_pages > 1000
+    assert total_content > 100
