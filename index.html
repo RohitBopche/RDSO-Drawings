@@ -2614,6 +2614,7 @@
   <script src="./lib/three.min.js"></script>
   <script src="./lib/OrbitControls.js"></script>
   <script src="./data/rdso_kg_data.js"></script>\n  <script src="./data/manual_structure.js"></script>
+  <script src="./data/manual_content_index.js"></script>
   <style>
     #kg-hover-hud {
       position: absolute;
@@ -3380,6 +3381,56 @@
         });
       });
 
+      // Attach source-derived chapter content blocks (sections, tables, figures, page evidence).
+      // These are derived only from the Manuals universe page extraction and are never linked to drawings.
+      const manualContentIndex = window.RDSO_MANUAL_CONTENT_INDEX || { manuals: {} };
+      const manualAliasById = new Map(manualStructure.manuals.map(m => [m.id, m.alias]));
+      const chapterContentOrder = { SECTION: 10, CLAUSE: 20, TABLE: 30, FIGURE: 40, EVIDENCE: 50 };
+
+      Object.entries(manualContentIndex.manuals || {}).forEach(([manualId, contentManual]) => {
+        const alias = manualAliasById.get(manualId);
+        if (!alias) return;
+        Object.values(contentManual.pages || {}).forEach(page => {
+          const chapterId = 'CHAPTER:' + alias + ':' + page.chapter;
+          if (!nodeHierarchyMap.has(chapterId)) return;
+
+          const addContentNode = (type, ordinal, label, extra = {}) => {
+            const safeOrdinal = String(ordinal + 1).padStart(2, '0');
+            const prefix = type === 'SECTION' ? 'SECTION' : type === 'TABLE' ? 'TABLE' : type === 'FIGURE' ? 'FIGURE' : 'EVIDENCE';
+            const nodeId = prefix + ':' + alias + ':' + page.chapter + ':P' + page.page + ':' + safeOrdinal;
+            if (!rawNodes.some(n => n.id === nodeId)) {
+              rawNodes.push({
+                id: nodeId,
+                label,
+                type,
+                domain: 'manual',
+                universe: 'manuals',
+                parent_id: chapterId,
+                order: Number(page.page) * 100 + ordinal,
+                page: Number(page.page),
+                structure_status: extra.structure_status || 'SOURCE_EXTRACTED',
+                source_page: Number(page.page),
+                source_document_id: manualId,
+                color: type === 'SECTION' ? '#b388ff' : type === 'TABLE' ? '#ffd166' : type === 'FIGURE' ? '#4cc9f0' : '#8be28b',
+                desc: extra.desc || ('Source-derived ' + type.toLowerCase() + ' on page ' + page.page),
+                specs: { Chapter: page.chapter, Page: Number(page.page), Source: 'extracted_pages.jsonl' }
+              });
+            }
+            const edgeKey = chapterId + '|HAS_' + type + '|' + nodeId;
+            if (!rawEdges.some(e => e.from + '|' + e.rel + '|' + e.to === edgeKey)) {
+              rawEdges.push({ from: chapterId, to: nodeId, rel: 'HAS_' + type, rationale: 'Source-derived manual content mapped by authoritative chapter page range' });
+            }
+          };
+
+          page.headings.forEach((heading, idx) => addContentNode('SECTION', idx, heading, { structure_status: 'EXTRACTED_HEADING_UNVERIFIED' }));
+          page.tables.forEach((table, idx) => addContentNode('TABLE', idx, table));
+          page.figures.forEach((figure, idx) => addContentNode('FIGURE', idx, figure));
+          if (page.headings.length || page.tables.length || page.figures.length) {
+            addContentNode('EVIDENCE', 0, 'Page ' + page.page + ' source evidence', { desc: 'Primary page-level evidence for extracted manual content.' });
+          }
+        });
+      }
+
       // Attach extracted clauses to their authoritative chapter; never directly to the manual.
       // Primary key: (manual, chapter title). Fallback: manual + page range. The page fallback
       // is deterministic and covers canonical clauses whose compact metadata does not carry
@@ -3442,7 +3493,7 @@
       });
 
       const HIERARCHY_RELS = new Set([
-        'HAS_CHAPTER', 'HAS_SECTION', 'HAS_CLAUSE', 'SPECIFIES', 'REQUIRES',
+        'HAS_CHAPTER', 'HAS_SECTION', 'HAS_CLAUSE', 'HAS_TABLE', 'HAS_FIGURE', 'HAS_EVIDENCE', 'SPECIFIES', 'REQUIRES',
         'HAS_REVISION', 'SUPERSEDES', 'CONTAINS', 'HAS_NOTE',
         'CONTAINS_SLEEPER', 'HAS_BOM_ITEM', 'HAS_SPARE',
         'CAN_CAUSE', 'MITIGATED_BY', 'INSPECTED_BY', 'GOVERNS',
@@ -3474,6 +3525,19 @@
           childEntry.parentId = parentEntry.id;
           if (!parentEntry.childrenIds.includes(childEntry.id)) parentEntry.childrenIds.push(childEntry.id);
         }
+      });
+
+      // Deterministic manual child ordering: page/source order first, then semantic content type.
+      nodeHierarchyMap.forEach(entry => {
+        if (entry.universe !== 'manuals') return;
+        entry.childrenIds.sort((a, b) => {
+          const na = rawNodes.find(n => n.id === a) || {};
+          const nb = rawNodes.find(n => n.id === b) || {};
+          const oa = Number.isFinite(Number(na.order)) ? Number(na.order) : 999999;
+          const ob = Number.isFinite(Number(nb.order)) ? Number(nb.order) : 999999;
+          if (oa !== ob) return oa - ob;
+          return (chapterContentOrder[na.type] || 99) - (chapterContentOrder[nb.type] || 99);
+        });
       });
 
       // Root designation: nodes with no parent or cross-universe parent
