@@ -48,3 +48,50 @@ def test_reject_duplicate_and_out_of_range_heading():
     ], [10, 20])
     assert any("duplicate heading reference: 2" in e for e in errors)
     assert any("outside chapter range" in e for e in errors)
+
+
+def test_canonical_graph_materializes_authoritative_nested_headings_and_deepest_clause_owner():
+    from resolve_manual_hierarchy import resolve_canonical_graph
+
+    chapter_id = "CHAPTER:TEST:CH_02"
+    clause_id = "CLAUSE:TEST:PARA_2_1_1"
+    canonical = {
+        "entities": [
+            {"id": chapter_id, "type": "CHAPTER", "domain": "manual", "universe": "manuals"},
+            {"id": clause_id, "type": "CLAUSE", "domain": "manual", "universe": "manuals"},
+        ],
+        "edges": [
+            {"from": chapter_id, "to": clause_id, "rel": "HAS_CLAUSE"},
+        ],
+        "facts": [],
+        "metadata": {},
+    }
+    intermediate = {
+        "manuals": [{
+            "document_id": "DOC:TEST:2026",
+            "alias": "TEST",
+            "chapters": [{
+                "chapter_id": chapter_id,
+                "title": "Test Chapter",
+                "page_range": [10, 20],
+                "headings": [
+                    {"reference": "2", "title": "Track Structure", "source_page": 10},
+                    {"reference": "2.1", "title": "Rails", "source_page": 11},
+                    {"reference": "2.1.1", "title": "Rail Selection", "source_page": 12},
+                ],
+                "clauses": [{
+                    "clause_id": clause_id,
+                    "para_number": "2.1.1",
+                    "source_page": 12,
+                }],
+            }],
+        }],
+    }
+    result, errors = resolve_canonical_graph(intermediate, canonical)
+    assert not errors
+    entities = {e["id"]: e for e in result["entities"]}
+    assert entities["SECTION:TEST:CHAPTER_TEST_CH_02:SEC_2"]["heading_kind"] == "SECTION"
+    assert entities["SUBSECTION:TEST:CHAPTER_TEST_CH_02:SEC_2_1_1"]["heading_kind"] == "SUBSECTION"
+    assert any(e["from"] == "SUBSECTION:TEST:CHAPTER_TEST_CH_02:SEC_2_1" and e["to"] == "SUBSECTION:TEST:CHAPTER_TEST_CH_02:SEC_2_1_1" and e["rel"] == "HAS_SECTION" for e in result["edges"])
+    assert any(e["from"] == "SUBSECTION:TEST:CHAPTER_TEST_CH_02:SEC_2_1_1" and e["to"] == clause_id and e["rel"] == "HAS_CLAUSE" for e in result["edges"])
+    assert not any(e["from"] == "SUBSECTION:TEST:CHAPTER_TEST_CH_02:SEC_2_1" and e["to"] == clause_id and e["rel"] == "HAS_CLAUSE" for e in result["edges"])
