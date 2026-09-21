@@ -204,3 +204,23 @@ These signals are not collapsed into ownership state. A Manual may therefore hav
 ## Readiness reason aggregation
 
 `readiness_reasons` is an ordered set of all applicable deterministic signals, not a first-match classification. A chapter may therefore expose `no_source_headings` together with `missing_pages`, or a hard `structural_or_ownership_error` together with coverage gaps. `readiness_status` still uses severity precedence: `BLOCKED` for hard errors, `ATTENTION` for non-error signals, and `HEALTHY` only when no attention signal applies. This preserves diagnostic evidence instead of hiding secondary extraction gaps.
+
+
+## Manual readiness reason aggregation
+
+The `manuals[]` rows now expose the same explicit readiness contract at Manual scope:
+
+- `readiness_status`: `HEALTHY`, `ATTENTION`, or `BLOCKED`.
+- `readiness_reasons`: ordered deterministic Manual-level signals.
+- `status`: retained as a compatibility alias of `readiness_status`.
+
+Manual reason codes are:
+
+- `complete_manual_readiness` — no Manual-level or chapter-level readiness signal applies.
+- `chapter_blocked` — at least one chapter is `BLOCKED`.
+- `chapter_attention` — at least one chapter is `ATTENTION`.
+- `registry_ownership_error` — the Manual registry ownership audit has hard errors.
+- `registry_ownership_warning` — the Manual registry ownership audit has warnings.
+- `unmapped_pages` — extracted pages exist outside the authoritative chapter registry.
+
+All applicable signals are retained in deterministic order; they are not mutually exclusive. `readiness_status` still follows severity precedence: `BLOCKED` when a hard signal applies, `ATTENTION` for non-error signals, and `HEALTHY` only when no signal applies. Exact page evidence remains in `registry_page_audit`, `missing_pages`, `unmapped_pages`, and chapter-level readiness rows. These fields are QA metadata only and never participate in hierarchy construction.
