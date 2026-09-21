@@ -87,6 +87,8 @@ def resolve_heading_sequence(headings: list[dict], page_range: list[int]) -> tup
                 errors.append(f"{current['reference']}: parent {parent} appears after child")
             current["parent_resolution"] = "SOURCE_HEADING" if parent_index >= 0 else "CHAPTER_FALLBACK"
             current["parent_available_in_source"] = parent_index >= 0
+            if parent_index < 0:
+                current["parent_missing_reason"] = "source_parent_not_extracted"
         else:
             current["parent_resolution"] = "CHAPTER"
             current["parent_available_in_source"] = True
