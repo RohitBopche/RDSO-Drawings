@@ -16,6 +16,7 @@ ALLOWED = {"HAS_SECTION", "HAS_CLAUSE", "HAS_TABLE", "HAS_FIGURE", "HAS_EVIDENCE
 CHAPTER_RE = re.compile(r"^CHAPTER:[^:]+:CH_\d{2}$")
 SECTION_RE = re.compile(r"^SECTION:[^:]+:SEC_.+$")
 SUBSECTION_RE = re.compile(r"^SUBSECTION:[^:]+:SEC_.+$")
+ARTIFACT_RE = re.compile(r"^(TABLE|FIGURE|EVIDENCE):[^:]+:CH_\\d{2}:P\\d{4}:\\d{2}_[0-9a-f]{8}$")
 
 
 def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
@@ -34,6 +35,7 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
     }
 
     ownership: dict[str, str] = {}
+    seen_structural_ids: dict[str, str] = {}
     child_edges: dict[str, list[dict]] = {}
     relation_parent_types = {
         "HAS_SECTION": {"CHAPTER", "SECTION", "SUBSECTION"},
@@ -52,6 +54,13 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
             continue
         parent_node = entities[parent]
         child_node = entities[child]
+        if child_node.get("type") in {"TABLE", "FIGURE", "EVIDENCE"}:
+            if not ARTIFACT_RE.match(child):
+                errors.append(f"{child}: invalid source artifact id")
+            previous_type = seen_structural_ids.get(child)
+            if previous_type and previous_type != child_node.get("type"):
+                errors.append(f"{child}: structural artifact type collision")
+            seen_structural_ids[child] = child_node.get("type")
         parent_chapter = (
             parent_node.get("parent_chapter_id")
             if parent_node.get("type") in {"SECTION", "SUBSECTION"}
@@ -75,11 +84,15 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
 
         if child_node.get("domain") != "manual" or child_node.get("universe") != "manuals":
             errors.append(f"{child}: structural child is not isolated in manuals universe")
-        for field in ("source_document", "extraction_method"):
+        for field in ("source_document", "source_text", "extraction_method"):
             if not child_node.get(field):
                 errors.append(f"{child}: missing {field} provenance")
         if child_node.get("source_page") is None:
             errors.append(f"{child}: missing source_page provenance")
+        if child_node.get("type") in {"TABLE", "FIGURE", "EVIDENCE"}:
+            confidence = child_node.get("confidence")
+            if not isinstance(confidence, (int, float)) or not 0 <= confidence <= 1:
+                errors.append(f"{child}: invalid confidence provenance")
 
         page_range = (chapters[parent_chapter].get("specs") or {}).get("PageRange")
         page = child_node.get("source_page")
@@ -135,6 +148,18 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
                         errors.append(f"{clause_id}: authoritative clause missing from canonical KG")
                     elif (cid, clause_id) not in {(owner, child) for child, owner in ownership.items()}:
                         errors.append(f"{clause_id}: authoritative chapter ownership edge missing for {cid}")
+
+    for manual in structure.get("manuals", []):
+        for chapter in manual.get("chapters", []):
+            for key, expected_type in (("tables", "TABLE"), ("figures", "FIGURE"), ("evidence", "EVIDENCE")):
+                for artifact in chapter.get(key, []) or []:
+                    aid = artifact.get("id")
+                    if aid:
+                        node = entities.get(aid)
+                        if node is None:
+                            errors.append(f"{aid}: authoritative {expected_type.lower()} missing from canonical KG")
+                        elif node.get("type") != expected_type:
+                            errors.append(f"{aid}: expected type {expected_type}, found {node.get('type')}")
 
     for child, owner in ownership.items():
         if child.startswith("CLAUSE:") and (owner, child) not in authoritative_ids:
