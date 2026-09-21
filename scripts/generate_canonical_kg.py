@@ -871,6 +871,91 @@ def build_canonical_knowledge_graph():
                         evidence_text=clause.get("verbatim_text", "")[:500],
                     )
 
+    # Materialize deterministic section/subsection hierarchy from authoritative
+    # clause references. These nodes are explicitly derived from numbering, not
+    # claimed to be a source TOC until heading-level extraction is available.
+    existing_entities = {e.get("id"): e for e in entities if e.get("id")}
+    for manual in chapter_data.get("manuals", []) if os.path.exists(chapter_path) else []:
+        manual_id = manual.get("document_id")
+        alias = manual.get("alias", "")
+        for ch in manual.get("chapters", []):
+            chapter_id = ch.get("chapter_id")
+            if not chapter_id:
+                continue
+            clauses = ch.get("clauses", []) or []
+            section_nodes = {}
+            subsection_nodes = {}
+            for clause in clauses:
+                clause_id = clause.get("clause_id")
+                section_ref = clause.get("section_ref")
+                subsection_ref = clause.get("subsection_ref")
+                if not clause_id or not section_ref:
+                    continue
+                section_key = f"SECTION:{alias}:SEC_{re.sub(r'[^A-Za-z0-9_]', '_', str(section_ref))}"
+                subsection_key = f"SUBSECTION:{alias}:SEC_{re.sub(r'[^A-Za-z0-9_]', '_', str(subsection_ref or section_ref))}"
+                page = clause.get("page_number")
+                source_section = clause.get("source_section") or clause.get("para_number")
+                for node_id, node_type, ref, store in (
+                    (section_key, "SECTION", section_ref, section_nodes),
+                    (subsection_key, "SUBSECTION", subsection_ref or section_ref, subsection_nodes),
+                ):
+                    if node_id not in store:
+                        node = existing_entities.get(node_id)
+                        if node is None:
+                            node = add_entity(
+                                node_id,
+                                f"{node_type.title()} {ref}",
+                                node_type,
+                                "manual",
+                                "#00f5d4",
+                                f"Manual content hierarchy node derived from clause numbering ({ref}).",
+                                {
+                                    "Reference": ref,
+                                    "Chapter": ch.get("title", ""),
+                                    "Page": page,
+                                    "Structure Status": "DERIVED_FROM_CLAUSE_NUMBERING",
+                                },
+                                x=0, y=7 if node_type == "SECTION" else 6.5, z=0, alt=13,
+                            )
+                            existing_entities[node_id] = node
+                        node.update({
+                            "domain": "manual",
+                            "universe": "manuals",
+                            "source_document": clause.get("source_document") or manual_id,
+                            "source_page": clause.get("source_page", page),
+                            "source_section": source_section,
+                            "source_text": clause.get("source_text", ""),
+                            "confidence": clause.get("confidence", 0.95),
+                            "extraction_method": clause.get("extraction_method", "deterministic_manual_clause_numbering"),
+                            "parent_chapter_id": chapter_id,
+                            "provenance": {
+                                "source_document": clause.get("source_document") or manual_id,
+                                "source_page": clause.get("source_page", page),
+                                "source_section": source_section,
+                                "source_text": clause.get("source_text", ""),
+                                "confidence": clause.get("confidence", 0.95),
+                                "extraction_method": clause.get("extraction_method", "deterministic_manual_clause_numbering"),
+                                "chapter_id": chapter_id,
+                                "chapter_page_range": ch.get("page_range", []),
+                            },
+                        })
+                        store[node_id] = node
+                if not any(e.get("from") == chapter_id and e.get("to") == section_key and e.get("rel") == "HAS_SECTION" for e in edges):
+                    add_edge(chapter_id, section_key, "HAS_SECTION",
+                             f"Derived section {section_ref} owned by chapter {ch.get('chapter_number')}",
+                             source_dwg=manual_id, revision=manual.get("pipeline_version", "STRUCTURE"),
+                             region=str(source_section), crop="", evidence_text=clause.get("source_text", "")[:500])
+                if not any(e.get("from") == section_key and e.get("to") == subsection_key and e.get("rel") == "HAS_SECTION" for e in edges):
+                    add_edge(section_key, subsection_key, "HAS_SECTION",
+                             f"Derived subsection {subsection_ref or section_ref}",
+                             source_dwg=manual_id, revision=manual.get("pipeline_version", "STRUCTURE"),
+                             region=str(source_section), crop="", evidence_text=clause.get("source_text", "")[:500])
+                if not any(e.get("from") == subsection_key and e.get("to") == clause_id and e.get("rel") == "HAS_CLAUSE" for e in edges):
+                    add_edge(subsection_key, clause_id, "HAS_CLAUSE",
+                             f"Clause {clause.get('para_number', '')} belongs to derived subsection {subsection_ref or section_ref}",
+                             source_dwg=manual_id, revision=manual.get("pipeline_version", "STRUCTURE"),
+                             region=str(source_section), crop="", evidence_text=clause.get("source_text", "")[:500])
+
     # Hard isolation gate: no canonical edge may cross between the Manuals and
     # Drawing universes. Future cross-domain relationships belong in a separate
     # relationship layer and must never be inferred here.
