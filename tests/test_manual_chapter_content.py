@@ -73,3 +73,16 @@ def test_wide_page_overlap_is_rejected():
     chapters[1]["page_range"] = [chapters[0]["page_range"][0], chapters[0]["page_range"][1]]
     errors, _ = validate_payload(payload)
     assert any("overlaps chapter" in error for error in errors)
+
+
+def test_clause_cannot_belong_to_two_chapters():
+    payload = make_payload()
+    clause = {
+        "clause_id": "CLAUSE:IRPWM:PARA_101",
+        "page_number": 32,
+        "verbatim_text": "same clause",
+    }
+    payload["manuals"][0]["chapters"][0]["clauses"] = [clause]
+    payload["manuals"][0]["chapters"][1]["clauses"] = [dict(clause, page_number=62)]
+    errors, _ = validate_payload(payload)
+    assert any("assigned to multiple chapters" in error for error in errors)
