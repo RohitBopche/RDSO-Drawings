@@ -89,3 +89,22 @@ Manual ingestion now persists `headings[]` directly in each authoritative chapte
 ### Coverage classification policy
 
 Gate K classifies each chapter deterministically as `HEALTHY`, `SPARSE`, `NO_SOURCE_HEADINGS`, or `MALFORMED`. Sparse and missing-heading states are warnings because source PDFs may legitimately expose limited machine-readable heading structure; malformed references and out-of-range provenance remain hard failures. No missing source heading is synthesized. Chapters without authoritative headings therefore retain the resolver's existing fallback behavior until the real corpus audit demonstrates that a stronger extraction rule is justified.
+
+
+## Machine-readable corpus audit
+
+Gate K exposes a reusable `audit_manual_corpus(payload, canonical=None)` function and an optional JSON output mode:
+
+```bash
+python scripts/validate_manual_hierarchy.py --json-out data/knowledge-graph/reports/manual_hierarchy_audit.json
+```
+
+The report schema is `manual_hierarchy_audit_v1` and contains:
+
+- `checked_chapters`: total chapters audited
+- `class_counts`: counts for `HEALTHY`, `SPARSE`, `NO_SOURCE_HEADINGS`, and `MALFORMED`
+- `manuals[]`: per-manual chapter/class counts
+- `chapters[]`: one deterministic row per chapter, including page/headings/artifact metrics plus errors and warnings
+- `error_count` / `warning_count` / `status`: aggregate audit outcome
+
+This report is intended for the first real six-manual corpus audit. It makes the audit result machine-readable without requiring downstream tooling to parse console output. No corpus health result is assumed until the actual intermediate corpus is available.
