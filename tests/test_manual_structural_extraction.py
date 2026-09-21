@@ -133,3 +133,19 @@ def test_payload_accepts_observed_boundary_page_when_registry_assigns_it_to_both
             return
     # Registry currently may have no shared boundary; the structural test remains valid.
     assert True
+
+
+def test_heading_candidate_normalization_suppresses_duplicates_large_integer_noise_and_backward_order():
+    from ingest_all_manual_chapters import normalize_source_heading_candidates
+
+    candidates = [
+        {"reference": "1", "title": "INTRODUCTION", "source_page": 1, "source_text": "1 INTRODUCTION"},
+        {"reference": "1", "title": "INTRODUCTION", "source_page": 2, "source_text": "1 INTRODUCTION"},
+        {"reference": "1.1", "title": "GENERAL REQUIREMENTS", "source_page": 2, "source_text": "1.1 GENERAL REQUIREMENTS"},
+        {"reference": "900", "title": "PAGE NUMBER NOISE", "source_page": 3, "source_text": "900 PAGE NUMBER NOISE"},
+        {"reference": "1.0", "title": "BACKWARD NOISE", "source_page": 4, "source_text": "1.0 BACKWARD NOISE"},
+        {"reference": "2", "title": "NEXT SECTION", "source_page": 5, "source_text": "2 NEXT SECTION"},
+    ]
+
+    result = normalize_source_heading_candidates(candidates)
+    assert [item["reference"] for item in result] == ["1", "1.1", "2"]
