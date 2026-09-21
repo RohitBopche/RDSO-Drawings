@@ -164,3 +164,20 @@ def test_coverage_audit_classifies_health_states():
     })
     assert errors
     assert metrics["coverage_class"] == "MALFORMED"
+
+
+def test_audit_manual_corpus_aggregates_machine_readable_report():
+    from validate_manual_hierarchy import audit_manual_corpus
+    payload = {"manuals": [{"document_id": "DOC:TEST:2026", "alias": "TEST", "chapters": [
+        {"chapter_id": "CHAPTER:TEST:CH_01", "page_range": [10, 10], "pages_seen": [10], "headings": [
+            {"reference": "2", "source_page": 10, "title": "Section"},
+            {"reference": "2.1", "source_page": 10, "title": "Subsection"}], "clauses": []},
+        {"chapter_id": "CHAPTER:TEST:CH_02", "page_range": [20, 20], "pages_seen": [20], "headings": [], "clauses": []},
+    ]}]}
+    report = audit_manual_corpus(payload)
+    assert report["schema_version"] == "manual_hierarchy_audit_v1"
+    assert report["checked_chapters"] == 2
+    assert report["class_counts"]["HEALTHY"] == 1
+    assert report["class_counts"]["NO_SOURCE_HEADINGS"] == 1
+    assert report["manuals"][0]["chapters"] == 2
+    assert report["status"] == "PASS"
