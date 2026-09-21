@@ -3329,6 +3329,8 @@
 
     function buildHierarchyStructure() {
       // Manuals are structurally authoritative: Manual -> Chapter -> content.
+      const rawNodes = CANONICAL_DATA.entities || [];
+      const rawEdges = CANONICAL_DATA.edges || [];
       const manualStructure = window.RDSO_MANUAL_STRUCTURE || { manuals: [] };
       const manualChapterById = new Map();
 
@@ -3378,9 +3380,6 @@
         'CAN_CAUSE', 'MITIGATED_BY', 'INSPECTED_BY', 'GOVERNS',
         'APPLIES_TO', 'FASTENED_BY', 'CONNECTED_TO', 'INTERFACES_WITH'
       ]);
-
-      const rawNodes = CANONICAL_DATA.entities || [];
-      const rawEdges = CANONICAL_DATA.edges || [];
 
       // Initialize hierarchy nodes
       rawNodes.forEach(n => {
