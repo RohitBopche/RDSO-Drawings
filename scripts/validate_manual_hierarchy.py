@@ -110,9 +110,10 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
 
     for manual in payload.get("manuals", []):
         manual_counts = {"chapters": 0, "HEALTHY": 0, "SPARSE": 0, "NO_SOURCE_HEADINGS": 0, "MALFORMED": 0}
-        manual_page_expected = 0
+        manual_expected_pages: set[int] = set()
         manual_page_seen: set[int] = set()
         manual_missing_pages: set[int] = set()
+        manual_page_owners: dict[int, list[str]] = {}
         manual_unmapped_pages = {p for p in (manual.get("unmapped_pages", []) or []) if isinstance(p, int)}
         manual_pages_with_headings: set[int] = set()
         manual_pages_with_clauses: set[int] = set()
@@ -122,8 +123,13 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
             headings, heading_errors = resolve_heading_sequence(chapter.get("headings", []) or [], chapter.get("page_range", []))
             chapter_errors = [f"{chapter.get('chapter_id')}: {e}" for e in heading_errors]
             cov_errors, cov_warnings, metrics = _coverage_audit(chapter)
-            manual_page_expected += metrics["pages_expected"] or 0
-            manual_page_seen.update(chapter.get("pages_seen", []) or [])
+            page_start, page_end = chapter.get("page_range", [None, None])
+            if isinstance(page_start, int) and isinstance(page_end, int) and page_end >= page_start:
+                manual_expected_pages.update(range(page_start, page_end + 1))
+            chapter_seen_pages = {p for p in (chapter.get("pages_seen", []) or []) if isinstance(p, int)}
+            manual_page_seen.update(chapter_seen_pages)
+            for page in chapter_seen_pages:
+                manual_page_owners.setdefault(page, []).append(str(chapter.get("chapter_id")))
             manual_missing_pages.update(metrics["missing_pages"])
             manual_pages_with_headings.update(
                 _item_page(h) for h in (chapter.get("headings", []) or []) if _item_page(h) is not None
@@ -176,14 +182,18 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
             "manual_id": manual.get("document_id"),
             "alias": manual.get("alias"),
             **manual_counts,
-            "pages_expected": manual_page_expected,
+            "pages_expected": len(manual_expected_pages),
             "pages_seen": len(manual_page_seen),
-            "missing_pages": sorted(manual_missing_pages),
+            "missing_pages": sorted(manual_expected_pages - manual_page_seen),
+            "observed_pages_with_multiple_chapters": sorted(
+                page for page, owners in manual_page_owners.items() if len(owners) > 1
+            ),
+            "observed_page_owner_count": len(manual_page_owners),
             "unmapped_pages": sorted(manual_unmapped_pages),
             "pages_with_headings": len(manual_pages_with_headings),
             "pages_with_clauses": len(manual_pages_with_clauses),
             "content_empty_pages": sorted(manual_content_empty_pages),
-            "coverage_ratio": (len(manual_page_seen) / manual_page_expected) if manual_page_expected else None,
+            "coverage_ratio": (len(manual_page_seen & manual_expected_pages) / len(manual_expected_pages)) if manual_expected_pages else None,
         })
 
     return {"schema_version": "manual_hierarchy_audit_v1", "manuals": manual_rows, "chapters": rows, "class_counts": class_counts, "checked_chapters": len(rows), "error_count": len(errors), "warning_count": len(warnings), "errors": errors, "warnings": warnings, "status": "FAIL" if errors else "PASS"}
