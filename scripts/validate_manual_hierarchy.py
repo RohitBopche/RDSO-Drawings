@@ -436,3 +436,7 @@ def main() -> int:
     print("PASS: deterministic Manual source-heading hierarchy is structurally valid.")
     return 0
 
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
