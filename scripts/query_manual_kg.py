@@ -42,6 +42,16 @@ class ManualKG:
             canonical = json.load(f)
         return cls(structure, canonical)
 
+    def audit_summary(self) -> dict[str, Any]:
+        """Return the latest deterministic Manual readiness summary when available."""
+        report = self.structure.get("audit_summary")
+        if isinstance(report, dict):
+            return report
+        return {
+            "status": "UNAVAILABLE",
+            "reason": "manual corpus audit summary is not embedded in the loaded structure",
+        }
+
     def list_manuals(self) -> list[dict[str, Any]]:
         return [
             {
@@ -49,6 +59,8 @@ class ManualKG:
                 "alias": m["alias"],
                 "title": m["title"],
                 "chapter_count": len(m.get("chapters", [])),
+                "readiness": (m.get("audit", {}) or {}).get("status"),
+                "coverage_ratio": (m.get("audit", {}) or {}).get("coverage_ratio"),
             }
             for m in self.structure.get("manuals", [])
         ]
@@ -61,9 +73,12 @@ class ManualKG:
             "id": manual["document_id"],
             "alias": manual["alias"],
             "title": manual["title"],
+            "readiness": (manual.get("audit", {}) or {}).get("status"),
+            "coverage_ratio": (manual.get("audit", {}) or {}).get("coverage_ratio"),
             "chapters": [
                 {
                     "id": c["chapter_id"],
+                    "readiness": (c.get("audit", {}) or {}).get("status"),
                     "number": c.get("chapter_number", c.get("order")),
                     "title": c["title"],
                     "page_start": (c.get("page_range") or [None, None])[0],
@@ -153,6 +168,8 @@ def main() -> int:
     kg = ManualKG.load()
     if args.command == "manuals":
         result = kg.list_manuals()
+    elif args.command == "audit":
+        result = kg.audit_summary()
     elif args.command == "manual":
         result = kg.get_manual(args.value) if args.value else None
     elif args.command == "chapter":
