@@ -65,3 +65,25 @@ def test_chapter_children_expose_evidence_metadata_when_present():
     assert child["source_text"] == "Overview text"
     assert child["confidence"] == 0.98
     assert child["extraction_method"] == "deterministic"
+
+
+def test_manual_list_exposes_readiness_without_cross_universe_data():
+    kg = make_kg()
+    kg.structure["manuals"][0]["audit"] = {"status": "ATTENTION", "coverage_ratio": 0.9}
+    result = kg.list_manuals()
+    assert result[0]["readiness"] == "ATTENTION"
+    assert result[0]["coverage_ratio"] == 0.9
+
+
+def test_manual_query_exposes_chapter_readiness():
+    kg = make_kg()
+    kg.manuals["DOC:M:1"]["chapters"][0]["audit"] = {"status": "HEALTHY"}
+    result = kg.get_manual("DOC:M:1")
+    assert result["readiness"] is None
+    assert result["chapters"][0]["readiness"] == "HEALTHY"
+
+
+def test_audit_summary_is_explicitly_unavailable_when_not_embedded():
+    result = make_kg().audit_summary()
+    assert result["status"] == "UNAVAILABLE"
+    assert "not embedded" in result["reason"]
