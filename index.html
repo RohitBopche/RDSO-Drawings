@@ -3336,7 +3336,13 @@
     }
 
     function renderManualReadiness(data) {
-      const container = document.getElementById('manual-readiness-card');
+      let container = document.getElementById('manual-readiness-card');
+      const overview = document.getElementById('drawing-overview-container');
+      if (!container && overview) {
+        container = document.createElement('div');
+        container.id = 'manual-readiness-card';
+        overview.insertBefore(container, overview.firstChild);
+      }
       if (!container) return;
       if (getNodeUniverse(data) !== 'manuals' || !['CHAPTER', 'DOCUMENT'].includes(String(data.type || '').toUpperCase())) {
         container.style.display = 'none';
