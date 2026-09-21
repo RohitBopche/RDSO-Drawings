@@ -101,6 +101,27 @@ def validate_payload(payload: dict) -> tuple[list[str], list[str]]:
             else:
                 ranges.append((num, page_range[0], page_range[1]))
 
+            headings = ch.get("headings", [])
+            if not isinstance(headings, list):
+                errors.append(f"{chapter_id}: headings must be a list")
+            else:
+                seen_heading_keys = set()
+                for heading in headings:
+                    ref = heading.get("reference")
+                    page = heading.get("page_number")
+                    key = (ref, page)
+                    if key in seen_heading_keys:
+                        errors.append(f"{chapter_id}: duplicate source heading {key}")
+                    seen_heading_keys.add(key)
+                    if not ref or not heading.get("title"):
+                        errors.append(f"{chapter_id}: source heading missing reference/title")
+                    if not isinstance(page, int):
+                        errors.append(f"{chapter_id}: source heading {ref} page_number must be an integer")
+                    elif page_range and not (page_range[0] <= page <= page_range[1]):
+                        errors.append(f"{chapter_id}: source heading {ref} page {page} outside chapter range {page_range}")
+                    if heading.get("extraction_method") != "deterministic_numbered_source_heading":
+                        errors.append(f"{chapter_id}: source heading {ref} has invalid extraction_method")
+
             clauses = ch.get("clauses", [])
             if not isinstance(clauses, list):
                 errors.append(f"{chapter_id}: clauses must be a list")
