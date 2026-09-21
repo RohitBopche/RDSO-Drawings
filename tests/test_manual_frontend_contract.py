@@ -80,3 +80,20 @@ def test_manual_layout_is_chapter_then_content():
     assert "function layoutManualChapterChildren(chapterId)" in source
     assert "entry.id.startsWith('DOC:')" in source
     assert "entry.id.startsWith('CHAPTER:')" in source
+
+
+def test_manual_frontend_prefers_authoritative_source_heading_tree():
+    source = _source()
+    assert "authoritativeHeadingByChapter" in source
+    assert "heading_kind" in source
+    assert "parent_heading_ref" in source
+    assert "Authoritative source-heading hierarchy" in source
+    assert "if (chapterAuthoritativeHeadings.length === 0)" in source
+    assert "EXTRACTED_HEADING_UNVERIFIED" in source
+
+
+def test_manual_frontend_preserves_structural_heading_relationships():
+    source = _source()
+    assert "const parentRef = n.parent_heading_ref || n.provenance?.parent_heading_ref;" in source
+    assert "const parentId = parent ? parent.id : chapterId;" in source
+    assert "rel: 'HAS_SECTION'" in source
