@@ -395,7 +395,7 @@ def normalize_source_heading_candidates(headings):
     return ordered
 
 
-def extract_clauses_from_text(doc_id, page_num, text):
+def extract_clauses_from_text(doc_id, page_num, text, chapter_num=None):
     """
     Extracts individual statutory clauses from page text based on numbering schemes.
     """
@@ -451,9 +451,12 @@ def extract_clauses_from_text(doc_id, page_num, text):
         fails = sorted(list(set(FAIL_RE.findall(clause_body))))
         comps = sorted(list(set(COMP_RE.findall(clause_body))))
         
-        # Deterministic Stable ID
+        # Deterministic Stable ID scoped to the authoritative chapter.
         clean_para = re.sub(r'[^A-Za-z0-9_]', '_', para_num)
-        clause_id = f"CLAUSE:{alias}:PARA_{clean_para}"
+        if chapter_num is not None:
+            clause_id = f"CLAUSE:{alias}:CH_{int(chapter_num):02d}:PARA_{clean_para}"
+        else:
+            clause_id = f"CLAUSE:{alias}:PARA_{clean_para}"
         
         # Summary (first 2 clean sentences)
         sentences = [s.strip() for s in re.split(r'\. |\n', clause_body) if len(s.strip()) > 15]
@@ -465,7 +468,7 @@ def extract_clauses_from_text(doc_id, page_num, text):
         # This is explicitly marked as derived, not treated as an authoritative
         # TOC/heading hierarchy until source headings are ingested.
         section_ref = para_num.split('.')[0].split('(')[0]
-        subsection_match = re.match(r'^([^.(]+(?:\\.[^.(]+)?(?:\\([^)]*\\))?)', para_num)
+        subsection_match = re.match(r'^([^.(]+(?:\.[^.(]+)?(?:\([^)]*\))?)', para_num)
         subsection_ref = subsection_match.group(1) if subsection_match else section_ref
 
         clauses.append({
@@ -482,7 +485,7 @@ def extract_clauses_from_text(doc_id, page_num, text):
             'confidence': 0.95,
             'extraction_method': 'deterministic_manual_clause_numbering',
             'summary': summary if summary else title,
-            'verbatim_text': clause_body[:1200], # Keep high-fidelity block
+            'verbatim_text': clause_body[:1200],
             'tolerances': tolerances[:5],
             'requirements': reqs,
             'roles': roles,
@@ -543,7 +546,6 @@ def main():
             pnum = data.get('page_number', 0)
             txt = data.get('text_content', '')
             
-            # Preserve every authoritative chapter owner, including shared boundary pages.
             target_chapters = get_chapters_for_page(doc_id, pnum)
             if not target_chapters:
                 manual_data[doc_id].setdefault('unmapped_pages', []).append(pnum)
@@ -557,7 +559,7 @@ def main():
 
                 headings = extract_source_headings(doc_id, pnum, txt)
                 manual_data[doc_id]['chapters'][ch_num]['headings'].extend(headings)
-                extracted = extract_clauses_from_text(doc_id, pnum, txt)
+                extracted = extract_clauses_from_text(doc_id, pnum, txt, ch_num)
                 if extracted:
                     manual_data[doc_id]['chapters'][ch_num]['clauses'].extend(extracted)
                     total_clauses_extracted += len(extracted)
@@ -565,7 +567,6 @@ def main():
                 for key in ('tables', 'figures', 'evidence'):
                     manual_data[doc_id]['chapters'][ch_num][key].extend(structural[key])
 
-    # Deduplicate source headings and structural artifacts while preserving source order.
     for doc_id, manual in manual_data.items():
         for chapter in manual['chapters'].values():
             seen_headings = set()
@@ -590,14 +591,12 @@ def main():
                     unique.append(item)
                 chapter[key] = unique
 
-    # Format structured output
     structured_manuals = []
     total_chapters_count = 0
     
     for doc_id, mdata in manual_data.items():
         ch_list = []
         for ch_num, cinfo in sorted(mdata['chapters'].items()):
-            # Deduplicate clauses by clause_id, preserving richest
             seen_clauses = {}
             for cl in cinfo['clauses']:
                 cid = cl['clause_id']

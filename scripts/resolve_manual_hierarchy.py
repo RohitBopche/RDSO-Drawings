@@ -104,8 +104,6 @@ def resolve_heading_sequence(headings: list[dict], page_range: list[int]) -> tup
         ):
             errors.append(f"{current['reference']}: hierarchy depth jumps from {previous['reference']}")
 
-    # Source order is authoritative; reject backward numeric references within
-    # the same heading family, but allow annexures/appendices after numbered content.
     last_numeric = None
     for h in normalized:
         if not NUMERIC_REF.fullmatch(h["reference"]):
@@ -131,6 +129,34 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
     facts = canonical.get("facts", [])
     by_id = {e.get("id"): e for e in entities if e.get("id")}
 
+    # Remove stale terminal Manual content from the legacy canonical corpus.
+    # The authoritative intermediate extraction is now the sole source of truth
+    # for clause/table/figure/evidence children. Chapter/section hierarchy nodes
+    # are retained and reconciled below.
+    authoritative_terminal_ids = set()
+    for manual in intermediate.get("manuals", []):
+        for chapter in manual.get("chapters", []):
+            for clause in chapter.get("clauses", []) or []:
+                if clause.get("clause_id"):
+                    authoritative_terminal_ids.add(clause["clause_id"])
+            for key in ("tables", "figures", "evidence"):
+                for artifact in chapter.get(key, []) or []:
+                    if artifact.get("id"):
+                        authoritative_terminal_ids.add(artifact["id"])
+
+    stale_terminal_ids = {
+        entity_id
+        for entity_id, entity in by_id.items()
+        if entity.get("domain") == "manual"
+        and entity.get("type") in {"CLAUSE", "TABLE", "FIGURE", "EVIDENCE"}
+        and entity_id not in authoritative_terminal_ids
+    }
+    if stale_terminal_ids:
+        entities[:] = [e for e in entities if e.get("id") not in stale_terminal_ids]
+        edges[:] = [e for e in edges if e.get("from") not in stale_terminal_ids and e.get("to") not in stale_terminal_ids]
+        facts[:] = [f for f in facts if f.get("subject_id") not in stale_terminal_ids and f.get("object_id") not in stale_terminal_ids]
+        by_id = {e.get("id"): e for e in entities if e.get("id")}
+
     def add_edge(frm, to, rel, evidence, manual_id, page, region):
         if any(e.get("from") == frm and e.get("to") == to and e.get("rel") == rel for e in edges):
             return
@@ -141,7 +167,6 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
             "confidence": 1.0, "status": "VERIFIED",
             "extraction_method": "deterministic_manual_source_heading", "evidence_text": evidence[:500],
         })
-
 
     errors: list[str] = []
     resolved_count = 0
@@ -155,8 +180,6 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
             headings, heading_errors = resolve_heading_sequence(chapter.get("headings", []) or [], page_range)
             errors.extend(f"{chapter_id}: {e}" for e in heading_errors)
 
-            # Only structurally valid heading sequences are materialized. Existing
-            # clause-derived nodes remain as fallback evidence, not as replacements.
             if heading_errors:
                 continue
 
@@ -242,11 +265,10 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
                 })
 
                 owner = parent_id or chapter_id
-                rel = "HAS_SECTION"
                 add_edge(
                     owner,
                     hid,
-                    rel,
+                    "HAS_SECTION",
                     (
                         f"Source heading {ref}: {heading['title']}"
                         if parent_id
@@ -260,10 +282,7 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
                 previous_id = hid
                 resolved_count += 1
 
-            # Re-parent clauses to the deepest matching heading by reference.
             structural = [h for h in headings if NUMERIC_REF.fullmatch(h["reference"])]
-            # Remove only clause-parent edges produced by the fallback numbering
-            # hierarchy when an authoritative source heading can own that clause.
             matched_clause_ids = set()
             for clause in chapter.get("clauses", []) or []:
                 pref = str(clause.get("para_number", ""))
@@ -277,8 +296,6 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
             for clause in chapter.get("clauses", []) or []:
                 cid = clause.get("clause_id")
                 pref = str(clause.get("para_number", ""))
-                # Preserve authoritative Chapter -> Clause ownership even when
-                # the clause is additionally nested under a source heading.
                 if cid and cid in by_id:
                     add_edge(
                         chapter_id,

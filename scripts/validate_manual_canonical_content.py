@@ -39,7 +39,7 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
     child_edges: dict[str, list[dict]] = {}
     relation_parent_types = {
         "HAS_SECTION": {"CHAPTER", "SECTION", "SUBSECTION"},
-        "HAS_CLAUSE": {"CHAPTER", "SUBSECTION"},
+        "HAS_CLAUSE": {"CHAPTER", "SECTION", "SUBSECTION"},
         "HAS_TABLE": {"CHAPTER", "SECTION", "SUBSECTION"},
         "HAS_FIGURE": {"CHAPTER", "SECTION", "SUBSECTION"},
         "HAS_EVIDENCE": {"CHAPTER", "SECTION", "SUBSECTION"},
@@ -112,17 +112,12 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
             if not isinstance(heading_confidence, (int, float)) or not 0 <= heading_confidence <= 1:
                 errors.append(f"{child}: invalid heading confidence provenance")
 
-    # Every source-derived structural child must have exactly one direct chapter
-    # owner, even when it is nested beneath Section/Subsection for UI traversal.
     for child, node in entities.items():
         if node.get("domain") != "manual" or node.get("universe") != "manuals":
             continue
         if node.get("type") not in {"SECTION", "SUBSECTION", "CLAUSE", "TABLE", "FIGURE", "EVIDENCE"}:
             continue
 
-        # Sections/subsections form the navigable hierarchy and may be nested.
-        # Their chapter ownership is carried by parent_chapter_id; only terminal
-        # structural children require an explicit Chapter -> child ownership edge.
         if node.get("type") in {"SECTION", "SUBSECTION"}:
             declared_owner = node.get("parent_chapter_id")
             if declared_owner not in chapters:
@@ -138,7 +133,6 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
                 owners.append(parent.get("id"))
         if len(set(owners)) != 1:
             errors.append(f"{child}: expected exactly one direct chapter owner, found {sorted(set(owners))}")
-
 
     for entity_id, node in entities.items():
         if node.get("type") == "SECTION" and not SECTION_RE.match(entity_id):
