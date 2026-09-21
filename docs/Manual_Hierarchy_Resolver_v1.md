@@ -234,3 +234,19 @@ The Gate K validator now explicitly treats an empty or invalid `all_chapters_ext
 ### Corpus schema preflight
 
 Before Gate K performs chapter-level auditing, the validator verifies that the corpus artifact is valid JSON, is an object, contains a `manuals` list, and contains at least one Manual. Empty, malformed, or structurally invalid artifacts are reported as `BLOCKED` external corpus-readiness conditions rather than being interpreted as a valid zero-manual audit.
+
+## Orphan source-heading policy
+
+A source heading may reference a numeric parent that is not present in the extracted source-heading sequence. This is treated as an extraction/completeness signal, not as a structural contradiction.
+
+The resolver preserves the observed heading as authoritative and records:
+
+- `parent_heading_ref`: the parent reference stated/implied by its numeric structure.
+- `parent_available_in_source: false`.
+- `parent_resolution: CHAPTER_FALLBACK`.
+- `Structure Status: AUTHORITATIVE_SOURCE_HEADING_ORPHAN`.
+
+The canonical graph attaches such a heading directly to its authoritative Chapter with `HAS_SECTION`. The resolver never invents a missing parent node. If the missing parent is recovered in a later extraction, the next canonical generation deterministically reparents the existing heading.
+
+This policy prevents incomplete source extraction from suppressing an otherwise valid chapter hierarchy while keeping the missing structural evidence explicit and auditable.
+\n
