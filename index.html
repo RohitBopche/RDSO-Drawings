@@ -3381,15 +3381,64 @@
       });
 
       // Attach extracted clauses to their authoritative chapter; never directly to the manual.
+      // Primary key: (manual, chapter title). Fallback: manual + page range. The page fallback
+      // is deterministic and covers canonical clauses whose compact metadata does not carry
+      // the full chapter title.
       const clauses = window.RDSO_MANUALS_KNOWLEDGE && window.RDSO_MANUALS_KNOWLEDGE.clauses || {};
+      const manualByAlias = new Map(manualStructure.manuals.map(m => [m.alias, m]));
+
+      function resolveChapterForClause(c) {
+        const alias = c.manual || c.alias;
+        const manual = manualByAlias.get(alias);
+        if (!manual) return null;
+
+        const exact = manualChapterById.get(alias + '|' + c.chapter);
+        if (exact) return exact;
+
+        const page = Number(c.page);
+        if (!Number.isFinite(page)) return null;
+        const candidates = manual.chapters
+          .map((ch, idx) => ({ idx, start: Number(ch[1]), end: Number(ch[2]) }))
+          .filter(x => page >= x.start && page <= x.end);
+
+        if (candidates.length !== 1) return null;
+        return 'CHAPTER:' + manual.alias + ':CH_' + String(candidates[0].idx + 1).padStart(2, '0');
+      }
+
       Object.values(clauses).forEach(c => {
         const cid = c.id || c.clause_id;
-        const chapterId = manualChapterById.get((c.manual || c.alias) + '|' + c.chapter);
+        const chapterId = resolveChapterForClause(c);
         if (!cid || !chapterId || !rawNodes.some(n => n.id === cid)) return;
         const edgeKey = chapterId + '|HAS_CLAUSE|' + cid;
         if (!rawEdges.some(e => e.from + '|' + e.rel + '|' + e.to === edgeKey)) {
-          rawEdges.push({ from: chapterId, to: cid, rel: 'HAS_CLAUSE', rationale: 'Clause assigned by authoritative chapter structure' });
+          rawEdges.push({ from: chapterId, to: cid, rel: 'HAS_CLAUSE', rationale: 'Clause assigned by authoritative chapter title/page structure' });
         }
+      });
+
+      // Canonical clause nodes may use versioned IDs (e.g. CLAUSE:IRPWM:2024:PARA_428)
+      // while the extracted manual knowledge uses compact IDs. When metadata on the node
+      // includes a chapter and the page is unavailable, use its manual/version identity
+      // and chapter label to attach it without creating a cross-universe edge.
+      rawNodes.filter(n => n.universe === 'manuals' && n.type === 'CLAUSE').forEach(n => {
+        if (rawEdges.some(e => e.rel === 'HAS_CLAUSE' && e.to === n.id)) return;
+        const manualMatch = String(n.id).match(/^CLAUSE:([^:]+)(?::[^:]+)?:/);
+        const alias = manualMatch ? manualMatch[1] : null;
+        const manual = manualByAlias.get(alias);
+        const chapterLabel = n.specs && n.specs.Chapter;
+        if (!manual || !chapterLabel) return;
+
+        const normalized = String(chapterLabel).replace(/^Chapter\s*\d+\s*/i, '').trim();
+        const idx = manual.chapters.findIndex(ch => {
+          const title = String(ch[0]).trim();
+          return normalized === title || normalized.includes(title) || title.includes(normalized);
+        });
+        if (idx < 0) return;
+
+        const chapterId = 'CHAPTER:' + alias + ':CH_' + String(idx + 1).padStart(2, '0');
+        rawEdges.push({
+          from: chapterId, to: n.id, rel: 'HAS_CLAUSE',
+          rationale: 'Canonical clause attached from verified chapter metadata'
+        });
       });
 
       const HIERARCHY_RELS = new Set([
