@@ -31,7 +31,7 @@ def validate_payload(payload: dict) -> tuple[list[str], list[str]]:
     if extra:
         errors.append(f"unexpected manuals in extracted payload: {', '.join(extra)}")
 
-    seen_chapter_ids: dict[str, str] = {}
+    seen_chapter_ids: set[str] = set()
     for manual in manuals:
         doc_id = manual.get("document_id")
         registry = MANUAL_CHAPTER_REGISTRY.get(doc_id)
