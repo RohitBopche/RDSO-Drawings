@@ -314,3 +314,27 @@ def test_corpus_audit_exposes_registry_page_ownership_metrics():
     assert audit["missing_pages"]
     assert audit["unmapped_pages"] == []
     assert audit["ownership_mismatches"] == []
+
+
+def test_corpus_audit_emits_chapter_and_manual_readiness_status():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    spec = registry["chapters"][0]
+    chapter_id = f"CHAPTER:{registry['alias']}:CH_{spec['num']:02d}"
+    payload = {"manuals": [{
+        "document_id": doc_id,
+        "alias": registry["alias"],
+        "unmapped_pages": [],
+        "chapters": [{
+            "chapter_id": chapter_id,
+            "page_range": [spec["page_start"], spec["page_end"]],
+            "pages_seen": [spec["page_start"]],
+            "headings": [],
+            "clauses": [],
+        }]
+    }]}
+
+    report = audit_manual_corpus(payload)
+    assert report["chapters"][0]["status"] == "ATTENTION"
+    assert report["manuals"][0]["status"] == "ATTENTION"
