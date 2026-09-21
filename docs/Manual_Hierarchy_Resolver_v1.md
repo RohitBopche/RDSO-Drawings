@@ -113,3 +113,27 @@ This report is intended for the first real six-manual corpus audit. It makes the
 ## Extraction-gap preservation
 
 Manual ingestion now preserves pages that fall outside the authoritative Chapter Boundary Registry as explicit `unmapped_pages` at the manual level and reports `total_unmapped_pages` at corpus level. Such pages are never silently assigned to the first or last chapter. This is an audit signal for registry/PDF alignment and is intentionally separate from chapter heading coverage.
+
+
+## Manual corpus completeness matrix
+
+The corpus audit now distinguishes four page states instead of treating extraction coverage as a single count:
+
+- **registered/expected pages** — pages declared by the authoritative Chapter Boundary Registry.
+- **observed pages** — pages actually assigned to the chapter by deterministic page ownership.
+- **missing pages** — registered pages that were not observed in the chapter extraction.
+- **unmapped pages** — extracted pages that could not be assigned to any registered chapter; these remain at manual scope.
+- **pages with headings** — observed pages carrying at least one persisted source heading.
+- **pages with clauses** — observed pages carrying at least one persisted clause.
+- **content-empty pages** — observed chapter pages with no persisted heading, clause, table, figure, or evidence artifact.
+- **coverage ratio** — observed chapter pages divided by registered expected pages.
+
+The machine-readable manual_hierarchy_audit_v1 report includes these metrics in each chapters[] row, while manuals[] contains the corresponding per-manual aggregates. missing_pages, unmapped_pages, and content_empty_pages are emitted as explicit page lists so downstream QA can identify exact gaps rather than relying only on counts.
+
+A page is considered non-empty only from persisted extraction provenance; arbitrary topic strings or semantic labels are not used to infer page coverage. This keeps completeness auditing independent from semantic enrichment.
+
+The distinction is intentional:
+
+missing != unmapped != content-empty
+
+A missing page was expected but not observed; an unmapped page was observed but had no authoritative chapter owner; a content-empty page was observed and owned by a chapter but produced no persisted structural/content artifact.
