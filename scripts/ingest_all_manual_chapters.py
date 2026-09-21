@@ -282,16 +282,16 @@ def extract_structural_content(doc_id, chapter_num, page_num, text):
     tables, figures, evidence = [], [], []
 
     table_patterns = [
-        r'(?m)^\s*(?:TABLE|Table)\s*(?:[-.:]?\s*)?(?:[A-Z0-9IVX]+(?:[-.][A-Z0-9IVX]+)*)?[^\n]{0,120}$',
-        r'(?m)^\s*Table[- ]?\d+(?:\s*[-.:\s]\s*[^\n]{0,100})?$',
+        r'^\s*(?:TABLE|Table)\s*(?:[-.:]?\s*)?(?:[A-Z0-9IVX]+(?:[-.][A-Z0-9IVX]+)*)?[^\n]{0,120}$',
+        r'^\s*Table[- ]?\d+(?:\s*[-.:\s]\s*[^\n]{0,100})?$',
     ]
     figure_patterns = [
-        r'(?m)^\s*(?:FIGURE|Figure|Fig\.)\s*(?:[-.:]?\s*)?(?:[A-Z0-9IVX]+(?:[-.][A-Z0-9IVX]+)*)?[^\n]{0,120}$',
+        r'^\s*(?:FIGURE|Figure|Fig\.)\s*(?:[-.:]?\s*)?(?:[A-Z0-9IVX]+(?:[-.][A-Z0-9IVX]+)*)?[^\n]{0,120}$',
     ]
     evidence_patterns = [
-        r'(?m)^\s*(?:Evidence|EVIDENCE)\s*[:.-]?[^\n]{0,120}$',
-        r'(?m)^\s*(?:Annexure|ANNEXURE|Appendix|APPENDIX)\s*[A-Z0-9IVX-]*[^\n]{0,120}$',
-        r'(?m)^\s*(?:Proforma|PROFORMA|Checklist|CHECKLIST|Register|REGISTER)\s*(?:[:.-]?\s*)[^\n]{0,120}$',
+        r'^\s*(?:Evidence|EVIDENCE)\s*[:.-]?[^\n]{0,120}$',
+        r'^\s*(?:Annexure|ANNEXURE|Appendix|APPENDIX)\s*[A-Z0-9IVX-]*[^\n]{0,120}$',
+        r'^\s*(?:Proforma|PROFORMA|Checklist|CHECKLIST|Register|REGISTER)\s*(?:[:.-]?\s*)[^\n]{0,120}$',
     ]
 
     for kind, patterns, target in (("TABLE", table_patterns, tables), ("FIGURE", figure_patterns, figures), ("EVIDENCE", evidence_patterns, evidence)):
