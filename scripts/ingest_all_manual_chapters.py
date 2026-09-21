@@ -477,7 +477,11 @@ def main():
             'order': ch['num'],
             'structure_status': 'STRUCTURE_VERIFIED',
             'topics': ch['topics'],
-            'clauses': []
+            'headings': [],
+            'clauses': [],
+            'tables': [],
+            'figures': [],
+            'evidence': []
         } for ch in meta['chapters']}
     } for doc_id, meta in MANUAL_CHAPTER_REGISTRY.items()}
     
@@ -507,7 +511,9 @@ def main():
                 
             ch_num = target_ch['num']
             
-            # Extract clauses and explicitly labeled source artifacts.
+            # Extract source headings, clauses and explicitly labeled source artifacts.
+            headings = extract_source_headings(doc_id, pnum, txt)
+            manual_data[doc_id]['chapters'][ch_num]['headings'].extend(headings)
             extracted = extract_clauses_from_text(doc_id, pnum, txt)
             if extracted:
                 manual_data[doc_id]['chapters'][ch_num]['clauses'].extend(extracted)
@@ -515,6 +521,29 @@ def main():
             structural = extract_structural_content(doc_id, ch_num, pnum, txt)
             for key in ('tables', 'figures', 'evidence'):
                 manual_data[doc_id]['chapters'][ch_num][key].extend(structural[key])
+
+    # Deduplicate source headings and structural artifacts while preserving source order.
+    for doc_id, manual in manual_data.items():
+        for chapter in manual['chapters'].values():
+            seen_headings = set()
+            unique_headings = []
+            for heading in chapter.get('headings', []):
+                key = (heading.get('reference'), heading.get('source_page'), heading.get('title'))
+                if key in seen_headings:
+                    continue
+                seen_headings.add(key)
+                unique_headings.append(heading)
+            chapter['headings'] = unique_headings
+            for key in ('tables', 'figures', 'evidence'):
+                seen = set()
+                unique = []
+                for item in chapter.get(key, []):
+                    item_key = item.get('id')
+                    if item_key in seen:
+                        continue
+                    seen.add(item_key)
+                    unique.append(item)
+                chapter[key] = unique
 
     # Format structured output
     structured_manuals = []
