@@ -43,6 +43,7 @@ Every manual must have:
 5. Stable chapter IDs in the form CHAPTER:<ALIAS>:CH_<NN>.
 6. Page ranges and structure status.
 7. A source-derived semantic layer attached below the structural hierarchy.
+8. Every source-derived structural child carries machine-readable provenance: source document, source page, source section/reference, extraction method and parent chapter ownership.
 
 ## Expansion behavior
 
@@ -76,10 +77,11 @@ Future relationships between manuals and drawings must be stored in a dedicated 
 1. Rebuild authoritative manual structure.
 2. Rebuild canonical KG.
 3. Validate manual structure and isolation.
-4. Run the complete publication validation suite.
-5. Detect generated-data drift.
-6. Refresh generated artifacts on main when deterministic regeneration changes them.
-7. Create a scheduled failure issue when the loop fails.
+4. Validate canonical chapter/content ownership and provenance.
+5. Run the complete publication validation suite.
+6. Detect generated-data drift.
+7. Refresh generated artifacts on main when deterministic regeneration changes them.
+8. Create a scheduled failure issue when the loop fails.
 
 ## Acceptance criteria
 
