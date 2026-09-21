@@ -376,14 +376,14 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
     return {"schema_version": "manual_hierarchy_audit_v1", "manuals": manual_rows, "chapters": rows, "summary": summary, "class_counts": class_counts, "checked_chapters": len(rows), "error_count": len(errors), "warning_count": len(warnings), "errors": errors, "warnings": warnings, "status": "FAIL" if errors else "PASS"}
 
 
-def _parse_args() -> argparse.Namespace:
+def _parse_args(argv=None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate deterministic Manual source-heading hierarchy and coverage.")
     parser.add_argument("--json-out", type=Path, help="Write the machine-readable corpus audit report to this path.")
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main() -> int:
-    args = _parse_args()
+def main(argv=None) -> int:
+    args = _parse_args(argv)
     path = ROOT / "data" / "knowledge-graph" / "intermediate" / "all_chapters_extracted.json"
     if not path.exists():
         print(f"FAIL: missing {path}")
