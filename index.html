@@ -3309,22 +3309,36 @@
 
     function getNodeUniverse(data) {
       if (!data) return 'drawings';
-      if (data.universe === 'manuals' || data.universe === 'drawings') return data.universe;
-      const id = data.id || '';
-      const type = data.type || '';
-      const domain = data.domain || '';
-      if (type === 'DOCUMENT' || type === 'CHAPTER' || type === 'CLAUSE' || 
-          type === 'TOLERANCE' || type === 'EQUIPMENT' ||
-          domain === 'manuals' || domain === 'manual' || domain === 'track_standards' || 
-          domain === 'tolerance' || domain === 'equipment' ||
-          id.startsWith('doc_') || id.startsWith('DOC:') || 
-          id.startsWith('ch_') || id.startsWith('CHAPTER:') || 
-          id.startsWith('cl_') || id.startsWith('CLAUSE:') || 
-          id.startsWith('tol_') || id.startsWith('TOL:') || 
-          id.startsWith('equip_') || id.startsWith('REQ:') || 
-          id.startsWith('PROC:') || id.startsWith('FAIL:')) {
+
+      // Explicit universe is authoritative. Never infer a universe from a generic
+      // semantic type when canonical data already declares its ownership.
+      if (data.universe === 'manuals' || data.universe === 'drawings') {
+        return data.universe;
+      }
+
+      const id = String(data.id || '');
+      const type = String(data.type || '').toUpperCase();
+      const domain = String(data.domain || '').toLowerCase();
+
+      // Legacy/manual-only identifiers are the fallback for older datasets.
+      // Keep this deliberately narrow: generic EQUIPMENT/TOLERANCE/etc. nodes can
+      // exist in the Drawing universe and must not leak into Manuals.
+      if (
+        type === 'DOCUMENT' ||
+        type === 'CHAPTER' ||
+        type === 'CLAUSE' ||
+        domain === 'manual' ||
+        domain === 'manuals' ||
+        id.startsWith('DOC:') ||
+        id.startsWith('CHAPTER:') ||
+        id.startsWith('CLAUSE:') ||
+        id.startsWith('doc_') ||
+        id.startsWith('ch_') ||
+        id.startsWith('cl_')
+      ) {
         return 'manuals';
       }
+
       return 'drawings';
     }
 
@@ -3509,6 +3523,7 @@
           parentId: null,
           childrenIds: [],
           depth: 1,
+          order: Number.isFinite(Number(n.order)) ? Number(n.order) : 999999,
           isRoot: false
         });
       });
