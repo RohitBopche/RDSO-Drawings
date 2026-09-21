@@ -119,6 +119,16 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
             continue
         if node.get("type") not in {"SECTION", "SUBSECTION", "CLAUSE", "TABLE", "FIGURE", "EVIDENCE"}:
             continue
+
+        # Sections/subsections form the navigable hierarchy and may be nested.
+        # Their chapter ownership is carried by parent_chapter_id; only terminal
+        # structural children require an explicit Chapter -> child ownership edge.
+        if node.get("type") in {"SECTION", "SUBSECTION"}:
+            declared_owner = node.get("parent_chapter_id")
+            if declared_owner not in chapters:
+                errors.append(f"{child}: expected exactly one chapter owner, found {declared_owner!r}")
+            continue
+
         owners = []
         for edge in edges:
             if edge.get("rel") not in ALLOWED or edge.get("to") != child:
