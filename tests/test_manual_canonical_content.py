@@ -112,3 +112,42 @@ def test_nested_section_subsection_ownership_and_page_bounds():
     errors, warnings = validate(structure, canonical)
     assert errors == []
     assert warnings == []
+
+
+def test_structural_child_requires_exactly_one_direct_chapter_owner():
+    structure = {"manuals": []}
+    canonical = {
+        "entities": [
+            {"id": "CHAPTER:M:CH_01", "type": "CHAPTER", "domain": "manual", "universe": "manuals",
+             "specs": {"PageRange": [1, 10]}},
+            {"id": "CHAPTER:M:CH_02", "type": "CHAPTER", "domain": "manual", "universe": "manuals",
+             "specs": {"PageRange": [11, 20]}},
+            {"id": "CLAUSE:M:PARA_1", "type": "CLAUSE", "domain": "manual", "universe": "manuals",
+             "parent_chapter_id": "CHAPTER:M:CH_01", "source_document": "DOC:M:1",
+             "source_page": 5, "extraction_method": "test"},
+        ],
+        "edges": [
+            {"from": "CHAPTER:M:CH_01", "to": "CLAUSE:M:PARA_1", "rel": "HAS_CLAUSE"},
+            {"from": "CHAPTER:M:CH_02", "to": "CLAUSE:M:PARA_1", "rel": "HAS_CLAUSE"},
+        ],
+    }
+    errors, _ = validate(structure, canonical)
+    assert any("exactly one direct chapter owner" in e for e in errors)
+
+
+def test_invalid_structural_parent_relation_is_rejected():
+    structure = {"manuals": []}
+    canonical = {
+        "entities": [
+            {"id": "CHAPTER:M:CH_01", "type": "CHAPTER", "domain": "manual", "universe": "manuals",
+             "specs": {"PageRange": [1, 10]}},
+            {"id": "CLAUSE:M:PARA_1", "type": "CLAUSE", "domain": "manual", "universe": "manuals",
+             "parent_chapter_id": "CHAPTER:M:CH_01", "source_document": "DOC:M:1",
+             "source_page": 5, "extraction_method": "test"},
+        ],
+        "edges": [
+            {"from": "CLAUSE:M:PARA_1", "to": "CHAPTER:M:CH_01", "rel": "HAS_CLAUSE"},
+        ],
+    }
+    errors, _ = validate(structure, canonical)
+    assert any("is not owned by a canonical chapter" in e for e in errors)
