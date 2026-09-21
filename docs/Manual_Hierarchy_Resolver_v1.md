@@ -235,6 +235,21 @@ The Gate K validator now explicitly treats an empty or invalid `all_chapters_ext
 
 Before Gate K performs chapter-level auditing, the validator verifies that the corpus artifact is valid JSON, is an object, contains a `manuals` list, and contains at least one Manual. Empty, malformed, or structurally invalid artifacts are reported as `BLOCKED` external corpus-readiness conditions rather than being interpreted as a valid zero-manual audit.
 
+## Overlapping chapter-boundary policy
+
+The authoritative chapter registry may intentionally assign the same source page to adjacent chapters, for example where a chapter boundary shares a page. Ingestion must preserve every registry owner rather than selecting the first matching chapter.
+
+The ingestion contract is therefore:
+
+- get_chapters_for_page() returns all authoritative owners for a page.
+- Shared boundary pages are extracted into every owning chapter.
+- Chapter pages_seen remains chapter-scoped and deterministic.
+- The ownership audit compares observed owners with the full registry owner set.
+- A shared page is not treated as an ownership error when the observed owner set exactly matches the registry.
+- get_chapter_for_page() remains only as a backward-compatible single-owner helper; new ingestion logic must use the multi-owner function.
+
+This prevents false extraction-gap warnings while preserving the authoritative registry as the source of chapter identity.
+
 ## Orphan source-heading policy
 
 A source heading may reference a numeric parent that is not present in the extracted source-heading sequence. This is treated as an extraction/completeness signal, not as a structural contradiction.
