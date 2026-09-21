@@ -45,7 +45,10 @@ def validate_payload(payload: dict) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
 
-    registry_errors, registry_warnings = validate_registry_boundaries()\n    errors.extend(registry_errors)\n    warnings.extend(registry_warnings)\n\n    manuals = payload.get("manuals")\n    if not isinstance(manuals, list):
+    registry_errors, registry_warnings = validate_registry_boundaries()
+    errors.extend(registry_errors)
+    warnings.extend(registry_warnings)
+\n    manuals = payload.get("manuals")\n    if not isinstance(manuals, list):
         return ["payload.manuals must be a list"], warnings
 
     expected_ids = set(MANUAL_CHAPTER_REGISTRY)
@@ -198,6 +201,50 @@ def validate_payload(payload: dict) -> tuple[list[str], list[str]]:
                 else:
                     errors.append(
                         f"{doc_id}: chapter {prev[0]} range {prev[1:]} overlaps chapter {cur[0]} range {cur[1:]}"
+                    )
+
+        # Page ownership audit: every observed page must have exactly one
+        # authoritative chapter owner, except explicit one-page registry boundaries.
+        observed_page_owners: dict[int, list[str]] = {}
+        for ch in chapters:
+            chapter_id = ch.get("chapter_id")
+            for page in (ch.get("pages_seen", []) or []):
+                if isinstance(page, int):
+                    observed_page_owners.setdefault(page, []).append(chapter_id)
+
+        registered_pages = {
+            page
+            for spec in expected
+            for page in range(spec["page_start"], spec["page_end"] + 1)
+        }
+        observed_pages = set(observed_page_owners)
+        unmapped_pages = sorted(
+            page for page in observed_pages
+            if page not in registered_pages
+        )
+        if unmapped_pages:
+            errors.append(
+                f"{doc_id}: observed pages outside authoritative registry: {unmapped_pages[:20]}"
+            )
+
+        multiply_owned = sorted(
+            page for page, owners in observed_page_owners.items()
+            if len(set(owners)) > 1
+        )
+        if multiply_owned:
+            # Boundary pages may legitimately occur in two chapter ranges, but
+            # this must agree with the registry rather than arising from extraction.
+            for page in multiply_owned:
+                owners = set(observed_page_owners[page])
+                expected_owners = {
+                    f"CHAPTER:{registry['alias']}:CH_{spec['num']:02d}"
+                    for spec in expected
+                    if spec["page_start"] <= page <= spec["page_end"]
+                }
+                if owners != expected_owners:
+                    errors.append(
+                        f"{doc_id}: observed page {page} has owners {sorted(owners)} "
+                        f"but registry owners are {sorted(expected_owners)}"
                     )
 
         for spec in expected:
