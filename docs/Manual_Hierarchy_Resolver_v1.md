@@ -165,3 +165,8 @@ Each chapter audit row now exposes a deterministic `status`:
 - `BLOCKED` — one or more hard validation errors prevent treating the chapter as structurally trustworthy.
 
 Each manual receives the same status based on its chapter rows plus manual-level registry ownership errors/warnings. This is a readiness signal, not a semantic quality score: it identifies where extraction or ownership requires attention without hiding the underlying evidence lists and metrics.
+
+
+## Corpus audit summary
+
+The audit report also exposes a dashboard-ready `summary` object containing total Manuals/Chapters, readiness counts, IDs requiring attention or blocked, coverage-class counts, aggregate page gaps (`missing`, `unmapped`, `content_empty`), and validation error/warning totals. The summary is derived from the detailed Manual and Chapter rows and does not replace their evidence.
