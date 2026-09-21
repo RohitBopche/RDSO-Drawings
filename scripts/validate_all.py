@@ -13,6 +13,7 @@ RDSO Knowledge Graph Improvement Blueprint (Section 9 & Section 29):
 7. Gate G — Manuals Frontend Hierarchy Contract
 8. Gate H — Manuals Query Boundary
 9. Gate I — Manuals Chapter/Content Ownership
+10. Gate J — Manuals Canonical Content Ownership
 """
 
 from __future__ import annotations
@@ -37,6 +38,7 @@ GATES = [
     ("Gate E: Regression Test Suite", [sys.executable, "-m", "pytest", str(ROOT / "tests")]),
     ("Gate F: Manuals Structure & Universe Isolation", [sys.executable, str(ROOT / "scripts" / "validate_manual_knowledge_graph.py")]),\n    ("Gate G: Manuals Frontend Hierarchy Contract", [sys.executable, "-m", "pytest", str(ROOT / "tests" / "test_manual_frontend_contract.py")]),\n    ("Gate H: Manuals Query Boundary", [sys.executable, "-m", "pytest", str(ROOT / "tests" / "test_manual_kg_query.py")]),
     ("Gate I: Manuals Chapter & Content Ownership", [sys.executable, str(ROOT / "scripts" / "validate_manual_chapter_content.py")]),
+    ("Gate J: Manuals Canonical Content Ownership", [sys.executable, str(ROOT / "scripts" / "validate_manual_canonical_content.py")]),
 ]
 
 
