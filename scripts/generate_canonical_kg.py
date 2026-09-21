@@ -735,6 +735,116 @@ def build_canonical_knowledge_graph():
         add_edge("note_6155_21", "spec_irpwm_para429_stretcher", "REFERENCES", "Note 21 tie bar drop directly corresponds to IRPWM Para 429(2)(j) stretcher bar clearance", source_dwg="RDSO/T-6155", revision="ALT_13", region="Note 21")
 
 
+
+    # =========================================================================
+    # 15. AUTHORITATIVE MANUAL STRUCTURE
+    # =========================================================================
+    # The Manuals universe is structurally independent from the Drawing universe.
+    # Chapters come from the chapter-boundary registry/intermediate extraction,
+    # not from semantic/entity extraction.
+    chapter_path = os.path.join(REPO_ROOT, "data", "knowledge-graph", "intermediate", "all_chapters_extracted.json")
+    if os.path.exists(chapter_path):
+        with open(chapter_path, "r", encoding="utf-8") as f:
+            chapter_data = json.load(f)
+
+        chapter_coords = {}
+        for manual_index, manual in enumerate(chapter_data.get("manuals", [])):
+            manual_id = manual.get("document_id")
+            if not manual_id:
+                continue
+            # Ensure the authoritative document exists in this canonical graph.
+            if not any(e.get("id") == manual_id for e in entities):
+                add_entity(
+                    manual_id,
+                    manual.get("title", manual_id),
+                    "DOCUMENT",
+                    "manual",
+                    "#ff007f",
+                    "Authoritative manual root. Structure is maintained independently from the Drawing KG.",
+                    {"Universe": "manuals", "Total Chapters": manual.get("total_chapters", 0)},
+                    x=-14 + (manual_index % 3) * 14,
+                    y=10,
+                    z=(manual_index // 3) * 8,
+                    alt=13,
+                )
+
+            for ch in sorted(manual.get("chapters", []), key=lambda x: x.get("order", x.get("chapter_number", 0))):
+                ch_id = ch.get("chapter_id")
+                if not ch_id:
+                    continue
+                chapter_coords[ch_id] = True
+                add_entity(
+                    ch_id,
+                    f"Chapter {ch.get('chapter_number')} — {ch.get('title', '')}",
+                    "CHAPTER",
+                    "manual",
+                    "#00f5d4",
+                    "Authoritative chapter node derived from the manual structure registry.",
+                    {
+                        "Chapter Number": ch.get("chapter_number"),
+                        "Page Range": ch.get("page_range", []),
+                        "Structure Status": ch.get("structure_status", "STRUCTURE_VERIFIED"),
+                        "Topics": ch.get("topics", []),
+                    },
+                    x=0,
+                    y=8,
+                    z=0,
+                    alt=13,
+                )
+                add_edge(
+                    manual_id,
+                    ch_id,
+                    "CONTAINS_CHAPTER",
+                    f"Authoritative chapter {ch.get('chapter_number')} in {manual.get('alias', manual_id)}",
+                    source_dwg="MANUAL_STRUCTURE",
+                    revision=manual.get("pipeline_version", "STRUCTURE"),
+                    region=f"Chapter {ch.get('chapter_number')}",
+                    crop="",
+                    evidence_text=f"Registry chapter boundary: pages {ch.get('page_range', [])}",
+                )
+
+    # Hard isolation gate: no canonical edge may cross between the Manuals and
+    # Drawing universes. Future cross-domain relationships belong in a separate
+    # relationship layer and must never be inferred here.
+    entity_domains = {e["id"]: e.get("domain") for e in entities}
+    allowed_manual_domains = {"manual"}
+    blocked_cross_domain = []
+    kept_edges = []
+    kept_facts = []
+    edge_to_fact = {}
+    for idx, edge in enumerate(edges):
+        from_domain = entity_domains.get(edge.get("from"))
+        to_domain = entity_domains.get(edge.get("to"))
+        if {from_domain, to_domain} == {"manual", "drawing"} or (
+            from_domain in allowed_manual_domains and to_domain not in allowed_manual_domains
+        ) or (
+            to_domain in allowed_manual_domains and from_domain not in allowed_manual_domains
+        ):
+            blocked_cross_domain.append(edge)
+            continue
+        kept_edges.append(edge)
+    allowed_edge_keys = {(e.get("from"), e.get("to"), e.get("rel"), e.get("rationale", "")) for e in kept_edges}
+    for fact in facts:
+        key = (
+            fact.get("subject_id"),
+            fact.get("object_id"),
+            fact.get("predicate"),
+            fact.get("evidence_text", ""),
+        )
+        # Facts are retained only when their endpoints remain in the isolated graph.
+        if fact.get("subject_id") in entity_domains and fact.get("object_id") in entity_domains:
+            sd = entity_domains.get(fact.get("subject_id"))
+            od = entity_domains.get(fact.get("object_id"))
+            if (sd == "manual") != (od == "manual") and ("manual" in {sd, od}):
+                continue
+            kept_facts.append(fact)
+    edges = kept_edges
+    facts = kept_facts
+
+    if blocked_cross_domain:
+        print(f"[INFO] Removed {len(blocked_cross_domain)} cross-universe manual/drawing edges from canonical KG.")
+
+
     # Final payload
     canonical_data = {
         "metadata": {
