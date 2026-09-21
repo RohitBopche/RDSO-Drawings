@@ -144,3 +144,8 @@ A missing page was expected but not observed; an unmapped page was observed but 
 Manual aggregates use the **union of registered chapter page ranges**, not the sum of chapter range lengths. This prevents shared chapter-boundary pages from inflating the expected-page denominator.
 
 The audit also records `observed_pages_with_multiple_chapters`. A non-empty list means the extracted `pages_seen` data assigns the same physical page to more than one chapter and should be investigated against the authoritative boundary registry. `observed_page_owner_count` reports the number of distinct observed pages at manual scope.
+
+
+## Observed-page ownership validation
+
+The chapter-content validator now compares every persisted `pages_seen` value against the authoritative Manual Chapter Boundary Registry. Pages outside the registry are hard errors rather than being silently absorbed into a chapter. When a registry explicitly permits a shared one-page chapter boundary, observed ownership must match the registry owners exactly; unexpected multi-chapter ownership is rejected.
