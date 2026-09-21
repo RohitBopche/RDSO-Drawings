@@ -9,6 +9,7 @@ RDSO Knowledge Graph Improvement Blueprint (Section 9 & Section 29):
 3. Gate C — Graph Referential Integrity (validate_graph_integrity.py)
 4. Gate D — Evidence Integrity (validate_evidence_integrity.py)
 5. Gate E — Automated Regression Tests (pytest tests/)
+6. Gate F — Manuals Structure & Universe Isolation (validate_manual_knowledge_graph.py)
 """
 
 from __future__ import annotations
@@ -31,6 +32,7 @@ GATES = [
     ("Gate C: Graph Referential Integrity", [sys.executable, str(ROOT / "scripts" / "validate_graph_integrity.py")]),
     ("Gate D: Evidence Integrity", [sys.executable, str(ROOT / "scripts" / "validate_evidence_integrity.py")]),
     ("Gate E: Regression Test Suite", [sys.executable, "-m", "pytest", str(ROOT / "tests")]),
+    ("Gate F: Manuals Structure & Universe Isolation", [sys.executable, str(ROOT / "scripts" / "validate_manual_knowledge_graph.py")]),
 ]
 
 
