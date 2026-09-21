@@ -3395,8 +3395,23 @@
         });
       });
 
-      // Attach source-derived chapter content blocks (sections, tables, figures, page evidence).
-      // These are derived only from the Manuals universe page extraction and are never linked to drawings.
+      // Prefer deterministic source-heading hierarchy materialized in the canonical KG.
+      // Page-level heading extraction is only a fallback when no authoritative heading
+      // nodes exist for the chapter. This prevents the UI from inventing flat/random
+      // SECTION nodes from page snippets.
+      const authoritativeHeadingByChapter = new Map();
+      rawNodes.forEach(n => {
+        if (n.universe !== 'manuals' || !['SECTION', 'SUBSECTION'].includes(n.type)) return;
+        if (n.heading_kind || n.heading_depth || n.source_heading_reference || n.specs?.['Structure Status'] === 'AUTHORITATIVE_SOURCE_HEADING') {
+          if (n.parent_chapter_id) {
+            if (!authoritativeHeadingByChapter.has(n.parent_chapter_id)) authoritativeHeadingByChapter.set(n.parent_chapter_id, []);
+            authoritativeHeadingByChapter.get(n.parent_chapter_id).push(n);
+          }
+        }
+      });
+
+      // Attach source-derived chapter content blocks (tables, figures, page evidence).
+      // Numbered headings are used only as a deterministic fallback.
       const manualContentIndex = window.RDSO_MANUAL_CONTENT_INDEX || { manuals: {} };
       const manualAliasById = new Map(manualStructure.manuals.map(m => [m.id, m.alias]));
       const chapterContentOrder = { SECTION: 10, CLAUSE: 20, TABLE: 30, FIGURE: 40, EVIDENCE: 50 };
@@ -3436,7 +3451,10 @@
             }
           };
 
-          page.headings.forEach((heading, idx) => addContentNode('SECTION', idx, heading, { structure_status: 'EXTRACTED_HEADING_UNVERIFIED' }));
+          const chapterAuthoritativeHeadings = authoritativeHeadingByChapter.get(chapterId) || [];
+          if (chapterAuthoritativeHeadings.length === 0) {
+            page.headings.forEach((heading, idx) => addContentNode('SECTION', idx, heading, { structure_status: 'EXTRACTED_HEADING_UNVERIFIED' }));
+          }
           page.tables.forEach((table, idx) => addContentNode('TABLE', idx, table));
           page.figures.forEach((figure, idx) => addContentNode('FIGURE', idx, figure));
           if (page.headings.length || page.tables.length || page.figures.length) {
@@ -3503,6 +3521,32 @@
         rawEdges.push({
           from: chapterId, to: n.id, rel: 'HAS_CLAUSE',
           rationale: 'Canonical clause attached from verified chapter metadata'
+        });
+      });
+
+      // Materialize the authoritative source-heading parent chain in the UI.
+      // Chapter ownership is always retained; nested headings follow explicit
+      // parent_heading_ref metadata rather than semantic similarity.
+      authoritativeHeadingByChapter.forEach((nodes, chapterId) => {
+        const byRef = new Map();
+        nodes.forEach(n => {
+          const ref = n.source_heading_reference || n.specs?.Reference;
+          if (ref) byRef.set(String(ref), n);
+        });
+        nodes.forEach(n => {
+          const ref = n.source_heading_reference || n.specs?.Reference;
+          if (!ref) return;
+          const parentRef = n.parent_heading_ref || n.provenance?.parent_heading_ref;
+          const parent = parentRef ? byRef.get(String(parentRef)) : null;
+          const parentId = parent ? parent.id : chapterId;
+          if (!rawEdges.some(e => e.from === parentId && e.to === n.id && e.rel === 'HAS_SECTION')) {
+            rawEdges.push({
+              from: parentId,
+              to: n.id,
+              rel: 'HAS_SECTION',
+              rationale: 'Authoritative source-heading hierarchy'
+            });
+          }
         });
       });
 
