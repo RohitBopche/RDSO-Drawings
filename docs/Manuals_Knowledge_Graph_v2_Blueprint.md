@@ -112,3 +112,20 @@ Candidate predicates:
 - RELATED_TO
 
 Every future cross-domain relationship should carry source page/region, extraction method, confidence and validation status.
+
+
+### Deterministic section/subsection layer
+
+The current manual content pipeline now derives an explicit intermediate hierarchy from stable clause numbering:
+
+```
+Manual
+  └── Chapter
+       └── Section (derived from clause reference)
+            └── Subsection (derived from clause reference)
+                 └── Clause
+```
+
+These Section/Subsection nodes are marked `DERIVED_FROM_CLAUSE_NUMBERING` and retain source document, source page, source section/reference, source text, extraction method, confidence, and parent chapter provenance. They are not treated as authoritative table-of-contents headings. A future heading-aware extractor may replace or enrich this derived layer without changing chapter ownership.
+
+Publication validation checks manual isolation, canonical IDs, single authoritative chapter ownership, source-page bounds, nested section/subsection ownership, and provenance completeness.
