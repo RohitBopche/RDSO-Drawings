@@ -220,7 +220,32 @@ async function run() {
         if (manualRoots.legacyVisible.length !== 0) throw new Error(`Legacy manual roots are still visible: ${manualRoots.legacyVisible.join(', ')}`);
         console.log("[PASS] Duplicate legacy manual roots are excluded from the Manuals universe!");
 
-        console.log("[PASS] Manuals graph is chapter-first and structurally isolated!");
+        console.log("[PASS] Manuals graph is chapter-first and structurally isolated!");\n\n        const chapterContent = await client.evaluate(`(() => {
+            const chapterId = 'CHAPTER:AT_WELD:CH_09';
+            const h = window.nodeHierarchyMap.get(chapterId);
+            if (!h) return { error: 'AT_WELD chapter 9 missing' };
+            const children = h.childrenIds
+                .map(id => window.kgPhysicsNodesMap.get(id))
+                .filter(Boolean)
+                .map(n => ({ id: n.data.id, type: n.data.type, page: n.data.page || n.data.source_page || 0 }));
+            const types = [...new Set(children.map(x => x.type))];
+            return {
+                childCount: children.length,
+                types,
+                hasSection: types.includes('SECTION'),
+                hasTable: types.includes('TABLE'),
+                hasEvidence: types.includes('EVIDENCE'),
+                sameUniverse: children.every(n => window.kgPhysicsNodesMap.get(n.id)?.universe === 'manuals')
+            };
+        })()`);
+        console.log(`[*] AT_WELD Chapter 9 content children: ${chapterContent.childCount}`);
+        console.log(`[*] Content types: ${chapterContent.types.join(', ')}`);
+        if (chapterContent.error) throw new Error(chapterContent.error);
+        if (!chapterContent.hasTable || !chapterContent.hasEvidence) {
+            throw new Error("Chapter content hierarchy missing expected source-derived table/evidence nodes");
+        }
+        if (!chapterContent.sameUniverse) throw new Error("Chapter content crossed Manuals universe boundary");
+        console.log("[PASS] Chapter -> content hierarchy is source-derived and universe-isolated!");
 
 
 
