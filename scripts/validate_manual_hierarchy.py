@@ -275,7 +275,36 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
             "registry_page_audit": ownership_metrics,
         })
 
-    return {"schema_version": "manual_hierarchy_audit_v1", "manuals": manual_rows, "chapters": rows, "class_counts": class_counts, "checked_chapters": len(rows), "error_count": len(errors), "warning_count": len(warnings), "errors": errors, "warnings": warnings, "status": "FAIL" if errors else "PASS"}
+    readiness_counts = {"HEALTHY": 0, "ATTENTION": 0, "BLOCKED": 0}
+    for manual in manual_rows:
+        readiness_counts[manual["status"]] += 1
+    chapter_readiness_counts = {"HEALTHY": 0, "ATTENTION": 0, "BLOCKED": 0}
+    for chapter in rows:
+        chapter_readiness_counts[chapter["status"]] += 1
+    summary = {
+        "manuals_total": len(manual_rows),
+        "chapters_total": len(rows),
+        "manuals_by_status": readiness_counts,
+        "chapters_by_status": chapter_readiness_counts,
+        "manuals_requiring_attention": [m["manual_id"] for m in manual_rows if m["status"] != "HEALTHY"],
+        "blocked_manuals": [m["manual_id"] for m in manual_rows if m["status"] == "BLOCKED"],
+        "chapters_requiring_attention": [c["chapter_id"] for c in rows if c["status"] != "HEALTHY"],
+        "blocked_chapters": [c["chapter_id"] for c in rows if c["status"] == "BLOCKED"],
+        "coverage_classes": class_counts,
+        "pages": {
+            "expected": sum(m["pages_expected"] for m in manual_rows),
+            "seen": sum(m["pages_seen"] for m in manual_rows),
+            "missing": sum(len(m["missing_pages"]) for m in manual_rows),
+            "unmapped": sum(len(m["unmapped_pages"]) for m in manual_rows),
+            "content_empty": sum(len(m["content_empty_pages"]) for m in manual_rows),
+        },
+        "validation": {
+            "errors": len(errors),
+            "warnings": len(warnings),
+            "status": "FAIL" if errors else "PASS",
+        },
+    }
+    return {"schema_version": "manual_hierarchy_audit_v1", "manuals": manual_rows, "chapters": rows, "summary": summary, "class_counts": class_counts, "checked_chapters": len(rows), "error_count": len(errors), "warning_count": len(warnings), "errors": errors, "warnings": warnings, "status": "FAIL" if errors else "PASS"}
 
 
 def _parse_args() -> argparse.Namespace:
@@ -305,6 +334,8 @@ def main() -> int:
     for row in report["chapters"]:
         print(f"  {row['chapter_id']}: class={row['coverage_class']}, pages {row['pages_seen']}/{row['pages_expected']}, headings {row['headings']}, clauses {row['clauses']}, artifacts {row['tables']}/{row['figures']}/{row['evidence']}, first={row['first_heading']}, last={row['last_heading']}")
     print(f"Coverage classes: {report['class_counts']}")
+    print(f"Readiness: manuals={report['summary']['manuals_by_status']}, chapters={report['summary']['chapters_by_status']}")
+    print(f"Attention targets: manuals={len(report['summary']['manuals_requiring_attention'])}, chapters={len(report['summary']['chapters_requiring_attention'])}")
     if report["warnings"]:
         print(f"WARN: {report['warning_count']} coverage warning(s)")
         for warning in report["warnings"][:50]:
