@@ -2682,8 +2682,8 @@
       <button class="universe-btn" id="btn-univ-manuals" data-universe="manuals" onclick="switchKnowledgeUniverse('manuals')">
         <span>📖</span> Manuals Universe
       </button>
-      <button class="universe-btn" id="btn-univ-combined" data-universe="combined" onclick="switchKnowledgeUniverse('combined')">
-        <span>🌐</span> Combined Cosmos
+      <button class="universe-btn" id="btn-univ-combined" data-universe="combined" disabled title="Future phase: verified Manual ↔ Drawing bridge only">
+        <span>🌐</span> Combined Cosmos <span style="font-size:8px;opacity:.6;">FUTURE</span>
       </button>
     </div>
 
@@ -4426,7 +4426,7 @@
         highlightProcurementEcosystem();
       } else if (mode === "manuals") {
         indicator.innerText = "CODES & MANUALS";
-        desc.innerText = "Regulatory governance & standard SOP lineage. Connects official codes (IRPWM, USFD, AT Weld, FBW, TMM, STMM) to drawings and field tolerances.";
+        desc.innerText = "Manual-only exploration. Shows the authoritative manual hierarchy first: Manual → Chapters → Clauses/Evidence. Drawing relationships are intentionally isolated.";
         highlightManualsEcosystem();
       }
     }
@@ -8707,6 +8707,7 @@
       const scored = [];
       kgPhysicsNodes.forEach(node => {
         const data = node.data;
+        if (currentKnowledgeUniverse !== 'combined' && getNodeUniverse(data) !== currentKnowledgeUniverse) return;
         const id = (data.id || '').toLowerCase();
         const idNorm = id.replace(/[-_/\\s]/g, '');
         const label = (data.label || '').toLowerCase();
