@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -152,7 +152,7 @@
       box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
     }
 
-    /* Segregated Knowledge Universes Switcher (Blueprint Â§2.1 & Â§8.3) */
+    /* Segregated Knowledge Universes Switcher (Blueprint §2.1 & §8.3) */
     .universe-switcher-bar {
       display: flex;
       align-items: center;
@@ -827,7 +827,7 @@
       border-left: 3px solid var(--accent-green);
     }
 
-    /* Phase 3: Graph Intelligence & Path Finder Styles (Blueprint Â§13 & Â§14) */
+    /* Phase 3: Graph Intelligence & Path Finder Styles (Blueprint §13 & §14) */
     .pathfinder-wrap {
       display: flex;
       flex-direction: column;
@@ -1179,7 +1179,7 @@
     }
 
     /* =========================================================================
-       PHASE 5: QUESTION INTERFACE & ANSWER CARDS (Â§15, Â§16)
+       PHASE 5: QUESTION INTERFACE & ANSWER CARDS (§15, §16)
        ========================================================================= */
     .qa-container {
       display: flex;
@@ -1277,7 +1277,7 @@
       transform: translateY(-1px);
     }
 
-    /* Full Answer Card (Blueprint Â§15) */
+    /* Full Answer Card (Blueprint §15) */
     .qa-answer-card {
       background: linear-gradient(145deg, rgba(14, 22, 38, 0.95), rgba(8, 14, 24, 0.98));
       border: 1px solid rgba(0, 240, 255, 0.35);
@@ -1438,7 +1438,7 @@
     }
 
     /* =========================================================================
-       PHASE 6: LEARNING SYSTEM & TRAINING ACADEMY (Â§17)
+       PHASE 6: LEARNING SYSTEM & TRAINING ACADEMY (§17)
        ========================================================================= */
     .learning-container {
       display: flex;
@@ -1653,7 +1653,7 @@
     }
 
     /* =========================================================================
-       PHASE 7: SEMANTIC INTELLIGENCE & HYBRID RETRIEVAL (Â§24, Â§36)
+       PHASE 7: SEMANTIC INTELLIGENCE & HYBRID RETRIEVAL (§24, §36)
        ========================================================================= */
     .semantic-container {
       display: flex;
@@ -2699,36 +2699,36 @@
   <!-- Command Header -->
   <header>
     <div class="brand-section">
-      <div class="brand-icon">ðŸŒ</div>
+      <div class="brand-icon">🌐</div>
       <div class="brand-titles">
         <h1>RDSO Railway Engineering Knowledge Operating System (REKG) <span class="badge-ver">v3.5 CANONICAL</span></h1>
-        <p>Document Layer Â· Engineering Domain Graph Â· Evidence & Provenance</p>
+        <p>Document Layer · Engineering Domain Graph · Evidence & Provenance</p>
       </div>
     </div>
 
-    <!-- Segregated Knowledge Universes Switcher (Blueprint Â§2.1 & Â§8.3) -->
+    <!-- Segregated Knowledge Universes Switcher (Blueprint §2.1 & §8.3) -->
     <div class="universe-switcher-bar" id="universe-switcher-bar">
       <button class="universe-btn active" id="btn-univ-drawings" data-universe="drawings" onclick="switchKnowledgeUniverse('drawings')">
-        <span>ðŸ“</span> Drawings Universe
+        <span>📐</span> Drawings Universe
       </button>
       <button class="universe-btn" id="btn-univ-manuals" data-universe="manuals" onclick="switchKnowledgeUniverse('manuals')">
-        <span>ðŸ“–</span> Manuals Universe
+        <span>📖</span> Manuals Universe
       </button>
-      <button class="universe-btn" id="btn-univ-combined" data-universe="combined" disabled title="Future phase: verified Manual â†” Drawing bridge only">
-        <span>ðŸŒ</span> Combined Cosmos <span style="font-size:8px;opacity:.6;">FUTURE</span>
+      <button class="universe-btn" id="btn-univ-combined" data-universe="combined" disabled title="Future phase: verified Manual ↔ Drawing bridge only">
+        <span>🌐</span> Combined Cosmos <span style="font-size:8px;opacity:.6;">FUTURE</span>
       </button>
     </div>
 
     <!-- Hierarchy Expansion & Level Controls -->
     <div class="hierarchy-controls-bar" id="hierarchy-controls-bar">
       <button class="hierarchy-btn" id="btn-hierarchy-expand-level" onclick="expandHierarchyOneLevel()" title="Expand Next Hierarchy Depth">
-        <span>âž•</span> Level +1
+        <span>➕</span> Level +1
       </button>
       <button class="hierarchy-btn" id="btn-hierarchy-collapse-roots" onclick="collapseAllToRoots()" title="Collapse back to Top Roots">
-        <span>âŠŸ</span> Roots Only
+        <span>⊟</span> Roots Only
       </button>
       <button class="hierarchy-btn" id="btn-hierarchy-expand-all" onclick="expandAllHierarchy()" title="Expand All Nodes">
-        <span>âŠž</span> Expand All
+        <span>⊞</span> Expand All
       </button>
       <div class="hierarchy-status-badge" id="hierarchy-status-badge">
         <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--accent-green); box-shadow:0 0 6px var(--accent-green);"></span>
@@ -2739,28 +2739,28 @@
     <!-- Semantic Graph Modes Switcher -->
     <div class="semantic-modes-bar">
       <button class="semantic-mode-btn active" data-mode="explore" onclick="switchSemanticMode('explore')">
-        <span>ðŸŒŒ</span> Explore
+        <span>🌌</span> Explore
       </button>
       <button class="semantic-mode-btn" data-mode="trace" onclick="switchSemanticMode('trace')">
-        <span>ðŸ”—</span> Dependency Trace
+        <span>🔗</span> Dependency Trace
       </button>
       <button class="semantic-mode-btn" data-mode="revision" onclick="switchSemanticMode('revision')">
-        <span>â³</span> Revision Impact
+        <span>⏳</span> Revision Impact
       </button>
       <button class="semantic-mode-btn" data-mode="failure" onclick="switchSemanticMode('failure')">
-        <span>âš ï¸</span> Failure Analysis
+        <span>⚠️</span> Failure Analysis
       </button>
       <button class="semantic-mode-btn" data-mode="bom" onclick="switchSemanticMode('bom')">
-        <span>ðŸ“¦</span> Procurement & BOM
+        <span>📦</span> Procurement & BOM
       </button>
       <button class="semantic-mode-btn" data-mode="manuals" onclick="switchSemanticMode('manuals')">
-        <span>ðŸ“–</span> Codes & Manuals
+        <span>📖</span> Codes & Manuals
       </button>
     </div>
 
     <!-- Global Search -->
     <div class="search-wrapper">
-      <span class="search-icon">ðŸ”</span>
+      <span class="search-icon">🔍</span>
       <input type="text" id="global-search" class="search-input" placeholder="Search notes, BOM, sleepers, specs...">
       <span class="search-shortcut">/</span>
       <div id="search-dropdown" class="search-dropdown"></div>
@@ -2769,26 +2769,26 @@
     <!-- Layout Switcher -->
     <div class="layout-switcher">
       <button class="layout-btn active" data-layout="cosmic" onclick="switchGraphLayout('cosmic')">
-        <span>ðŸŒŒ</span> 3D Cosmic
+        <span>🌌</span> 3D Cosmic
       </button>
       <button class="layout-btn" data-layout="planar" onclick="switchGraphLayout('planar')">
-        <span>ðŸ“</span> 2D Planar
+        <span>📐</span> 2D Planar
       </button>
       <button class="layout-btn" data-layout="dag" onclick="switchGraphLayout('dag')">
-        <span>ðŸŒ²</span> Hierarchical
+        <span>🌲</span> Hierarchical
       </button>
       <button class="layout-btn" data-layout="concentric" onclick="switchGraphLayout('concentric')">
-        <span>ðŸŽ¯</span> Concentric
+        <span>🎯</span> Concentric
       </button>
     </div>
 
     <!-- Header Actions -->
     <div class="header-actions">
       <button class="btn" onclick="exportGraph('cypher')">
-        <span>ðŸ’¾</span> Cypher
+        <span>💾</span> Cypher
       </button>
       <button class="btn btn-primary" onclick="openIngestModal()">
-        <span>âž•</span> Ingest Node
+        <span>➕</span> Ingest Node
       </button>
     </div>
   </header>
@@ -2831,7 +2831,7 @@
       </div>
     </div>
 
-    <!-- Predicate Family Filters (Blueprint Â§13.2) -->
+    <!-- Predicate Family Filters (Blueprint §13.2) -->
     <div class="dock-card">
       <div class="card-title">
         <span>Predicate Families</span>
@@ -2839,19 +2839,19 @@
       </div>
       <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
         <label class="pred-family-toggle" style="display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: var(--text-main); cursor: pointer;">
-          <span style="display: flex; align-items: center; gap: 4px;">ðŸ§± <strong style="color: #00f0ff;">Structural</strong> (CONTAINS, FASTENED)</span>
+          <span style="display: flex; align-items: center; gap: 4px;">🧱 <strong style="color: #00f0ff;">Structural</strong> (CONTAINS, FASTENED)</span>
           <input type="checkbox" id="pred-filter-structural" checked onchange="togglePredicateFamily('structural', this.checked)">
         </label>
         <label class="pred-family-toggle" style="display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: var(--text-main); cursor: pointer;">
-          <span style="display: flex; align-items: center; gap: 4px;">âš–ï¸ <strong style="color: #9d4edd;">Governance</strong> (GOVERNS, REQUIRES)</span>
+          <span style="display: flex; align-items: center; gap: 4px;">⚖️ <strong style="color: #9d4edd;">Governance</strong> (GOVERNS, REQUIRES)</span>
           <input type="checkbox" id="pred-filter-governance" checked onchange="togglePredicateFamily('governance', this.checked)">
         </label>
         <label class="pred-family-toggle" style="display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: var(--text-main); cursor: pointer;">
-          <span style="display: flex; align-items: center; gap: 4px;">â³ <strong style="color: #a2d2ff;">Lifecycle</strong> (REVISION, SUPERSEDES)</span>
+          <span style="display: flex; align-items: center; gap: 4px;">⏳ <strong style="color: #a2d2ff;">Lifecycle</strong> (REVISION, SUPERSEDES)</span>
           <input type="checkbox" id="pred-filter-lifecycle" checked onchange="togglePredicateFamily('lifecycle', this.checked)">
         </label>
         <label class="pred-family-toggle" style="display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: var(--text-main); cursor: pointer;">
-          <span style="display: flex; align-items: center; gap: 4px;">âš ï¸ <strong style="color: #ff3366;">Safety & Maint</strong> (CAN_CAUSE, SPARE)</span>
+          <span style="display: flex; align-items: center; gap: 4px;">⚠️ <strong style="color: #ff3366;">Safety & Maint</strong> (CAN_CAUSE, SPARE)</span>
           <input type="checkbox" id="pred-filter-maintenance" checked onchange="togglePredicateFamily('maintenance', this.checked)">
         </label>
       </div>
@@ -2864,11 +2864,11 @@
     <div id="drawer-breadcrumbs" class="drawer-breadcrumbs">
       <div class="breadcrumb-trail" id="breadcrumb-trail">
         <span class="breadcrumb-item" onclick="reopenSearchDropdown()">Studio Search</span>
-        <span class="breadcrumb-sep">âž”</span>
+        <span class="breadcrumb-sep">➔</span>
         <span class="breadcrumb-active" id="breadcrumb-current-node">RDSO/T-6155</span>
       </div>
       <button class="breadcrumb-back-btn" id="breadcrumb-back-btn" onclick="reopenSearchDropdown()" style="display: none;">
-        <span>ðŸ”</span> Back to Search
+        <span>🔍</span> Back to Search
       </button>
     </div>
 
@@ -2880,7 +2880,7 @@
         </div>
         <h2 id="drawer-title">Select Any 3D Node</h2>
       </div>
-      <button class="close-drawer-btn" onclick="toggleIntelligenceDrawer(false)">âœ•</button>
+      <button class="close-drawer-btn" onclick="toggleIntelligenceDrawer(false)">✕</button>
     </div>
 
     <!-- Engineering Answer Card (Executive Summary & Evidence Provenance) -->
@@ -2893,10 +2893,10 @@
         <div class="provenance-details">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
             <span style="font-weight: 700; color: #fff;" id="prov-dwg-title">RDSO/T-6155</span>
-            <span class="confidence-badge">âœ“ 100% VERIFIED</span>
+            <span class="confidence-badge">✓ 100% VERIFIED</span>
           </div>
           <div style="color: var(--text-muted); font-size: 9.5px;" id="prov-meta-line">Rev: ALT 13 | Region: General Notes</div>
-          <div style="color: var(--accent-cyan); font-size: 9px; cursor: pointer; margin-top: 2px;" onclick="openFullscreenActiveBlueprint()">ðŸ” Inspect Source Crop</div>
+          <div style="color: var(--accent-cyan); font-size: 9px; cursor: pointer; margin-top: 2px;" onclick="openFullscreenActiveBlueprint()">🔍 Inspect Source Crop</div>
         </div>
       </div>
       <!-- Standardized Action Toolbar (Blueprint Section 15) -->
@@ -2908,49 +2908,49 @@
     <!-- Multi-Tab Navigation Bar -->
     <div class="drawer-nav-tabs">
       <button class="drawer-tab active" data-tab="overview" id="drawer-tab-overview-btn" onclick="switchDrawerTab('overview')">
-        <span>ðŸ“‹</span> <span id="overview-tab-label">Overview</span>
+        <span>📋</span> <span id="overview-tab-label">Overview</span>
       </button>
       <button class="drawer-tab" data-tab="notes" onclick="switchDrawerTab('notes')">
-        <span>ðŸ“‘</span> Notes <span class="drawer-tab-badge" id="notes-tab-count">28</span>
+        <span>📑</span> Notes <span class="drawer-tab-badge" id="notes-tab-count">28</span>
       </button>
       <button class="drawer-tab" data-tab="tables" onclick="switchDrawerTab('tables')">
-        <span>ðŸ“Š</span> Tables & BOM
+        <span>📊</span> Tables & BOM
       </button>
       <button class="drawer-tab" data-tab="blueprint" onclick="switchDrawerTab('blueprint')">
-        <span>ðŸ”</span> Blueprint View
+        <span>🔍</span> Blueprint View
       </button>
       <button class="drawer-tab" data-tab="twin" onclick="switchDrawerTab('twin')">
-        <span>ðŸ“¦</span> 3D Asset Twin
+        <span>📦</span> 3D Asset Twin
       </button>
       <button class="drawer-tab" data-tab="risks" onclick="switchDrawerTab('risks')">
-        <span>âš ï¸</span> Risks & SOPs
+        <span>⚠️</span> Risks & SOPs
       </button>
       <button class="drawer-tab" data-tab="manuals" onclick="switchDrawerTab('manuals')">
-        <span>ðŸ“–</span> Manuals TOC <span class="drawer-tab-badge" id="manuals-tab-count">83</span>
+        <span>📖</span> Manuals TOC <span class="drawer-tab-badge" id="manuals-tab-count">83</span>
       </button>
       <button class="drawer-tab" data-tab="revisions" onclick="switchDrawerTab('revisions')">
-        <span>â³</span> Revisions & Diff
+        <span>⏳</span> Revisions & Diff
       </button>
       <button class="drawer-tab" data-tab="conflicts" onclick="switchDrawerTab('conflicts')">
-        <span>âš–ï¸</span> Conflicts
+        <span>⚖️</span> Conflicts
       </button>
       <button class="drawer-tab" data-tab="paths" onclick="switchDrawerTab('paths')">
-        <span>ðŸ›¤ï¸</span> Path Finder
+        <span>🛤️</span> Path Finder
       </button>
       <button class="drawer-tab" data-tab="inspection" onclick="switchDrawerTab('inspection')">
-        <span>ðŸ“‹</span> Field Inspection
+        <span>📋</span> Field Inspection
       </button>
       <button class="drawer-tab" data-tab="procurement" onclick="switchDrawerTab('procurement')">
-        <span>ðŸ“¦</span> Spares & BOM
+        <span>📦</span> Spares & BOM
       </button>
       <button class="drawer-tab" data-tab="qa" id="drawer-tab-qa" onclick="switchDrawerTab('qa')">
-        <span>â“</span> Ask Q&A
+        <span>❓</span> Ask Q&A
       </button>
       <button class="drawer-tab" data-tab="learning" id="drawer-tab-learning" onclick="switchDrawerTab('learning')">
-        <span>ðŸŽ“</span> Academy
+        <span>🎓</span> Academy
       </button>
       <button class="drawer-tab" data-tab="semantic" id="drawer-tab-semantic" onclick="switchDrawerTab('semantic')">
-        <span>ðŸ§ </span> Semantic
+        <span>🧠</span> Semantic
       </button>
     </div>
 
@@ -2993,7 +2993,7 @@
         </div>
         <div class="blueprint-preview-box" onclick="openFullscreenActiveBlueprint()">
           <img id="blueprint-crop-img" class="blueprint-img" src="" alt="RDSO Blueprint Crop">
-          <div class="blueprint-overlay-hint">ðŸ” Click to Expand High-Res</div>
+          <div class="blueprint-overlay-hint">🔍 Click to Expand High-Res</div>
         </div>
       </div>
 
@@ -3001,12 +3001,12 @@
       <div class="tab-pane" id="tab-pane-twin">
         <div class="digital-twin-box" id="twin-box">
           <div class="twin-badge">
-            <span>ðŸ“¦</span> <span id="twin-badge-text">PHYSICAL 3D ASSET TWIN</span>
+            <span>📦</span> <span id="twin-badge-text">PHYSICAL 3D ASSET TWIN</span>
           </div>
           <div class="twin-canvas-wrap">
             <canvas id="component-twin-canvas"></canvas>
           </div>
-          <div class="twin-controls-hint">ðŸ–±ï¸ Left Drag: Rotate | Right Drag: Pan | Scroll: Zoom</div>
+          <div class="twin-controls-hint">🖱️ Left Drag: Rotate | Right Drag: Pan | Scroll: Zoom</div>
         </div>
 
         <div>
@@ -3024,7 +3024,7 @@
       <div class="tab-pane" id="tab-pane-risks">
         <div class="failure-risk-box" id="drawer-risk-box">
           <div class="failure-risk-header">
-            <span>âš ï¸</span> <span id="drawer-risk-title">High Derailment Risk Mode</span>
+            <span>⚠️</span> <span id="drawer-risk-title">High Derailment Risk Mode</span>
           </div>
           <div class="failure-risk-desc" id="drawer-risk-desc">
             Select an entity to review tethered failure mechanisms and preventative maintenance actions.
@@ -3067,35 +3067,35 @@
         </div>
       </div>
 
-      <!-- 10. TAB: FIELD INSPECTION CHECKLIST WORKFLOW (Â§18) -->
+      <!-- 10. TAB: FIELD INSPECTION CHECKLIST WORKFLOW (§18) -->
       <div class="tab-pane" id="tab-pane-inspection">
         <div id="inspection-container" style="display: flex; flex-direction: column; gap: 10px; padding: 4px;">
           <!-- Populated dynamically by renderFieldInspectionWorkflow() -->
         </div>
       </div>
 
-      <!-- 11. TAB: TURNOUT SPARES & BOM CALCULATOR (Â§19) -->
+      <!-- 11. TAB: TURNOUT SPARES & BOM CALCULATOR (§19) -->
       <div class="tab-pane" id="tab-pane-procurement">
         <div id="procurement-container" style="display: flex; flex-direction: column; gap: 10px; padding: 4px;">
           <!-- Populated dynamically by renderProcurementCalculator() -->
         </div>
       </div>
 
-      <!-- 12. TAB: QUESTION INTERFACE & NATURAL LANGUAGE RETRIEVAL (Â§15, Â§16) -->
+      <!-- 12. TAB: QUESTION INTERFACE & NATURAL LANGUAGE RETRIEVAL (§15, §16) -->
       <div class="tab-pane" id="tab-pane-qa">
         <div id="qa-container" class="qa-container">
           <!-- Populated dynamically by renderQuestionInterface() -->
         </div>
       </div>
 
-      <!-- 13. TAB: LEARNING SYSTEM & TRAINING ACADEMY (Â§17, Â§21, Â§36) -->
+      <!-- 13. TAB: LEARNING SYSTEM & TRAINING ACADEMY (§17, §21, §36) -->
       <div class="tab-pane" id="tab-pane-learning">
         <div id="learning-container" class="learning-container">
           <!-- Populated dynamically by renderLearningModule() -->
         </div>
       </div>
 
-      <!-- 14. TAB: SEMANTIC INTELLIGENCE & CONCEPT RETRIEVAL (Â§24, Â§36) -->
+      <!-- 14. TAB: SEMANTIC INTELLIGENCE & CONCEPT RETRIEVAL (§24, §36) -->
       <div class="tab-pane" id="tab-pane-semantic">
         <div id="semantic-container" class="semantic-container">
           <!-- Populated dynamically by renderSemanticModule() -->
@@ -3126,7 +3126,7 @@
   <div id="blueprint-modal">
     <div class="blueprint-modal-header">
       <h3 style="font-size: 14px; color: #fff;" id="blueprint-modal-title">RDSO High-Resolution Blueprint Source Crop</h3>
-      <button class="close-drawer-btn" onclick="closeFullscreenBlueprint()">âœ•</button>
+      <button class="close-drawer-btn" onclick="closeFullscreenBlueprint()">✕</button>
     </div>
     <div class="blueprint-modal-body">
       <img id="blueprint-modal-img" class="blueprint-modal-img" src="" alt="RDSO Blueprint Full Resolution">
@@ -3138,10 +3138,10 @@
     <div style="background: var(--bg-panel); border: 1px solid var(--border-glow); border-radius: 8px; padding: 20px; width: 560px; max-width: 90vw; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 10px 30px rgba(0,240,255,0.2);">
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 16px;">ðŸ”</span>
+          <span style="font-size: 16px;">🔍</span>
           <h3 style="font-size: 13.5px; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;" id="evidence-modal-title">Source Evidence & Provenance</h3>
         </div>
-        <button class="close-drawer-btn" onclick="closeEvidenceModal()">âœ•</button>
+        <button class="close-drawer-btn" onclick="closeEvidenceModal()">✕</button>
       </div>
       <div id="evidence-modal-content" style="display: flex; flex-direction: column; gap: 10px; font-size: 11px; line-height: 1.45;">
         <!-- Dynamically populated -->
@@ -3154,10 +3154,10 @@
     <div style="background: var(--bg-panel); border: 1px solid var(--border-glow); border-radius: 8px; padding: 20px; width: 580px; max-width: 92vw; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 10px 30px rgba(0,240,255,0.25);">
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 16px;">ðŸ”—</span>
+          <span style="font-size: 16px;">🔗</span>
           <h3 style="font-size: 13.5px; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;" id="why-connected-modal-title">Why Are These Connected?</h3>
         </div>
-        <button class="close-drawer-btn" onclick="closeWhyConnectedModal()">âœ•</button>
+        <button class="close-drawer-btn" onclick="closeWhyConnectedModal()">✕</button>
       </div>
       <div id="why-connected-modal-content" style="display: flex; flex-direction: column; gap: 10px; font-size: 11px; line-height: 1.45;">
         <!-- Dynamically populated -->
@@ -3168,7 +3168,7 @@
   <!-- Ingest Node Modal -->
   <div id="ingest-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
     <div style="background: var(--bg-panel); border: 1px solid var(--border-glow); border-radius: 8px; padding: 20px; width: 440px; display: flex; flex-direction: column; gap: 12px;">
-      <h3 style="font-size: 14px; color: #fff;">âž• Ingest New Knowledge Entity</h3>
+      <h3 style="font-size: 14px; color: #fff;">➕ Ingest New Knowledge Entity</h3>
       <div>
         <label style="font-size: 10px; color: var(--text-muted);">Entity Label</label>
         <input type="text" id="in-node-title" style="width: 100%; height: 32px; background: #0c1424; border: 1px solid var(--border-subtle); color: #fff; padding: 0 8px; border-radius: 4px;">
@@ -3216,20 +3216,20 @@
     const rawKGFacts = CANONICAL_DATA.facts || [];
 
     const DOMAIN_METADATA = {
-      drawing: { label: "Drawings & Blueprints", color: "#00f0ff", icon: "ðŸ“" },
-      revision: { label: "Revisions & History", color: "#a2d2ff", icon: "â³" },
-      component: { label: "Components & Assemblies", color: "#00ff88", icon: "âš™ï¸" },
-      turnout_layout: { label: "Sleepers & Layout Zones", color: "#72efdd", icon: "ðŸ›¤ï¸" },
-      specification: { label: "Directives, Notes & Tolerances", color: "#ffd60a", icon: "ðŸ”¬" },
-      materials: { label: "Materials & Metallurgy", color: "#b5179e", icon: "ðŸ§ª" },
-      standards: { label: "Governing Standards", color: "#7209b7", icon: "ðŸ“œ" },
-      procurement: { label: "BOM & LIST-A Spares", color: "#f72585", icon: "ðŸ“¦" },
-      signaling: { label: "S&T Point Interlocking", color: "#ff3366", icon: "âš¡" },
-      defect: { label: "Failure Modes & Hazards", color: "#d90429", icon: "âš ï¸" },
-      sop: { label: "Field SOPs & Protocols", color: "#9d4edd", icon: "ðŸ“‹" },
-      manual: { label: "Codes & Manuals", color: "#ff007f", icon: "ðŸ“–" },
-      tolerance: { label: "Tolerances & Limits", color: "#fee440", icon: "ðŸ“" },
-      equipment: { label: "Tools & Equipment", color: "#f15bb5", icon: "ðŸ› ï¸" }
+      drawing: { label: "Drawings & Blueprints", color: "#00f0ff", icon: "📐" },
+      revision: { label: "Revisions & History", color: "#a2d2ff", icon: "⏳" },
+      component: { label: "Components & Assemblies", color: "#00ff88", icon: "⚙️" },
+      turnout_layout: { label: "Sleepers & Layout Zones", color: "#72efdd", icon: "🛤️" },
+      specification: { label: "Directives, Notes & Tolerances", color: "#ffd60a", icon: "🔬" },
+      materials: { label: "Materials & Metallurgy", color: "#b5179e", icon: "🧪" },
+      standards: { label: "Governing Standards", color: "#7209b7", icon: "📜" },
+      procurement: { label: "BOM & LIST-A Spares", color: "#f72585", icon: "📦" },
+      signaling: { label: "S&T Point Interlocking", color: "#ff3366", icon: "⚡" },
+      defect: { label: "Failure Modes & Hazards", color: "#d90429", icon: "⚠️" },
+      sop: { label: "Field SOPs & Protocols", color: "#9d4edd", icon: "📋" },
+      manual: { label: "Codes & Manuals", color: "#ff007f", icon: "📖" },
+      tolerance: { label: "Tolerances & Limits", color: "#fee440", icon: "📏" },
+      equipment: { label: "Tools & Equipment", color: "#f15bb5", icon: "🛠️" }
     };
 
     const PREDICATE_COLORS = {
@@ -3256,7 +3256,7 @@
       MAINTAINED_BY: 0x00f5d4
     };
 
-    // Predicate Family Mapping for 3D Edge HUD & Filtering (Blueprint Â§13.2)
+    // Predicate Family Mapping for 3D Edge HUD & Filtering (Blueprint §13.2)
     const PREDICATE_FAMILY_MAP = {
       CONTAINS: "structural",
       CONNECTED_TO: "structural",
@@ -3333,7 +3333,7 @@
       standards: { x: -6, y: 18, z: 10 }
     };
 
-    // Segregated Knowledge Universes & Hierarchy Engine State (Blueprint Â§2.1, Â§8.3 & Â§14)
+    // Segregated Knowledge Universes & Hierarchy Engine State (Blueprint §2.1, §8.3 & §14)
     let currentKnowledgeUniverse = 'drawings'; // 'drawings' | 'manuals' | 'combined'
     let currentHierarchyDepth = 2;
     const expandedNodeIds = new Set();
@@ -3399,9 +3399,9 @@
         '<div class="drawing-meta-item"><div class="drawing-meta-label">Readiness</div><div class="drawing-meta-value" style="color:' + tone + ';">' + status + '</div></div>' +
         '<div class="drawing-meta-item"><div class="drawing-meta-label">Ownership</div><div class="drawing-meta-value">' + ownership + '</div></div>' +
         '<div class="drawing-meta-item"><div class="drawing-meta-label">Coverage</div><div class="drawing-meta-value">' + coverage + '</div></div>' +
-        '<div class="drawing-meta-item"><div class="drawing-meta-label">Page Gaps</div><div class="drawing-meta-value">' + (missing === null ? 'â€”' : missing + ' missing / ' + (empty ?? 0) + ' empty') + '</div></div>' +
+        '<div class="drawing-meta-item"><div class="drawing-meta-label">Page Gaps</div><div class="drawing-meta-value">' + (missing === null ? '—' : missing + ' missing / ' + (empty ?? 0) + ' empty') + '</div></div>' +
         '</div>' +
-        '<div style="font-size:10px;color:var(--text-muted);line-height:1.45;">Reasons: ' + reasonText + (issuePages !== null ? ' Â· Ownership issue pages: ' + issuePages : '') + '</div>';
+        '<div style="font-size:10px;color:var(--text-muted);line-height:1.45;">Reasons: ' + reasonText + (issuePages !== null ? ' · Ownership issue pages: ' + issuePages : '') + '</div>';
     }
     window.loadManualReadinessAudit = loadManualReadinessAudit;
 
@@ -3479,10 +3479,10 @@
           manualChapterById.set(m.alias + '|' + ch[0], chapterId);
           if (!rawNodes.some(n => n.id === chapterId)) {
             rawNodes.push({
-              id: chapterId, label: 'Chapter ' + (idx + 1) + ' â€” ' + ch[0], type: 'CHAPTER', domain: 'manual', universe: 'manuals',
+              id: chapterId, label: 'Chapter ' + (idx + 1) + ' — ' + ch[0], type: 'CHAPTER', domain: 'manual', universe: 'manuals',
               parent_id: m.id, order: idx + 1, color: '#ff4fa3',
-              desc: 'Pages ' + ch[1] + 'â€“' + ch[2],
-              specs: { ChapterNumber: idx + 1, PageRange: ch[1] + 'â€“' + ch[2], Manual: m.alias },
+              desc: 'Pages ' + ch[1] + '–' + ch[2],
+              specs: { ChapterNumber: idx + 1, PageRange: ch[1] + '–' + ch[2], Manual: m.alias },
               x: 0, y: 18 - idx * 0.6, z: 0, alt: 13
             });
           }
@@ -3559,7 +3559,7 @@
             addContentNode('EVIDENCE', 0, 'Page ' + page.page + ' source evidence', { desc: 'Primary page-level evidence for extracted manual content.' });
           }
         });
-      });
+      }
 
       // Attach extracted clauses to their authoritative chapter; never directly to the manual.
       // Primary key: (manual, chapter title). Fallback: manual + page range. The page fallback
@@ -4179,10 +4179,10 @@
       ctx.stroke();
 
       // Top domain tag
-      const meta = DOMAIN_METADATA[domain] || { label: domain, icon: "ðŸ”¹" };
+      const meta = DOMAIN_METADATA[domain] || { label: domain, icon: "🔹" };
       ctx.fillStyle = color || '#00f0ff';
       ctx.font = "bold 13px -apple-system, sans-serif";
-      const domainLabel = `${meta.icon || 'ðŸ”¹'} ${(meta.label || domain).toUpperCase()}`.slice(0, childCount > 0 ? 17 : 26);
+      const domainLabel = `${meta.icon || '🔹'} ${(meta.label || domain).toUpperCase()}`.slice(0, childCount > 0 ? 17 : 26);
       ctx.fillText(domainLabel, 14, 25);
 
       // Top-right expansion badge if node has child entities
@@ -4210,7 +4210,7 @@
       // Bottom crisp title
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 15px -apple-system, sans-serif";
-      const displayLabel = text.length > 21 ? text.substring(0, 20) + "â€¦" : text;
+      const displayLabel = text.length > 21 ? text.substring(0, 20) + "…" : text;
       ctx.fillText(displayLabel, 14, 53);
 
       const texture = new THREE.CanvasTexture(canvas);
@@ -4766,7 +4766,7 @@
         highlightProcurementEcosystem();
       } else if (mode === "manuals") {
         indicator.innerText = "CODES & MANUALS";
-        desc.innerText = "Manual-only exploration. Shows the authoritative manual hierarchy first: Manual â†’ Chapters â†’ Clauses/Evidence. Drawing relationships are intentionally isolated.";
+        desc.innerText = "Manual-only exploration. Shows the authoritative manual hierarchy first: Manual → Chapters → Clauses/Evidence. Drawing relationships are intentionally isolated.";
         highlightManualsEcosystem();
       }
     }
@@ -4934,7 +4934,7 @@
             hud.style.display = 'block';
             hud.style.left = (e.clientX + 16) + 'px';
             hud.style.top = (e.clientY + 12) + 'px';
-            const meta = DOMAIN_METADATA[hit.data.domain] || { label: hit.data.domain, icon: 'ðŸ”¹' };
+            const meta = DOMAIN_METADATA[hit.data.domain] || { label: hit.data.domain, icon: '🔹' };
             hudTag.innerHTML = `${meta.icon} ${meta.label}`;
             hudTag.style.color = hit.data.color || '#00f0ff';
             hudTitle.innerText = hit.data.label;
@@ -4986,7 +4986,7 @@
       kgControls.update();
 
       // Drawer Header
-      document.getElementById('drawer-domain').innerText = `${data.type} Â· ${(DOMAIN_METADATA[data.domain]?.label || data.domain).toUpperCase()}`;
+      document.getElementById('drawer-domain').innerText = `${data.type} · ${(DOMAIN_METADATA[data.domain]?.label || data.domain).toUpperCase()}`;
       document.getElementById('drawer-domain').style.color = data.color;
       document.getElementById('drawer-title').innerText = data.label;
       const idBadge = document.getElementById('drawer-id-badge');
@@ -5000,7 +5000,7 @@
         tabLabel.innerText = isDrawingNode ? "Drawing Overview" : "Node Dossier";
       }
 
-      // Find governing drawing dossier â€” only match if node is actually related to a known drawing
+      // Find governing drawing dossier — only match if node is actually related to a known drawing
       let dossierKey = null;
       if (data.id.includes("6155")) dossierKey = "RDSO_T_6155";
       else if (data.id.includes("6154")) dossierKey = "RDSO_T_6154";
@@ -5046,36 +5046,36 @@
         descEl.innerHTML = `
           <div style="margin-bottom:8px;">
             <strong style="color:var(--accent-cyan); font-size:13px;">${title}</strong>
-            <span style="font-size:11px; color:var(--accent-pink); background:rgba(247,37,133,0.15); padding:2px 6px; border-radius:4px; border:1px solid rgba(247,37,133,0.3); margin-left:6px;">${manualName} ${pageNum ? 'Â· Page ' + pageNum : ''}</span>
+            <span style="font-size:11px; color:var(--accent-pink); background:rgba(247,37,133,0.15); padding:2px 6px; border-radius:4px; border:1px solid rgba(247,37,133,0.3); margin-left:6px;">${manualName} ${pageNum ? '· Page ' + pageNum : ''}</span>
           </div>
-          ${chapterName ? `<div style="font-size:11px; color:var(--accent-purple); font-weight:600; margin-bottom:6px;">ðŸ“– ${chapterName}</div>` : ''}
+          ${chapterName ? `<div style="font-size:11px; color:var(--accent-purple); font-weight:600; margin-bottom:6px;">📖 ${chapterName}</div>` : ''}
           <blockquote style="border-left:3px solid var(--accent-cyan); padding-left:10px; margin:8px 0; font-style:italic; color:#e0e8f8; font-size:12px; line-height:1.5;">"${verbatim}"</blockquote>
           ${(tols.length > 0) ? `
             <div style="margin-top:8px;">
               <div style="font-size:10px; font-weight:600; color:var(--accent-yellow); text-transform:uppercase; margin-bottom:4px;">Statutory Tolerances & Bounds:</div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                ${tols.map(t => `<span style="font-size:10px; background:rgba(255,214,10,0.12); border:1px solid rgba(255,214,10,0.35); border-radius:4px; padding:2px 6px; color:var(--accent-yellow); font-weight:600;">ðŸ“ ${t}</span>`).join('')}
+                ${tols.map(t => `<span style="font-size:10px; background:rgba(255,214,10,0.12); border:1px solid rgba(255,214,10,0.35); border-radius:4px; padding:2px 6px; color:var(--accent-yellow); font-weight:600;">📐 ${t}</span>`).join('')}
               </div>
             </div>` : ''}
           ${(roles.length > 0) ? `
             <div style="margin-top:8px;">
               <div style="font-size:10px; font-weight:600; color:var(--accent-cyan); text-transform:uppercase; margin-bottom:4px;">Responsible Authorities:</div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                ${roles.map(r => `<span style="font-size:10px; background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.25); border-radius:4px; padding:2px 6px; color:var(--accent-cyan); font-weight:600;">ðŸ‘® ${r}</span>`).join('')}
+                ${roles.map(r => `<span style="font-size:10px; background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.25); border-radius:4px; padding:2px 6px; color:var(--accent-cyan); font-weight:600;">👮 ${r}</span>`).join('')}
               </div>
             </div>` : ''}
           ${(equips.length > 0) ? `
             <div style="margin-top:8px;">
               <div style="font-size:10px; font-weight:600; color:var(--accent-blue); text-transform:uppercase; margin-bottom:4px;">Mandated Track Equipment:</div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                ${equips.map(e => `<span style="font-size:10px; background:rgba(58,134,255,0.1); border:1px solid rgba(58,134,255,0.3); border-radius:4px; padding:2px 6px; color:var(--accent-blue); font-weight:600;">âš™ï¸ ${e}</span>`).join('')}
+                ${equips.map(e => `<span style="font-size:10px; background:rgba(58,134,255,0.1); border:1px solid rgba(58,134,255,0.3); border-radius:4px; padding:2px 6px; color:var(--accent-blue); font-weight:600;">⚙️ ${e}</span>`).join('')}
               </div>
             </div>` : ''}
           ${(fails.length > 0) ? `
             <div style="margin-top:8px;">
               <div style="font-size:10px; font-weight:600; color:var(--accent-red); text-transform:uppercase; margin-bottom:4px;">Monitored Defect Codes / Hazards:</div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                ${fails.map(f => `<span style="font-size:10px; background:rgba(255,51,102,0.1); border:1px solid rgba(255,51,102,0.3); border-radius:4px; padding:2px 6px; color:var(--accent-red); font-weight:600;">âš ï¸ ${f}</span>`).join('')}
+                ${fails.map(f => `<span style="font-size:10px; background:rgba(255,51,102,0.1); border:1px solid rgba(255,51,102,0.3); border-radius:4px; padding:2px 6px; color:var(--accent-red); font-weight:600;">⚠️ ${f}</span>`).join('')}
               </div>
             </div>` : ''}
         `;
@@ -5084,7 +5084,7 @@
         descEl.innerHTML = `
           <div style="margin-bottom:8px;">
             <strong style="color:var(--accent-purple); font-size:14px;">${data.label}</strong>
-            <span style="font-size:11px; color:var(--accent-cyan); background:rgba(0,240,255,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(0,240,255,0.3); margin-left:6px;">${specs.Manual || 'Manual'} Â· Pages ${specs.PageRange || 'N/A'}</span>
+            <span style="font-size:11px; color:var(--accent-cyan); background:rgba(0,240,255,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(0,240,255,0.3); margin-left:6px;">${specs.Manual || 'Manual'} · Pages ${specs.PageRange || 'N/A'}</span>
           </div>
           <p style="font-size:12px; line-height:1.5; color:#e0e8f8; margin-bottom:10px;">${data.desc}</p>
           <div style="font-size:11px; font-weight:600; color:var(--accent-green); margin-bottom:4px;">KEY STATUTORY TOPICS:</div>
@@ -5093,7 +5093,7 @@
           </div>
           <div style="font-size:11px; color:var(--text-muted); display:flex; justify-content:space-between; align-items:center;">
             <span>Indexed Clauses in Chapter: <strong style="color:var(--accent-cyan); font-size:13px;">${specs.ClauseCount || 0}</strong></span>
-            <button class="btn" style="padding:4px 8px; font-size:10px;" onclick="switchDrawerTab('manuals'); filterManualsTree('Ch ${specs.ChapterNumber || ''}')">View in TOC Tree âž”</button>
+            <button class="btn" style="padding:4px 8px; font-size:10px;" onclick="switchDrawerTab('manuals'); filterManualsTree('Ch ${specs.ChapterNumber || ''}')">View in TOC Tree ➔</button>
           </div>
         `;
       } else if (manDoc || data.type === "DOCUMENT") {
@@ -5128,7 +5128,7 @@
             <span style="font-size:10px; color:var(--accent-cyan); background:rgba(0,240,255,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(0,240,255,0.3);">${tolClause}</span>
           </div>
           <p style="font-size:12px; line-height:1.5; color:#e0e8f8;"><strong>Safety & Engineering Purpose:</strong> ${tolPurpose}</p>
-          ${(tolMin !== "" && tolMax !== "") ? `<div style="margin-top:8px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Design Limits: [${tolMin} ${tolUnit} â€” ${tolMax} ${tolUnit}]</div>` : ''}
+          ${(tolMin !== "" && tolMax !== "") ? `<div style="margin-top:8px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Design Limits: [${tolMin} ${tolUnit} — ${tolMax} ${tolUnit}]</div>` : ''}
         `;
       } else if (manEq || data.type === "EQUIPMENT") {
         const eqLabel = (manEq && manEq.label) || data.label;
@@ -5180,15 +5180,15 @@
 
             <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 10px;">
               <span style="background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3); color: var(--accent-cyan); padding: 2px 6px; border-radius: 4px; font-weight: 600;">
-                ðŸ“œ ${parentDwg} (ALT ${altNum})
+                📜 ${parentDwg} (ALT ${altNum})
               </span>
               ${effDate ? `
                 <span style="background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.3); color: var(--accent-green); padding: 2px 6px; border-radius: 4px; font-weight: 600;">
-                  ðŸ“… ${effDate}
+                  📅 ${effDate}
                 </span>
               ` : ''}
               <span style="background: rgba(157, 78, 221, 0.15); border: 1px solid rgba(157, 78, 221, 0.35); color: var(--text-main); padding: 2px 6px; border-radius: 4px;">
-                ${altNum === 13 ? 'â˜… Current Release' : 'Archived Alteration'}
+                ${altNum === 13 ? '★ Current Release' : 'Archived Alteration'}
               </span>
             </div>
 
@@ -5204,7 +5204,7 @@
 
             ${lineageSummary.length > 0 ? `
               <div style="font-size: 10px; color: var(--text-muted);">
-                <strong style="color: var(--accent-cyan);">Revision Lineage:</strong> ${lineageSummary.join(' Â· ')}.
+                <strong style="color: var(--accent-cyan);">Revision Lineage:</strong> ${lineageSummary.join(' · ')}.
               </div>
             ` : ''}
           </div>
@@ -5223,19 +5223,19 @@
           toolbar.style.display = "flex";
           toolbar.innerHTML = `
             <button class="answer-tool-btn" id="btn-answer-blueprint" onclick="openFullscreenBlueprint('crops/t6155_title_alt13.png', '${data.label}')">
-              <span>ðŸ”</span> Revision Crop
+              <span>🔍</span> Revision Crop
             </button>
             <button class="answer-tool-btn" id="btn-answer-revisions" onclick="switchDrawerTab('revisions')">
-              <span>â³</span> Compare Alt
+              <span>⏳</span> Compare Alt
             </button>
             <button class="answer-tool-btn" id="btn-answer-paths" onclick="renderPathFinderUI('${data.id}', 'std_irs_t10'); switchDrawerTab('paths');">
-              <span>ðŸ›¤ï¸</span> Trace Paths
+              <span>🛤️</span> Trace Paths
             </button>
             <button class="answer-tool-btn" id="btn-answer-notes" onclick="switchDrawerTab('notes')">
-              <span>ðŸ“‘</span> View Notes
+              <span>📑</span> View Notes
             </button>
             <button class="answer-tool-btn" id="btn-answer-overview" onclick="switchDrawerTab('overview')">
-              <span>ðŸ“‹</span> Node Dossier
+              <span>📋</span> Node Dossier
             </button>
           `;
         }
@@ -5251,10 +5251,10 @@
 
             <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 10px;">
               <span style="background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3); color: var(--accent-cyan); padding: 2px 6px; border-radius: 4px; font-weight: 600;">
-                âš–ï¸ STATUTORY STANDARD
+                ⚖️ STATUTORY STANDARD
               </span>
               <span style="background: rgba(157, 78, 221, 0.15); border: 1px solid rgba(157, 78, 221, 0.35); color: var(--text-main); padding: 2px 6px; border-radius: 4px;">
-                ðŸ›ï¸ RDSO Track Directorate
+                🏛️ RDSO Track Directorate
               </span>
             </div>
 
@@ -5284,19 +5284,19 @@
           toolbar.style.display = "flex";
           toolbar.innerHTML = `
             <button class="answer-tool-btn" id="btn-answer-blueprint" onclick="openFullscreenActiveBlueprint()">
-              <span>ðŸ”</span> Blueprint
+              <span>🔍</span> Blueprint
             </button>
             <button class="answer-tool-btn" id="btn-answer-paths" onclick="renderPathFinderUI('${data.id}', 'drg_6155'); switchDrawerTab('paths');">
-              <span>ðŸ›¤ï¸</span> Trace Paths
+              <span>🛤️</span> Trace Paths
             </button>
             <button class="answer-tool-btn" id="btn-answer-conflicts" onclick="switchDrawerTab('conflicts')">
-              <span>âš–ï¸</span> Conflicts
+              <span>⚖️</span> Conflicts
             </button>
             <button class="answer-tool-btn" id="btn-answer-manuals" onclick="switchDrawerTab('manuals')">
-              <span>ðŸ“–</span> Manuals TOC
+              <span>📖</span> Manuals TOC
             </button>
             <button class="answer-tool-btn" id="btn-answer-overview" onclick="switchDrawerTab('overview')">
-              <span>ðŸ“‹</span> Node Dossier
+              <span>📋</span> Node Dossier
             </button>
           `;
         }
@@ -5318,10 +5318,10 @@
 
             <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: 10px;">
               <span style="background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.3); color: var(--accent-cyan); padding: 2px 6px; border-radius: 4px; font-weight: 600;">
-                ðŸ“œ ${currentActiveDossier.drawing_number} (ALT ${currentActiveDossier.alteration_number || 13})
+                📜 ${currentActiveDossier.drawing_number} (ALT ${currentActiveDossier.alteration_number || 13})
               </span>
               <span style="background: rgba(157, 78, 221, 0.15); border: 1px solid rgba(157, 78, 221, 0.35); color: var(--text-main); padding: 2px 6px; border-radius: 4px;">
-                ðŸ“ BG 1676 mm
+                📏 BG 1676 mm
               </span>
               <span style="background: rgba(76, 201, 240, 0.1); border: 1px solid rgba(76, 201, 240, 0.3); color: var(--accent-blue); padding: 2px 6px; border-radius: 4px;">
                 IRS: T 10 / T 29
@@ -5346,7 +5346,7 @@
             ` : ''}
 
             <div style="font-size: 10px; color: var(--accent-orange); background: rgba(247, 37, 133, 0.08); border-left: 2px solid var(--accent-pink); padding: 4px 8px; border-radius: 0 4px 4px 0;">
-              âš ï¸ <strong>Safeguard:</strong> Strict compliance with IRPWM Chapter 4 & Note 28 maintenance directives.
+              ⚠️ <strong>Safeguard:</strong> Strict compliance with IRPWM Chapter 4 & Note 28 maintenance directives.
             </div>
           </div>
         `;
@@ -5374,19 +5374,19 @@
           toolbar.style.display = "flex";
           toolbar.innerHTML = `
             <button class="answer-tool-btn" id="btn-answer-blueprint" onclick="openFullscreenActiveBlueprint()">
-              <span>ðŸ”</span> Blueprint Crop
+              <span>🔍</span> Blueprint Crop
             </button>
             <button class="answer-tool-btn" id="btn-answer-twin" onclick="switchDrawerTab('twin')">
-              <span>ðŸ“¦</span> 3D Twin
+              <span>📦</span> 3D Twin
             </button>
             <button class="answer-tool-btn" id="btn-answer-paths" onclick="renderPathFinderUI('${data.id}', 'std_irs_t10'); switchDrawerTab('paths');">
-              <span>ðŸ›¤ï¸</span> Trace Paths
+              <span>🛤️</span> Trace Paths
             </button>
             <button class="answer-tool-btn" id="btn-answer-inspection" onclick="switchDrawerTab('inspection')">
-              <span>ðŸ“‹</span> Field Inspection
+              <span>📋</span> Field Inspection
             </button>
             <button class="answer-tool-btn" id="btn-answer-procurement" onclick="switchDrawerTab('procurement')">
-              <span>ðŸ“¦</span> Spares & BOM
+              <span>📦</span> Spares & BOM
             </button>
           `;
         }
@@ -5427,7 +5427,7 @@
         if (targetNode) {
           const tag = document.createElement('div');
           tag.className = "lineage-tag";
-          tag.innerHTML = `<span>${h.type === 'out' ? 'âž”' : 'â¬…'} ${h.rel}:</span> <strong>${targetNode.data.label}</strong> <span class="why-trigger" style="color:var(--accent-cyan); font-size:9px; margin-left:auto; padding-left:4px; opacity:0.85;" title="Explain why connected">â„¹ï¸ Why?</span>`;
+          tag.innerHTML = `<span>${h.type === 'out' ? '➔' : '⬅'} ${h.rel}:</span> <strong>${targetNode.data.label}</strong> <span class="why-trigger" style="color:var(--accent-cyan); font-size:9px; margin-left:auto; padding-left:4px; opacity:0.85;" title="Explain why connected">ℹ️ Why?</span>`;
           tag.onclick = (ev) => {
             if (ev.target.classList.contains('why-trigger') || ev.target.innerText?.includes('Why?')) {
               ev.stopPropagation();
@@ -5536,8 +5536,8 @@
         manualHeader.className = "manual-tree-header";
         const isManualOpen = q.length > 0;
         manualHeader.innerHTML = `
-          <div><span>ðŸ“˜</span> <strong>${manual.alias}</strong> <span style="color:var(--text-muted); font-size:11px; margin-left:4px;">${manual.title}</span></div>
-          <span class="manual-tree-badge">${matchingChapters.length} Ch Â· ${manual.total_clauses || 0} Cl</span>
+          <div><span>📘</span> <strong>${manual.alias}</strong> <span style="color:var(--text-muted); font-size:11px; margin-left:4px;">${manual.title}</span></div>
+          <span class="manual-tree-badge">${matchingChapters.length} Ch · ${manual.total_clauses || 0} Cl</span>
         `;
 
         const manualBody = document.createElement('div');
@@ -5586,7 +5586,7 @@
             const clRow = document.createElement('div');
             clRow.className = "clause-tree-item";
             clRow.innerHTML = `
-              <span class="clause-para-badge">Â§ ${cl.para}</span>
+              <span class="clause-para-badge">§ ${cl.para}</span>
               <span class="clause-title-text" title="${cl.title}">${cl.title}</span>
               <span class="clause-page-badge">p.${cl.page}</span>
             `;
@@ -5738,10 +5738,10 @@
             edgesHtml += `
               <div class="lineage-tag" style="justify-content: space-between; padding: 6px 10px;" onclick="window.selectGraphNode('${e.to}')">
                 <div style="display: flex; align-items: center; gap: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                  <span style="color: ${color}; font-weight: 700; font-family: var(--font-mono); font-size: 10px;">âž” ${e.rel}</span>
+                  <span style="color: ${color}; font-weight: 700; font-family: var(--font-mono); font-size: 10px;">➔ ${e.rel}</span>
                   <span style="color: #fff; font-weight: 600; font-size: 11px;">${targetLabel}</span>
                 </div>
-                <span class="why-trigger" style="color: var(--accent-cyan); font-size: 9.5px; padding-left: 6px; margin-left: auto;" onclick="event.stopPropagation(); openWhyConnectedModal('${data.id}', '${e.to}', '${e.rel}')" title="Explain why connected">â„¹ï¸ Why?</span>
+                <span class="why-trigger" style="color: var(--accent-cyan); font-size: 9.5px; padding-left: 6px; margin-left: auto;" onclick="event.stopPropagation(); openWhyConnectedModal('${data.id}', '${e.to}', '${e.rel}')" title="Explain why connected">ℹ️ Why?</span>
               </div>
             `;
           });
@@ -5753,10 +5753,10 @@
             edgesHtml += `
               <div class="lineage-tag" style="justify-content: space-between; padding: 6px 10px;" onclick="window.selectGraphNode('${e.from}')">
                 <div style="display: flex; align-items: center; gap: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                  <span style="color: ${color}; font-weight: 700; font-family: var(--font-mono); font-size: 10px;">â¬… ${e.rel}</span>
+                  <span style="color: ${color}; font-weight: 700; font-family: var(--font-mono); font-size: 10px;">⬅ ${e.rel}</span>
                   <span style="color: #fff; font-weight: 600; font-size: 11px;">${srcLabel}</span>
                 </div>
-                <span class="why-trigger" style="color: var(--accent-cyan); font-size: 9.5px; padding-left: 6px; margin-left: auto;" onclick="event.stopPropagation(); openWhyConnectedModal('${e.from}', '${data.id}', '${e.rel}')" title="Explain why connected">â„¹ï¸ Why?</span>
+                <span class="why-trigger" style="color: var(--accent-cyan); font-size: 9.5px; padding-left: 6px; margin-left: auto;" onclick="event.stopPropagation(); openWhyConnectedModal('${e.from}', '${data.id}', '${e.rel}')" title="Explain why connected">ℹ️ Why?</span>
               </div>
             `;
           });
@@ -5778,7 +5778,7 @@
           notesHtml = `
             <div class="drawing-section">
               <div class="drawing-section-header">
-                <div class="drawing-section-title"><span>ðŸ“‘</span> Governing Verbatim Drawing Directives</div>
+                <div class="drawing-section-title"><span>📑</span> Governing Verbatim Drawing Directives</div>
                 <span class="drawing-section-badge">${matchingNotes.length} DIRECTIVES</span>
               </div>
               <div style="display: flex; flex-direction: column; gap: 6px;">
@@ -5789,7 +5789,7 @@
                 `).join('')}
               </div>
               <button class="btn" onclick="switchDrawerTab('notes')" style="margin-top: 4px; font-size: 10.5px; justify-content: center; gap: 6px;">
-                <span>ðŸ“‘</span> View All Notes in Notes Tab âž”
+                <span>📑</span> View All Notes in Notes Tab ➔
               </button>
             </div>
           `;
@@ -5802,7 +5802,7 @@
         let assetTwinLabel = "Digital Twin Asset";
         let assetTwinValue = data.twinAsset || "Standard Geometry";
         let riskHeader = "Derailment Hazard & Safeguards";
-        let riskText = "Strict adherence to dimensional tolerances, torque limits (550â€“650 NÂ·m), and periodic USFD ultrasonic scans prevents derailment hazards.";
+        let riskText = "Strict adherence to dimensional tolerances, torque limits (550–650 N·m), and periodic USFD ultrasonic scans prevents derailment hazards.";
         let riskBadge = "SAFETY CRITICAL";
         let riskSubnote = "Mandatory maintenance compliance governed by IRPWM 2024 Chapter 4 and IRS specifications.";
 
@@ -5853,7 +5853,7 @@
           hierarchyBtnHtml = `
             <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
               <button class="btn" style="width: 100%; justify-content: center; font-size: 11px; font-weight: 700; background: ${isExp ? 'rgba(255,51,102,0.15)' : 'rgba(0,240,255,0.15)'}; border-color: ${isExp ? 'var(--accent-red)' : 'var(--accent-cyan)'}; color: ${isExp ? 'var(--accent-red)' : 'var(--accent-cyan)'};" onclick="window.toggleNodeExpansion('${data.id}')">
-                <span>${isExp ? 'âŠŸ Collapse ' + childCount + ' Child Entities in 3D' : 'âŠž Expand ' + childCount + ' Child Entities in 3D'}</span>
+                <span>${isExp ? '⊟ Collapse ' + childCount + ' Child Entities in 3D' : '⊞ Expand ' + childCount + ' Child Entities in 3D'}</span>
               </button>
             </div>
           `;
@@ -5863,9 +5863,9 @@
           <!-- Section 1: Entity Identity & Classification -->
           <div class="drawing-section">
             <div class="drawing-section-header">
-              <div class="drawing-section-title"><span>ðŸ·ï¸</span> Entity Identity & Classification</div>
+              <div class="drawing-section-title"><span>🏷️</span> Entity Identity & Classification</div>
               <span class="drawing-section-badge" style="color: ${data.color || 'var(--accent-cyan)'}; border-color: ${data.color || 'var(--accent-cyan)'};">
-                ${data.type} Â· ${(DOMAIN_METADATA[data.domain]?.label || data.domain).toUpperCase()}
+                ${data.type} · ${(DOMAIN_METADATA[data.domain]?.label || data.domain).toUpperCase()}
               </span>
             </div>
             <div class="drawing-meta-grid">
@@ -5885,7 +5885,7 @@
               </div>
               <div class="drawing-meta-item">
                 <div class="drawing-meta-label">Audit Confidence</div>
-                <div class="drawing-meta-value" style="color: var(--accent-green); font-family: var(--font-mono);">âœ“ 100% CANONICAL</div>
+                <div class="drawing-meta-value" style="color: var(--accent-green); font-family: var(--font-mono);">✓ 100% CANONICAL</div>
               </div>
               <div class="drawing-meta-item">
                 <div class="drawing-meta-label">${assetTwinLabel}</div>
@@ -5899,7 +5899,7 @@
           ${specEntries.length > 0 ? `
             <div class="drawing-section">
               <div class="drawing-section-header">
-                <div class="drawing-section-title"><span>âš™ï¸</span> Technical Specifications & Parameters</div>
+                <div class="drawing-section-title"><span>⚙️</span> Technical Specifications & Parameters</div>
                 <span class="drawing-section-badge">${specEntries.length} PARAMETERS</span>
               </div>
               <div class="drawing-meta-grid">
@@ -5916,7 +5916,7 @@
           <!-- Section 3: Engineering Function & Statutory Scope -->
           <div class="drawing-section">
             <div class="drawing-section-header">
-              <div class="drawing-section-title"><span>ðŸ“–</span> Engineering Function & Scope</div>
+              <div class="drawing-section-title"><span>📖</span> Engineering Function & Scope</div>
               <span class="drawing-section-badge">PURPOSE</span>
             </div>
             <div style="font-size: 11.5px; line-height: 1.5; color: #e0e8f8; background: rgba(10, 16, 28, 0.6); padding: 8px 10px; border-radius: 5px; border-left: 3px solid var(--accent-cyan);">
@@ -5927,7 +5927,7 @@
           <!-- Section 4: Connected Kinematics & Graph Lineage -->
           <div class="drawing-section">
             <div class="drawing-section-header">
-              <div class="drawing-section-title"><span>ðŸ”—</span> Connected Graph Lineage (${outEdges.length + inEdges.length} Hops)</div>
+              <div class="drawing-section-title"><span>🔗</span> Connected Graph Lineage (${outEdges.length + inEdges.length} Hops)</div>
               <span class="drawing-section-badge">INTERCONNECTED</span>
             </div>
             ${edgesHtml}
@@ -5936,7 +5936,7 @@
           <!-- Section 5: Safety Risk & Preventative Safeguards -->
           <div class="drawing-section">
             <div class="drawing-section-header">
-              <div class="drawing-section-title"><span>âš ï¸</span> ${riskHeader}</div>
+              <div class="drawing-section-title"><span>⚠️</span> ${riskHeader}</div>
               <span class="drawing-section-badge" style="color: var(--accent-red); border-color: rgba(255, 51, 102, 0.3);">${riskBadge}</span>
             </div>
             <div style="background: rgba(255, 51, 102, 0.08); border-left: 3px solid var(--accent-red); padding: 8px 10px; border-radius: 0 5px 5px 0; font-size: 11px; line-height: 1.45; color: #f8d7da;">
@@ -5950,14 +5950,14 @@
           <!-- Section 6: Grounded Visual Blueprint Evidence -->
           <div class="drawing-section">
             <div class="drawing-section-header">
-              <div class="drawing-section-title"><span>ðŸ“¸</span> Grounded Visual Blueprint Evidence</div>
+              <div class="drawing-section-title"><span>📸</span> Grounded Visual Blueprint Evidence</div>
               <span class="drawing-section-badge">SOURCE CROP</span>
             </div>
             <div style="background: rgba(10, 16, 28, 0.8); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 6px; cursor: pointer;" onclick="openFullscreenBlueprint('${cropImg}', '${data.label}: Source Evidence')">
               <img src="${cropImg}" style="width: 100%; height: 90px; object-fit: cover; border-radius: 4px;" alt="Blueprint Evidence">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; font-size: 9.5px;">
                 <span style="color: var(--accent-cyan); font-weight: 600;">Region: ${cropRegion}</span>
-                <span style="color: var(--text-dim);">ðŸ” Click to Expand</span>
+                <span style="color: var(--text-dim);">🔍 Click to Expand</span>
               </div>
             </div>
           </div>
@@ -5983,7 +5983,7 @@
           <div class="timeline-node-card ${isLatest ? 'active-rev' : ''}">
             <div class="timeline-rev-title">
               <span style="color: ${isLatest ? 'var(--accent-green)' : 'var(--accent-cyan)'}; font-family: var(--font-mono);">
-                ALT ${item.alt || (13 - idx)} ${isLatest ? 'â˜… LATEST RELEASED' : ''}
+                ALT ${item.alt || (13 - idx)} ${isLatest ? '★ LATEST RELEASED' : ''}
               </span>
               <span style="color: var(--text-dim); font-size: 10px;">${item.date || ''}</span>
             </div>
@@ -6013,20 +6013,20 @@
         <!-- Fast Action Bar -->
         <div style="display: flex; gap: 8px;">
           <button class="btn btn-primary" onclick="focusNodeIn3D('${data.id}')" style="flex: 1; justify-content: center; gap: 6px;">
-            <span>ðŸŒ</span> Focus 3D Twin
+            <span>🌐</span> Focus 3D Twin
           </button>
           <button class="btn" onclick="switchDrawerTab('notes')" style="padding: 6px 12px; font-size: 11px;">
-            <span>ðŸ“‘</span> 28 Notes
+            <span>📑</span> 28 Notes
           </button>
           <button class="btn" onclick="switchDrawerTab('tables')" style="padding: 6px 12px; font-size: 11px;">
-            <span>ðŸ“¦</span> LIST-A BOM
+            <span>📦</span> LIST-A BOM
           </button>
         </div>
 
         <!-- Section 1: Drawing Identity -->
         <div class="drawing-section">
           <div class="drawing-section-header">
-            <div class="drawing-section-title"><span>ðŸ“</span> Section 1: Drawing Identity</div>
+            <div class="drawing-section-title"><span>📐</span> Section 1: Drawing Identity</div>
             <span class="drawing-section-badge">CANONICAL ASSET</span>
           </div>
           <div class="drawing-meta-grid">
@@ -6056,7 +6056,7 @@
         <!-- Section 2: Engineering Applicability -->
         <div class="drawing-section">
           <div class="drawing-section-header">
-            <div class="drawing-section-title"><span>ðŸ›¤ï¸</span> Section 2: Engineering Applicability</div>
+            <div class="drawing-section-title"><span>🛤️</span> Section 2: Engineering Applicability</div>
             <span class="drawing-section-badge">BG TRACKWORK</span>
           </div>
           <div class="drawing-meta-grid">
@@ -6078,7 +6078,7 @@
             </div>
             <div class="drawing-meta-item" style="grid-column: span 2;">
               <div class="drawing-meta-label">Operating Speed Potential</div>
-              <div class="drawing-meta-value" style="color: var(--accent-green);">50 km/h on Loop line Â· Up to 160 km/h on Main line</div>
+              <div class="drawing-meta-value" style="color: var(--accent-green);">50 km/h on Loop line · Up to 160 km/h on Main line</div>
             </div>
           </div>
         </div>
@@ -6086,8 +6086,8 @@
         <!-- Section 3: Revision Lineage & Alteration Timeline -->
         <div class="drawing-section">
           <div class="drawing-section-header">
-            <div class="drawing-section-title"><span>â³</span> Section 3: Revision Lineage & Alteration Timeline</div>
-            <span class="drawing-section-badge">ALT 10 âž” ALT 13</span>
+            <div class="drawing-section-title"><span>⏳</span> Section 3: Revision Lineage & Alteration Timeline</div>
+            <span class="drawing-section-badge">ALT 10 ➔ ALT 13</span>
           </div>
           <div class="drawing-timeline">
             ${altTimelineHtml}
@@ -6097,7 +6097,7 @@
         <!-- Section 4: Key Engineering Directives -->
         <div class="drawing-section">
           <div class="drawing-section-header">
-            <div class="drawing-section-title"><span>ðŸ”¬</span> Section 4: Key Engineering Directives</div>
+            <div class="drawing-section-title"><span>🔬</span> Section 4: Key Engineering Directives</div>
             <span class="drawing-section-badge">28 VERBATIM NOTES</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
@@ -6105,10 +6105,10 @@
               <strong style="color: var(--accent-cyan);">Note 1:</strong> Asymmetric tongue rail profile (ZU-1-60 / 60E1A1) with machined web and flange for rigid housing against 60 kg stock rail.
             </div>
             <div style="background: rgba(10, 16, 28, 0.6); border-left: 3px solid var(--accent-yellow); border-radius: 0 5px 5px 0; padding: 6px 10px; font-size: 10.5px;">
-              <strong style="color: var(--accent-yellow);">Note 2:</strong> 1 in 12 layout with 441.36 m switch radius and 0Â° 20' 00" entry angle for passenger ride index enhancement.
+              <strong style="color: var(--accent-yellow);">Note 2:</strong> 1 in 12 layout with 441.36 m switch radius and 0° 20' 00" entry angle for passenger ride index enhancement.
             </div>
             <div style="background: rgba(10, 16, 28, 0.6); border-left: 3px solid var(--accent-green); border-radius: 0 5px 5px 0; padding: 6px 10px; font-size: 10.5px;">
-              <strong style="color: var(--accent-green);">Note 10:</strong> Mandatory throw of switch at toe 115 mm (Â±3 mm); clearance at junction of rail heads 60 mm.
+              <strong style="color: var(--accent-green);">Note 10:</strong> Mandatory throw of switch at toe 115 mm (±3 mm); clearance at junction of rail heads 60 mm.
             </div>
             <div style="background: rgba(10, 16, 28, 0.6); border-left: 3px solid var(--accent-purple); border-radius: 0 5px 5px 0; padding: 6px 10px; font-size: 10.5px;">
               <strong style="color: var(--accent-purple);">Note 25:</strong> Anti-wear and hardening treatment on running surface of tongue and stock rails to IRS:T-12 (320-360 HB).
@@ -6118,14 +6118,14 @@
             </div>
           </div>
           <button class="btn" onclick="switchDrawerTab('notes')" style="margin-top: 4px; font-size: 10.5px; justify-content: center; gap: 6px;">
-            <span>ðŸ“‘</span> View Complete Catalog of 28 Verbatim Notes âž”
+            <span>📑</span> View Complete Catalog of 28 Verbatim Notes ➔
           </button>
         </div>
 
         <!-- Section 5: Dimensions & LIST-A Spares -->
         <div class="drawing-section">
           <div class="drawing-section-header">
-            <div class="drawing-section-title"><span>ðŸ“</span> Section 5: Dimensions & LIST-A Spares</div>
+            <div class="drawing-section-title"><span>📏</span> Section 5: Dimensions & LIST-A Spares</div>
             <span class="drawing-section-badge">31 BOM ITEMS</span>
           </div>
           <div class="drawing-meta-grid">
@@ -6139,7 +6139,7 @@
             </div>
             <div class="drawing-meta-item">
               <div class="drawing-meta-label">Switch Entry Angle</div>
-              <div class="drawing-meta-value">0Â° 20' 00"</div>
+              <div class="drawing-meta-value">0° 20' 00"</div>
             </div>
             <div class="drawing-meta-item">
               <div class="drawing-meta-label">Nominal Throw</div>
@@ -6156,37 +6156,37 @@
             </ul>
           </div>
           <button class="btn" onclick="switchDrawerTab('tables')" style="margin-top: 4px; font-size: 10.5px; justify-content: center; gap: 6px;">
-            <span>ðŸ“¦</span> Inspect Full Bill of Materials (LIST-A) âž”
+            <span>📦</span> Inspect Full Bill of Materials (LIST-A) ➔
           </button>
         </div>
 
         <!-- Section 6: Governing Codes & Standards -->
         <div class="drawing-section">
           <div class="drawing-section-header">
-            <div class="drawing-section-title"><span>ðŸ“œ</span> Section 6: Governing Codes & Standards</div>
+            <div class="drawing-section-title"><span>📜</span> Section 6: Governing Codes & Standards</div>
             <span class="drawing-section-badge">STATUTORY</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
             <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(10, 16, 28, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 5px; padding: 6px 10px; cursor: pointer;" onclick="window.selectGraphNode('doc_irpwm_2024')">
               <div>
                 <div style="font-size: 11px; font-weight: 700; color: var(--accent-pink);">IRPWM:2024 (ACS-14)</div>
-                <div style="font-size: 9.5px; color: var(--text-muted);">Indian Railways Permanent Way Manual Â· Chapter 4 (Points & Crossings)</div>
+                <div style="font-size: 9.5px; color: var(--text-muted);">Indian Railways Permanent Way Manual · Chapter 4 (Points & Crossings)</div>
               </div>
-              <span style="color: var(--accent-cyan); font-size: 11px;">Inspect âž”</span>
+              <span style="color: var(--accent-cyan); font-size: 11px;">Inspect ➔</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(10, 16, 28, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 5px; padding: 6px 10px; cursor: pointer;" onclick="window.selectGraphNode('std_irst10')">
               <div>
                 <div style="font-size: 11px; font-weight: 700; color: var(--accent-purple);">IRS:T-10</div>
                 <div style="font-size: 9.5px; color: var(--text-muted);">Indian Railway Standard Specification for Turnout Components</div>
               </div>
-              <span style="color: var(--accent-cyan); font-size: 11px;">Inspect âž”</span>
+              <span style="color: var(--accent-cyan); font-size: 11px;">Inspect ➔</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(10, 16, 28, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 5px; padding: 6px 10px; cursor: pointer;" onclick="window.selectGraphNode('std_irst12')">
               <div>
                 <div style="font-size: 11px; font-weight: 700; color: var(--accent-cyan);">IRS:T-12</div>
                 <div style="font-size: 9.5px; color: var(--text-muted);">Standard for Switch Rails, Asymmetric Profiles & Metallurgy</div>
               </div>
-              <span style="color: var(--accent-cyan); font-size: 11px;">Inspect âž”</span>
+              <span style="color: var(--accent-cyan); font-size: 11px;">Inspect ➔</span>
             </div>
           </div>
         </div>
@@ -6194,20 +6194,20 @@
         <!-- Section 7: Inspection & Maintenance SOPs -->
         <div class="drawing-section">
           <div class="drawing-section-header">
-            <div class="drawing-section-title"><span>ðŸ› ï¸</span> Section 7: Inspection & Maintenance SOPs</div>
+            <div class="drawing-section-title"><span>🛠️</span> Section 7: Inspection & Maintenance SOPs</div>
             <span class="drawing-section-badge">SAFETY CRITICAL</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px; font-size: 10.5px;">
             <div style="background: rgba(10, 16, 28, 0.6); border-radius: 5px; padding: 6px 8px;">
-              <div style="color: var(--accent-yellow); font-weight: 700; margin-bottom: 2px;">ðŸ“ Tongue Rail Housed Gap Tolerances</div>
+              <div style="color: var(--accent-yellow); font-weight: 700; margin-bottom: 2px;">📏 Tongue Rail Housed Gap Tolerances</div>
               <div style="color: var(--text-muted);">Gap between toe of tongue rail and stock rail must not exceed <strong>0.5 mm</strong> when clamped / housed.</div>
             </div>
             <div style="background: rgba(10, 16, 28, 0.6); border-radius: 5px; padding: 6px 8px;">
-              <div style="color: var(--accent-red); font-weight: 700; margin-bottom: 2px;">âš ï¸ Maximum Permissible Rail Wear Limits</div>
-              <div style="color: var(--text-muted);">Vertical wear: max <strong>6.0 mm</strong> Â· Lateral wear: max <strong>8.0 mm</strong>. Exceeding mandates immediate renewal.</div>
+              <div style="color: var(--accent-red); font-weight: 700; margin-bottom: 2px;">⚠️ Maximum Permissible Rail Wear Limits</div>
+              <div style="color: var(--text-muted);">Vertical wear: max <strong>6.0 mm</strong> · Lateral wear: max <strong>8.0 mm</strong>. Exceeding mandates immediate renewal.</div>
             </div>
             <div style="background: rgba(10, 16, 28, 0.6); border-radius: 5px; padding: 6px 8px;">
-              <div style="color: var(--accent-green); font-weight: 700; margin-bottom: 2px;">âš™ï¸ SSD (Spring Setting Device) Setting</div>
+              <div style="color: var(--accent-green); font-weight: 700; margin-bottom: 2px;">⚙️ SSD (Spring Setting Device) Setting</div>
               <div style="color: var(--text-muted);">Maintain <strong>60 mm</strong> opening at 2nd drive rod (sleeper 13) to ensure full trailing without gap.</div>
             </div>
           </div>
@@ -6216,21 +6216,21 @@
         <!-- Section 8: Companion Drawings & Assemblies -->
         <div class="drawing-section">
           <div class="drawing-section-header">
-            <div class="drawing-section-title"><span>ðŸ”—</span> Section 8: Companion Drawings & Assemblies</div>
+            <div class="drawing-section-title"><span>🔗</span> Section 8: Companion Drawings & Assemblies</div>
             <span class="drawing-section-badge">MATING ASSETS</span>
           </div>
           <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
             <button class="btn" style="font-size: 10px; justify-content: flex-start;" onclick="window.selectGraphNode('drg_6154')">
-              <span>ðŸ“</span> RDSO/T-6154 (1:12 Turnout)
+              <span>📐</span> RDSO/T-6154 (1:12 Turnout)
             </button>
             <button class="btn" style="font-size: 10px; justify-content: flex-start;" onclick="window.selectGraphNode('drg_6216')">
-              <span>âš™ï¸</span> RDSO/T-6216 (SSD Assembly)
+              <span>⚙️</span> RDSO/T-6216 (SSD Assembly)
             </button>
             <button class="btn" style="font-size: 10px; justify-content: flex-start;" onclick="window.selectGraphNode('drg_6280')">
-              <span>ðŸ›¤ï¸</span> RDSO/T-6280 (CMS Crossing)
+              <span>🛤️</span> RDSO/T-6280 (CMS Crossing)
             </button>
             <button class="btn" style="font-size: 10px; justify-content: flex-start;" onclick="window.selectGraphNode('drg_6275')">
-              <span>ðŸ”©</span> RDSO/T-6275 (Check Rails)
+              <span>🔩</span> RDSO/T-6275 (Check Rails)
             </button>
           </div>
         </div>
@@ -6238,14 +6238,14 @@
         <!-- Section 9: Verified Blueprint Visual Evidence -->
         <div class="drawing-section">
           <div class="drawing-section-header">
-            <div class="drawing-section-title"><span>ðŸ“¸</span> Section 9: Verified Blueprint Visual Evidence</div>
+            <div class="drawing-section-title"><span>📸</span> Section 9: Verified Blueprint Visual Evidence</div>
             <span class="drawing-section-badge">HIGH RES CROPS</span>
           </div>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
             ${cropGalleryHtml}
           </div>
           <button class="btn" onclick="switchDrawerTab('blueprint')" style="margin-top: 4px; font-size: 10.5px; justify-content: center; gap: 6px;">
-            <span>ðŸ”</span> Open Blueprint View with Crop Switcher âž”
+            <span>🔍</span> Open Blueprint View with Crop Switcher ➔
           </button>
         </div>
       `;
@@ -6312,7 +6312,7 @@
         id: "conf_fastener_upgrade",
         title: "Elastic Fastener Upgrade: ERC Mk-III vs ERC Mk-V",
         domain: "Permanent Way Fastenings",
-        historical_value: "Elastic Rail Clips Mk-III with GFN Liners at Turnout Sleepers 03â€“13",
+        historical_value: "Elastic Rail Clips Mk-III with GFN Liners at Turnout Sleepers 03–13",
         statutory_value: "ERC Mk-V with Metal Liners (RDSO/T-5919) producing >= 1200 kg toe load",
         precedence_rule: "High-Axle-Load Corridor Mandate (Alt 10 standardized Mk-V on all PSC switches).",
         status: "RESOLVED",
@@ -6467,11 +6467,11 @@
               </div>
               <span style="font-size: 9.5px; color: var(--text-dim); font-family: var(--font-mono);">RDSO/T-6155</span>
             </div>
-            ${it.changeNote ? `<div style="font-size: 10.5px; color: var(--accent-yellow); background: rgba(255, 214, 10, 0.08); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255, 214, 10, 0.25);">ðŸ’¡ <strong>Engineering Rationale:</strong> ${it.changeNote}</div>` : ''}
+            ${it.changeNote ? `<div style="font-size: 10.5px; color: var(--accent-yellow); background: rgba(255, 214, 10, 0.08); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255, 214, 10, 0.25);">💡 <strong>Engineering Rationale:</strong> ${it.changeNote}</div>` : ''}
             <div style="font-size: 11px; color: var(--text-main); line-height: 1.45; margin-top: 2px;">${it.text}</div>
             <div style="display: flex; justify-content: flex-end; margin-top: 2px;">
               <button class="search-card-btn" onclick="openEvidenceModal({ title: 'Note ${it.num}', text: '${it.text.replace(/'/g, "\\'")}', dwg: 'RDSO/T-6155 Alt ${diff.targetAlt}' })">
-                <span>ðŸ”</span> Evidence & Crop
+                <span>🔍</span> Evidence & Crop
               </button>
             </div>
           </div>
@@ -6495,7 +6495,7 @@
               ${baseOptions}
             </select>
           </div>
-          <span style="color: var(--accent-cyan); font-weight: 800;">âž”</span>
+          <span style="color: var(--accent-cyan); font-weight: 800;">➔</span>
           <div class="diff-select-group">
             <span style="color: var(--text-dim); font-weight: 600;">Target Alteration:</span>
             <select id="diff-target-select" class="diff-select" onchange="renderRevisionDiffView(document.getElementById('diff-base-select').value, this.value)">
@@ -6528,12 +6528,12 @@
         <div class="drawing-section" style="border-color: rgba(247, 37, 133, 0.35);">
           <div class="drawing-section-header">
             <div class="drawing-section-title" style="color: var(--accent-pink);">
-              <span>âš¡</span> Downstream Revision Impact Analysis
+              <span>⚡</span> Downstream Revision Impact Analysis
             </div>
             <span class="impact-level-pill impact-critical">${impact.severity}</span>
           </div>
           <div style="font-size: 11.5px; font-weight: 700; color: #fff; margin-bottom: 2px;">
-            Target: ${impact.revLabel} â€” ${impact.changeTitle}
+            Target: ${impact.revLabel} — ${impact.changeTitle}
           </div>
           <div class="impact-tree-flow">
             ${hopsHtml}
@@ -6558,7 +6558,7 @@
         <div class="drawing-section">
           <div class="drawing-section-header">
             <div class="drawing-section-title">
-              <span>ðŸ“‘</span> Verbatim Notes Comparison (Alt ${diff.baseAlt} âž” Alt ${diff.targetAlt})
+              <span>📑</span> Verbatim Notes Comparison (Alt ${diff.baseAlt} ➔ Alt ${diff.targetAlt})
             </div>
             <span class="drawing-section-badge">${diff.addedCount + diff.modifiedCount} CHANGED ITEMS</span>
           </div>
@@ -6571,7 +6571,7 @@
         <div class="drawing-section">
           <div class="drawing-section-header">
             <div class="drawing-section-title">
-              <span>ðŸ“¸</span> Physical Blueprint Crop Verification
+              <span>📸</span> Physical Blueprint Crop Verification
             </div>
             <span class="drawing-section-badge">COORDINATE EVIDENCE</span>
           </div>
@@ -6615,7 +6615,7 @@
               </div>
             </div>
             <div style="font-size: 10px; background: rgba(0, 240, 255, 0.06); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 4px; padding: 6px 8px;">
-              <strong style="color: var(--accent-cyan);">âš–ï¸ Precedence Rule:</strong> ${conf.precedence_rule}
+              <strong style="color: var(--accent-cyan);">⚖️ Precedence Rule:</strong> ${conf.precedence_rule}
             </div>
             <div style="font-size: 10.5px; color: var(--text-muted); line-height: 1.4;">
               ${conf.justification}
@@ -6698,7 +6698,7 @@
     }
 
     // =========================================================================
-    // PHASE 3: ENGINEERING GRAPH INTELLIGENCE & PATH FINDER (Blueprint Â§13 & Â§14)
+    // PHASE 3: ENGINEERING GRAPH INTELLIGENCE & PATH FINDER (Blueprint §13 & §14)
     // =========================================================================
 
     function explainRelationship(fromId, toId, rel) {
@@ -6780,8 +6780,8 @@
       if (!modal || !content) return;
 
       const expl = explainRelationship(fromId, toId, rel);
-      const uMeta = DOMAIN_METADATA[expl.from.domain] || { label: expl.from.domain, icon: "ðŸ”¹" };
-      const vMeta = DOMAIN_METADATA[expl.to.domain] || { label: expl.to.domain, icon: "ðŸ”¹" };
+      const uMeta = DOMAIN_METADATA[expl.from.domain] || { label: expl.from.domain, icon: "🔹" };
+      const vMeta = DOMAIN_METADATA[expl.to.domain] || { label: expl.to.domain, icon: "🔹" };
 
       content.innerHTML = `
         <!-- Connected Entities Pair -->
@@ -6793,7 +6793,7 @@
           </div>
 
           <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 4px;">
-            <span class="path-hop-badge" style="font-size: 9.5px;">${expl.isReversed ? 'â¬…' : 'âž”'} ${expl.rel}</span>
+            <span class="path-hop-badge" style="font-size: 9.5px;">${expl.isReversed ? '⬅' : '➔'} ${expl.rel}</span>
             <span style="font-size: 9px; color: var(--text-dim); font-family: var(--font-mono);">${expl.isDirect ? 'DIRECT EDGE' : 'DERIVED HOP'}</span>
           </div>
 
@@ -6806,7 +6806,7 @@
 
         <!-- Engineering Rationale -->
         <div style="background: rgba(14, 22, 38, 0.8); border-left: 3.5px solid var(--accent-yellow); padding: 10px 12px; border-radius: 4px;">
-          <div style="font-size: 9.5px; font-weight: 700; color: var(--accent-yellow); text-transform: uppercase; margin-bottom: 3px;">ðŸ’¡ Engineering Justification & Basis:</div>
+          <div style="font-size: 9.5px; font-weight: 700; color: var(--accent-yellow); text-transform: uppercase; margin-bottom: 3px;">💡 Engineering Justification & Basis:</div>
           <div style="font-size: 11.5px; color: #f0f4fc; line-height: 1.45;">${expl.rationale}</div>
         </div>
 
@@ -6833,7 +6833,7 @@
         <!-- Modal Actions -->
         <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px;">
           <button class="btn" onclick="closeWhyConnectedModal(); selectGraphNode('${expl.from.id}');">Focus [${expl.from.label}] in 3D</button>
-          <button class="btn" style="background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan);" onclick="closeWhyConnectedModal(); renderPathFinderUI('${expl.from.id}', '${expl.to.id}');">Find All Paths âž”</button>
+          <button class="btn" style="background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan);" onclick="closeWhyConnectedModal(); renderPathFinderUI('${expl.from.id}', '${expl.to.id}');">Find All Paths ➔</button>
           <button class="btn" onclick="closeWhyConnectedModal()">Close</button>
         </div>
       `;
@@ -6952,7 +6952,7 @@
       if (!path) {
         resultHtml = `
           <div style="background: rgba(255, 51, 102, 0.1); border: 1px solid var(--border-crimson); border-radius: 6px; padding: 12px; text-align: center; margin-top: 8px;">
-            <div style="color: var(--accent-red); font-weight: 700; font-size: 12px;">âš ï¸ No Multi-Hop Path Found</div>
+            <div style="color: var(--accent-red); font-weight: 700; font-size: 12px;">⚠️ No Multi-Hop Path Found</div>
             <div style="color: var(--text-muted); font-size: 10.5px; margin-top: 4px;">No traversable edges found between selected entities within 5 hops.</div>
           </div>
         `;
@@ -6964,7 +6964,7 @@
         nodeSequence.forEach((nodeId, idx) => {
           const nodeObj = kgPhysicsNodesMap.get(nodeId) || { data: { id: nodeId, label: nodeId, domain: "component", type: "ENTITY" } };
           const data = nodeObj.data;
-          const meta = DOMAIN_METADATA[data.domain] || { label: data.domain, icon: "ðŸ”¹" };
+          const meta = DOMAIN_METADATA[data.domain] || { label: data.domain, icon: "🔹" };
 
           stepsHtml += `
             <div class="path-step-card" style="border-left: 3.5px solid ${data.color || '#00f0ff'};" onclick="selectGraphNode('${data.id}')">
@@ -6973,7 +6973,7 @@
                 <span style="font-size: 9px; color: var(--text-dim); font-family: var(--font-mono);">Step ${idx}</span>
               </div>
               <div style="font-size: 12px; font-weight: 700; color: #fff; margin-top: 2px;">${data.label}</div>
-              <div style="font-size: 9.5px; color: var(--text-muted); line-height: 1.35;">${(data.desc || '').slice(0, 110)}${data.desc && data.desc.length > 110 ? 'â€¦' : ''}</div>
+              <div style="font-size: 9.5px; color: var(--text-muted); line-height: 1.35;">${(data.desc || '').slice(0, 110)}${data.desc && data.desc.length > 110 ? '…' : ''}</div>
             </div>
           `;
 
@@ -6982,13 +6982,13 @@
             const hop = path[idx];
             const fromStep = hop.from;
             const toStep = hop.to;
-            const relText = hop.direction === 'out' ? `âž” ${hop.rel}` : `â¬… ${hop.rel}`;
+            const relText = hop.direction === 'out' ? `➔ ${hop.rel}` : `⬅ ${hop.rel}`;
             stepsHtml += `
               <div class="path-hop-row">
                 <div class="path-hop-line"></div>
                 <div class="path-hop-badge" title="Click to view full engineering explanation" onclick="openWhyConnectedModal('${fromStep}', '${toStep}', '${hop.rel}')">
                   <span>${relText}</span>
-                  <span style="font-size: 9px; color: var(--accent-yellow); margin-left: 2px;">â„¹ï¸ Why?</span>
+                  <span style="font-size: 9px; color: var(--accent-yellow); margin-left: 2px;">ℹ️ Why?</span>
                 </div>
                 <div class="path-hop-line"></div>
               </div>
@@ -7000,11 +7000,11 @@
         resultHtml = `
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
             <div>
-              <span style="font-size: 10px; color: var(--accent-green); font-weight: 700;">âœ“ PATH FOUND IN ${path.length} HOPS</span>
+              <span style="font-size: 10px; color: var(--accent-green); font-weight: 700;">✓ PATH FOUND IN ${path.length} HOPS</span>
               <div style="font-size: 9.5px; color: var(--text-dim);">${nodeSequence.length} entities in sequence</div>
             </div>
             <button class="search-card-btn" onclick="focusPathIn3D(${nodeSeqStr})">
-              <span>ðŸŽ¯</span> Focus Path in 3D
+              <span>🎯</span> Focus Path in 3D
             </button>
           </div>
           <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 6px;">
@@ -7018,24 +7018,24 @@
           <!-- Blueprint Standard Templates -->
           <div>
             <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">
-              Blueprint Standard Path Templates (Â§14):
+              Blueprint Standard Path Templates (§14):
             </div>
             <div class="path-template-pills">
               <button class="path-template-btn" onclick="loadPathTemplate('component')">
-                <div class="path-template-title"><span>ðŸ§©</span> Component Path</div>
-                <div class="path-template-sub">Rail âž” Drawing âž” IRS T-10</div>
+                <div class="path-template-title"><span>🧩</span> Component Path</div>
+                <div class="path-template-sub">Rail ➔ Drawing ➔ IRS T-10</div>
               </button>
               <button class="path-template-btn" onclick="loadPathTemplate('failure')">
-                <div class="path-template-title"><span>âš ï¸</span> Failure Path</div>
-                <div class="path-template-sub">Fatigue âž” Derailment Hazard</div>
+                <div class="path-template-title"><span>⚠️</span> Failure Path</div>
+                <div class="path-template-sub">Fatigue ➔ Derailment Hazard</div>
               </button>
               <button class="path-template-btn" onclick="loadPathTemplate('procedure')">
-                <div class="path-template-title"><span>ðŸ“‹</span> Procedure Path</div>
-                <div class="path-template-sub">USFD Code âž” SOP âž” Flaw Tester</div>
+                <div class="path-template-title"><span>📋</span> Procedure Path</div>
+                <div class="path-template-sub">USFD Code ➔ SOP ➔ Flaw Tester</div>
               </button>
               <button class="path-template-btn" onclick="loadPathTemplate('procurement')">
-                <div class="path-template-title"><span>ðŸ“¦</span> Procurement Path</div>
-                <div class="path-template-sub">T-6155 âž” Spares âž” HTS Bolt</div>
+                <div class="path-template-title"><span>📦</span> Procurement Path</div>
+                <div class="path-template-sub">T-6155 ➔ Spares ➔ HTS Bolt</div>
               </button>
             </div>
           </div>
@@ -7053,7 +7053,7 @@
               <select id="path-end-select" class="path-entity-select" onchange="renderPathFinderUI(document.getElementById('path-start-select').value, this.value)">
                 ${endOpts}
               </select>
-              <button class="path-swap-btn" title="Swap Endpoints" onclick="renderPathFinderUI(document.getElementById('path-end-select').value, document.getElementById('path-start-select').value)">â‡„</button>
+              <button class="path-swap-btn" title="Swap Endpoints" onclick="renderPathFinderUI(document.getElementById('path-end-select').value, document.getElementById('path-start-select').value)">⇄</button>
             </div>
           </div>
 
@@ -7082,7 +7082,7 @@
         id: "check_rail",
         param: "check_rail_clearance",
         title: "Check Rail Clearance at Crossing",
-        standard: "41.0 â€“ 45.0 mm (IRPWM Para 429 & IRS: T 10)",
+        standard: "41.0 – 45.0 mm (IRPWM Para 429 & IRS: T 10)",
         min: 41.0,
         max: 45.0,
         defaultVal: 43.0,
@@ -7094,7 +7094,7 @@
         id: "switch_throw",
         param: "switch_throw",
         title: "Switch Opening at Toe of Switch (Throw)",
-        standard: "160.0 â€“ 163.0 mm (RDSO/T-6155 & Note 12)",
+        standard: "160.0 – 163.0 mm (RDSO/T-6155 & Note 12)",
         min: 160.0,
         max: 163.0,
         defaultVal: 160.0,
@@ -7130,11 +7130,11 @@
         id: "bolt_torque",
         param: "bolt_torque",
         title: "Fishbolt & Tie Bar Tightening Torque",
-        standard: "550 â€“ 650 NÂ·m (IRS Standard P-Way Practice)",
+        standard: "550 – 650 N·m (IRS Standard P-Way Practice)",
         min: 550.0,
         max: 650.0,
         defaultVal: 580.0,
-        unit: "NÂ·m",
+        unit: "N·m",
         risk: "Loose bolts allow tie bar vibration and bolt hole ovalization leading to star cracks.",
         remedy: "Retorque with calibrated torque wrench and insert new split pins."
       },
@@ -7185,7 +7185,7 @@
             </div>
 
             <div style="font-size: 10px; color: var(--text-muted); line-height: 1.35; margin-top: 2px;" id="insp-msg-${it.id}">
-              ðŸ’¡ <strong>Safety Risk:</strong> ${it.risk}
+              💡 <strong>Safety Risk:</strong> ${it.risk}
             </div>
           </div>
         `;
@@ -7195,14 +7195,14 @@
         <div class="inspection-header">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="font-size: 16px;">ðŸ“‹</span>
+              <span style="font-size: 16px;">📋</span>
               <div>
                 <strong style="color: #fff; font-size: 12.5px;">Turnout Field Inspection Checklist</strong>
-                <div style="font-size: 9.5px; color: var(--text-dim);">RDSO/T-6155 (Curved Switch) Â· Broad Gauge 1676 mm Â· IRPWM 2024</div>
+                <div style="font-size: 9.5px; color: var(--text-dim);">RDSO/T-6155 (Curved Switch) · Broad Gauge 1676 mm · IRPWM 2024</div>
               </div>
             </div>
             <button class="search-card-btn" onclick="exportInspectionReport()">
-              <span>ðŸ–¨ï¸</span> Export Certificate
+              <span>🖨️</span> Export Certificate
             </button>
           </div>
 
@@ -7239,21 +7239,21 @@
 
         if (it.isCheckbox) {
           isPass = input.checked;
-          note = isPass ? "âœ“ USFD scan complete: No ultrasonic flaw echoes recorded in tongue rail." : "âš ï¸ PENDING / FLAW DETECTED: Ultrasonic inspection incomplete or flaw identified.";
+          note = isPass ? "✓ USFD scan complete: No ultrasonic flaw echoes recorded in tongue rail." : "⚠️ PENDING / FLAW DETECTED: Ultrasonic inspection incomplete or flaw identified.";
         } else {
           const val = parseFloat(input.value);
           if (isNaN(val)) {
             isPass = false;
-            note = "âš ï¸ Enter valid numeric measurement.";
+            note = "⚠️ Enter valid numeric measurement.";
           } else if (val >= it.min && val <= it.max) {
             isPass = true;
-            note = `âœ“ Value ${val} ${it.unit} is within statutory tolerance [${it.min} - ${it.max} ${it.unit}].`;
+            note = `✓ Value ${val} ${it.unit} is within statutory tolerance [${it.min} - ${it.max} ${it.unit}].`;
           } else if (val < it.min) {
             isPass = false;
-            note = `âŒ DEFECT: Measured ${val} ${it.unit} is BELOW statutory limit (min ${it.min} ${it.unit}). ${it.risk}`;
+            note = `❌ DEFECT: Measured ${val} ${it.unit} is BELOW statutory limit (min ${it.min} ${it.unit}). ${it.risk}`;
           } else {
             isPass = false;
-            note = `âŒ DEFECT: Measured ${val} ${it.unit} is ABOVE statutory limit (max ${it.max} ${it.unit}). ${it.risk}`;
+            note = `❌ DEFECT: Measured ${val} ${it.unit} is ABOVE statutory limit (max ${it.max} ${it.unit}). ${it.risk}`;
           }
         }
 
@@ -7269,7 +7269,7 @@
           card.classList.add('inspection-card-defect');
           badge.className = 'inspection-pill inspection-pill-defect';
           badge.innerText = 'DEFECT';
-          msg.innerHTML = `<span style="color: var(--accent-red); font-weight: 600;">${note}</span><div style="color: var(--accent-yellow); font-size: 9.5px; margin-top: 2px;">ðŸ”§ Remedy: ${it.remedy}</div>`;
+          msg.innerHTML = `<span style="color: var(--accent-red); font-weight: 600;">${note}</span><div style="color: var(--accent-yellow); font-size: 9.5px; margin-top: 2px;">🔧 Remedy: ${it.remedy}</div>`;
         }
       });
 
@@ -7279,10 +7279,10 @@
 
       if (label) {
         if (passCount === totalCount) {
-          label.innerText = `${passCount}/${totalCount} CHECKS PASSED (100%) Â· FIT FOR SPEED`;
+          label.innerText = `${passCount}/${totalCount} CHECKS PASSED (100%) · FIT FOR SPEED`;
           label.style.color = "var(--accent-green)";
         } else {
-          label.innerText = `${passCount}/${totalCount} CHECKS PASSED (${pct}%) Â· SPEED RESTRICTION REQUIRED`;
+          label.innerText = `${passCount}/${totalCount} CHECKS PASSED (${pct}%) · SPEED RESTRICTION REQUIRED`;
           label.style.color = "var(--accent-red)";
         }
       }
@@ -7320,7 +7320,7 @@
     }
 
     // =========================================================================
-    // TURNOUT PROCUREMENT & NOTE 28 LIST-A SPARES CALCULATOR (Blueprint Â§19)
+    // TURNOUT PROCUREMENT & NOTE 28 LIST-A SPARES CALCULATOR (Blueprint §19)
     // =========================================================================
 
     const CANONICAL_BOM_CATALOG = [
@@ -7347,7 +7347,7 @@
           baseReq: baseReq,
           buffer: buffer,
           total: total,
-          formula: item.isListA ? `${item.base} Ã— ${sets} sets + ${buffer} (10% buffer)` : `${item.base} Ã— ${sets} sets`
+          formula: item.isListA ? `${item.base} × ${sets} sets + ${buffer} (10% buffer)` : `${item.base} × ${sets} sets`
         };
       });
     }
@@ -7386,7 +7386,7 @@
           <!-- Multiplier Control Bar -->
           <div class="procurement-calc-bar">
             <div>
-              <strong style="color: #fff; font-size: 12px;">ðŸ“¦ Turnout Procurement Quantity Calculator</strong>
+              <strong style="color: #fff; font-size: 12px;">📦 Turnout Procurement Quantity Calculator</strong>
               <div style="font-size: 9.5px; color: var(--text-muted); margin-top: 2px;">
                 Note 28 Mandate: 10% statutory wear buffer automatically added for LIST-A depot spares.
               </div>
@@ -7395,7 +7395,7 @@
               <span style="font-size: 11px; color: var(--text-muted);">Sets on Order:</span>
               <input type="number" min="1" max="500" value="${sets}" class="procurement-input" id="proc-sets-input" oninput="renderProcurementCalculator(this.value)">
               <button class="search-card-btn" onclick="exportProcurementCSV()">
-                <span>ðŸ’¾</span> Export CSV
+                <span>💾</span> Export CSV
               </button>
             </div>
           </div>
@@ -7456,17 +7456,17 @@
     window.exportProcurementCSV = exportProcurementCSV;
 
     // =========================================================================
-    // PHASE 5: QUESTION INTERFACE & NATURAL LANGUAGE RETRIEVAL (Â§15, Â§16, Â§24)
+    // PHASE 5: QUESTION INTERFACE & NATURAL LANGUAGE RETRIEVAL (§15, §16, §24)
     // =========================================================================
 
     const INTENT_METADATA = {
-      TOLERANCE_INQUIRY: { label: "Tolerance Inquiry", color: "var(--accent-yellow)", icon: "ðŸŽ¯" },
-      SPECIFICATION_GOVERNANCE: { label: "Specification & Standards", color: "var(--accent-purple)", icon: "âš–ï¸" },
-      INSPECTION_PROCEDURE: { label: "Inspection & Testing", color: "var(--accent-cyan)", icon: "ðŸ“‹" },
-      FAILURE_MITIGATION: { label: "Failure & Mitigation", color: "var(--accent-red)", icon: "âš ï¸" },
-      BOM_PROCUREMENT: { label: "Procurement & Spares", color: "var(--accent-green)", icon: "ðŸ“¦" },
-      REVISION_COMPARISON: { label: "Revision Lineage", color: "var(--accent-blue)", icon: "â³" },
-      COMPONENT_LOOKUP: { label: "Component Detail", color: "#00f0ff", icon: "ðŸ§±" }
+      TOLERANCE_INQUIRY: { label: "Tolerance Inquiry", color: "var(--accent-yellow)", icon: "🎯" },
+      SPECIFICATION_GOVERNANCE: { label: "Specification & Standards", color: "var(--accent-purple)", icon: "⚖️" },
+      INSPECTION_PROCEDURE: { label: "Inspection & Testing", color: "var(--accent-cyan)", icon: "📋" },
+      FAILURE_MITIGATION: { label: "Failure & Mitigation", color: "var(--accent-red)", icon: "⚠️" },
+      BOM_PROCUREMENT: { label: "Procurement & Spares", color: "var(--accent-green)", icon: "📦" },
+      REVISION_COMPARISON: { label: "Revision Lineage", color: "var(--accent-blue)", icon: "⏳" },
+      COMPONENT_LOOKUP: { label: "Component Detail", color: "#00f0ff", icon: "🧱" }
     };
 
     const CANONICAL_QA_DATABASE = [
@@ -7505,7 +7505,7 @@
         question: "What is the standard switch throw at the toe of curved switch?",
         statement: "Standard switch opening at the toe of switch is 160 mm (-0 mm, +3 mm), giving an operating tolerance window of 160.0 to 163.0 mm per RDSO/T-6155 Note 12.",
         params: [
-          { name: "Switch Opening at Toe", nominal: "160.0 mm", limit: "160.0 â€“ 163.0 mm", unit: "mm", risk: "Under-throw (<160mm) risks facing point splitting; over-throw (>163mm) strains point motor", remedy: "Adjust drive rod stroke on point machine (S-3454)" }
+          { name: "Switch Opening at Toe", nominal: "160.0 mm", limit: "160.0 – 163.0 mm", unit: "mm", risk: "Under-throw (<160mm) risks facing point splitting; over-throw (>163mm) strains point motor", remedy: "Adjust drive rod stroke on point machine (S-3454)" }
         ],
         traversal: [
           { id: "drg_6155", label: "RDSO/T-6155 (Drawing)", universe: "drawings" },
@@ -7532,7 +7532,7 @@
         question: "What is the check rail clearance limit for 1:12 BG turnouts?",
         statement: "Check rail clearance at the crossing nose must be maintained between 41.0 mm and 45.0 mm per IRPWM Para 429 and IRS:T-10.",
         params: [
-          { name: "Check Rail Clearance", nominal: "43.0 mm", limit: "41.0 â€“ 45.0 mm", unit: "mm", risk: "Clearance <41 mm risks wheel flange striking nose; >45 mm permits unguided wheel climb", remedy: "Adjust check rail packing washers or replace check rail blocks" }
+          { name: "Check Rail Clearance", nominal: "43.0 mm", limit: "41.0 – 45.0 mm", unit: "mm", risk: "Clearance <41 mm risks wheel flange striking nose; >45 mm permits unguided wheel climb", remedy: "Adjust check rail packing washers or replace check rail blocks" }
         ],
         traversal: [
           { id: "drg_6155", label: "RDSO/T-6155 (Turnout)", universe: "drawings" },
@@ -7559,7 +7559,7 @@
         question: "Which IRS specification governs sleeper rubber pads?",
         statement: "Grooved Rubber Sole Pads (GRSP 6mm & 10mm composite) are governed by IRS:T-46:2020 and layout standard RDSO/T-6154.",
         params: [
-          { name: "GRSP Pad Thickness", nominal: "10.0 mm Composite", limit: "Â±0.5 mm", unit: "mm", risk: "Pad crushing leads to PSC sleeper rail seat attrition", remedy: "Renew with IRS:T-46 high-damping rubber pads" }
+          { name: "GRSP Pad Thickness", nominal: "10.0 mm Composite", limit: "±0.5 mm", unit: "mm", risk: "Pad crushing leads to PSC sleeper rail seat attrition", remedy: "Renew with IRS:T-46 high-damping rubber pads" }
         ],
         traversal: [
           { id: "drg_6154", label: "RDSO/T-6154 (Layout)", universe: "drawings" },
@@ -7610,7 +7610,7 @@
         intent: "INSPECTION_PROCEDURE",
         keywords: ["usfd", "ultrasonic", "scan", "testing", "flaw", "inspection", "probe", "frequency"],
         question: "What is the USFD testing protocol for curved switches?",
-        statement: "USFD testing mandates 3-Zone ultrasonic scanning of machined tongue rails (Zone 1: head, Zone 2: web, Zone 3: foot) using 70Â° and 0Â° normal probes every 3 months or 10 GMT per USFD Manual 2026 Chapter 10.",
+        statement: "USFD testing mandates 3-Zone ultrasonic scanning of machined tongue rails (Zone 1: head, Zone 2: web, Zone 3: foot) using 70° and 0° normal probes every 3 months or 10 GMT per USFD Manual 2026 Chapter 10.",
         params: [
           { name: "USFD Frequency", nominal: "3 Months / 10 GMT", limit: "Mandatory Periodic", unit: "GMT/M", risk: "Undetected internal fatigue fracture in machined web triggers sudden switch break under traffic", remedy: "Immediate joggled fishplating with emergency clamps per USFD protocol" }
         ],
@@ -7779,7 +7779,7 @@
       });
 
       if (bestMatch && bestScore >= 35) {
-        const intentMeta = INTENT_METADATA[bestMatch.intent] || { label: bestMatch.intent, color: "var(--accent-cyan)", icon: "â„¹ï¸" };
+        const intentMeta = INTENT_METADATA[bestMatch.intent] || { label: bestMatch.intent, color: "var(--accent-cyan)", icon: "ℹ️" };
         return {
           ...bestMatch,
           query: query,
@@ -7812,7 +7812,7 @@
           params: d.specs ? Object.entries(d.specs).map(([k, v]) => ({ name: k, nominal: String(v), limit: "As Specified", unit: "-", risk: "Non-compliance risks operational derailment", remedy: "Adhere to IRS design drawings" })) : [],
           traversal: [
             { id: d.id, label: d.label, universe: nodeUniverse },
-            ...outEdges.slice(0, 3).map(e => ({ id: e.to, label: `${e.rel} âž” ${e.to}`, universe: e.to.startsWith('DOC:') || e.to.startsWith('doc_') ? 'manuals' : 'drawings' }))
+            ...outEdges.slice(0, 3).map(e => ({ id: e.to, label: `${e.rel} ➔ ${e.to}`, universe: e.to.startsWith('DOC:') || e.to.startsWith('doc_') ? 'manuals' : 'drawings' }))
           ],
           primaryNodeId: d.id,
           provenance: {
@@ -7851,27 +7851,27 @@
 
       container.innerHTML = `
         <div class="qa-input-wrap">
-          <span style="font-size: 15px;">â“</span>
+          <span style="font-size: 15px;">❓</span>
           <input type="text" class="qa-input" id="qa-user-input" placeholder="Ask any railway engineering question (wear, throw, standards, alt 11, USFD, spares)..." value="${initialQuery}">
           <button class="qa-ask-btn" onclick="submitUserQuestion()">
-            <span>âš¡</span> Ask Question
+            <span>⚡</span> Ask Question
           </button>
         </div>
 
         <div class="qa-chips-section">
           <div class="qa-chips-label">
-            <span>ðŸ’¡</span> Quick Canonical Questions:
+            <span>💡</span> Quick Canonical Questions:
           </div>
           <div class="qa-chips-list">
-            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the permissible wear for 60kg tongue rails?')">ðŸŽ¯ Tongue Rail Wear Limits</button>
-            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the standard switch throw at the toe of curved switch?')">ðŸ“ Switch Throw at Toe</button>
-            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the check rail clearance limit for 1:12 BG turnouts?')">âš ï¸ Check Rail Clearance</button>
-            <button class="qa-chip" onclick="onQuestionPromptSelected('Which IRS specification governs sleeper rubber pads?')">âš–ï¸ Rubber Pad IRS Spec</button>
-            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the toe load standard for ERC Mk-V fasteners?')">ðŸ”© ERC Mk-V Clamping Load</button>
-            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the USFD testing protocol for curved switches?')">ðŸ” USFD Inspection Protocol</button>
-            <button class="qa-chip" onclick="onQuestionPromptSelected('What was changed in Alt 11 for T-6155?')">ðŸ“ Alt 11 Revision Ledger</button>
-            <button class="qa-chip" onclick="onQuestionPromptSelected('How are LIST-A spares calculated for 10 turnout sets?')">ðŸ“¦ LIST-A Spares Calculation</button>
-            <button class="qa-chip" onclick="onQuestionPromptSelected('What are the mitigations for bolt hole star cracks?')">ðŸš¨ Star Crack Mitigations</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the permissible wear for 60kg tongue rails?')">🎯 Tongue Rail Wear Limits</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the standard switch throw at the toe of curved switch?')">📏 Switch Throw at Toe</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the check rail clearance limit for 1:12 BG turnouts?')">⚠️ Check Rail Clearance</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('Which IRS specification governs sleeper rubber pads?')">⚖️ Rubber Pad IRS Spec</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the toe load standard for ERC Mk-V fasteners?')">🔩 ERC Mk-V Clamping Load</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What is the USFD testing protocol for curved switches?')">🔍 USFD Inspection Protocol</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What was changed in Alt 11 for T-6155?')">📝 Alt 11 Revision Ledger</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('How are LIST-A spares calculated for 10 turnout sets?')">📦 LIST-A Spares Calculation</button>
+            <button class="qa-chip" onclick="onQuestionPromptSelected('What are the mitigations for bolt hole star cracks?')">🚨 Star Crack Mitigations</button>
           </div>
         </div>
 
@@ -7920,7 +7920,7 @@
       } else {
         mount.innerHTML = `
           <div style="background: rgba(14,22,38,0.7); border: 1px dashed var(--border-subtle); border-radius: 8px; padding: 24px; text-align: center; color: var(--text-dim);">
-            <div style="font-size: 24px; margin-bottom: 8px;">ðŸ”</div>
+            <div style="font-size: 24px; margin-bottom: 8px;">🔍</div>
             <strong style="color: #fff; font-size: 13px;">No direct canonical answer resolved</strong>
             <div style="font-size: 11px; margin-top: 4px;">Try asking about <strong>wear limits</strong>, <strong>switch throw</strong>, <strong>USFD inspection</strong>, <strong>Alt 11 changes</strong>, or <strong>LIST-A spares</strong>.</div>
           </div>
@@ -7969,19 +7969,19 @@
         let chips = '';
         answer.traversal.forEach((node, idx) => {
           const isDrawings = node.universe === 'drawings';
-          const icon = isDrawings ? 'ðŸ“' : 'ðŸ“–';
+          const icon = isDrawings ? '📐' : '📖';
           chips += `
             <span class="qa-traversal-node" onclick="focusAnswerEntityIn3D('${node.id}')" title="Focus ${node.id} in 3D">
               <span>${icon}</span>
               <span>${node.label}</span>
             </span>
-            ${idx < answer.traversal.length - 1 ? '<span style="color: var(--text-dim); font-size: 10px;">âž”</span>' : ''}
+            ${idx < answer.traversal.length - 1 ? '<span style="color: var(--text-dim); font-size: 10px;">➔</span>' : ''}
           `;
         });
         traversalHtml = `
           <div style="display: flex; flex-direction: column; gap: 4px;">
             <div style="font-size: 9.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
-              <span>ðŸŒ Cross-Domain Knowledge Traversal Path (Blueprint Â§16.1):</span>
+              <span>🌐 Cross-Domain Knowledge Traversal Path (Blueprint §16.1):</span>
             </div>
             <div class="qa-traversal-path">${chips}</div>
           </div>
@@ -7993,7 +7993,7 @@
         conflictHtml = `
           <div class="qa-conflict-box">
             <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; margin-bottom: 2px;">
-              <span>âš–ï¸</span> <span>Revision / Standard Conflict Disclosure (Blueprint Â§16.2):</span>
+              <span>⚖️</span> <span>Revision / Standard Conflict Disclosure (Blueprint §16.2):</span>
             </div>
             <div>${answer.conflictNote}</div>
           </div>
@@ -8009,7 +8009,7 @@
                 <span class="qa-intent-badge" style="background: ${answer.intentColor}22; color: ${answer.intentColor}; border: 1px solid ${answer.intentColor}44;">
                   <span>${answer.intentIcon}</span> ${answer.intentLabel}
                 </span>
-                <span class="${statusPillClass}">âœ“ ${answer.provenance.status}</span>
+                <span class="${statusPillClass}">✓ ${answer.provenance.status}</span>
               </div>
               <h3 style="margin: 0; font-size: 14px; color: #fff; font-weight: 700;">${answer.question}</h3>
             </div>
@@ -8036,11 +8036,11 @@
           <div class="qa-provenance-card">
             <div>
               <div style="font-size: 9.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Statutory Provenance & Clause Reference</div>
-              <div style="font-weight: 700; color: #fff; margin-top: 2px;">${answer.provenance.doc} Â· <span style="color: var(--accent-cyan); font-family: var(--font-mono);">${answer.provenance.clause}</span></div>
+              <div style="font-weight: 700; color: #fff; margin-top: 2px;">${answer.provenance.doc} · <span style="color: var(--accent-cyan); font-family: var(--font-mono);">${answer.provenance.clause}</span></div>
               <div style="color: var(--text-dim); font-size: 9.5px;">${answer.provenance.chapter || answer.provenance.edition}</div>
             </div>
             <button class="search-card-btn" onclick="openFullscreenActiveBlueprint()" style="background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan);">
-              <span>ðŸ”</span> View Source Crop
+              <span>🔍</span> View Source Crop
             </button>
           </div>
 
@@ -8050,11 +8050,11 @@
           <!-- Action Toolbar -->
           <div class="qa-card-toolbar">
             <button class="btn btn-primary" onclick="focusAnswerEntityIn3D('${answer.primaryNodeId}')" style="font-size: 11px; padding: 6px 12px;">
-              <span>ðŸª</span> Focus in 3D Cosmos
+              <span>🪐</span> Focus in 3D Cosmos
             </button>
             ${answer.workflow ? `
               <button class="btn" onclick="switchDrawerTab('${answer.workflow.tab}')" style="font-size: 11px; padding: 6px 12px; border-color: var(--accent-green); color: var(--accent-green);">
-                <span>ðŸ“‹</span> ${answer.workflow.label}
+                <span>📋</span> ${answer.workflow.label}
               </button>
             ` : ''}
           </div>
@@ -8071,7 +8071,7 @@
     window.renderQuestionAnswerCard = renderQuestionAnswerCard;
 
     /* =========================================================================
-       PHASE 6: LEARNING SYSTEM & TRAINING ACADEMY (Â§17, Â§21, Â§36)
+       PHASE 6: LEARNING SYSTEM & TRAINING ACADEMY (§17, §21, §36)
        ========================================================================= */
 
     const CANONICAL_LEARNING_TRACKS = [
@@ -8079,7 +8079,7 @@
         id: "track_turnout_curved_switches",
         title: "Turnout Engineering & Curved Switches",
         doc: "RDSO/T-6155 & T-6154",
-        icon: "ðŸ›¤ï¸",
+        icon: "🛤️",
         color: "var(--accent-cyan)",
         stages: [
           {
@@ -8088,7 +8088,7 @@
             topic: "Master Layout Geometry (1 in 12, 1676 mm Gauge)",
             desc: "Master turnout parameters: 1:12 angle, 1676 mm broad gauge, 60kg rail section, and 39.992 m overall lead length.",
             targetNode: "drg_6155",
-            actionLabel: "Inspect T-6155 âž”"
+            actionLabel: "Inspect T-6155 ➔"
           },
           {
             stage: 2,
@@ -8096,7 +8096,7 @@
             topic: "Switch Assembly & Components (Thick-Web, Detail B)",
             desc: "Examine curved asymmetric tongue rails, stock rails, spherical washers, and forged tie bar connections.",
             targetNode: "comp_detailb",
-            actionLabel: "Inspect Detail 'B' âž”"
+            actionLabel: "Inspect Detail 'B' ➔"
           },
           {
             stage: 3,
@@ -8104,7 +8104,7 @@
             topic: "Fastenings & Sleepers (PSC Sleepers, ERC Mk-V, GRSP)",
             desc: "Trace wheel load path down through PSC sleepers, Elastic Rail Clips, and 10mm elastomeric pads.",
             targetNode: "std_irs_t10",
-            actionLabel: "Inspect IRS:T-10 âž”"
+            actionLabel: "Inspect IRS:T-10 ➔"
           },
           {
             stage: 4,
@@ -8112,7 +8112,7 @@
             topic: "Revision Lineage (Alt 10 vs Alt 11 vs Alt 12)",
             desc: "Analyze engineering evolution: Alt 10 baseline, Alt 11 222mm forged drop for tamping, and Alt 12 weld-free lug.",
             targetTab: "revisions",
-            actionLabel: "Compare Revisions âž”"
+            actionLabel: "Compare Revisions ➔"
           },
           {
             stage: 5,
@@ -8120,7 +8120,7 @@
             topic: "Field Tolerances & Defect Mitigations",
             desc: "Execute statutory checks: 115mm toe throw, 41-45mm check rail gap, and star crack ultrasonic remediation.",
             targetTab: "inspection",
-            actionLabel: "Launch Field Checklist âž”"
+            actionLabel: "Launch Field Checklist ➔"
           }
         ]
       },
@@ -8128,7 +8128,7 @@
         id: "track_irpwm_statutory_tolerances",
         title: "IRPWM 2024 Track Tolerances & Joint Inspection",
         doc: "IRPWM 2024 ACS-14",
-        icon: "ðŸ“œ",
+        icon: "📜",
         color: "var(--accent-green)",
         stages: [
           {
@@ -8137,15 +8137,15 @@
             topic: "Chapter 4 Turnout Classification",
             desc: "Classifications for passenger mainline, loop line turnouts, and maximum authorized turnout turnout speeds.",
             targetNode: "man_irpwm_ch4",
-            actionLabel: "Inspect IRPWM Ch 4 âž”"
+            actionLabel: "Inspect IRPWM Ch 4 ➔"
           },
           {
             stage: 2,
             name: "Understand",
             topic: "Statutory Maintenance Tolerances",
-            desc: "Master statutory operating limits for gauge (+3/-2mm), cross-level (Â±4mm), twist, and clearance.",
+            desc: "Master statutory operating limits for gauge (+3/-2mm), cross-level (±4mm), twist, and clearance.",
             targetNode: "man_irpwm_ch4",
-            actionLabel: "View Tolerances âž”"
+            actionLabel: "View Tolerances ➔"
           },
           {
             stage: 3,
@@ -8153,7 +8153,7 @@
             topic: "P-Way and S&T Joint Inspection Mandates",
             desc: "Joint inspection protocol: monthly joint walkthroughs by SSE/P-Way and SSE/Signal for motorized points.",
             targetTab: "inspection",
-            actionLabel: "Open Joint Form âž”"
+            actionLabel: "Open Joint Form ➔"
           },
           {
             stage: 4,
@@ -8161,7 +8161,7 @@
             topic: "ACS-14 Updates to Speed Regimes",
             desc: "Review newest amendments under ACS-14 for 25T heavy axle load lines and enhanced track geometry standards.",
             targetNode: "man_irpwm_ch4",
-            actionLabel: "Read ACS-14 âž”"
+            actionLabel: "Read ACS-14 ➔"
           },
           {
             stage: 5,
@@ -8169,7 +8169,7 @@
             topic: "Wear Gauging & Remedial Renewal",
             desc: "Apply 6.0 mm vertical and 8.0 mm lateral tongue rail wear thresholds to condemn or recondition in-situ.",
             targetTab: "qa",
-            actionLabel: "Q&A Diagnostics âž”"
+            actionLabel: "Q&A Diagnostics ➔"
           }
         ]
       },
@@ -8177,16 +8177,16 @@
         id: "track_usfd_flaw_detection",
         title: "USFD 2026 Flaw Detection & Diagnostics",
         doc: "USFD Manual 2026 Ch 10 & IRS:T-12",
-        icon: "ðŸ”",
+        icon: "🔍",
         color: "var(--accent-purple)",
         stages: [
           {
             stage: 1,
             name: "Identify",
-            topic: "3-Zone Ultrasonic Probe Configuration (0Â°, 70Â°, 45Â°)",
-            desc: "Probe beam orientations: 0Â° for horizontal web flaws, 70Â° for transverse head cracks, and 45Â° for bolt hole cracks.",
+            topic: "3-Zone Ultrasonic Probe Configuration (0°, 70°, 45°)",
+            desc: "Probe beam orientations: 0° for horizontal web flaws, 70° for transverse head cracks, and 45° for bolt hole cracks.",
             targetNode: "man_usfd_ch10",
-            actionLabel: "Inspect USFD Ch 10 âž”"
+            actionLabel: "Inspect USFD Ch 10 ➔"
           },
           {
             stage: 2,
@@ -8194,7 +8194,7 @@
             topic: "Echo Signal Interpretation & Defect Classifications",
             desc: "Distinguish IMR (Immediate Removal - crack >50%), OBS (Observed flaw), and REM (Remedial monitoring) defect flags.",
             targetNode: "man_usfd_ch10",
-            actionLabel: "Echo Criteria âž”"
+            actionLabel: "Echo Criteria ➔"
           },
           {
             stage: 3,
@@ -8202,7 +8202,7 @@
             topic: "Tongue Rail & Crossing Testing Protocol",
             desc: "Mandatory inspection interval: scan machined switch rails every 3 months or 10 GMT, whichever is earlier.",
             targetNode: "man_usfd_ch10",
-            actionLabel: "View Frequency âž”"
+            actionLabel: "View Frequency ➔"
           },
           {
             stage: 4,
@@ -8210,7 +8210,7 @@
             topic: "Historical Defect Thresholds vs 2026 Advanced Digital Phased Array",
             desc: "Comparison of manual A-scan calibration versus digital B-scan continuous recording and pattern matching.",
             targetTab: "conflicts",
-            actionLabel: "Standards Matrix âž”"
+            actionLabel: "Standards Matrix ➔"
           },
           {
             stage: 5,
@@ -8218,7 +8218,7 @@
             topic: "Bolt Hole Star Cracks & Gauge Corner Flaking Remediation",
             desc: "Statutory remediation: execute immediate fishplating with clamp, impose 30 km/h caution order, and replace within 3 days.",
             targetTab: "paths",
-            actionLabel: "Trace Failure Path âž”"
+            actionLabel: "Trace Failure Path ➔"
           }
         ]
       }
@@ -8260,8 +8260,8 @@
         category: "Switch Geometry",
         question: "What is the standard switch opening / throw at the toe of a curved switch?",
         hint: "Measured at first stretcher bar position between stock and tongue rail.",
-        answer: "115 Â± 3 mm (operating range: 112 mm to 118 mm; minimum permissible in field: 95 mm). Ensures adequate wheel flange passage.",
-        citation: "IRPWM 2024 Para 429 Â· IRS:T-10",
+        answer: "115 ± 3 mm (operating range: 112 mm to 118 mm; minimum permissible in field: 95 mm). Ensures adequate wheel flange passage.",
+        citation: "IRPWM 2024 Para 429 · IRS:T-10",
         doc: "IRPWM 2024",
         nodeId: "std_irs_t10"
       },
@@ -8288,9 +8288,9 @@
       {
         id: "fc7",
         category: "NDT & USFD",
-        question: "Which ultrasonic probe angle is utilized to detect 360Â° star cracks around fishbolt holes?",
+        question: "Which ultrasonic probe angle is utilized to detect 360° star cracks around fishbolt holes?",
         hint: "Uses angular shear wave reflection in rail web.",
-        answer: "45Â° shear wave probe (or tandem 45Â°/70Â° array) steered across the web to detect radial fatigue cracks originating from bolt hole edges.",
+        answer: "45° shear wave probe (or tandem 45°/70° array) steered across the web to detect radial fatigue cracks originating from bolt hole edges.",
         citation: "USFD Manual 2026 Chapter 10",
         doc: "USFD Manual",
         nodeId: "man_usfd_ch10"
@@ -8331,7 +8331,7 @@
       {
         id: "q1_check_rail",
         question: "What is the statutory check rail clearance at the nose of a 1:12 BG turnout?",
-        options: ["35.0 â€“ 38.0 mm", "41.0 â€“ 45.0 mm", "48.0 â€“ 52.0 mm", "57.0 â€“ 60.0 mm"],
+        options: ["35.0 – 38.0 mm", "41.0 – 45.0 mm", "48.0 – 52.0 mm", "57.0 – 60.0 mm"],
         correctIndex: 1,
         citation: "IRPWM 2024 Para 429 & IRS:T-10",
         domain: "Track Geometry & Layout",
@@ -8393,16 +8393,16 @@
           <!-- Academy Sub-Navigation -->
           <div class="learning-subnav">
             <button class="learning-subnav-btn ${subTab === 'tracks' ? 'active' : ''}" onclick="renderLearningModule('tracks')">
-              <span>ðŸ›¤ï¸</span> Tracks
+              <span>🛤️</span> Tracks
             </button>
             <button class="learning-subnav-btn ${subTab === 'flashcards' ? 'active' : ''}" onclick="renderLearningModule('flashcards')">
-              <span>ðŸŽ´</span> Flashcards
+              <span>🎴</span> Flashcards
             </button>
             <button class="learning-subnav-btn ${subTab === 'quiz' ? 'active' : ''}" onclick="renderLearningModule('quiz')">
-              <span>ðŸ“</span> Assessment
+              <span>📝</span> Assessment
             </button>
             <button class="learning-subnav-btn ${subTab === 'competency' ? 'active' : ''}" onclick="renderLearningModule('competency')">
-              <span>ðŸ“Š</span> Competency
+              <span>📊</span> Competency
             </button>
           </div>
 
@@ -8427,7 +8427,7 @@
       let html = `
         <div style="display: flex; flex-direction: column; gap: 10px;">
           <div style="font-size: 11px; color: var(--text-muted); line-height: 1.4; padding: 0 2px;">
-            Structured 5-stage learning progression (Â§17.3) guiding track engineers from asset identification to statutory failure diagnostics.
+            Structured 5-stage learning progression (§17.3) guiding track engineers from asset identification to statutory failure diagnostics.
           </div>
       `;
 
@@ -8474,7 +8474,7 @@
               <div style="display: flex; flex-direction: column; gap: 2px; flex: 1;">
                 <div style="display: flex; align-items: center; gap: 6px;">
                   <span class="learning-stage-badge" style="background: ${bgCol}; color: ${textCol}; border: 1px solid ${textCol}44;">
-                    STAGE ${st.stage} Â· ${st.name}
+                    STAGE ${st.stage} · ${st.name}
                   </span>
                   <span style="font-weight: 600; color: #fff; font-size: 11px;">${st.topic}</span>
                 </div>
@@ -8534,7 +8534,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
               <span class="search-card-rev-badge" style="background: ${isMastered ? 'rgba(0,255,136,0.2)' : 'rgba(255,255,255,0.06)'}; color: ${isMastered ? 'var(--accent-green)' : 'var(--text-muted)'};">
-                ${isMastered ? 'â˜… MASTERED' : 'LEARNING'}
+                ${isMastered ? '★ MASTERED' : 'LEARNING'}
               </span>
               <span style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">
                 ${window.masteredFlashcards.size} / ${total} Mastered
@@ -8550,7 +8550,7 @@
                 <div>
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                     <span class="search-card-type-badge" style="background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border: 1px solid var(--accent-cyan)44;">
-                      ðŸ·ï¸ ${card.category}
+                      🏷️ ${card.category}
                     </span>
                     <span style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">CARD #${idx + 1}</span>
                   </div>
@@ -8558,14 +8558,14 @@
                     ${card.question}
                   </div>
                   <div style="font-size: 11px; color: var(--text-muted); font-style: italic; line-height: 1.4;">
-                    ðŸ’¡ Hint: ${card.hint}
+                    💡 Hint: ${card.hint}
                   </div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
                   <span style="font-size: 10px; color: var(--accent-cyan); font-weight: 600;">
-                    ðŸ”„ Click anywhere to flip & reveal authoritative answer
+                    🔄 Click anywhere to flip & reveal authoritative answer
                   </span>
-                  <span style="font-size: 13px;">âž”</span>
+                  <span style="font-size: 13px;">➔</span>
                 </div>
               </div>
 
@@ -8574,7 +8574,7 @@
                 <div>
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                     <span class="search-card-type-badge" style="background: rgba(0, 255, 136, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green)44;">
-                      âœ“ STATUTORY ANSWER
+                      ✓ STATUTORY ANSWER
                     </span>
                     <span style="font-size: 9.5px; color: var(--accent-green); font-family: var(--font-mono); font-weight: 700;">
                       ${card.doc}
@@ -8584,16 +8584,16 @@
                     ${card.answer}
                   </div>
                   <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; padding: 6px 8px; font-size: 10px; color: var(--text-dim);">
-                    ðŸ“œ Citation: <strong style="color: #fff;">${card.citation}</strong>
+                    📜 Citation: <strong style="color: #fff;">${card.citation}</strong>
                   </div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
                   <button class="search-card-btn" onclick="event.stopPropagation(); markFlashcardMastered(${idx})" style="background: ${isMastered ? 'rgba(0,255,136,0.3)' : 'transparent'}; color: var(--accent-green); border-color: var(--accent-green); font-size: 10px; padding: 5px 10px;">
-                    ${isMastered ? 'âœ“ Mastered' : 'â˜… Mark as Mastered'}
+                    ${isMastered ? '✓ Mastered' : '★ Mark as Mastered'}
                   </button>
                   ${card.nodeId ? `
                     <button class="search-card-btn" onclick="event.stopPropagation(); inspectNodeById('${card.nodeId}')" style="font-size: 10px; padding: 5px 10px;">
-                      ðŸ” Inspect Asset
+                      🔍 Inspect Asset
                     </button>
                   ` : ''}
                 </div>
@@ -8604,13 +8604,13 @@
           <!-- Bottom Navigation Bar -->
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
             <button class="btn" onclick="prevFlashcard()" style="flex: 1; justify-content: center; font-size: 11px;">
-              â—€ Previous
+              ◀ Previous
             </button>
             <button class="btn" onclick="flipCurrentFlashcard()" style="flex: 1; justify-content: center; font-size: 11px; border-color: var(--accent-cyan); color: var(--accent-cyan);">
-              ðŸ”„ Flip 3D
+              🔄 Flip 3D
             </button>
             <button class="btn" onclick="nextFlashcard()" style="flex: 1; justify-content: center; font-size: 11px;">
-              Next â–¶
+              Next ▶
             </button>
           </div>
         </div>
@@ -8658,12 +8658,12 @@
                 Official Competency Knowledge Assessment
               </div>
               <div style="font-size: 10px; color: var(--text-muted); margin-top: 1px;">
-                5 Canonical Questions Â· 80% Statutory Passing Standard (Â§17.4)
+                5 Canonical Questions · 80% Statutory Passing Standard (§17.4)
               </div>
             </div>
             ${isSubmitted ? `
               <button class="search-card-btn" onclick="resetQuizAssessment()" style="font-size: 10px; padding: 4px 8px;">
-                ðŸ”„ Retake
+                🔄 Retake
               </button>
             ` : ''}
           </div>
@@ -8675,7 +8675,7 @@
           <div style="background: ${pass ? 'rgba(0, 255, 136, 0.12)' : 'rgba(255, 51, 102, 0.12)'}; border: 1px solid ${pass ? 'var(--accent-green)' : 'var(--accent-red)'}; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <div style="font-weight: 800; font-size: 13px; color: ${pass ? 'var(--accent-green)' : '#ff8899'};">
-                ${pass ? 'ðŸ… ASSESSMENT PASSED' : 'âš ï¸ ASSESSMENT REQUIRES RETEST'}
+                ${pass ? '🏅 ASSESSMENT PASSED' : '⚠️ ASSESSMENT REQUIRES RETEST'}
               </div>
               <div style="font-family: var(--font-mono); font-weight: 800; font-size: 14px; color: #fff;">
                 ${scoreData.score} / ${scoreData.total} (${scoreData.percentage}%)
@@ -8692,7 +8692,7 @@
           html += `
             <div style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(20, 25, 40, 0.95)); border: 2px solid #ffd700; border-radius: 8px; padding: 14px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); display: flex; flex-direction: column; gap: 8px; text-align: center;">
               <div style="font-size: 9px; font-weight: 800; letter-spacing: 1.5px; color: #ffd700; text-transform: uppercase;">
-                GOVERNMENT OF INDIA Â· MINISTRY OF RAILWAYS Â· RDSO
+                GOVERNMENT OF INDIA · MINISTRY OF RAILWAYS · RDSO
               </div>
               <div style="font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.5px;">
                 CERTIFICATE OF ENGINEERING COMPETENCY
@@ -8701,7 +8701,7 @@
                 This certifies that the candidate has verified compliance under
               </div>
               <div style="font-size: 11.5px; font-weight: 700; color: var(--accent-cyan); font-family: var(--font-mono);">
-                RDSO/T-6155 Â· IRPWM 2024 (ACS-14) Â· USFD 2026 Â· IRS:T-10 / T-46
+                RDSO/T-6155 · IRPWM 2024 (ACS-14) · USFD 2026 · IRS:T-10 / T-46
               </div>
               <div style="display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,215,0,0.3); padding-top: 8px; margin-top: 4px; font-size: 9.5px;">
                 <div>
@@ -8758,8 +8758,8 @@
             <button class="quiz-option-btn ${extraClass}" onclick="selectQuizOption(${qIdx}, ${optIdx})" ${isSubmitted ? 'disabled' : ''}>
               <span style="font-family: var(--font-mono); font-weight: 700; font-size: 10px; opacity: 0.8;">[${String.fromCharCode(65 + optIdx)}]</span>
               <span style="flex: 1;">${opt}</span>
-              ${isSubmitted && optIdx === q.correctIndex ? '<span style="color: var(--accent-green); font-weight: 800;">âœ“ Correct</span>' : ''}
-              ${isSubmitted && optIdx === userChoice && userChoice !== q.correctIndex ? '<span style="color: var(--accent-red); font-weight: 800;">âœ— Your Choice</span>' : ''}
+              ${isSubmitted && optIdx === q.correctIndex ? '<span style="color: var(--accent-green); font-weight: 800;">✓ Correct</span>' : ''}
+              ${isSubmitted && optIdx === userChoice && userChoice !== q.correctIndex ? '<span style="color: var(--accent-red); font-weight: 800;">✗ Your Choice</span>' : ''}
             </button>
           `;
         });
@@ -8769,7 +8769,7 @@
         if (isSubmitted) {
           html += `
             <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 8px 10px; font-size: 10px; color: var(--text-muted); line-height: 1.4; margin-top: 4px;">
-              ðŸ’¡ <strong style="color: #fff;">Statutory Rationale:</strong> ${q.explanation}
+              💡 <strong style="color: #fff;">Statutory Rationale:</strong> ${q.explanation}
             </div>
           `;
         }
@@ -8782,7 +8782,7 @@
         html += `
           <div style="margin-top: 4px; display: flex; flex-direction: column; gap: 6px;">
             <button class="btn btn-primary" onclick="submitQuizAssessment()" style="padding: 10px; justify-content: center; font-size: 12px; font-weight: 700;">
-              <span>âš¡</span> Submit Assessment (${answeredCount} / ${CANONICAL_QUIZ_QUESTIONS.length} Answered)
+              <span>⚡</span> Submit Assessment (${answeredCount} / ${CANONICAL_QUIZ_QUESTIONS.length} Answered)
             </button>
           </div>
         `;
@@ -8811,7 +8811,7 @@
         const submitBtn = mount.querySelector('.btn-primary');
         if (submitBtn) {
           const count = Object.keys(window.userQuizChoices).length;
-          submitBtn.innerHTML = `<span>âš¡</span> Submit Assessment (${count} / ${CANONICAL_QUIZ_QUESTIONS.length} Answered)`;
+          submitBtn.innerHTML = `<span>⚡</span> Submit Assessment (${count} / ${CANONICAL_QUIZ_QUESTIONS.length} Answered)`;
         }
       }
     }
@@ -8931,7 +8931,7 @@
                   ${status}
                 </span>
                 <span style="font-family: var(--font-mono); font-weight: 700; font-size: 11px; color: #fff;">
-                  ${d.evaluated ? `${d.score}%` : 'â€”'}
+                  ${d.evaluated ? `${d.score}%` : '—'}
                 </span>
               </div>
             </div>
@@ -8943,7 +8943,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; color: var(--text-muted); margin-top: 2px;">
               <span>Aligned Module: <strong style="color: var(--text-main);">${d.trackId}</strong></span>
               <button class="search-card-btn" onclick="renderLearningModule('tracks')" style="font-size: 9px; padding: 2px 6px;">
-                Open Track âž”
+                Open Track ➔
               </button>
             </div>
           </div>
@@ -8975,7 +8975,7 @@
     window.renderCompetencySubView = renderCompetencySubView;
 
     /* =========================================================================
-       PHASE 7: SEMANTIC INTELLIGENCE & HYBRID RETRIEVAL (Â§24, Â§36)
+       PHASE 7: SEMANTIC INTELLIGENCE & HYBRID RETRIEVAL (§24, §36)
        ========================================================================= */
 
     const SEMANTIC_SYNONYM_REGISTRY = {
@@ -9030,11 +9030,11 @@
     }
 
     function getSemanticMatchTier(lexicalScore, semanticHits) {
-      if (lexicalScore >= 1000) return { tier: 'EXACT_ID', icon: 'ðŸŽ¯', color: 'var(--accent-cyan)' };
-      if (lexicalScore >= 400) return { tier: 'LEXICAL', icon: 'ðŸ”¤', color: 'var(--accent-green)' };
-      if (semanticHits >= 2) return { tier: 'SEMANTIC', icon: 'âœ¨', color: 'var(--accent-purple)' };
-      if (semanticHits >= 1 || lexicalScore > 0) return { tier: 'HYBRID', icon: 'âš¡', color: '#ffaa00' };
-      return { tier: 'GENERAL', icon: 'ðŸ”', color: 'var(--text-muted)' };
+      if (lexicalScore >= 1000) return { tier: 'EXACT_ID', icon: '🎯', color: 'var(--accent-cyan)' };
+      if (lexicalScore >= 400) return { tier: 'LEXICAL', icon: '🔤', color: 'var(--accent-green)' };
+      if (semanticHits >= 2) return { tier: 'SEMANTIC', icon: '✨', color: 'var(--accent-purple)' };
+      if (semanticHits >= 1 || lexicalScore > 0) return { tier: 'HYBRID', icon: '⚡', color: '#ffaa00' };
+      return { tier: 'GENERAL', icon: '🔍', color: 'var(--text-muted)' };
     }
 
     function rankHybridSearchResults(query) {
@@ -9268,13 +9268,13 @@
         <div style="display: flex; flex-direction: column; gap: 8px;">
           <div class="semantic-subnav">
             <button class="semantic-subnav-btn ${subTab === 'neighbors' ? 'active' : ''}" onclick="renderSemanticModule('neighbors')">
-              <span>ðŸ”®</span> Similar Concepts
+              <span>🔮</span> Similar Concepts
             </button>
             <button class="semantic-subnav-btn ${subTab === 'taxonomy' ? 'active' : ''}" onclick="renderSemanticModule('taxonomy')">
-              <span>ðŸ§¬</span> Semantic Taxonomy
+              <span>🧬</span> Semantic Taxonomy
             </button>
             <button class="semantic-subnav-btn ${subTab === 'gaps' ? 'active' : ''}" onclick="renderSemanticModule('gaps')">
-              <span>ðŸ”</span> Knowledge Gaps
+              <span>🔍</span> Knowledge Gaps
             </button>
           </div>
           <div id="semantic-subview-mount"></div>
@@ -9314,8 +9314,8 @@
       } else {
         neighbors.forEach((nb, idx) => {
           const simColor = nb.similarity >= 70 ? 'var(--accent-green)' : nb.similarity >= 40 ? '#ffaa00' : 'var(--accent-purple)';
-          const typeIcons = { DRAWING: 'ðŸ“', COMPONENT: 'ðŸ”©', STANDARD: 'ðŸ“œ', MANUAL_CHAPTER: 'ðŸ“–', REVISION: 'ðŸ”„' };
-          const icon = typeIcons[nb.type] || 'ðŸ“¦';
+          const typeIcons = { DRAWING: '📐', COMPONENT: '🔩', STANDARD: '📜', MANUAL_CHAPTER: '📖', REVISION: '🔄' };
+          const icon = typeIcons[nb.type] || '📦';
 
           html += `
             <div class="concept-neighbor-card" onclick="inspectNodeById('${nb.id}')" style="border-left: 3px solid ${simColor};">
@@ -9324,7 +9324,7 @@
                   <span style="font-size: 14px;">${icon}</span>
                   <div>
                     <div style="font-weight: 700; color: #fff; font-size: 11.5px;">${nb.label}</div>
-                    <div style="font-size: 9.5px; color: var(--text-dim); font-family: var(--font-mono);">${nb.id} Â· ${nb.type}</div>
+                    <div style="font-size: 9.5px; color: var(--text-dim); font-family: var(--font-mono);">${nb.id} · ${nb.type}</div>
                   </div>
                 </div>
                 <div style="text-align: right;">
@@ -9335,8 +9335,8 @@
                 </div>
               </div>
               <div style="display: flex; gap: 6px; align-items: center;">
-                ${nb.isConnected ? '<span class="expansion-chip" style="background: rgba(0,255,136,0.15); color: var(--accent-green); border-color: var(--accent-green);"><span>ðŸ”—</span> Direct Edge</span>' : ''}
-                ${nb.domain ? `<span class="expansion-chip"><span>ðŸ·ï¸</span> ${nb.domain}</span>` : ''}
+                ${nb.isConnected ? '<span class="expansion-chip" style="background: rgba(0,255,136,0.15); color: var(--accent-green); border-color: var(--accent-green);"><span>🔗</span> Direct Edge</span>' : ''}
+                ${nb.domain ? `<span class="expansion-chip"><span>🏷️</span> ${nb.domain}</span>` : ''}
               </div>
             </div>
           `;
@@ -9366,7 +9366,7 @@
               Railway Engineering Semantic Taxonomy
             </div>
             <div style="font-size: 10px; color: var(--text-muted); margin-top: 1px;">
-              ${Object.keys(SEMANTIC_SYNONYM_REGISTRY).length} concept clusters Â· Bridging colloquial terminology to statutory engineering codes
+              ${Object.keys(SEMANTIC_SYNONYM_REGISTRY).length} concept clusters · Bridging colloquial terminology to statutory engineering codes
             </div>
           </div>
       `;
@@ -9388,7 +9388,7 @@
               </span>
             </div>
             <div style="display: flex; flex-wrap: wrap; gap: 4px;">
-              ${cat.keys.map(k => `<span class="expansion-chip" onclick="performSemanticSearch('${k}')" style="cursor: pointer;"><span>ðŸ”‘</span> ${k}</span>`).join('')}
+              ${cat.keys.map(k => `<span class="expansion-chip" onclick="performSemanticSearch('${k}')" style="cursor: pointer;"><span>🔑</span> ${k}</span>`).join('')}
             </div>
             <div style="display: flex; flex-wrap: wrap; gap: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.04);">
               ${Array.from(allSynonyms).slice(0, 12).map(s => `<span style="font-size: 9px; color: var(--text-dim); background: rgba(255,255,255,0.04); padding: 1px 5px; border-radius: 3px;">${s}</span>`).join('')}
@@ -9415,7 +9415,7 @@
                 Knowledge Core Completeness Index
               </div>
               <div style="font-size: 10px; color: var(--text-dim); margin-top: 2px;">
-                ${audit.total_nodes} entities scanned Â· ${audit.nodes_with_gaps} with gaps Â· ${audit.complete_nodes} fully verified
+                ${audit.total_nodes} entities scanned · ${audit.nodes_with_gaps} with gaps · ${audit.complete_nodes} fully verified
               </div>
             </div>
             <div style="text-align: right;">
@@ -9433,10 +9433,10 @@
       `;
 
       const gapTypes = [
-        { key: 'missing_evidence', label: 'Missing Evidence', icon: 'ðŸ“„', color: 'var(--accent-red)', desc: 'Entities without primary source references' },
-        { key: 'missing_tolerance', label: 'Missing Tolerances', icon: 'ðŸ“', color: '#ffaa00', desc: 'Components without quantified limits' },
-        { key: 'untracked_revisions', label: 'Untracked Revisions', icon: 'ðŸ”„', color: 'var(--accent-purple)', desc: 'Drawings without revision lineage' },
-        { key: 'orphan_nodes', label: 'Orphan Nodes', icon: 'ðŸï¸', color: 'var(--text-muted)', desc: 'Entities with zero edges' }
+        { key: 'missing_evidence', label: 'Missing Evidence', icon: '📄', color: 'var(--accent-red)', desc: 'Entities without primary source references' },
+        { key: 'missing_tolerance', label: 'Missing Tolerances', icon: '📏', color: '#ffaa00', desc: 'Components without quantified limits' },
+        { key: 'untracked_revisions', label: 'Untracked Revisions', icon: '🔄', color: 'var(--accent-purple)', desc: 'Drawings without revision lineage' },
+        { key: 'orphan_nodes', label: 'Orphan Nodes', icon: '🏝️', color: 'var(--text-muted)', desc: 'Entities with zero edges' }
       ];
 
       gapTypes.forEach(gt => {
@@ -9463,7 +9463,7 @@
         html += `
           <div>
             <div style="font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 6px;">
-              ðŸ”º High-Priority Remediation Items
+              🔺 High-Priority Remediation Items
             </div>
         `;
         highPriority.forEach(g => {
@@ -10033,8 +10033,8 @@
         if (extraTerms.length > 0) {
           const chipBar = document.createElement('div');
           chipBar.className = 'semantic-expansion-bar';
-          chipBar.innerHTML = `<span style="font-size: 9px; color: var(--text-muted); margin-right: 4px;">âœ¨ Also searching:</span>` +
-            extraTerms.slice(0, 8).map(t => `<span class="expansion-chip" onclick="performSemanticSearch('${t.replace(/'/g, "\\'")}')"><span>ðŸ”—</span> ${t}</span>`).join('') +
+          chipBar.innerHTML = `<span style="font-size: 9px; color: var(--text-muted); margin-right: 4px;">✨ Also searching:</span>` +
+            extraTerms.slice(0, 8).map(t => `<span class="expansion-chip" onclick="performSemanticSearch('${t.replace(/'/g, "\\'")}')"><span>🔗</span> ${t}</span>`).join('') +
             (extraTerms.length > 8 ? `<span style="font-size: 9px; color: var(--text-muted);">+${extraTerms.length - 8} more</span>` : '');
           dropdown.appendChild(chipBar);
         }
@@ -10046,7 +10046,7 @@
           previewCard.innerHTML = `
             <div class="search-card-header">
               <div class="search-card-title" style="color: var(--accent-cyan); font-weight: 800;">
-                <span>â“</span> <span>ENGINEERING ANSWER CARD</span>
+                <span>❓</span> <span>ENGINEERING ANSWER CARD</span>
               </div>
               <div style="display: flex; gap: 4px; align-items: center;">
                 <span class="search-card-type-badge" style="background: ${ansMatch.intentColor}22; color: ${ansMatch.intentColor}; border: 1px solid ${ansMatch.intentColor}44;">${ansMatch.intentLabel}</span>
@@ -10057,7 +10057,7 @@
               ${ansMatch.statement}
             </div>
             <div class="search-card-footer">
-              <span class="search-card-evidence"><span>ðŸ“œ</span> ${ansMatch.provenance.doc} Â· ${ansMatch.provenance.clause}</span>
+              <span class="search-card-evidence"><span>📜</span> ${ansMatch.provenance.doc} · ${ansMatch.provenance.clause}</span>
               <div class="search-card-actions">
                 <button class="search-card-btn qa-inspect-btn" style="background: var(--accent-cyan); color: #000; font-weight: 700;">View Full Answer</button>
                 <button class="search-card-btn action-3d">Focus 3D</button>
@@ -10095,15 +10095,15 @@
 
           let evidenceHtml = '';
           if (d.id.startsWith('drg_')) {
-            evidenceHtml = '<span class="search-card-evidence"><span>ðŸ“¸</span> 3 Crops Â· 28 Notes</span>';
+            evidenceHtml = '<span class="search-card-evidence"><span>📸</span> 3 Crops · 28 Notes</span>';
           } else if (d.type === 'CLAUSE') {
-            evidenceHtml = '<span class="search-card-evidence"><span>ðŸ“œ</span> IRPWM 2024 ACS-14</span>';
+            evidenceHtml = '<span class="search-card-evidence"><span>📜</span> IRPWM 2024 ACS-14</span>';
           } else {
-            evidenceHtml = '<span class="search-card-evidence"><span>ðŸ”—</span> RDSO Knowledge Core</span>';
+            evidenceHtml = '<span class="search-card-evidence"><span>🔗</span> RDSO Knowledge Core</span>';
           }
 
           const meta = hybridMeta[d.id];
-          const tierIcon = meta ? meta.matchIcon : 'ðŸ”';
+          const tierIcon = meta ? meta.matchIcon : '🔍';
           const tierLabel = meta ? meta.matchTier : '';
           const tierColor = meta ? meta.matchColor : color;
           const semHits = meta ? meta.semanticHits : 0;
@@ -10113,11 +10113,11 @@
           card.innerHTML = `
             <div class="search-card-header">
               <div class="search-card-title search-item-title">
-                <span style="color: ${color};">â—</span>
+                <span style="color: ${color};">●</span>
                 <span>${d.label}</span>
               </div>
               <div style="display: flex; gap: 4px; align-items: center;">
-                ${semHits > 0 ? `<span class="search-card-type-badge" style="background: rgba(180,80,255,0.15); color: var(--accent-purple); border: 1px solid rgba(180,80,255,0.4); font-size: 8px;">âœ¨ ${semHits} semantic</span>` : ''}
+                ${semHits > 0 ? `<span class="search-card-type-badge" style="background: rgba(180,80,255,0.15); color: var(--accent-purple); border: 1px solid rgba(180,80,255,0.4); font-size: 8px;">✨ ${semHits} semantic</span>` : ''}
                 <span class="search-card-type-badge" style="background: ${tierColor}22; color: ${tierColor}; border: 1px solid ${tierColor}44; font-size: 8px;">${tierIcon} ${tierLabel}</span>
                 ${revPill}
                 <span class="search-card-type-badge" style="background: ${color}22; color: ${color}; border: 1px solid ${color}44;">${typeName}</span>
@@ -10301,4 +10301,3 @@
   </script>
 </body>
 </html>
-
