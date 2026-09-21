@@ -958,6 +958,82 @@ def build_canonical_knowledge_graph():
                              source_dwg=manual_id, revision=manual.get("pipeline_version", "STRUCTURE"),
                              region=str(source_section), crop="", evidence_text=clause.get("source_text", "")[:500])
 
+    # Materialize authoritative source-derived Tables, Figures and Evidence.
+    # These are direct Chapter children by default; no semantic parent inference is
+    # performed here. Each node carries source-level provenance and a stable ID from
+    # the deterministic extraction stage.
+    existing_entities = {e.get("id"): e for e in entities if e.get("id")}
+    for manual in chapter_data.get("manuals", []) if os.path.exists(chapter_path) else []:
+        manual_id = manual.get("document_id")
+        for ch in manual.get("chapters", []):
+            chapter_id = ch.get("chapter_id")
+            if not chapter_id:
+                continue
+            page_range = ch.get("page_range", [])
+            for key, node_type, rel in (("tables", "TABLE", "HAS_TABLE"), ("figures", "FIGURE", "HAS_FIGURE"), ("evidence", "EVIDENCE", "HAS_EVIDENCE")):
+                for artifact in ch.get(key, []) or []:
+                    artifact_id = artifact.get("id")
+                    if not artifact_id:
+                        continue
+                    page = artifact.get("source_page", artifact.get("page_number"))
+                    node = existing_entities.get(artifact_id)
+                    if node is None:
+                        node = add_entity(
+                            artifact_id,
+                            artifact.get("title", artifact_id),
+                            node_type,
+                            "manual",
+                            "#00f5d4",
+                            artifact.get("source_text", "")[:500],
+                            {
+                                "Page": page,
+                                "Chapter": ch.get("title", ""),
+                                "Manual": manual_id,
+                                "PageRange": page_range,
+                            },
+                            x=0, y=6, z=0, alt=13,
+                        )
+                        existing_entities[artifact_id] = node
+                    source_section = artifact.get("source_section") or artifact.get("title")
+                    source_text = artifact.get("source_text", "")
+                    extraction_method = artifact.get("extraction_method", "deterministic_explicit_source_label")
+                    confidence = artifact.get("confidence", 0.90)
+                    provenance = {
+                        "source_document": manual_id,
+                        "source_page": page,
+                        "source_section": source_section,
+                        "source_text": source_text,
+                        "confidence": confidence,
+                        "extraction_method": extraction_method,
+                        "chapter_id": chapter_id,
+                        "chapter_page_range": page_range,
+                    }
+                    node.update({
+                        "domain": "manual",
+                        "universe": "manuals",
+                        "source_document": manual_id,
+                        "source_page": page,
+                        "source_section": source_section,
+                        "source_text": source_text,
+                        "confidence": confidence,
+                        "extraction_method": extraction_method,
+                        "parent_chapter_id": chapter_id,
+                        "provenance": provenance,
+                    })
+                    node["specs"] = {**(node.get("specs") or {}), "Page": page, "Chapter": ch.get("title", ""), "Manual": manual_id}
+                    if not any(e.get("from") == chapter_id and e.get("to") == artifact_id and e.get("rel") == rel for e in edges):
+                        add_edge(
+                            chapter_id,
+                            artifact_id,
+                            rel,
+                            f"Authoritative extracted {node_type.lower()} owned by chapter {ch.get('chapter_number')}",
+                            source_dwg=manual_id,
+                            revision=manual.get("pipeline_version", "STRUCTURE"),
+                            region=str(source_section),
+                            crop="",
+                            evidence_text=source_text[:500],
+                        )
+
     # Hard isolation gate: no canonical edge may cross between the Manuals and
     # Drawing universes. Future cross-domain relationships belong in a separate
     # relationship layer and must never be inferred here.
