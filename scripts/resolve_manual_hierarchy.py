@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 INTERMEDIATE = ROOT / "data" / "knowledge-graph" / "intermediate" / "all_chapters_extracted.json"
 CANONICAL = ROOT / "data" / "rdso_canonical_kg.json"
 
-NUMERIC_REF = re.compile(r"^(d+(?:.d+)*)$")
+NUMERIC_REF = re.compile(r"^(\d+(?:\.\d+)*)$")
 ANNEX_REF = re.compile(r"^(ANNEXURE|APPENDIX|SCHEDULE|TABLE)\s*[-:]?\s*([A-Z0-9IVX.-]+)$", re.I)
 
 
@@ -115,12 +115,8 @@ def node_id(prefix: str, alias: str, chapter_id: str, reference: str) -> str:
     return f"{prefix}:{alias}:{token}:SEC_{ref}"
 
 
-def main() -> int:
-    if not INTERMEDIATE.exists() or not CANONICAL.exists():
-        raise SystemExit("Missing manual intermediate or canonical KG")
-
-    intermediate = json.loads(INTERMEDIATE.read_text(encoding="utf-8"))
-    canonical = json.loads(CANONICAL.read_text(encoding="utf-8"))
+def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, list[str]]:
+    """Resolve valid authoritative source headings into an in-memory canonical KG."""
     entities = canonical.get("entities", [])
     edges = canonical.get("edges", [])
     facts = canonical.get("facts", [])
@@ -130,25 +126,14 @@ def main() -> int:
         if any(e.get("from") == frm and e.get("to") == to and e.get("rel") == rel for e in edges):
             return
         edges.append({"from": frm, "to": to, "rel": rel, "rationale": evidence[:250]})
-        fact_num = len(facts) + 1
         facts.append({
-            "id": f"fact_{fact_num:04d}",
-            "subject_id": frm,
-            "predicate": rel,
-            "object_id": to,
-            "source": {
-                "drawing_id": manual_id,
-                "revision": "MANUAL_STRUCTURE",
-                "region": region,
-                "crop": ""
-            },
-            "confidence": 1.0,
-            "status": "VERIFIED",
-            "extraction_method": "deterministic_manual_source_heading",
-            "evidence_text": evidence[:500],
+            "id": f"fact_{len(facts) + 1:04d}", "subject_id": frm, "predicate": rel, "object_id": to,
+            "source": {"drawing_id": manual_id, "revision": "MANUAL_STRUCTURE", "region": region, "crop": ""},
+            "confidence": 1.0, "status": "VERIFIED",
+            "extraction_method": "deterministic_manual_source_heading", "evidence_text": evidence[:500],
         })
 
-    errors: list[str] = []
+
     resolved_count = 0
 
     for manual in intermediate.get("manuals", []):
@@ -269,7 +254,20 @@ def main() -> int:
             print(f"  - {error}")
         return 1
     return 0
-
+def main() -> int:
+    if not INTERMEDIATE.exists() or not CANONICAL.exists():
+        raise SystemExit("Missing manual intermediate or canonical KG")
+    intermediate = json.loads(INTERMEDIATE.read_text(encoding="utf-8"))
+    canonical = json.loads(CANONICAL.read_text(encoding="utf-8"))
+    canonical, errors = resolve_canonical_graph(intermediate, canonical)
+    CANONICAL.write_text(json.dumps(canonical, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"Resolved {canonical.get('metadata', {}).get('manual_hierarchy_resolved_headings', 0)} authoritative manual headings.")
+    if errors:
+        print(f"Hierarchy warnings/errors: {len(errors)}")
+        for error in errors[:50]:
+            print(f"  - {error}")
+        return 1
+    return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())
