@@ -176,7 +176,7 @@ The machine-readable chapter row exposes both the legacy `status` field and expl
 - `ownership_status`: `CLEAN` or `BLOCKED`.
 - `ownership_issue_pages`: exact pages with registry ownership mismatches.
 
-These fields are intended for downstream QA/UI consumption without requiring consumers to reinterpret free-form warnings. The classification remains evidence-based and does not infer semantic completeness from chapter topics.
+These fields are intended for downstream QA/UI consumption without requiring consumers to reinterpret free-form warnings. Chapter `ownership_issue_pages` is derived from the same registry mismatch records used by the corpus audit, so a page-level ownership failure is attributed to every affected observed/expected chapter and contributes to that chapter's `ownership_status`, `readiness_status`, and `errors`. The classification remains evidence-based and does not infer semantic completeness from chapter topics.
 
 ## Corpus audit summary
 
