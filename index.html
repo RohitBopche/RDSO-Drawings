@@ -3334,13 +3334,32 @@
       const manualStructure = window.RDSO_MANUAL_STRUCTURE || { manuals: [] };
       const manualChapterById = new Map();
 
+      // Remove legacy manual roots so the authoritative registry is the only manual root set.
+      const authoritativeManualIds = new Set(manualStructure.manuals.map(m => m.id));
+      const legacyManualIds = new Set([
+        'doc_irpwm_2024', 'doc_usfd_2026', 'doc_atweld_2022',
+        'doc_fbw_2022', 'doc_tmm_2020', 'doc_stmm_2024'
+      ]);
+      for (let i = rawNodes.length - 1; i >= 0; i--) {
+        if (legacyManualIds.has(rawNodes[i].id) && !authoritativeManualIds.has(rawNodes[i].id)) rawNodes.splice(i, 1);
+      }
+      for (let i = rawEdges.length - 1; i >= 0; i--) {
+        if (legacyManualIds.has(rawEdges[i].from) || legacyManualIds.has(rawEdges[i].to)) rawEdges.splice(i, 1);
+      }
+
       manualStructure.manuals.forEach(m => {
-        if (!rawNodes.some(n => n.id === m.id)) {
-          rawNodes.push({
+        let manualNode = rawNodes.find(n => n.id === m.id);
+        if (!manualNode) {
+          manualNode = {
             id: m.id, label: m.title, type: 'DOCUMENT', domain: 'manual', universe: 'manuals',
             color: '#ff007f', desc: m.title, specs: { ChapterCount: m.chapters.length, Structure: 'AUTHORITATIVE' },
             x: 0, y: 24, z: 10, alt: 13
-          });
+          };
+          rawNodes.push(manualNode);
+        } else {
+          manualNode.universe = 'manuals';
+          manualNode.domain = 'manual';
+          manualNode.specs = { ...(manualNode.specs || {}), ChapterCount: m.chapters.length, Structure: 'AUTHORITATIVE' };
         }
         m.chapters.forEach((ch, idx) => {
           const chapterId = 'CHAPTER:' + m.alias + ':CH_' + String(idx + 1).padStart(2, '0');
@@ -3545,14 +3564,40 @@
       const children = parent.childrenIds
         .map(id => kgPhysicsNodesMap.get(id))
         .filter(Boolean)
-        .sort((a, b) => (nodeHierarchyMap.get(a.data.id)?.depth || 0) - (nodeHierarchyMap.get(b.data.id)?.depth || 0));
-      const count = children.length;
-      const radius = Math.max(13, Math.min(30, count * 1.55));
+        .sort((a, b) => (nodeHierarchyMap.get(a.data.id)?.order || 9999) - (nodeHierarchyMap.get(b.data.id)?.order || 9999));
+
+      // Ordered two-column TOC layout: chapter number maps directly to position.
+      const columnGap = 15;
+      const rowGap = 3.0;
+      const rows = Math.ceil(children.length / 2);
+      const startY = 18 + ((rows - 1) * rowGap) / 2;
       children.forEach((n, idx) => {
-        const angle = count === 1 ? 0 : -Math.PI / 2 + (idx / (count - 1)) * Math.PI;
-        n.targetX = parent.id === manualId ? Math.cos(angle) * radius : 0;
-        n.targetY = parent.id === manualId ? 16 : 0;
-        n.targetZ = parent.id === manualId ? Math.sin(angle) * radius : 0;
+        const row = Math.floor(idx / 2);
+        const col = idx % 2;
+        n.targetX = col === 0 ? -columnGap : columnGap;
+        n.targetY = startY - row * rowGap;
+        n.targetZ = 0;
+        n.targetVX = 0;
+        n.targetVY = 0;
+        n.targetVZ = 0;
+      });
+      isPhysicsSleeping = true;
+      isTransitioningLayout = true;
+    }
+
+    function layoutManualChapterChildren(chapterId) {
+      const parent = nodeHierarchyMap.get(chapterId);
+      if (!parent || parent.universe !== 'manuals' || parent.childrenIds.length === 0) return;
+      const children = parent.childrenIds.map(id => kgPhysicsNodesMap.get(id)).filter(Boolean);
+      const rowGap = 2.2;
+      const startY = -2 - ((children.length - 1) * rowGap) / 2;
+      children.forEach((n, idx) => {
+        n.targetX = 0;
+        n.targetY = startY - idx * rowGap;
+        n.targetZ = 5;
+        n.targetVX = 0;
+        n.targetVY = 0;
+        n.targetVZ = 0;
       });
       isPhysicsSleeping = true;
       isTransitioningLayout = true;
@@ -3587,7 +3632,8 @@
 
       updateGraphVisibility();
       if (entry.universe === 'manuals' && entry.childrenIds.length > 0) {
-        layoutManualChildren(nodeId);
+        if (entry.id.startsWith('DOC:')) layoutManualChildren(nodeId);
+        else if (entry.id.startsWith('CHAPTER:')) layoutManualChapterChildren(nodeId);
       }
       updateExpansionBillboards();
       if (currentSelectedNode) {
