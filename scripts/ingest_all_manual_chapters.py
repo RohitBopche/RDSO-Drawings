@@ -357,6 +357,38 @@ def extract_source_headings(doc_id, page_num, text):
     return headings
 
 
+def normalize_source_heading_candidates(headings):
+    """Reduce repeated/paragraph-like numbered candidates to a conservative sequence.
+
+    This is deterministic source-structure filtering. Repeated references are
+    suppressed, large plain-integer references are treated as likely page/
+    clause-number noise, and backward numeric movement is excluded.
+    """
+    ordered = []
+    seen_refs = set()
+    previous = None
+    for item in sorted(headings, key=lambda h: (int(h.get("source_page", 0)), h.get("source_text", ""))):
+        ref = str(item.get("reference", "")).strip()
+        if not ref or ref in seen_refs:
+            continue
+        parts = ref.split(".")
+        if not all(part.isdigit() for part in parts):
+            continue
+        if len(parts) == 1 and ref.isdigit() and len(ref) >= 3:
+            continue
+        title = str(item.get("title", "")).strip()
+        words = re.findall(r"[A-Za-z]+", title)
+        if len(words) < 2:
+            continue
+        numeric_ref = tuple(int(part) for part in parts)
+        if previous is not None and numeric_ref < previous:
+            continue
+        seen_refs.add(ref)
+        previous = numeric_ref
+        ordered.append(item)
+    return ordered
+
+
 def extract_clauses_from_text(doc_id, page_num, text):
     """
     Extracts individual statutory clauses from page text based on numbering schemes.
@@ -539,7 +571,7 @@ def main():
                     continue
                 seen_headings.add(key)
                 unique_headings.append(heading)
-            chapter['headings'] = unique_headings
+            chapter['headings'] = normalize_source_heading_candidates(unique_headings)
             chapter['pages_seen'] = sorted(set(chapter.get('pages_seen', [])))
             chapter['unmapped_pages'] = []
             for key in ('tables', 'figures', 'evidence'):
