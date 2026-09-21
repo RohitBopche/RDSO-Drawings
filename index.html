@@ -3392,7 +3392,7 @@
         if (!alias) return;
         Object.values(contentManual.pages || {}).forEach(page => {
           const chapterId = 'CHAPTER:' + alias + ':' + page.chapter;
-          if (!nodeHierarchyMap.has(chapterId)) return;
+          if (!rawNodes.some(n => n.id === chapterId)) return;
 
           const addContentNode = (type, ordinal, label, extra = {}) => {
             const safeOrdinal = String(ordinal + 1).padStart(2, '0');
