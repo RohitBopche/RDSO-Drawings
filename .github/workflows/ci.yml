@@ -1,4 +1,4 @@
-name: Knowledge Graph Publication Validation (Gates A-E)
+name: Knowledge Graph Publication Validation (Gates A-K)
 
 on:
   push:
@@ -14,16 +14,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: "pip"
+          cache-dependency-path: "requirements-dev.txt"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Run Unified Knowledge Graph Validation (Gates A-E)
+      - name: Run Unified Knowledge Graph Validation (Gates A-K)
         run: |
           python scripts/validate_all.py
