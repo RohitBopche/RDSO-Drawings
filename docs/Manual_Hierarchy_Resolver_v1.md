@@ -200,3 +200,7 @@ Page-gap signals remain separate:
 - ownership mismatch: observed chapter ownership differs from the authoritative registry and is a hard validation failure.
 
 These signals are not collapsed into ownership state. A Manual may therefore have a `HEALTHY` chapter while the Manual itself is `ATTENTION` because of manual-scope unmapped pages.
+
+## Readiness reason aggregation
+
+`readiness_reasons` is an ordered set of all applicable deterministic signals, not a first-match classification. A chapter may therefore expose `no_source_headings` together with `missing_pages`, or a hard `structural_or_ownership_error` together with coverage gaps. `readiness_status` still uses severity precedence: `BLOCKED` for hard errors, `ATTENTION` for non-error signals, and `HEALTHY` only when no attention signal applies. This preserves diagnostic evidence instead of hiding secondary extraction gaps.
