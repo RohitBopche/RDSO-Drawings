@@ -154,3 +154,14 @@ The chapter-content validator now compares every persisted `pages_seen` value ag
 ## Registry ownership in the corpus report
 
 The machine-readable corpus audit now embeds `registry_page_audit` under each manual. It records registered and observed page counts, exact missing/unmapped page lists, multiply-owned pages, and explicit registry-vs-observed ownership mismatches. Ownership mismatches are hard audit errors; multiply-owned pages are retained as a diagnostic signal and are valid only when the authoritative registry assigns the same page to those chapters.
+
+
+## Consolidated Manual readiness status
+
+Each chapter audit row now exposes a deterministic `status`:
+
+- `HEALTHY` — no chapter-level errors or warnings.
+- `ATTENTION` — structurally valid but has coverage/extraction warnings that should be reviewed.
+- `BLOCKED` — one or more hard validation errors prevent treating the chapter as structurally trustworthy.
+
+Each manual receives the same status based on its chapter rows plus manual-level registry ownership errors/warnings. This is a readiness signal, not a semantic quality score: it identifies where extraction or ownership requires attention without hiding the underlying evidence lists and metrics.
