@@ -97,7 +97,11 @@ def resolve_heading_sequence(headings: list[dict], page_range: list[int]) -> tup
             if h is current:
                 break
             previous = h
-        if previous and current["depth"] > previous["depth"] + 1:
+        if (
+            previous
+            and current["depth"] > previous["depth"] + 1
+            and current.get("parent_available_in_source", True)
+        ):
             errors.append(f"{current['reference']}: hierarchy depth jumps from {previous['reference']}")
 
     # Source order is authoritative; reject backward numeric references within
