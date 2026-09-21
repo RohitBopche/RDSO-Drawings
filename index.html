@@ -2629,7 +2629,7 @@
       if (!root) return;
       const existing = document.getElementById('rekg-runtime-diagnostic');
       if (existing) existing.remove();
-      if ((canonical && Array.isArray(canonical.entities) && canonical.entities.length) || !window.__REKG_BOOT_ERRORS.length) return;
+      if (canonical && Array.isArray(canonical.entities) && canonical.entities.length) return;
       const panel = document.createElement('div');
       panel.id = 'rekg-runtime-diagnostic';
       panel.style.cssText = 'position:absolute;left:18px;top:118px;z-index:2000;max-width:620px;padding:12px 14px;border:1px solid #ff3366;border-radius:8px;background:rgba(20,5,12,.96);color:#fff;font:12px/1.5 monospace;box-shadow:0 8px 30px rgba(0,0,0,.5);';
