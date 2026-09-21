@@ -220,19 +220,22 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
             # Publish chapter-attributed ownership failures into the global audit.
             errors.extend(chapter_errors)
             warnings.extend(chapter_warnings)
+            # Preserve every applicable deterministic reason rather than
+            # hiding page-gap signals behind the coverage class.
             readiness_reasons = []
             if chapter_errors:
-                readiness_status = "BLOCKED"
                 readiness_reasons.append("structural_or_ownership_error")
-            elif metrics["coverage_class"] in {"NO_SOURCE_HEADINGS", "SPARSE"}:
-                readiness_status = "ATTENTION"
+            if metrics["coverage_class"] in {"NO_SOURCE_HEADINGS", "SPARSE"}:
                 readiness_reasons.append(metrics["coverage_class"].lower())
-            elif metrics["missing_pages"]:
-                readiness_status = "ATTENTION"
+            if metrics["missing_pages"]:
                 readiness_reasons.append("missing_pages")
-            elif metrics["content_empty_pages"]:
-                readiness_status = "ATTENTION"
+            if metrics["content_empty_pages"]:
                 readiness_reasons.append("content_empty_pages")
+
+            if chapter_errors:
+                readiness_status = "BLOCKED"
+            elif readiness_reasons:
+                readiness_status = "ATTENTION"
             else:
                 readiness_status = "HEALTHY"
                 readiness_reasons.append("complete_structural_coverage")
