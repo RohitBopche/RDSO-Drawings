@@ -32,7 +32,7 @@ GATES = [
     ("Gate C: Graph Referential Integrity", [sys.executable, str(ROOT / "scripts" / "validate_graph_integrity.py")]),
     ("Gate D: Evidence Integrity", [sys.executable, str(ROOT / "scripts" / "validate_evidence_integrity.py")]),
     ("Gate E: Regression Test Suite", [sys.executable, "-m", "pytest", str(ROOT / "tests")]),
-    ("Gate F: Manuals Structure & Universe Isolation", [sys.executable, str(ROOT / "scripts" / "validate_manual_knowledge_graph.py")]),
+    ("Gate F: Manuals Structure & Universe Isolation", [sys.executable, str(ROOT / "scripts" / "validate_manual_knowledge_graph.py")]),\n    ("Gate G: Manuals Frontend Hierarchy Contract", [sys.executable, "-m", "pytest", str(ROOT / "tests" / "test_manual_frontend_contract.py")]),
 ]
 
 
