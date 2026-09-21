@@ -4295,9 +4295,9 @@
       const hEntry = nodeHierarchyMap.get(data.id);
       const childCount = hEntry ? hEntry.childrenIds.length : 0;
       const isExp = expandedNodeIds.has(data.id);
-      const sprite = createBillboardSprite(data.label, data.color, data.domain, isPrimary, childCount, isExp);
-      nodeGroup.add(sprite);
 
+      // Billboard textures are expensive. Only materialize labels for nodes
+      // visible at startup; descendants receive labels when expanded.
       let initX = data.x !== undefined ? data.x : (Math.random() - 0.5) * 24;
       const initY = data.y !== undefined ? data.y : (Math.random() - 0.5) * 16;
       const initZ = data.z !== undefined ? data.z : (Math.random() - 0.5) * 20;
@@ -4308,6 +4308,11 @@
 
       nodeGroup.position.set(initX, initY, initZ);
       nodeGroup.visible = isNodeHierarchyVisible(data.id) && (currentKnowledgeUniverse === 'combined' || currentKnowledgeUniverse === u);
+
+      const sprite = nodeGroup.visible
+        ? createBillboardSprite(data.label, data.color, data.domain, isPrimary, childCount, isExp)
+        : null;
+      if (sprite) nodeGroup.add(sprite);
       kgScene.add(nodeGroup);
 
       const nodeObj = {
@@ -4317,7 +4322,7 @@
         mesh: coreMesh,
         sprite: sprite,
         isPrimary: isPrimary,
-        hasBadge: childCount > 0,
+        hasBadge: Boolean(sprite) && childCount > 0,
         x: initX,
         y: initY,
         z: initZ,
