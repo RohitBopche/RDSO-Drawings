@@ -220,7 +220,9 @@ async function run() {
         if (manualRoots.legacyVisible.length !== 0) throw new Error(`Legacy manual roots are still visible: ${manualRoots.legacyVisible.join(', ')}`);
         console.log("[PASS] Duplicate legacy manual roots are excluded from the Manuals universe!");
 
-        console.log("[PASS] Manuals graph is chapter-first and structurally isolated!");\n\n        const chapterContent = await client.evaluate(`(() => {
+        console.log("[PASS] Manuals graph is chapter-first and structurally isolated!");
+
+        const chapterContent = await client.evaluate(`(() => {
             const chapterId = 'CHAPTER:AT_WELD:CH_09';
             const h = window.nodeHierarchyMap.get(chapterId);
             if (!h) return { error: 'AT_WELD chapter 9 missing' };
