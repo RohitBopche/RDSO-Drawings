@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 import re
@@ -66,34 +67,33 @@ def _coverage_audit(chapter: dict) -> tuple[list[str], list[str], dict]:
         metrics["coverage_class"] = "HEALTHY"
     return errors, warnings, metrics
 
-def main() -> int:
-    path = ROOT / "data" / "knowledge-graph" / "intermediate" / "all_chapters_extracted.json"
-    if not path.exists():
-        print(f"FAIL: missing {path}")
-        return 1
-
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    canonical_path = ROOT / "data" / "rdso_canonical_kg.json"
-    canonical = json.loads(canonical_path.read_text(encoding="utf-8")) if canonical_path.exists() else None
-    errors = []
-    warnings = []
-    coverage_rows = []
-    checked = 0
+def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
+    """Return a machine-readable deterministic corpus audit report."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    rows: list[dict] = []
+    manual_rows: list[dict] = []
     class_counts = {"HEALTHY": 0, "SPARSE": 0, "NO_SOURCE_HEADINGS": 0, "MALFORMED": 0}
     canonical_entities = {e.get("id"): e for e in (canonical or {}).get("entities", []) if e.get("id")}
     canonical_edges = (canonical or {}).get("edges", [])
+
     for manual in payload.get("manuals", []):
+        manual_counts = {"chapters": 0, "HEALTHY": 0, "SPARSE": 0, "NO_SOURCE_HEADINGS": 0, "MALFORMED": 0}
         for chapter in manual.get("chapters", []):
-            checked += 1
-            headings, heading_errors = resolve_heading_sequence(
-                chapter.get("headings", []) or [], chapter.get("page_range", [])
-            )
-            errors.extend(f"{chapter.get('chapter_id')}: {e}" for e in heading_errors)
+            manual_counts["chapters"] += 1
+            headings, heading_errors = resolve_heading_sequence(chapter.get("headings", []) or [], chapter.get("page_range", []))
+            chapter_errors = [f"{chapter.get('chapter_id')}: {e}" for e in heading_errors]
             cov_errors, cov_warnings, metrics = _coverage_audit(chapter)
-            errors.extend(f"{chapter.get('chapter_id')}: {e}" for e in cov_errors)
-            warnings.extend(f"{chapter.get('chapter_id')}: {w}" for w in cov_warnings)
-            coverage_rows.append((chapter.get('chapter_id'), metrics))
-            class_counts[metrics['coverage_class']] += 1
+            chapter_errors.extend(f"{chapter.get('chapter_id')}: {e}" for e in cov_errors)
+            chapter_warnings = [f"{chapter.get('chapter_id')}: {w}" for w in cov_warnings]
+            errors.extend(chapter_errors)
+            warnings.extend(chapter_warnings)
+            class_name = metrics["coverage_class"]
+            class_counts[class_name] += 1
+            manual_counts[class_name] += 1
+            row = {"manual_id": manual.get("document_id"), "manual_alias": manual.get("alias"), "chapter_id": chapter.get("chapter_id"), **metrics, "errors": chapter_errors, "warnings": chapter_warnings}
+            rows.append(row)
+
             refs = [h["reference"] for h in headings]
             if len(refs) != len(set(refs)):
                 errors.append(f"{chapter.get('chapter_id')}: duplicate references remain after resolution")
@@ -101,8 +101,7 @@ def main() -> int:
                 if heading.get("heading_depth", heading.get("depth")) != heading.get("depth"):
                     errors.append(f"{chapter.get('chapter_id')}: inconsistent heading depth for {heading['reference']}")
             if canonical is not None and not heading_errors:
-                manual = next((m for m in payload.get("manuals", []) if chapter in m.get("chapters", [])), None)
-                alias = (manual or {}).get("alias", "")
+                alias = manual.get("alias", "")
                 chapter_id = chapter.get("chapter_id")
                 token = re.sub(r"[^A-Za-z0-9_]", "_", str(chapter_id))
                 for heading in headings:
@@ -125,23 +124,47 @@ def main() -> int:
                     if not any(e.get("from") == owner and e.get("to") == hid and e.get("rel") == "HAS_SECTION" for e in canonical_edges):
                         errors.append(f"{chapter_id}: missing canonical HAS_SECTION for heading {ref}")
 
-    print(f"Checked {checked} manual chapters.")
+        manual_rows.append({"manual_id": manual.get("document_id"), "alias": manual.get("alias"), **manual_counts})
+
+    return {"schema_version": "manual_hierarchy_audit_v1", "manuals": manual_rows, "chapters": rows, "class_counts": class_counts, "checked_chapters": len(rows), "error_count": len(errors), "warning_count": len(warnings), "errors": errors, "warnings": warnings, "status": "FAIL" if errors else "PASS"}
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Validate deterministic Manual source-heading hierarchy and coverage.")
+    parser.add_argument("--json-out", type=Path, help="Write the machine-readable corpus audit report to this path.")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = _parse_args()
+    path = ROOT / "data" / "knowledge-graph" / "intermediate" / "all_chapters_extracted.json"
+    if not path.exists():
+        print(f"FAIL: missing {path}")
+        return 1
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    canonical_path = ROOT / "data" / "rdso_canonical_kg.json"
+    canonical = json.loads(canonical_path.read_text(encoding="utf-8")) if canonical_path.exists() else None
+    report = audit_manual_corpus(payload, canonical)
+    if args.json_out:
+        args.json_out.parent.mkdir(parents=True, exist_ok=True)
+        args.json_out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8")
+        print(f"Wrote corpus audit report: {args.json_out}")
+
+    print(f"Checked {report['checked_chapters']} manual chapters.")
     print("Coverage report:")
-    for chapter_id, metrics in coverage_rows:
-        print(f"  {chapter_id}: class={metrics['coverage_class']}, pages {metrics['pages_seen']}/{metrics['pages_expected']}, headings {metrics['headings']}, clauses {metrics['clauses']}, artifacts {metrics['tables']}/{metrics['figures']}/{metrics['evidence']}, first={metrics['first_heading']}, last={metrics['last_heading']}")
-    print(f"Coverage classes: {class_counts}")
-    if warnings:
-        print(f"WARN: {len(warnings)} coverage warning(s)")
-        for warning in warnings[:50]:
+    for row in report["chapters"]:
+        print(f"  {row['chapter_id']}: class={row['coverage_class']}, pages {row['pages_seen']}/{row['pages_expected']}, headings {row['headings']}, clauses {row['clauses']}, artifacts {row['tables']}/{row['figures']}/{row['evidence']}, first={row['first_heading']}, last={row['last_heading']}")
+    print(f"Coverage classes: {report['class_counts']}")
+    if report["warnings"]:
+        print(f"WARN: {report['warning_count']} coverage warning(s)")
+        for warning in report["warnings"][:50]:
             print(f"  - {warning}")
-    if errors:
-        print(f"FAIL: {len(errors)} hierarchy issue(s)")
-        for error in errors[:50]:
+    if report["errors"]:
+        print(f"FAIL: {report['error_count']} hierarchy issue(s)")
+        for error in report["errors"][:50]:
             print(f"  - {error}")
         return 1
     print("PASS: deterministic Manual source-heading hierarchy is structurally valid.")
     return 0
 
-
-if __name__ == "__main__":
-    raise SystemExit(main())
