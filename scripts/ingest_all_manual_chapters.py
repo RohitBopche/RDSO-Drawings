@@ -242,16 +242,18 @@ FAIL_RE = re.compile(r'\b(IMR|IMRW|OBS|OBSW|DFWN|DFWO|DFWR|Transverse Fissure|Ho
 COMP_RE = re.compile(r'\b(RDSO/T-6154|RDSO/T-6155|T-6154|T-6155|T-4018|T-4218|T-2496|T-8746|Tongue Rail|Stock Rail|Slide Chair|Check Rail|CMS Crossing|Switch Assembly|Stretcher Bar|Lead Curve|Turnout 1:12|Turnout 1:8\.5)\b', re.IGNORECASE)
 
 
-def get_chapter_for_page(doc_id, page_num):
+def get_chapters_for_page(doc_id, page_num):
+    """Return every authoritative chapter whose registry range contains the page."""
     reg = MANUAL_CHAPTER_REGISTRY.get(doc_id)
     if not reg:
-        return None
-    for ch in reg['chapters']:
-        if ch['page_start'] <= page_num <= ch['page_end']:
-            return ch
-    # Never silently assign out-of-range pages to the first/last chapter.
-    # Unmapped pages are handled explicitly by the caller for review.
-    return None
+        return []
+    return [ch for ch in reg['chapters'] if ch['page_start'] <= page_num <= ch['page_end']]
+
+
+def get_chapter_for_page(doc_id, page_num):
+    """Backward-compatible single-owner lookup; ingestion uses the multi-owner form."""
+    chapters = get_chapters_for_page(doc_id, page_num)
+    return chapters[0] if chapters else None
 
 
 def _stable_artifact_id(alias, kind, chapter_num, page_num, ordinal, text):
@@ -537,28 +539,27 @@ def main():
             pnum = data.get('page_number', 0)
             txt = data.get('text_content', '')
             
-            # Identify chapter
-            target_ch = get_chapter_for_page(doc_id, pnum)
-            if not target_ch:
-                # Preserve extraction gaps explicitly; never contaminate a neighboring chapter.
+            # Preserve every authoritative chapter owner, including shared boundary pages.
+            target_chapters = get_chapters_for_page(doc_id, pnum)
+            if not target_chapters:
                 manual_data[doc_id].setdefault('unmapped_pages', []).append(pnum)
                 unmapped_pages_by_doc.setdefault(doc_id, []).append(pnum)
                 continue
-                
-            ch_num = target_ch['num']
-            if pnum not in manual_data[doc_id]['chapters'][ch_num]['pages_seen']:
-                manual_data[doc_id]['chapters'][ch_num]['pages_seen'].append(pnum)
-            
-            # Extract source headings, clauses and explicitly labeled source artifacts.
-            headings = extract_source_headings(doc_id, pnum, txt)
-            manual_data[doc_id]['chapters'][ch_num]['headings'].extend(headings)
-            extracted = extract_clauses_from_text(doc_id, pnum, txt)
-            if extracted:
-                manual_data[doc_id]['chapters'][ch_num]['clauses'].extend(extracted)
-                total_clauses_extracted += len(extracted)
-            structural = extract_structural_content(doc_id, ch_num, pnum, txt)
-            for key in ('tables', 'figures', 'evidence'):
-                manual_data[doc_id]['chapters'][ch_num][key].extend(structural[key])
+
+            for target_ch in target_chapters:
+                ch_num = target_ch['num']
+                if pnum not in manual_data[doc_id]['chapters'][ch_num]['pages_seen']:
+                    manual_data[doc_id]['chapters'][ch_num]['pages_seen'].append(pnum)
+
+                headings = extract_source_headings(doc_id, pnum, txt)
+                manual_data[doc_id]['chapters'][ch_num]['headings'].extend(headings)
+                extracted = extract_clauses_from_text(doc_id, pnum, txt)
+                if extracted:
+                    manual_data[doc_id]['chapters'][ch_num]['clauses'].extend(extracted)
+                    total_clauses_extracted += len(extracted)
+                structural = extract_structural_content(doc_id, ch_num, pnum, txt)
+                for key in ('tables', 'figures', 'evidence'):
+                    manual_data[doc_id]['chapters'][ch_num][key].extend(structural[key])
 
     # Deduplicate source headings and structural artifacts while preserving source order.
     for doc_id, manual in manual_data.items():
