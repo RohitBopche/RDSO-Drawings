@@ -168,7 +168,7 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
                 hid = node_id(prefix, alias, chapter_id, ref)
                 parent_ref = heading.get("parent_heading_ref")
                 parent_id = None
-                if parent_ref:
+                if parent_ref and heading.get("parent_available_in_source", True):
                     parent_kind, _ = heading_kind(parent_ref)
                     parent_prefix = "SECTION" if parent_kind in {"SECTION", "ANNEXURE"} else "SUBSECTION"
                     parent_id = node_id(parent_prefix, alias, chapter_id, parent_ref)
