@@ -149,3 +149,8 @@ The audit also records `observed_pages_with_multiple_chapters`. A non-empty list
 ## Observed-page ownership validation
 
 The chapter-content validator now compares every persisted `pages_seen` value against the authoritative Manual Chapter Boundary Registry. Pages outside the registry are hard errors rather than being silently absorbed into a chapter. When a registry explicitly permits a shared one-page chapter boundary, observed ownership must match the registry owners exactly; unexpected multi-chapter ownership is rejected.
+
+
+## Registry ownership in the corpus report
+
+The machine-readable corpus audit now embeds `registry_page_audit` under each manual. It records registered and observed page counts, exact missing/unmapped page lists, multiply-owned pages, and explicit registry-vs-observed ownership mismatches. Ownership mismatches are hard audit errors; multiply-owned pages are retained as a diagnostic signal and are valid only when the authoritative registry assigns the same page to those chapters.
