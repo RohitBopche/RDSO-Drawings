@@ -22,7 +22,7 @@ def _coverage_audit(chapter: dict) -> tuple[list[str], list[str], dict]:
     pages = sorted(set(chapter.get("pages_seen", []) or []))
     headings = chapter.get("headings", []) or []
     refs = [h.get("reference") for h in headings if h.get("reference")]
-    malformed = [r for r in refs if not re.fullmatch(r"\\d+(?:\\.\\d+){0,2}", str(r)) and not re.match(r"^(ANNEXURE|APPENDIX|SCHEDULE|TABLE)", str(r), re.I)]
+    malformed = [r for r in refs if not re.fullmatch(r"\d+(?:\.\d+){0,2}", str(r)) and not re.match(r"^(ANNEXURE|APPENDIX|SCHEDULE|TABLE)", str(r), re.I)]
     errors = []
     warnings = []
     if page_start is not None and page_end is not None:
