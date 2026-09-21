@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from resolve_manual_hierarchy import resolve_heading_sequence, heading_kind
+from validate_manual_chapter_content import MANUAL_CHAPTER_REGISTRY
 
 
 
@@ -98,6 +99,65 @@ def _coverage_audit(chapter: dict, unmapped_pages: list[int] | None = None) -> t
         metrics["coverage_class"] = "HEALTHY"
     return errors, warnings, metrics
 
+def _audit_manual_page_ownership(manual: dict) -> tuple[list[str], list[str], dict]:
+    """Audit observed page ownership against the authoritative registry."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    doc_id = manual.get("document_id")
+    registry = MANUAL_CHAPTER_REGISTRY.get(doc_id)
+    if not registry:
+        return [f"{doc_id}: no authoritative registry entry"], warnings, {}
+
+    chapters = manual.get("chapters", []) or []
+    owners: dict[int, list[str]] = {}
+    for chapter in chapters:
+        chapter_id = chapter.get("chapter_id")
+        for page in chapter.get("pages_seen", []) or []:
+            if isinstance(page, int):
+                owners.setdefault(page, []).append(str(chapter_id))
+
+    expected_owners: dict[int, set[str]] = {}
+    for spec in registry.get("chapters", []):
+        chapter_id = f"CHAPTER:{registry['alias']}:CH_{spec['num']:02d}"
+        for page in range(spec["page_start"], spec["page_end"] + 1):
+            expected_owners.setdefault(page, set()).add(chapter_id)
+
+    observed_pages = set(owners)
+    registered_pages = set(expected_owners)
+    unmapped = sorted(observed_pages - registered_pages)
+    missing = sorted(registered_pages - observed_pages)
+    multiple = sorted(page for page, page_owners in owners.items() if len(set(page_owners)) > 1)
+    ownership_mismatches = []
+    for page in sorted(observed_pages & registered_pages):
+        observed = set(owners[page])
+        expected = expected_owners[page]
+        if observed != expected:
+            ownership_mismatches.append({
+                "page": page,
+                "observed": sorted(observed),
+                "expected": sorted(expected),
+            })
+
+    if unmapped:
+        errors.append(f"{doc_id}: observed pages outside registry: {unmapped[:20]}")
+    for mismatch in ownership_mismatches:
+        errors.append(
+            f"{doc_id}: page {mismatch['page']} ownership mismatch; "
+            f"observed={mismatch['observed']} expected={mismatch['expected']}"
+        )
+    if multiple:
+        warnings.append(f"{doc_id}: {len(multiple)} observed page(s) have multiple chapter owners")
+
+    return errors, warnings, {
+        "registered_pages": len(registered_pages),
+        "observed_pages": len(observed_pages),
+        "missing_pages": missing,
+        "unmapped_pages": unmapped,
+        "multiply_owned_pages": multiple,
+        "ownership_mismatches": ownership_mismatches,
+    }
+
+
 def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
     """Return a machine-readable deterministic corpus audit report."""
     errors: list[str] = []
@@ -109,6 +169,9 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
     canonical_edges = (canonical or {}).get("edges", [])
 
     for manual in payload.get("manuals", []):
+        ownership_errors, ownership_warnings, ownership_metrics = _audit_manual_page_ownership(manual)
+        errors.extend(ownership_errors)
+        warnings.extend(ownership_warnings)
         manual_counts = {"chapters": 0, "HEALTHY": 0, "SPARSE": 0, "NO_SOURCE_HEADINGS": 0, "MALFORMED": 0}
         manual_expected_pages: set[int] = set()
         manual_page_seen: set[int] = set()
@@ -194,6 +257,7 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
             "pages_with_clauses": len(manual_pages_with_clauses),
             "content_empty_pages": sorted(manual_content_empty_pages),
             "coverage_ratio": (len(manual_page_seen & manual_expected_pages) / len(manual_expected_pages)) if manual_expected_pages else None,
+            "registry_page_audit": ownership_metrics,
         })
 
     return {"schema_version": "manual_hierarchy_audit_v1", "manuals": manual_rows, "chapters": rows, "class_counts": class_counts, "checked_chapters": len(rows), "error_count": len(errors), "warning_count": len(warnings), "errors": errors, "warnings": warnings, "status": "FAIL" if errors else "PASS"}
