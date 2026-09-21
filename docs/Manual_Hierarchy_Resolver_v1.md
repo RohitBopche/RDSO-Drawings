@@ -224,3 +224,8 @@ Manual reason codes are:
 - `unmapped_pages` — extracted pages exist outside the authoritative chapter registry.
 
 All applicable signals are retained in deterministic order; they are not mutually exclusive. `readiness_status` still follows severity precedence: `BLOCKED` when a hard signal applies, `ATTENTION` for non-error signals, and `HEALTHY` only when no signal applies. Exact page evidence remains in `registry_page_audit`, `missing_pages`, `unmapped_pages`, and chapter-level readiness rows. These fields are QA metadata only and never participate in hierarchy construction.
+
+
+## Corpus artifact preflight
+
+The Gate K validator now explicitly treats an empty or invalid `all_chapters_extracted.json` as an external corpus-readiness blocker. It exits with status `2` and reports the artifact condition instead of raising an unhandled JSON error or implying that zero chapters constitute a valid audit. This keeps the distinction clear between a valid corpus audit result and an unavailable corpus artifact.
