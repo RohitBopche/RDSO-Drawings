@@ -14,6 +14,8 @@ CANONICAL = ROOT / "data" / "rdso_canonical_kg.json"
 
 ALLOWED = {"HAS_SECTION", "HAS_CLAUSE", "HAS_TABLE", "HAS_FIGURE", "HAS_EVIDENCE"}
 CHAPTER_RE = re.compile(r"^CHAPTER:[^:]+:CH_\d{2}$")
+SECTION_RE = re.compile(r"^SECTION:[^:]+:SEC_.+$")
+SUBSECTION_RE = re.compile(r"^SUBSECTION:[^:]+:SEC_.+$")
 
 
 def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
@@ -32,38 +34,53 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
     }
 
     ownership: dict[str, str] = {}
+    structural_children: dict[str, set[str]] = {}
     for edge in edges:
         if edge.get("rel") not in ALLOWED:
             continue
         parent = edge.get("from")
         child = edge.get("to")
-        if parent not in chapters or child not in manual_ids:
+        if parent not in entities or child not in manual_ids:
             continue
-        previous = ownership.get(child)
-        if previous and previous != parent:
-            errors.append(f"{child}: multiple chapter owners ({previous}, {parent})")
-        ownership[child] = parent
+        parent_node = entities[parent]
+        child_node = entities[child]
+        parent_chapter = parent_node.get("parent_chapter_id") if parent_node.get("type") in {"SECTION", "SUBSECTION"} else (parent if parent in chapters else None)
+        if parent_chapter not in chapters:
+            continue
 
-        node = entities[child]
-        if node.get("domain") != "manual" or node.get("universe") != "manuals":
+        structural_children.setdefault(parent, set()).add(child)
+        if parent in chapters:
+            previous = ownership.get(child)
+            if previous and previous != parent:
+                errors.append(f"{child}: multiple chapter owners ({previous}, {parent})")
+            ownership[child] = parent
+
+        if child_node.get("domain") != "manual" or child_node.get("universe") != "manuals":
             errors.append(f"{child}: structural child is not isolated in manuals universe")
-        if not node.get("source_document"):
+        if not child_node.get("source_document"):
             errors.append(f"{child}: missing source_document provenance")
-        if node.get("source_page") is None:
+        if child_node.get("source_page") is None:
             errors.append(f"{child}: missing source_page provenance")
-        if not node.get("extraction_method"):
+        if not child_node.get("extraction_method"):
             errors.append(f"{child}: missing extraction_method provenance")
 
-        parent_node = chapters[parent]
-        page_range = (parent_node.get("specs") or {}).get("PageRange")
-        page = node.get("source_page")
+        page_range = (chapters[parent_chapter].get("specs") or {}).get("PageRange")
+        page = child_node.get("source_page")
         if isinstance(page_range, list) and len(page_range) == 2 and isinstance(page, int):
             if not page_range[0] <= page <= page_range[1]:
-                errors.append(f"{child}: source_page {page} outside chapter {parent} range {page_range}")
+                errors.append(f"{child}: source_page {page} outside chapter {parent_chapter} range {page_range}")
 
-        declared_parent = node.get("parent_chapter_id")
-        if declared_parent and declared_parent != parent:
-            errors.append(f"{child}: parent_chapter_id {declared_parent} disagrees with edge owner {parent}")
+        declared_parent = child_node.get("parent_chapter_id")
+        if declared_parent and declared_parent != parent_chapter:
+            errors.append(f"{child}: parent_chapter_id {declared_parent} disagrees with chapter owner {parent_chapter}")
+        if child_node.get("type") in {"SECTION", "SUBSECTION"} and not declared_parent:
+            errors.append(f"{child}: missing parent_chapter_id")
+
+    for entity_id, node in entities.items():
+        if node.get("type") == "SECTION" and not SECTION_RE.match(entity_id):
+            errors.append(f"{entity_id}: invalid canonical section id")
+        if node.get("type") == "SUBSECTION" and not SUBSECTION_RE.match(entity_id):
+            errors.append(f"{entity_id}: invalid canonical subsection id")
 
     for chapter_id in chapters:
         if not CHAPTER_RE.match(chapter_id):
