@@ -74,3 +74,10 @@ def test_source_heading_extraction_preserves_page_and_document_provenance():
     assert result[0]["source_document"] == "DOC:FBW:2022:CS5"
     assert result[0]["source_page"] == 9
     assert result[0]["source_section"] == "4.1"
+
+
+def test_authoritative_registry_boundaries_are_valid():
+    from validate_manual_chapter_content import validate_registry_boundaries
+    errors, warnings = validate_registry_boundaries()
+    assert not errors
+    assert isinstance(warnings, list)
