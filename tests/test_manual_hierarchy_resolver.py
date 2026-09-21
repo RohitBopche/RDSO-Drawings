@@ -563,6 +563,19 @@ def test_manual_readiness_is_healthy_only_when_no_signals_apply():
 
 
 
+def test_manual_validator_reports_empty_corpus_artifact_as_blocker(tmp_path, monkeypatch, capsys):
+    import validate_manual_hierarchy as validator
+
+    empty = tmp_path / "all_chapters_extracted.json"
+    empty.write_text("", encoding="utf-8")
+    monkeypatch.setattr(validator, "ROOT", tmp_path)
+    result = validator.main()
+    output = capsys.readouterr().out
+    assert result == 2
+    assert "BLOCKED: Manual corpus artifact is empty" in output
+
+
+
 def test_chapter_readiness_preserves_multiple_attention_reasons():
     from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
 
