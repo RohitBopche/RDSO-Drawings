@@ -34,9 +34,17 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
     }
 
     ownership: dict[str, str] = {}
-    structural_children: dict[str, set[str]] = {}
+    child_edges: dict[str, list[dict]] = {}
+    relation_parent_types = {
+        "HAS_SECTION": {"CHAPTER", "SECTION", "SUBSECTION"},
+        "HAS_CLAUSE": {"CHAPTER", "SUBSECTION"},
+        "HAS_TABLE": {"CHAPTER", "SECTION", "SUBSECTION"},
+        "HAS_FIGURE": {"CHAPTER", "SECTION", "SUBSECTION"},
+        "HAS_EVIDENCE": {"CHAPTER", "SECTION", "SUBSECTION"},
+    }
     for edge in edges:
-        if edge.get("rel") not in ALLOWED:
+        rel = edge.get("rel")
+        if rel not in ALLOWED:
             continue
         parent = edge.get("from")
         child = edge.get("to")
@@ -44,11 +52,21 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
             continue
         parent_node = entities[parent]
         child_node = entities[child]
-        parent_chapter = parent_node.get("parent_chapter_id") if parent_node.get("type") in {"SECTION", "SUBSECTION"} else (parent if parent in chapters else None)
+        parent_chapter = (
+            parent_node.get("parent_chapter_id")
+            if parent_node.get("type") in {"SECTION", "SUBSECTION"}
+            else (parent if parent in chapters else None)
+        )
         if parent_chapter not in chapters:
+            errors.append(f"{child}: structural parent {parent} is not owned by a canonical chapter")
             continue
+        allowed_parents = relation_parent_types[rel]
+        if parent_node.get("type") not in allowed_parents:
+            errors.append(
+                f"{parent} -> {child}: relation {rel} is invalid for parent type {parent_node.get('type')}"
+            )
+        child_edges.setdefault(child, []).append(edge)
 
-        structural_children.setdefault(parent, set()).add(child)
         if parent in chapters:
             previous = ownership.get(child)
             if previous and previous != parent:
@@ -57,12 +75,11 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
 
         if child_node.get("domain") != "manual" or child_node.get("universe") != "manuals":
             errors.append(f"{child}: structural child is not isolated in manuals universe")
-        if not child_node.get("source_document"):
-            errors.append(f"{child}: missing source_document provenance")
+        for field in ("source_document", "extraction_method"):
+            if not child_node.get(field):
+                errors.append(f"{child}: missing {field} provenance")
         if child_node.get("source_page") is None:
             errors.append(f"{child}: missing source_page provenance")
-        if not child_node.get("extraction_method"):
-            errors.append(f"{child}: missing extraction_method provenance")
 
         page_range = (chapters[parent_chapter].get("specs") or {}).get("PageRange")
         page = child_node.get("source_page")
@@ -75,6 +92,24 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
             errors.append(f"{child}: parent_chapter_id {declared_parent} disagrees with chapter owner {parent_chapter}")
         if child_node.get("type") in {"SECTION", "SUBSECTION"} and not declared_parent:
             errors.append(f"{child}: missing parent_chapter_id")
+
+    # Every source-derived structural child must have exactly one direct chapter
+    # owner, even when it is nested beneath Section/Subsection for UI traversal.
+    for child, node in entities.items():
+        if node.get("domain") != "manual" or node.get("universe") != "manuals":
+            continue
+        if node.get("type") not in {"SECTION", "SUBSECTION", "CLAUSE", "TABLE", "FIGURE", "EVIDENCE"}:
+            continue
+        owners = []
+        for edge in edges:
+            if edge.get("rel") not in ALLOWED or edge.get("to") != child:
+                continue
+            parent = entities.get(edge.get("from"))
+            if parent and parent.get("type") == "CHAPTER":
+                owners.append(parent.get("id"))
+        if len(set(owners)) != 1:
+            errors.append(f"{child}: expected exactly one direct chapter owner, found {sorted(set(owners))}")
+
 
     for entity_id, node in entities.items():
         if node.get("type") == "SECTION" and not SECTION_RE.match(entity_id):
