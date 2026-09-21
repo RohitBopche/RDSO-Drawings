@@ -204,6 +204,22 @@ async function run() {
         if (hierarchy.childTypes.some(t => t !== 'CHAPTER')) throw new Error("Manual direct children contain non-CHAPTER nodes");
         if (hierarchy.childLabels.some((x, i) => !x.startsWith('Chapter ' + (i + 1) + ' — '))) throw new Error("Chapter labels are not canonical");
 
+        const manualRoots = await client.evaluate(`(() => {
+            const legacy = new Set(['doc_irpwm_2024','doc_usfd_2026','doc_atweld_2022','doc_fbw_2022','doc_tmm_2020','doc_stmm_2024']);
+            const roots = window.kgPhysicsNodes
+                .filter(n => n.universe === 'manuals' && n.data.type === 'DOCUMENT' && n.data.id.startsWith('DOC:'))
+                .map(n => n.data.id);
+            const legacyVisible = window.kgPhysicsNodes
+                .filter(n => n.universe === 'manuals' && legacy.has(n.data.id) && n.group.visible)
+                .map(n => n.data.id);
+            return { roots, legacyVisible };
+        })()`);
+        console.log(`[*] Authoritative manual roots: ${manualRoots.roots.length}`);
+        console.log(`[*] Visible legacy manual roots: ${manualRoots.legacyVisible.length}`);
+        if (manualRoots.roots.length !== 6) throw new Error(`Expected 6 authoritative manual roots, found ${manualRoots.roots.length}`);
+        if (manualRoots.legacyVisible.length !== 0) throw new Error(`Legacy manual roots are still visible: ${manualRoots.legacyVisible.join(', ')}`);
+        console.log("[PASS] Duplicate legacy manual roots are excluded from the Manuals universe!");
+
         console.log("[PASS] Manuals graph is chapter-first and structurally isolated!");
 
 
