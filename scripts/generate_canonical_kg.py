@@ -892,8 +892,9 @@ def build_canonical_knowledge_graph():
                 subsection_ref = clause.get("subsection_ref")
                 if not clause_id or not section_ref:
                     continue
-                section_key = f"SECTION:{alias}:SEC_{re.sub(r'[^A-Za-z0-9_]', '_', str(section_ref))}"
-                subsection_key = f"SUBSECTION:{alias}:SEC_{re.sub(r'[^A-Za-z0-9_]', '_', str(subsection_ref or section_ref))}"
+                chapter_token = re.sub(r'[^A-Za-z0-9_]', '_', str(chapter_id))
+                section_key = f"SECTION:{alias}:{chapter_token}:SEC_{re.sub(r'[^A-Za-z0-9_]', '_', str(section_ref))}"
+                subsection_key = f"SUBSECTION:{alias}:{chapter_token}:SEC_{re.sub(r'[^A-Za-z0-9_]', '_', str(subsection_ref or section_ref))}"
                 page = clause.get("page_number")
                 source_section = clause.get("source_section") or clause.get("para_number")
                 for node_id, node_type, ref, store in (
