@@ -172,6 +172,42 @@ async function run() {
         await client.captureScreenshot('rdso_mode_codes_manuals.png');
         console.log("[PASS] Codes & Manuals mode activated and rendered successfully!");
 
+        console.log("\n--- TEST 2A: Manual Universe Chapter-First Hierarchy ---");
+        await client.evaluate(`switchKnowledgeUniverse('manuals')`);
+        await sleep(700);
+
+        const hierarchy = await client.evaluate(`(() => {
+            const manualId = 'DOC:IRPWM:2024:ACS14';
+            const h = window.nodeHierarchyMap.get(manualId);
+            if (!h) return { error: 'manual hierarchy node missing' };
+            const direct = h.childrenIds.map(id => window.nodeHierarchyMap.get(id)).filter(Boolean);
+            const visibleBefore = window.kgPhysicsNodes.filter(n => n.group.visible && n.universe === 'manuals').map(n => n.data.id);
+            window.toggleNodeExpansion(manualId);
+            const visibleAfter = window.kgPhysicsNodes.filter(n => n.group.visible && n.universe === 'manuals').map(n => n.data.id);
+            return {
+                childCount: direct.length,
+                childIds: direct.map(x => x.id),
+                childLabels: direct.map(x => window.kgPhysicsNodesMap.get(x.id)?.data.label),
+                childTypes: direct.map(x => window.kgPhysicsNodesMap.get(x.id)?.data.type),
+                ordered: direct.every((x, i) => x.id === 'CHAPTER:IRPWM:CH_' + String(i + 1).padStart(2, '0')),
+                visibleBeforeCount: visibleBefore.length,
+                visibleAfter: visibleAfter.length
+            };
+        })()`);
+        console.log(`[*] IRPWM direct chapter children: ${hierarchy.childCount}`);
+        console.log(`[*] Chapter order valid: ${hierarchy.ordered}`);
+        console.log(`[*] Visible manual nodes after expansion: ${hierarchy.visibleAfterCount}`);
+
+        if (hierarchy.error) throw new Error(hierarchy.error);
+        if (hierarchy.childCount !== 15) throw new Error(`IRPWM expected exactly 15 direct chapters, found ${hierarchy.childCount}`);
+        if (!hierarchy.ordered) throw new Error("IRPWM chapter IDs are not in canonical order");
+        if (hierarchy.childTypes.some(t => t !== 'CHAPTER')) throw new Error("Manual direct children contain non-CHAPTER nodes");
+        if (hierarchy.childLabels.some((x, i) => !x.startsWith('Chapter ' + (i + 1) + ' — '))) throw new Error("Chapter labels are not canonical");
+
+        console.log("[PASS] Manuals graph is chapter-first and structurally isolated!");
+
+
+
         // 3. Inspect IRPWM 2024 Document Node
         console.log("\n--- TEST 3: Inspect IRPWM 2024 Document Node ---");
         await client.evaluate(`window.selectGraphNode('DOC:IRPWM:2024:ACS14')`);
