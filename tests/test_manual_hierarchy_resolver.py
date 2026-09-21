@@ -96,3 +96,33 @@ def test_canonical_graph_materializes_authoritative_nested_headings_and_deepest_
     assert any(e["from"] == "SUBSECTION:TEST:CHAPTER_TEST_CH_02:SEC_2_1_1" and e["to"] == clause_id and e["rel"] == "HAS_CLAUSE" for e in result["edges"])
     assert not any(e["from"] == "SUBSECTION:TEST:CHAPTER_TEST_CH_02:SEC_2_1" and e["to"] == clause_id and e["rel"] == "HAS_CLAUSE" for e in result["edges"])
     assert result["metadata"]["manual_hierarchy_resolved_headings"] == 3
+
+
+def test_coverage_audit_flags_sparse_chapters_as_warnings():
+    from validate_manual_hierarchy import _coverage_audit
+    errors, warnings, metrics = _coverage_audit({
+        "chapter_id": "CHAPTER:TEST:CH_01",
+        "page_range": [10, 12],
+        "pages_seen": [10],
+        "headings": [{"reference": "2.1", "source_page": 10, "title": "Heading"}],
+        "clauses": [],
+        "tables": [],
+        "figures": [],
+        "evidence": [],
+    })
+    assert errors == []
+    assert metrics["pages_expected"] == 3
+    assert metrics["pages_seen"] == 1
+    assert metrics["headings"] == 1
+    assert any("not observed" in warning for warning in warnings)
+
+
+def test_coverage_audit_rejects_malformed_heading_references():
+    from validate_manual_hierarchy import _coverage_audit
+    errors, warnings, metrics = _coverage_audit({
+        "chapter_id": "CHAPTER:TEST:CH_01",
+        "page_range": [10, 10],
+        "pages_seen": [10],
+        "headings": [{"reference": "not-a-reference", "source_page": 10, "title": "Bad"}],
+    })
+    assert any("malformed heading reference" in error for error in errors)
