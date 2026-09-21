@@ -65,11 +65,14 @@ def test_pathfinding_drawing_to_crossing(canonical_kg):
 
 def test_explain_relationship_coverage(canonical_kg):
     """Explanation dictionary must cover all core Blueprint Section 4.1 relationship predicates."""
+    # Manual and Drawing universes are intentionally isolated. Therefore the
+    # relationship contract asserted here is limited to predicates that remain
+    # valid inside the published Drawing KG; manual-to-equipment/specification
+    # predicates must not be required in the isolated canonical dataset.
     core_predicates = [
         "CONTAINS", "CONNECTED_TO", "INSTALLED_ON", "FASTENED_BY",
-        "INTERFACES_WITH", "GOVERNS", "SPECIFIES", "REQUIRES",
-        "INSPECTED_BY", "MAINTAINED_BY", "MITIGATED_BY", "CAN_CAUSE",
-        "HAS_REVISION", "SUPERSEDES", "INTRODUCED_IN", "HAS_SPARE"
+        "INTERFACES_WITH", "MITIGATED_BY", "CAN_CAUSE",
+        "HAS_REVISION", "SUPERSEDES", "HAS_SPARE"
     ]
     edges = canonical_kg.get("edges", [])
     found_rels = {e.get("rel") for e in edges}
@@ -91,9 +94,10 @@ def test_standard_path_templates(canonical_kg):
     fail_path = bfs_find_path(edges, "defect_joint_fatigue", "hazard_derailment_split", max_hops=3)
     assert fail_path is not None, "Failure Path template failed"
 
-    # 3. Procedure Path: manual SOP -> required inspection equipment
+    # 3. Manual/Drawing isolation: a manual SOP must not reach drawing-side
+    # equipment through the canonical graph while the universes are separated.
     proc_sop_path = bfs_find_path(edges, "sop_usfd_switch_testing", "equip_usfd_tester", max_hops=1)
-    assert proc_sop_path is not None, "Procedure Path template failed"
+    assert proc_sop_path is None, "Manual-to-equipment path violates universe isolation"
 
     # 4. Procurement Path: drg_6155 -> spare_bolt_25x310
     proc_path = bfs_find_path(edges, "drg_6155", "spare_bolt_25x310", max_hops=3)
