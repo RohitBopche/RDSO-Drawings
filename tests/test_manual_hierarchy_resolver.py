@@ -370,3 +370,44 @@ def test_corpus_audit_summary_aggregates_readiness_and_page_gaps():
     assert summary["chapters_by_status"]["ATTENTION"] == 1
     assert chapter_id in summary["chapters_requiring_attention"]
     assert summary["pages"]["unmapped"] == 1
+
+
+def test_corpus_audit_attributes_registry_ownership_mismatch_to_affected_chapter():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    first, second = registry["chapters"][:2]
+    first_id = f"CHAPTER:{registry['alias']}:CH_{first['num']:02d}"
+    second_id = f"CHAPTER:{registry['alias']}:CH_{second['num']:02d}"
+    boundary = first["page_end"]
+    payload = {"manuals": [{
+        "document_id": doc_id,
+        "alias": registry["alias"],
+        "chapters": [
+            {
+                "chapter_id": first_id,
+                "page_range": [first["page_start"], first["page_end"]],
+                "pages_seen": [first["page_start"], boundary],
+                "headings": [],
+                "clauses": [],
+            },
+            {
+                "chapter_id": second_id,
+                "page_range": [second["page_start"], second["page_end"]],
+                "pages_seen": [second["page_start"]],
+                "headings": [],
+                "clauses": [],
+            },
+        ],
+    }]}
+
+    # Deliberately place the boundary page under the wrong chapter as well.
+    payload["manuals"][0]["chapters"][1]["pages_seen"].append(boundary)
+
+    report = audit_manual_corpus(payload)
+    second_row = next(c for c in report["chapters"] if c["chapter_id"] == second_id)
+    assert second_row["ownership_status"] == "BLOCKED"
+    assert second_row["ownership_issue_pages"] == [boundary]
+    assert second_row["readiness_status"] == "BLOCKED"
+    assert any("ownership mismatch" in e for e in second_row["errors"])
+    assert report["error_count"] > 0
