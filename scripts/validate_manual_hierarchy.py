@@ -173,6 +173,7 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
         errors.extend(ownership_errors)
         warnings.extend(ownership_warnings)
         manual_counts = {"chapters": 0, "HEALTHY": 0, "SPARSE": 0, "NO_SOURCE_HEADINGS": 0, "MALFORMED": 0}
+        manual_chapter_rows: list[dict] = []
         manual_expected_pages: set[int] = set()
         manual_page_seen: set[int] = set()
         manual_missing_pages: set[int] = set()
@@ -249,6 +250,7 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
                 "status": readiness_status,
             }
             rows.append(row)
+            manual_chapter_rows.append(row)
 
             refs = [h["reference"] for h in headings]
             if len(refs) != len(set(refs)):
@@ -280,17 +282,32 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
                     if not any(e.get("from") == owner and e.get("to") == hid and e.get("rel") == "HAS_SECTION" for e in canonical_edges):
                         errors.append(f"{chapter_id}: missing canonical HAS_SECTION for heading {ref}")
 
+        # Derive Manual readiness only from this Manual's chapter rows and
+        # manual-scope ownership/extraction signals. Do not depend on global
+        # row ordering, and do not collapse missing/unmapped/content-empty
+        # evidence into ownership state.
+        chapter_blocked = any(row["readiness_status"] == "BLOCKED" for row in manual_chapter_rows)
+        chapter_attention = any(row["readiness_status"] == "ATTENTION" for row in manual_chapter_rows)
         manual_status = (
             "BLOCKED"
-            if ownership_errors or any(row["manual_id"] == manual.get("document_id") and row["errors"] for row in rows[-manual_counts["chapters"]:])
-            else ("ATTENTION" if ownership_warnings or any(row["manual_id"] == manual.get("document_id") and row["warnings"] for row in rows[-manual_counts["chapters"]:])
-                  else "HEALTHY")
+            if ownership_errors or chapter_blocked
+            else (
+                "ATTENTION"
+                if ownership_warnings or chapter_attention or manual_unmapped_pages
+                else "HEALTHY"
+            )
         )
+        manual_chapter_status_counts = {
+            "HEALTHY": sum(row["readiness_status"] == "HEALTHY" for row in manual_chapter_rows),
+            "ATTENTION": sum(row["readiness_status"] == "ATTENTION" for row in manual_chapter_rows),
+            "BLOCKED": sum(row["readiness_status"] == "BLOCKED" for row in manual_chapter_rows),
+        }
         manual_rows.append({
             "manual_id": manual.get("document_id"),
             "alias": manual.get("alias"),
             "status": manual_status,
             **manual_counts,
+            "chapter_status_counts": manual_chapter_status_counts,
             "pages_expected": len(manual_expected_pages),
             "pages_seen": len(manual_page_seen),
             "missing_pages": sorted(manual_expected_pages - manual_page_seen),
