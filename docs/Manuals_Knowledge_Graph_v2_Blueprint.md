@@ -129,3 +129,16 @@ Manual
 These Section/Subsection nodes are marked `DERIVED_FROM_CLAUSE_NUMBERING` and retain source document, source page, source section/reference, source text, extraction method, confidence, and parent chapter provenance. They are not treated as authoritative table-of-contents headings. A future heading-aware extractor may replace or enrich this derived layer without changing chapter ownership.
 
 Publication validation checks manual isolation, canonical IDs, single authoritative chapter ownership, source-page bounds, nested section/subsection ownership, and provenance completeness.
+
+
+## Authoritative source-derived structural artifacts
+
+The manual ingestion pipeline now materializes explicitly labeled source artifacts into the authoritative intermediate structure:
+
+- `tables[]` → canonical `TABLE` nodes via `HAS_TABLE`
+- `figures[]` → canonical `FIGURE` nodes via `HAS_FIGURE`
+- `evidence[]` → canonical `EVIDENCE` nodes via `HAS_EVIDENCE`
+
+Each artifact uses a deterministic chapter/page/ordinal/hash ID and carries `source_document`, `source_page`, `source_section`, `source_text`, `extraction_method`, `confidence`, and `parent_chapter_id`. Artifacts are direct Chapter children by default; the pipeline does not infer semantic Section/Subsection ownership for them. The canonical validator enforces ID shape, provenance completeness, confidence bounds, chapter page bounds, exactly one direct Chapter owner, structural relation parent types, and Manuals/Drawing isolation.
+
+The extraction is deliberately label-driven. Unlabeled semantic mentions of tables, figures, or evidence do not become structural nodes. This keeps the Manual graph deterministic and prevents the earlier problem of random drawing-derived information appearing under Manuals.
