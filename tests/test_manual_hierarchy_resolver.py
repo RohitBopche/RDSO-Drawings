@@ -607,7 +607,9 @@ def test_manual_readiness_is_healthy_only_when_no_signals_apply():
 def test_manual_validator_reports_empty_corpus_artifact_as_blocker(tmp_path, monkeypatch, capsys):
     import validate_manual_hierarchy as validator
 
-    empty = tmp_path / "all_chapters_extracted.json"
+    artifact_dir = tmp_path / "data" / "knowledge-graph" / "intermediate"
+    artifact_dir.mkdir(parents=True)
+    empty = artifact_dir / "all_chapters_extracted.json"
     empty.write_text("", encoding="utf-8")
     monkeypatch.setattr(validator, "ROOT", tmp_path)
     result = validator.main([])
@@ -620,7 +622,9 @@ def test_manual_validator_reports_empty_corpus_artifact_as_blocker(tmp_path, mon
 def test_manual_validator_rejects_empty_manual_list(tmp_path, monkeypatch, capsys):
     import validate_manual_hierarchy as validator
 
-    artifact = tmp_path / "all_chapters_extracted.json"
+    artifact_dir = tmp_path / "data" / "knowledge-graph" / "intermediate"
+    artifact_dir.mkdir(parents=True)
+    artifact = artifact_dir / "all_chapters_extracted.json"
     artifact.write_text(json.dumps({"manuals": []}), encoding="utf-8")
     monkeypatch.setattr(validator, "ROOT", tmp_path)
     result = validator.main([])
@@ -632,7 +636,9 @@ def test_manual_validator_rejects_empty_manual_list(tmp_path, monkeypatch, capsy
 def test_manual_validator_rejects_invalid_top_level_schema(tmp_path, monkeypatch, capsys):
     import validate_manual_hierarchy as validator
 
-    artifact = tmp_path / "all_chapters_extracted.json"
+    artifact_dir = tmp_path / "data" / "knowledge-graph" / "intermediate"
+    artifact_dir.mkdir(parents=True)
+    artifact = artifact_dir / "all_chapters_extracted.json"
     artifact.write_text(json.dumps({"chapters": []}), encoding="utf-8")
     monkeypatch.setattr(validator, "ROOT", tmp_path)
     result = validator.main([])
