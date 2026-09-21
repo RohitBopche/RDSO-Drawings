@@ -601,6 +601,17 @@ def test_manual_validator_rejects_invalid_top_level_schema(tmp_path, monkeypatch
 
 
 
+def test_manual_hierarchy_script_has_cli_entrypoint():
+    import validate_manual_hierarchy as validator
+
+    assert callable(validator.main)
+    source = validator.__file__
+    text = open(source, encoding="utf-8").read()
+    assert 'if __name__ == "__main__":' in text
+    assert "raise SystemExit(main())" in text
+
+
+
 def test_chapter_readiness_preserves_multiple_attention_reasons():
     from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
 
