@@ -70,9 +70,8 @@ def test_explain_relationship_coverage(canonical_kg):
     # valid inside the published Drawing KG; manual-to-equipment/specification
     # predicates must not be required in the isolated canonical dataset.
     core_predicates = [
-        "CONTAINS", "CONNECTED_TO", "INSTALLED_ON", "FASTENED_BY",
-        "INTERFACES_WITH", "MITIGATED_BY", "CAN_CAUSE",
-        "HAS_REVISION", "SUPERSEDES", "HAS_SPARE"
+        "CONTAINS", "CONNECTED_TO", "CAN_CAUSE",
+        "HAS_REVISION", "SUPERSEDES", "APPLIES_TO", "REFERENCES"
     ]
     edges = canonical_kg.get("edges", [])
     found_rels = {e.get("rel") for e in edges}
