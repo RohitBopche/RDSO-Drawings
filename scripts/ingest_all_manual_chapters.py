@@ -478,6 +478,7 @@ def main():
             'structure_status': 'STRUCTURE_VERIFIED',
             'topics': ch['topics'],
             'headings': [],
+            'pages_seen': [],
             'clauses': [],
             'tables': [],
             'figures': [],
@@ -510,6 +511,8 @@ def main():
                 continue
                 
             ch_num = target_ch['num']
+            if pnum not in manual_data[doc_id]['chapters'][ch_num]['pages_seen']:
+                manual_data[doc_id]['chapters'][ch_num]['pages_seen'].append(pnum)
             
             # Extract source headings, clauses and explicitly labeled source artifacts.
             headings = extract_source_headings(doc_id, pnum, txt)
@@ -534,6 +537,7 @@ def main():
                 seen_headings.add(key)
                 unique_headings.append(heading)
             chapter['headings'] = unique_headings
+            chapter['pages_seen'] = sorted(set(chapter.get('pages_seen', [])))
             for key in ('tables', 'figures', 'evidence'):
                 seen = set()
                 unique = []
