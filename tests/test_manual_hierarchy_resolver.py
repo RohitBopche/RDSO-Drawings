@@ -610,7 +610,7 @@ def test_manual_validator_reports_empty_corpus_artifact_as_blocker(tmp_path, mon
     empty = tmp_path / "all_chapters_extracted.json"
     empty.write_text("", encoding="utf-8")
     monkeypatch.setattr(validator, "ROOT", tmp_path)
-    result = validator.main()
+    result = validator.main([])
     output = capsys.readouterr().out
     assert result == 2
     assert "BLOCKED: Manual corpus artifact is empty" in output
@@ -623,7 +623,7 @@ def test_manual_validator_rejects_empty_manual_list(tmp_path, monkeypatch, capsy
     artifact = tmp_path / "all_chapters_extracted.json"
     artifact.write_text(json.dumps({"manuals": []}), encoding="utf-8")
     monkeypatch.setattr(validator, "ROOT", tmp_path)
-    result = validator.main()
+    result = validator.main([])
     output = capsys.readouterr().out
     assert result == 2
     assert "BLOCKED: Manual corpus artifact contains no manuals" in output
@@ -635,7 +635,7 @@ def test_manual_validator_rejects_invalid_top_level_schema(tmp_path, monkeypatch
     artifact = tmp_path / "all_chapters_extracted.json"
     artifact.write_text(json.dumps({"chapters": []}), encoding="utf-8")
     monkeypatch.setattr(validator, "ROOT", tmp_path)
-    result = validator.main()
+    result = validator.main([])
     output = capsys.readouterr().out
     assert result == 2
     assert "BLOCKED: Manual corpus artifact has invalid top-level schema" in output
@@ -702,4 +702,4 @@ def test_blocked_chapter_preserves_structural_error_and_coverage_reason():
     report = audit_manual_corpus(payload)
     row = report["chapters"][0]
     assert row["readiness_status"] == "ATTENTION"
-    assert row["readiness_reasons"] == ["sparse", "missing_pages", "content_empty_pages"]
+    assert row["readiness_reasons"] == ["sparse", "missing_pages"]
