@@ -81,8 +81,16 @@ class ManualKG:
                     "readiness": (c.get("audit", {}) or {}).get("status"),
                     "number": c.get("chapter_number", c.get("order")),
                     "title": c["title"],
-                    "page_start": (c.get("page_range") or [None, None])[0],
-                    "page_end": (c.get("page_range") or [None, None])[1],
+                    "page_start": (
+                        (c.get("page_range") or [None, None])[0]
+                        if c.get("page_range") is not None
+                        else c.get("page_start")
+                    ),
+                    "page_end": (
+                        (c.get("page_range") or [None, None])[1]
+                        if c.get("page_range") is not None
+                        else c.get("page_end")
+                    ),
                 }
                 for c in manual.get("chapters", [])
             ],
