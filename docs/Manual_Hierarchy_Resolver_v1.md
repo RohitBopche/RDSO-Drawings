@@ -59,3 +59,23 @@ If a heading sequence is structurally invalid, the resolver does not partially m
 ## Next iteration
 
 After this resolver is validated against all current manual source headings, the next step is to make the frontend consume the resolved source-heading tree directly, replacing clause-number-derived hierarchy as the primary Chapter → Section → Subsection source while preserving deterministic fallbacks and provenance.
+
+
+## Publication pipeline integration
+
+The deterministic resolver is now a shared in-memory publication primitive. The normal
+`scripts/generate_canonical_kg.py` pipeline invokes `resolve_canonical_graph()` before
+the final Manuals/Drawing isolation gate, so authoritative source-heading nodes and
+nested `HAS_SECTION` relationships are produced during ordinary canonical generation.
+
+The standalone `scripts/resolve_manual_hierarchy.py` command remains available for
+diagnostics and repair workflows, but it no longer owns a separate implementation.
+
+For valid source-heading sequences, clause ownership is refined to the deepest matching
+numeric heading. Direct Chapter → Clause ownership remains intact for canonical
+ownership/audit purposes. Invalid heading sequences do not replace the clause-derived
+fallback structure.
+
+Gate K now checks both the intermediate heading sequence and, when the canonical output
+exists, the presence and authoritative status of the generated source-heading nodes and
+their `HAS_SECTION` edges.
