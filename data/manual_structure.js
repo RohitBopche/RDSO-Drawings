@@ -1,4 +1,6 @@
-// Authoritative manual document hierarchy. Structural metadata only.\nconst _rootManualStructure = (typeof window !== 'undefined' ? window : globalThis);\n_rootManualStructure.RDSO_MANUAL_STRUCTURE = {
+// Authoritative manual document hierarchy. Structural metadata only.
+const _rootManualStructure = (typeof window !== 'undefined' ? window : globalThis);
+_rootManualStructure.RDSO_MANUAL_STRUCTURE = {
   "schema_version": "manual-structure-v1",
   "universe": "manuals",
   "manuals": [
@@ -460,4 +462,4 @@
       ]
     }
   ]
-};\n
+};
