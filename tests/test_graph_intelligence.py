@@ -48,12 +48,11 @@ def bfs_find_path(edges, start_id, end_id, max_hops=4):
 
 
 def test_pathfinding_component_to_standard(canonical_kg):
-    """Must discover valid multi-hop path from comp_detailb to doc_irpwm_2024."""
+    """Drawing-only pathfinding remains valid inside the isolated Drawing KG."""
     edges = canonical_kg.get("edges", [])
-    path = bfs_find_path(edges, "comp_detailb", "doc_irpwm_2024", max_hops=4)
-    assert path is not None, "Failed to find path from comp_detailb to doc_irpwm_2024"
-    assert len(path) >= 1
-    assert any(step[1] in ["CONTAINS", "GOVERNS", "INTERFACES_WITH", "APPLIES_TO", "REFERENCES"] for step in path)
+    path = bfs_find_path(edges, "comp_tongue_rail", "std_irs_t10", max_hops=3)
+    assert path is not None, "Failed to find component-to-standard path"
+    assert len(path) <= 3
 
 
 def test_pathfinding_drawing_to_crossing(canonical_kg):
@@ -92,8 +91,8 @@ def test_standard_path_templates(canonical_kg):
     fail_path = bfs_find_path(edges, "defect_joint_fatigue", "hazard_derailment_split", max_hops=3)
     assert fail_path is not None, "Failure Path template failed"
 
-    # 3. Procedure Path: doc_usfd_2026 -> sop_usfd_switch_testing -> equip_usfd_tester
-    proc_sop_path = bfs_find_path(edges, "doc_usfd_2026", "equip_usfd_tester", max_hops=3)
+    # 3. Procedure Path: manual SOP -> required inspection equipment
+    proc_sop_path = bfs_find_path(edges, "sop_usfd_switch_testing", "equip_usfd_tester", max_hops=1)
     assert proc_sop_path is not None, "Procedure Path template failed"
 
     # 4. Procurement Path: drg_6155 -> spare_bolt_25x310
