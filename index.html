@@ -3528,13 +3528,19 @@
         });
       });
 
-      // Child -> parent links. Manual document children are ONLY chapters.
+      // Child -> parent links. Manual hierarchy is intentionally structural:
+      // Manual -> Chapter -> Section/Table/Figure/Evidence/Clause. Semantic graph
+      // predicates (SPECIFIES, REQUIRES, GOVERNS, etc.) must never become visual
+      // parent/child expansion paths inside the Manuals universe.
+      const MANUAL_STRUCTURAL_RELS = new Set([
+        'HAS_CHAPTER', 'HAS_SECTION', 'HAS_CLAUSE', 'HAS_TABLE', 'HAS_FIGURE', 'HAS_EVIDENCE'
+      ]);
       rawEdges.forEach(e => {
         if (!HIERARCHY_RELS.has(e.rel)) return;
         const parentEntry = nodeHierarchyMap.get(e.from);
         const childEntry = nodeHierarchyMap.get(e.to);
         if (!parentEntry || !childEntry) return;
-        if (parentEntry.universe === 'manuals' && parentEntry.id.startsWith('DOC:') && e.rel !== 'HAS_CHAPTER') return;
+        if (parentEntry.universe === 'manuals' && !MANUAL_STRUCTURAL_RELS.has(e.rel)) return;
         if (childEntry.universe !== parentEntry.universe) return;
         if (!childEntry.parentId && childEntry.id !== parentEntry.id) {
           childEntry.parentId = parentEntry.id;
@@ -4181,6 +4187,13 @@
     }
 
     function addEdgeToGraph(edgeData) {
+      // Manual and Drawing universes remain hard-isolated until the future,
+      // evidence-backed relationship layer is introduced.
+      const sourceData = CANONICAL_DATA.entities.find(n => n.id === edgeData.from);
+      const targetData = CANONICAL_DATA.entities.find(n => n.id === edgeData.to);
+      if (sourceData && targetData && getNodeUniverse(sourceData) !== getNodeUniverse(targetData)) {
+        return;
+      }
       const predColor = PREDICATE_COLORS[edgeData.rel] || 0x00f0ff;
       const lineMat = new THREE.LineBasicMaterial({ color: predColor, transparent: true, opacity: 0.45, linewidth: 1.5 });
       const lineGeo = new THREE.BufferGeometry();
