@@ -48,7 +48,9 @@ def validate_payload(payload: dict) -> tuple[list[str], list[str]]:
     registry_errors, registry_warnings = validate_registry_boundaries()
     errors.extend(registry_errors)
     warnings.extend(registry_warnings)
-\n    manuals = payload.get("manuals")\n    if not isinstance(manuals, list):
+
+    manuals = payload.get("manuals")
+    if not isinstance(manuals, list):
         return ["payload.manuals must be a list"], warnings
 
     expected_ids = set(MANUAL_CHAPTER_REGISTRY)
