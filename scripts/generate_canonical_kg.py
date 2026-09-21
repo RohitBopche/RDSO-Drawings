@@ -9,10 +9,9 @@ import os
 import re
 import sys
 
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
 from resolve_manual_hierarchy import resolve_canonical_graph
-
-REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def build_canonical_knowledge_graph():
     input_path = os.path.join(REPO_ROOT, "data", "rdso_extracted_knowledge.json")
