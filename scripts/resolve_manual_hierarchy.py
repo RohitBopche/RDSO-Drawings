@@ -245,6 +245,18 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
             for clause in chapter.get("clauses", []) or []:
                 cid = clause.get("clause_id")
                 pref = str(clause.get("para_number", ""))
+                # Preserve authoritative Chapter -> Clause ownership even when
+                # the clause is additionally nested under a source heading.
+                if cid and cid in by_id:
+                    add_edge(
+                        chapter_id,
+                        cid,
+                        "HAS_CLAUSE",
+                        f"Clause {pref} belongs to chapter {chapter_id}",
+                        manual_id,
+                        clause.get("source_page"),
+                        pref,
+                    )
                 matches = [h for h in structural if pref == h["reference"] or pref.startswith(h["reference"] + ".")]
                 if not matches:
                     continue
