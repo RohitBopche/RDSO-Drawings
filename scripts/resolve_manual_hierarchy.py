@@ -134,6 +134,7 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
         })
 
 
+    errors: list[str] = []
     resolved_count = 0
 
     for manual in intermediate.get("manuals", []):
@@ -258,8 +259,6 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
     canonical["facts"] = facts
     canonical.setdefault("metadata", {})["manual_hierarchy_resolver"] = "deterministic_source_heading_v1"
     canonical["metadata"]["manual_hierarchy_resolved_headings"] = resolved_count
-    CANONICAL.write_text(json.dumps(canonical, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Resolved {resolved_count} authoritative manual headings.")
     if errors:
         print(f"Hierarchy warnings/errors: {len(errors)}")
         for error in errors[:50]:
