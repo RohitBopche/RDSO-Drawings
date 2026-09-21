@@ -482,13 +482,15 @@ def main():
             'clauses': [],
             'tables': [],
             'figures': [],
-            'evidence': []
+            'evidence': [],
+            'unmapped_pages': []
         } for ch in meta['chapters']}
     } for doc_id, meta in MANUAL_CHAPTER_REGISTRY.items()}
     
     total_pages_read = 0
     total_clauses_extracted = 0
     pages_by_doc = {}
+    unmapped_pages_by_doc = {}
     
     print(f"Reading raw pages from: {EXTRACTED_PAGES_PATH} ...")
     with open(EXTRACTED_PAGES_PATH, 'r', encoding='utf-8') as f:
@@ -506,8 +508,9 @@ def main():
             # Identify chapter
             target_ch = get_chapter_for_page(doc_id, pnum)
             if not target_ch:
-                # Preserve the page as an explicit extraction gap rather than
-                # contaminating a neighboring chapter.
+                # Preserve extraction gaps explicitly; never contaminate a neighboring chapter.
+                manual_data[doc_id].setdefault('unmapped_pages', []).append(pnum)
+                unmapped_pages_by_doc.setdefault(doc_id, []).append(pnum)
                 continue
                 
             ch_num = target_ch['num']
@@ -538,6 +541,7 @@ def main():
                 unique_headings.append(heading)
             chapter['headings'] = unique_headings
             chapter['pages_seen'] = sorted(set(chapter.get('pages_seen', [])))
+            chapter['unmapped_pages'] = []
             for key in ('tables', 'figures', 'evidence'):
                 seen = set()
                 unique = []
@@ -583,6 +587,7 @@ def main():
             'total_tables': sum(len(c['tables']) for c in ch_list),
             'total_figures': sum(len(c['figures']) for c in ch_list),
             'total_evidence': sum(len(c['evidence']) for c in ch_list),
+            'unmapped_pages': sorted(set(mdata.get('unmapped_pages', []))),
             'chapters': ch_list
         })
 
@@ -593,6 +598,7 @@ def main():
         'total_chapters': total_chapters_count,
         'total_pages_processed': total_pages_read,
         'total_clauses_extracted': total_clauses_extracted,
+        'total_unmapped_pages': sum(len(set(v)) for v in unmapped_pages_by_doc.values()),
         'manuals': structured_manuals
     }
     
@@ -610,7 +616,7 @@ def main():
     print(f"  Saved Payload to:  {OUTPUT_FILE}")
     print("\nBreakdown by Manual:")
     for m in structured_manuals:
-        print(f"  - {m['alias']}: {m['total_chapters']} Chapters, {m['total_clauses']} Unique Clauses ({pages_by_doc.get(m['document_id'], 0)} pages)")
+        print(f"  - {m['alias']}: {m['total_chapters']} Chapters, {m['total_clauses']} Unique Clauses ({pages_by_doc.get(m['document_id'], 0)} pages), unmapped={len(m.get('unmapped_pages', []))}")
     print("================================================================================")
 
 if __name__ == '__main__':
