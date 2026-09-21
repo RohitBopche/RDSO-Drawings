@@ -91,3 +91,37 @@ def test_canonical_kg_has_no_duplicate_authoritative_manual_ids():
     # the runtime hierarchy must treat the authoritative IDs as the only roots.
     assert len(legacy_ids.intersection(set(ids))) == 6
     assert len(authoritative_ids.intersection(set(ids))) == 6
+
+
+def test_manual_clause_metadata_maps_to_exactly_one_registered_chapter():
+    knowledge_path = ROOT / "data" / "rdso_manuals_knowledge.json"
+    if not knowledge_path.exists():
+        return
+    knowledge = json.loads(knowledge_path.read_text(encoding="utf-8"))
+    structure = load_structure()
+    manuals = {m["alias"]: m for m in structure["manuals"]}
+
+    unresolved = []
+    ambiguous = []
+    for clause in knowledge.get("clauses", {}).values():
+        manual = manuals.get(clause.get("manual") or clause.get("alias"))
+        if not manual:
+            continue
+        exact = [i for i, ch in enumerate(manual["chapters"]) if ch[0] == clause.get("chapter")]
+        if len(exact) == 1:
+            continue
+        page = clause.get("page")
+        if page is None:
+            unresolved.append(clause.get("id"))
+            continue
+        candidates = [
+            i for i, ch in enumerate(manual["chapters"])
+            if ch[1] <= page <= ch[2]
+        ]
+        if len(candidates) != 1:
+            if not candidates:
+                unresolved.append(clause.get("id"))
+            else:
+                ambiguous.append(clause.get("id"))
+    assert not unresolved, f"Unmapped manual clauses: {unresolved[:20]}"
+    assert not ambiguous, f"Ambiguous manual clauses: {ambiguous[:20]}"
