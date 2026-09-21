@@ -259,12 +259,9 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
     canonical["facts"] = facts
     canonical.setdefault("metadata", {})["manual_hierarchy_resolver"] = "deterministic_source_heading_v1"
     canonical["metadata"]["manual_hierarchy_resolved_headings"] = resolved_count
-    if errors:
-        print(f"Hierarchy warnings/errors: {len(errors)}")
-        for error in errors[:50]:
-            print(f"  - {error}")
-        return 1
-    return 0
+    return canonical, errors
+
+
 def main() -> int:
     if not INTERMEDIATE.exists() or not CANONICAL.exists():
         raise SystemExit("Missing manual intermediate or canonical KG")
