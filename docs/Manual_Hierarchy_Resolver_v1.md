@@ -229,3 +229,8 @@ All applicable signals are retained in deterministic order; they are not mutuall
 ## Corpus artifact preflight
 
 The Gate K validator now explicitly treats an empty or invalid `all_chapters_extracted.json` as an external corpus-readiness blocker. It exits with status `2` and reports the artifact condition instead of raising an unhandled JSON error or implying that zero chapters constitute a valid audit. This keeps the distinction clear between a valid corpus audit result and an unavailable corpus artifact.
+
+
+### Corpus schema preflight
+
+Before Gate K performs chapter-level auditing, the validator verifies that the corpus artifact is valid JSON, is an object, contains a `manuals` list, and contains at least one Manual. Empty, malformed, or structurally invalid artifacts are reported as `BLOCKED` external corpus-readiness conditions rather than being interpreted as a valid zero-manual audit.
