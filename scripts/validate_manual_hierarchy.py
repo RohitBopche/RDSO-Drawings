@@ -389,7 +389,18 @@ def main() -> int:
         print(f"FAIL: missing {path}")
         return 1
 
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    raw_payload = path.read_text(encoding="utf-8")
+    if not raw_payload.strip():
+        print(f"BLOCKED: Manual corpus artifact is empty: {path}")
+        print("Generate/populate all_chapters_extracted.json before running the six-manual corpus audit.")
+        return 2
+    try:
+        payload = json.loads(raw_payload)
+    except json.JSONDecodeError as exc:
+        print(f"BLOCKED: Manual corpus artifact is not valid JSON: {path}")
+        print(f"JSON error: {exc}")
+        return 2
+
     canonical_path = ROOT / "data" / "rdso_canonical_kg.json"
     canonical = json.loads(canonical_path.read_text(encoding="utf-8")) if canonical_path.exists() else None
     report = audit_manual_corpus(payload, canonical)
