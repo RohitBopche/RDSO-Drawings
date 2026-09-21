@@ -181,3 +181,74 @@ def test_audit_manual_corpus_aggregates_machine_readable_report():
     assert report["class_counts"]["NO_SOURCE_HEADINGS"] == 1
     assert report["manuals"][0]["chapters"] == 2
     assert report["status"] == "PASS"
+
+
+def test_coverage_audit_builds_complete_page_matrix():
+    from validate_manual_hierarchy import _coverage_audit
+
+    errors, warnings, metrics = _coverage_audit({
+        "chapter_id": "CHAPTER:TEST:CH_03",
+        "page_range": [30, 34],
+        "pages_seen": [30, 31, 33],
+        "headings": [{"reference": "3", "source_page": 30, "title": "Section"}],
+        "clauses": [{"clause_id": "C1", "source_page": 31}],
+        "tables": [{"id": "T1", "source_page": 33}],
+        "figures": [],
+        "evidence": [],
+    }, [99])
+
+    assert not errors
+    assert metrics["pages_expected"] == 5
+    assert metrics["pages_seen"] == 3
+    assert metrics["missing_pages"] == [32, 34]
+    assert metrics["unmapped_pages"] == [99]
+    assert metrics["pages_with_headings"] == 1
+    assert metrics["pages_with_clauses"] == 1
+    assert metrics["content_empty_pages"] == []
+    assert metrics["coverage_ratio"] == 0.6
+
+
+def test_coverage_audit_identifies_observed_content_empty_pages():
+    from validate_manual_hierarchy import _coverage_audit
+
+    errors, warnings, metrics = _coverage_audit({
+        "chapter_id": "CHAPTER:TEST:CH_04",
+        "page_range": [40, 42],
+        "pages_seen": [40, 41, 42],
+        "headings": [{"reference": "4", "source_page": 40, "title": "Section"}],
+        "clauses": [{"clause_id": "C1", "source_page": 42}],
+        "tables": [],
+        "figures": [],
+        "evidence": [],
+    })
+
+    assert not errors
+    assert metrics["content_empty_pages"] == [41]
+
+
+def test_audit_manual_corpus_aggregates_manual_page_completeness():
+    from validate_manual_hierarchy import audit_manual_corpus
+
+    payload = {"manuals": [{
+        "document_id": "DOC:TEST:2026",
+        "alias": "TEST",
+        "unmapped_pages": [99],
+        "chapters": [{
+            "chapter_id": "CHAPTER:TEST:CH_01",
+            "page_range": [10, 12],
+            "pages_seen": [10, 12],
+            "headings": [{"reference": "2", "source_page": 10, "title": "Section"}],
+            "clauses": [{"clause_id": "C1", "source_page": 12}],
+        }]
+    }]}
+
+    report = audit_manual_corpus(payload)
+    row = report["manuals"][0]
+    assert row["pages_expected"] == 3
+    assert row["pages_seen"] == 2
+    assert row["missing_pages"] == [11]
+    assert row["unmapped_pages"] == [99]
+    assert row["pages_with_headings"] == 1
+    assert row["pages_with_clauses"] == 1
+    assert row["content_empty_pages"] == []
+    assert row["coverage_ratio"] == 2 / 3
