@@ -2611,6 +2611,37 @@
       flex-shrink: 0;
     }
   </style>
+  <script>
+    // Runtime bootstrap diagnostics: keep local/offline builds debuggable.
+    window.__REKG_BOOT_ERRORS = [];
+    window.addEventListener('error', function (event) {
+      const message = event && event.error && event.error.stack
+        ? event.error.stack
+        : (event && event.message ? event.message : 'Unknown runtime error');
+      window.__REKG_BOOT_ERRORS.push(String(message));
+    });
+    window.addEventListener('unhandledrejection', function (event) {
+      window.__REKG_BOOT_ERRORS.push(String(event && event.reason ? event.reason.stack || event.reason : 'Unhandled promise rejection'));
+    });
+    function renderRuntimeDiagnostic() {
+      const canonical = window.RDSO_CANONICAL_KG;
+      const root = document.getElementById('kg-canvas-container');
+      if (!root) return;
+      const existing = document.getElementById('rekg-runtime-diagnostic');
+      if (existing) existing.remove();
+      if ((canonical && Array.isArray(canonical.entities) && canonical.entities.length) || !window.__REKG_BOOT_ERRORS.length) return;
+      const panel = document.createElement('div');
+      panel.id = 'rekg-runtime-diagnostic';
+      panel.style.cssText = 'position:absolute;left:18px;top:118px;z-index:2000;max-width:620px;padding:12px 14px;border:1px solid #ff3366;border-radius:8px;background:rgba(20,5,12,.96);color:#fff;font:12px/1.5 monospace;box-shadow:0 8px 30px rgba(0,0,0,.5);';
+      panel.innerHTML = '<strong style="color:#ff6688;">REKG bootstrap error</strong><br>' +
+        '<span>Canonical graph did not initialize. Reload after checking the local data bundle.</span><br>' +
+        '<span style="color:#ffb3c1;">' + String(window.__REKG_BOOT_ERRORS[0] || 'Canonical data unavailable').replace(/[&<>]/g, function(s){return ({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]);}) + '</span>';
+      root.appendChild(panel);
+    }
+    window.addEventListener('DOMContentLoaded', function () {
+      setTimeout(renderRuntimeDiagnostic, 0);
+    });
+  </script>
   <script src="./lib/three.min.js"></script>
   <script src="./lib/OrbitControls.js"></script>
   <script src="./data/rdso_kg_data.js"></script>\n  <script src="./data/manual_structure.js"></script>
@@ -4006,7 +4037,8 @@
     }
 
     function initKnowledgeGraphApp() {
-      const container = document.getElementById('kg-canvas-container');
+      try {
+        const container = document.getElementById('kg-canvas-container');
       const w = window.innerWidth;
       const h = window.innerHeight;
 
@@ -4094,7 +4126,11 @@
       setupRaycasting();
 
       // 8. Resize Listener
-      window.addEventListener('resize', onWindowResize);
+        window.addEventListener('resize', onWindowResize);
+      } catch (error) {
+        window.__REKG_BOOT_ERRORS.push(error && error.stack ? error.stack : String(error));
+        renderRuntimeDiagnostic();
+      }
     }
 
     // High-Contrast Glassmorphic Billboard Badge with Hierarchy Status
