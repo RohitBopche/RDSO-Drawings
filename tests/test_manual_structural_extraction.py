@@ -46,3 +46,31 @@ def test_numbered_source_heading_extraction_is_conservative():
     assert [h["reference"] for h in result] == ["2.1", "2.2"]
     assert result[0]["title"] == "Rail Selection Criteria"
     assert result[0]["extraction_method"] == "deterministic_numbered_source_heading"
+
+
+def test_source_heading_extraction_rejects_requirement_prose_and_long_lines():
+    from ingest_all_manual_chapters import extract_source_headings
+
+    result = extract_source_headings(
+        "DOC:AT_WELD:2022",
+        12,
+        "2.1 Rail Selection Criteria\n"
+        "Rails shall be inspected before welding.\n"
+        "2.2 This is a very long heading that contains more than twenty words "
+        "and should therefore not be treated as a structural source heading.\n"
+        "2.3 Equipment Storage"
+    )
+    assert [h["reference"] for h in result] == ["2.1", "2.3"]
+
+
+def test_source_heading_extraction_preserves_page_and_document_provenance():
+    from ingest_all_manual_chapters import extract_source_headings
+
+    result = extract_source_headings(
+        "DOC:FBW:2022:CS5",
+        9,
+        "4.1 Welding Procedure"
+    )
+    assert result[0]["source_document"] == "DOC:FBW:2022:CS5"
+    assert result[0]["source_page"] == 9
+    assert result[0]["source_section"] == "4.1"
