@@ -137,3 +137,10 @@ The distinction is intentional:
 missing != unmapped != content-empty
 
 A missing page was expected but not observed; an unmapped page was observed but had no authoritative chapter owner; a content-empty page was observed and owned by a chapter but produced no persisted structural/content artifact.
+
+
+## Manual-level ownership audit
+
+Manual aggregates use the **union of registered chapter page ranges**, not the sum of chapter range lengths. This prevents shared chapter-boundary pages from inflating the expected-page denominator.
+
+The audit also records `observed_pages_with_multiple_chapters`. A non-empty list means the extracted `pages_seen` data assigns the same physical page to more than one chapter and should be investigated against the authoritative boundary registry. `observed_page_owner_count` reports the number of distinct observed pages at manual scope.
