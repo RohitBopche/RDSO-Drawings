@@ -400,6 +400,14 @@ def main() -> int:
         print(f"BLOCKED: Manual corpus artifact is not valid JSON: {path}")
         print(f"JSON error: {exc}")
         return 2
+    if not isinstance(payload, dict) or not isinstance(payload.get("manuals"), list):
+        print(f"BLOCKED: Manual corpus artifact has invalid top-level schema: {path}")
+        print("Expected a JSON object containing a 'manuals' list.")
+        return 2
+    if not payload["manuals"]:
+        print(f"BLOCKED: Manual corpus artifact contains no manuals: {path}")
+        print("Populate the registered manual corpus before running the six-manual audit.")
+        return 2
 
     canonical_path = ROOT / "data" / "rdso_canonical_kg.json"
     canonical = json.loads(canonical_path.read_text(encoding="utf-8")) if canonical_path.exists() else None
