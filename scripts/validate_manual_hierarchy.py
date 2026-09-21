@@ -305,10 +305,28 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
             "ATTENTION": sum(row["readiness_status"] == "ATTENTION" for row in manual_chapter_rows),
             "BLOCKED": sum(row["readiness_status"] == "BLOCKED" for row in manual_chapter_rows),
         }
+        # Manual-level reasons explain why the Manual is not fully ready.
+        # Chapter reasons remain intact; these codes summarize only the
+        # deterministic Manual-scope/chapter-state signals.
+        manual_readiness_reasons = []
+        if ownership_errors:
+            manual_readiness_reasons.append("registry_ownership_error")
+        if chapter_blocked:
+            manual_readiness_reasons.append("chapter_blocked")
+        if ownership_warnings:
+            manual_readiness_reasons.append("registry_ownership_warning")
+        if chapter_attention:
+            manual_readiness_reasons.append("chapter_attention")
+        if manual_unmapped_pages:
+            manual_readiness_reasons.append("unmapped_pages")
+        if not manual_readiness_reasons:
+            manual_readiness_reasons.append("complete_manual_readiness")
         manual_rows.append({
             "manual_id": manual.get("document_id"),
             "alias": manual.get("alias"),
             "status": manual_status,
+            "readiness_status": manual_status,
+            "readiness_reasons": manual_readiness_reasons,
             **manual_counts,
             "chapter_status_counts": manual_chapter_status_counts,
             "pages_expected": len(manual_expected_pages),
