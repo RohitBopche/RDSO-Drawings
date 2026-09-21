@@ -378,7 +378,7 @@ def normalize_source_heading_candidates(headings):
             continue
         title = str(item.get("title", "")).strip()
         words = re.findall(r"[A-Za-z]+", title)
-        if len(words) < 2:
+        if not words:
             continue
         numeric_ref = tuple(int(part) for part in parts)
         if previous is not None and numeric_ref < previous:
