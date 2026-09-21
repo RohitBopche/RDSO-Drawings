@@ -38,3 +38,11 @@ def test_unlabeled_semantic_text_does_not_create_structural_artifacts():
         "This paragraph mentions a table and figure but has no explicit source label."
     )
     assert result == {"tables": [], "figures": [], "evidence": []}
+
+
+def test_numbered_source_heading_extraction_is_conservative():
+    from ingest_all_manual_chapters import extract_source_headings
+    result = extract_source_headings("DOC:AT_WELD:2022", 12, "2.1 Rail Selection Criteria\nRails shall be inspected before welding.\n2.2 Equipment Storage")
+    assert [h["reference"] for h in result] == ["2.1", "2.2"]
+    assert result[0]["title"] == "Rail Selection Criteria"
+    assert result[0]["extraction_method"] == "deterministic_numbered_source_heading"
