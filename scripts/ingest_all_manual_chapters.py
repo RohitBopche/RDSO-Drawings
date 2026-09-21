@@ -262,7 +262,7 @@ def _stable_artifact_id(alias, kind, chapter_num, page_num, ordinal, text):
 def _extract_labeled_blocks(text, patterns):
     """Deterministically extract explicitly labeled source blocks."""
     matches = []
-    combined = re.compile("|".join(f"(?:{p})" for p in patterns), re.IGNORECASE | re.MULTILINE)
+    combined = re.compile("|".join(f"(?:{re.sub(r'\\(\\?m\\)', '', p)})" for p in patterns), re.IGNORECASE | re.MULTILINE)
     found = list(combined.finditer(text or ""))
     for i, match in enumerate(found):
         start = match.start()
