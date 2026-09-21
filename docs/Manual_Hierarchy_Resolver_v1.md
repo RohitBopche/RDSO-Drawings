@@ -79,3 +79,8 @@ fallback structure.
 Gate K now checks both the intermediate heading sequence and, when the canonical output
 exists, the presence and authoritative status of the generated source-heading nodes and
 their `HAS_SECTION` edges.
+
+
+### Ingestion contract
+
+Manual ingestion now persists `headings[]` directly in each authoritative chapter record. Each heading carries its source document, source page, source reference/text, confidence, and deterministic extraction method. The ingestion stage deduplicates headings by `(reference, source_page, title)` and initializes structural artifact collections explicitly. This makes the resolver input complete and machine-readable rather than depending on a later enrichment pass.
