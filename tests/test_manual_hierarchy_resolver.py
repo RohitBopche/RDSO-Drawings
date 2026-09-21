@@ -246,9 +246,43 @@ def test_audit_manual_corpus_aggregates_manual_page_completeness():
     row = report["manuals"][0]
     assert row["pages_expected"] == 3
     assert row["pages_seen"] == 2
+    assert row["observed_page_owner_count"] == 2
+    assert row["observed_pages_with_multiple_chapters"] == []
     assert row["missing_pages"] == [11]
     assert row["unmapped_pages"] == [99]
     assert row["pages_with_headings"] == 1
     assert row["pages_with_clauses"] == 1
     assert row["content_empty_pages"] == []
     assert row["coverage_ratio"] == 2 / 3
+
+
+def test_audit_manual_corpus_uses_union_of_overlapping_chapter_ranges():
+    from validate_manual_hierarchy import audit_manual_corpus
+
+    payload = {"manuals": [{
+        "document_id": "DOC:TEST:2026",
+        "alias": "TEST",
+        "chapters": [
+            {
+                "chapter_id": "CHAPTER:TEST:CH_01",
+                "page_range": [10, 12],
+                "pages_seen": [10, 11, 12],
+                "headings": [],
+            },
+            {
+                "chapter_id": "CHAPTER:TEST:CH_02",
+                "page_range": [12, 14],
+                "pages_seen": [12, 13, 14],
+                "headings": [],
+            },
+        ],
+    }]}
+
+    report = audit_manual_corpus(payload)
+    row = report["manuals"][0]
+    assert row["pages_expected"] == 5
+    assert row["pages_seen"] == 4
+    assert row["missing_pages"] == []
+    assert row["observed_page_owner_count"] == 4
+    assert row["observed_pages_with_multiple_chapters"] == [12]
+    assert row["coverage_ratio"] == 0.8
