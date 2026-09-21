@@ -466,11 +466,14 @@ def main():
                 
             ch_num = target_ch['num']
             
-            # Extract clauses
+            # Extract clauses and explicitly labeled source artifacts.
             extracted = extract_clauses_from_text(doc_id, pnum, txt)
             if extracted:
                 manual_data[doc_id]['chapters'][ch_num]['clauses'].extend(extracted)
                 total_clauses_extracted += len(extracted)
+            structural = extract_structural_content(doc_id, ch_num, pnum, txt)
+            for key in ('tables', 'figures', 'evidence'):
+                manual_data[doc_id]['chapters'][ch_num][key].extend(structural[key])
 
     # Format structured output
     structured_manuals = []
@@ -486,6 +489,13 @@ def main():
                 if cid not in seen_clauses or len(cl['verbatim_text']) > len(seen_clauses[cid]['verbatim_text']):
                     seen_clauses[cid] = cl
             cinfo['clauses'] = list(seen_clauses.values())
+            for key in ('tables', 'figures', 'evidence'):
+                seen_artifacts = {}
+                for artifact in cinfo[key]:
+                    aid = artifact.get('id')
+                    if aid and (aid not in seen_artifacts or len(artifact.get('source_text', '')) > len(seen_artifacts[aid].get('source_text', ''))):
+                        seen_artifacts[aid] = artifact
+                cinfo[key] = list(seen_artifacts.values())
             ch_list.append(cinfo)
             total_chapters_count += 1
             
@@ -496,12 +506,15 @@ def main():
             'universe': 'manuals',
             'total_chapters': len(ch_list),
             'total_clauses': sum(len(c['clauses']) for c in ch_list),
+            'total_tables': sum(len(c['tables']) for c in ch_list),
+            'total_figures': sum(len(c['figures']) for c in ch_list),
+            'total_evidence': sum(len(c['evidence']) for c in ch_list),
             'chapters': ch_list
         })
 
     final_payload = {
         'extracted_at': datetime.now().isoformat(),
-        'pipeline_version': '4.0.0-deep-chapter-extraction',
+        'pipeline_version': '4.1.0-deterministic-structural-artifacts',
         'total_manuals': len(structured_manuals),
         'total_chapters': total_chapters_count,
         'total_pages_processed': total_pages_read,
@@ -517,6 +530,9 @@ def main():
     print(f"  Processed Pages:   {total_pages_read}")
     print(f"  Cataloged Chapters: {total_chapters_count}")
     print(f"  Extracted Clauses: {total_clauses_extracted}")
+    print(f"  Extracted Tables:   {sum(m['total_tables'] for m in structured_manuals)}")
+    print(f"  Extracted Figures:  {sum(m['total_figures'] for m in structured_manuals)}")
+    print(f"  Extracted Evidence: {sum(m['total_evidence'] for m in structured_manuals)}")
     print(f"  Saved Payload to:  {OUTPUT_FILE}")
     print("\nBreakdown by Manual:")
     for m in structured_manuals:
