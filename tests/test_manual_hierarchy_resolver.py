@@ -338,3 +338,32 @@ def test_corpus_audit_emits_chapter_and_manual_readiness_status():
     report = audit_manual_corpus(payload)
     assert report["chapters"][0]["status"] == "ATTENTION"
     assert report["manuals"][0]["status"] == "ATTENTION"
+
+
+def test_corpus_audit_summary_aggregates_readiness_and_page_gaps():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    spec = registry["chapters"][0]
+    chapter_id = f"CHAPTER:{registry['alias']}:CH_{spec['num']:02d}"
+    payload = {"manuals": [{
+        "document_id": doc_id,
+        "alias": registry["alias"],
+        "unmapped_pages": [999],
+        "chapters": [{
+            "chapter_id": chapter_id,
+            "page_range": [spec["page_start"], spec["page_end"]],
+            "pages_seen": [spec["page_start"]],
+            "headings": [],
+            "clauses": [],
+        }]
+    }]}
+
+    report = audit_manual_corpus(payload)
+    summary = report["summary"]
+    assert summary["manuals_total"] == 1
+    assert summary["chapters_total"] == 1
+    assert summary["manuals_by_status"]["ATTENTION"] == 1
+    assert summary["chapters_by_status"]["ATTENTION"] == 1
+    assert chapter_id in summary["chapters_requiring_attention"]
+    assert summary["pages"]["unmapped"] == 1
