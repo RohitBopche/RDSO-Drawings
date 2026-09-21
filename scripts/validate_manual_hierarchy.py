@@ -203,8 +203,6 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
             manual_content_empty_pages.update(metrics["content_empty_pages"])
             chapter_errors.extend(f"{chapter.get('chapter_id')}: {e}" for e in cov_errors)
             chapter_warnings = [f"{chapter.get('chapter_id')}: {w}" for w in cov_warnings]
-            errors.extend(chapter_errors)
-            warnings.extend(chapter_warnings)
             class_name = metrics["coverage_class"]
             class_counts[class_name] += 1
             manual_counts[class_name] += 1
@@ -218,6 +216,9 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
                     f"{chapter_id}: registry ownership mismatch on page {item['page']}"
                     for item in ownership_issues
                 )
+            # Publish chapter-attributed ownership failures into the global audit.
+            errors.extend(chapter_errors)
+            warnings.extend(chapter_warnings)
             readiness_reasons = []
             if chapter_errors:
                 readiness_status = "BLOCKED"
