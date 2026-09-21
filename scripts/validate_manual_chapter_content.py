@@ -14,12 +14,38 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from ingest_all_manual_chapters import MANUAL_CHAPTER_REGISTRY  # noqa: E402
 
 
+def validate_registry_boundaries(registry: dict | None = None) -> tuple[list[str], list[str]]:
+    """Validate the authoritative registry itself before checking extracted payloads."""
+    registry = registry or MANUAL_CHAPTER_REGISTRY
+    errors: list[str] = []
+    warnings: list[str] = []
+    for doc_id, manual in registry.items():
+        ranges = []
+        nums = [spec.get("num") for spec in manual.get("chapters", [])]
+        if nums != list(range(1, len(nums) + 1)):
+            errors.append(f"{doc_id}: registry chapter numbering is not contiguous: {nums}")
+        for spec in manual.get("chapters", []):
+            start, end = spec.get("page_start"), spec.get("page_end")
+            if not isinstance(start, int) or not isinstance(end, int) or start > end:
+                errors.append(f"{doc_id}: invalid registry range for chapter {spec.get('num')}: {[start, end]}")
+                continue
+            ranges.append((spec["num"], start, end))
+        ranges.sort()
+        for prev, cur in zip(ranges, ranges[1:]):
+            if cur[1] <= prev[2]:
+                overlap_pages = min(prev[2], cur[2]) - cur[1] + 1
+                if overlap_pages == 1 and prev[2] == cur[1]:
+                    warnings.append(f"{doc_id}: registry chapters {prev[0]} and {cur[0]} share boundary page {cur[1]}")
+                else:
+                    errors.append(f"{doc_id}: registry chapters {prev[0]} range {prev[1:]} overlaps chapter {cur[0]} range {cur[1:]}")
+    return errors, warnings
+
+
 def validate_payload(payload: dict) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
 
-    manuals = payload.get("manuals")
-    if not isinstance(manuals, list):
+    registry_errors, registry_warnings = validate_registry_boundaries()\n    errors.extend(registry_errors)\n    warnings.extend(registry_warnings)\n\n    manuals = payload.get("manuals")\n    if not isinstance(manuals, list):
         return ["payload.manuals must be a list"], warnings
 
     expected_ids = set(MANUAL_CHAPTER_REGISTRY)
