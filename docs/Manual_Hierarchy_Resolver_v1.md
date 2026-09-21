@@ -181,3 +181,22 @@ These fields are intended for downstream QA/UI consumption without requiring con
 ## Corpus audit summary
 
 The audit report also exposes a dashboard-ready `summary` object containing total Manuals/Chapters, readiness counts, IDs requiring attention or blocked, coverage-class counts, aggregate page gaps (`missing`, `unmapped`, `content_empty`), and validation error/warning totals. The summary is derived from the detailed Manual and Chapter rows and does not replace their evidence.
+
+## Manual readiness aggregation contract
+
+Manual-level readiness is derived from an explicit `manual_chapter_rows` collection for the current Manual; it does not depend on global chapter-row ordering. The precedence is:
+
+1. `BLOCKED` if the Manual has registry ownership errors or any chapter is `BLOCKED`.
+2. `ATTENTION` if there are manual-scope ownership warnings, any chapter is `ATTENTION`, or `unmapped_pages` exist.
+3. `HEALTHY` otherwise.
+
+The report also exposes `manuals[].chapter_status_counts` so consumers can distinguish a Manual blocked by one chapter from a Manual whose chapters are only in attention.
+
+Page-gap signals remain separate:
+
+- `missing_pages`: expected registry pages not observed in chapter extraction.
+- `unmapped_pages`: observed/extracted pages without an authoritative chapter owner; manual scope.
+- `content_empty_pages`: owned observed pages with no persisted structural/content artifact.
+- ownership mismatch: observed chapter ownership differs from the authoritative registry and is a hard validation failure.
+
+These signals are not collapsed into ownership state. A Manual may therefore have a `HEALTHY` chapter while the Manual itself is `ATTENTION` because of manual-scope unmapped pages.
