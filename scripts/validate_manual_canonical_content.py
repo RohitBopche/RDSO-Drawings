@@ -16,7 +16,7 @@ ALLOWED = {"HAS_SECTION", "HAS_CLAUSE", "HAS_TABLE", "HAS_FIGURE", "HAS_EVIDENCE
 CHAPTER_RE = re.compile(r"^CHAPTER:[^:]+:CH_\d{2}$")
 SECTION_RE = re.compile(r"^SECTION:[^:]+:SEC_.+$")
 SUBSECTION_RE = re.compile(r"^SUBSECTION:[^:]+:SEC_.+$")
-ARTIFACT_RE = re.compile(r"^(TABLE|FIGURE|EVIDENCE):[^:]+:CH_\\d{2}:P\\d{4}:\\d{2}_[0-9a-f]{8}$")
+ARTIFACT_RE = re.compile(r"^(TABLE|FIGURE|EVIDENCE):[^:]+:CH_\d{2}:P\d{4}:\d{2}_[0-9a-f]{8}$")
 
 
 def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
