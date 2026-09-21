@@ -274,11 +274,17 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
                     if not entity:
                         errors.append(f"{chapter_id}: missing canonical source-heading node {ref}")
                         continue
-                    if entity.get("specs", {}).get("Structure Status") != "AUTHORITATIVE_SOURCE_HEADING":
-                        errors.append(f"{chapter_id}: canonical heading {ref} is not authoritative")
                     parent = heading.get("parent_heading_ref")
+                    parent_available = heading.get("parent_available_in_source", True)
+                    expected_status = (
+                        "AUTHORITATIVE_SOURCE_HEADING_ORPHAN"
+                        if parent and not parent_available
+                        else "AUTHORITATIVE_SOURCE_HEADING"
+                    )
+                    if entity.get("specs", {}).get("Structure Status") != expected_status:
+                        errors.append(f"{chapter_id}: canonical heading {ref} is not authoritative")
                     owner = chapter_id
-                    if parent:
+                    if parent and parent_available:
                         pkind, _ = heading_kind(parent)
                         pprefix = "SECTION" if pkind in {"SECTION", "ANNEXURE"} else "SUBSECTION"
                         owner = f"{pprefix}:{alias}:{token}:SEC_{re.sub(r'[^A-Za-z0-9_]', '_', parent)}"
