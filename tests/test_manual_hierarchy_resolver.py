@@ -483,3 +483,59 @@ def test_manual_readiness_treats_unmapped_pages_as_manual_attention_not_ownershi
     assert chapter["ownership_status"] == "CLEAN"
     assert manual["status"] == "ATTENTION"
     assert manual["unmapped_pages"] == [9999]
+
+
+def test_chapter_readiness_preserves_multiple_attention_reasons():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    spec = registry["chapters"][0]
+    chapter_id = f"CHAPTER:{registry['alias']}:CH_{spec['num']:02d}"
+    payload = {"manuals": [{
+        "document_id": doc_id,
+        "alias": registry["alias"],
+        "chapters": [{
+            "chapter_id": chapter_id,
+            "page_range": [spec["page_start"], spec["page_start"] + 2],
+            "pages_seen": [spec["page_start"]],
+            "headings": [],
+            "clauses": [],
+        }]
+    }]}
+
+    report = audit_manual_corpus(payload)
+    row = report["chapters"][0]
+    assert row["readiness_status"] == "ATTENTION"
+    assert row["readiness_reasons"] == ["no_source_headings", "missing_pages"]
+
+
+def test_blocked_chapter_preserves_structural_error_and_coverage_reason():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    spec = registry["chapters"][0]
+    chapter_id = f"CHAPTER:{registry['alias']}:CH_{spec['num']:02d}"
+    payload = {"manuals": [{
+        "document_id": doc_id,
+        "alias": registry["alias"],
+        "chapters": [{
+            "chapter_id": chapter_id,
+            "page_range": [spec["page_start"], spec["page_start"] + 1],
+            "pages_seen": [spec["page_start"]],
+            "headings": [{
+                "reference": "2.1",
+                "source_page": spec["page_start"],
+                "title": "SUBSECTION WITHOUT PARENT",
+            }],
+            "clauses": [],
+        }]
+    }]}
+
+    report = audit_manual_corpus(payload)
+    row = report["chapters"][0]
+    assert row["readiness_status"] == "BLOCKED"
+    assert row["readiness_reasons"] == [
+        "structural_or_ownership_error",
+        "sparse",
+        "missing_pages",
+    ]
