@@ -803,6 +803,74 @@ def build_canonical_knowledge_graph():
                     evidence_text=f"Registry chapter boundary: pages {ch.get('page_range', [])}",
                 )
 
+    # Authoritative chapter content: clauses extracted from the same chapter registry
+    # are materialized as Manual-universe children with explicit provenance. Existing
+    # legacy clause entities are enriched in place rather than duplicated.
+    existing_entities = {e.get("id"): e for e in entities if e.get("id")}
+    for manual in chapter_data.get("manuals", []) if os.path.exists(chapter_path) else []:
+        manual_id = manual.get("document_id")
+        alias = manual.get("alias", "")
+        for ch in manual.get("chapters", []):
+            chapter_id = ch.get("chapter_id")
+            if not chapter_id:
+                continue
+            for clause in ch.get("clauses", []) or []:
+                clause_id = clause.get("clause_id")
+                if not clause_id:
+                    continue
+                page = clause.get("page_number")
+                page_range = ch.get("page_range", [])
+                provenance = {
+                    "source_document": manual_id,
+                    "source_page": page,
+                    "source_section": clause.get("ref") or clause.get("title"),
+                    "source_text": clause.get("verbatim_text", ""),
+                    "confidence": clause.get("confidence"),
+                    "extraction_method": clause.get("extraction_method", "deterministic_manual_clause_extraction"),
+                    "chapter_id": chapter_id,
+                    "chapter_page_range": page_range,
+                }
+                node = existing_entities.get(clause_id)
+                if node is None:
+                    node = add_entity(
+                        clause_id,
+                        clause.get("title", clause_id),
+                        clause.get("category", "CLAUSE"),
+                        "manual",
+                        "#00f5d4",
+                        clause.get("verbatim_text", clause.get("desc", ""))[:500],
+                        {
+                            "Manual Ref": clause.get("ref", ""),
+                            "Chapter": ch.get("title", ""),
+                            "Page": page,
+                        },
+                        x=0, y=6, z=0, alt=13,
+                    )
+                    existing_entities[clause_id] = node
+                node["domain"] = "manual"
+                node["universe"] = "manuals"
+                node["provenance"] = provenance
+                node["source_document"] = manual_id
+                node["source_page"] = page
+                node["source_section"] = clause.get("ref") or clause.get("title")
+                node["source_text"] = clause.get("verbatim_text", "")
+                node["confidence"] = clause.get("confidence")
+                node["extraction_method"] = provenance["extraction_method"]
+                node["parent_chapter_id"] = chapter_id
+                node["specs"] = {**(node.get("specs") or {}), "Page": page, "Chapter": ch.get("title", ""), "Manual": manual_id}
+                if not any(e.get("from") == chapter_id and e.get("to") == clause_id and e.get("rel") == "HAS_CLAUSE" for e in edges):
+                    add_edge(
+                        chapter_id,
+                        clause_id,
+                        "HAS_CLAUSE",
+                        f"Authoritative extracted clause owned by chapter {ch.get('chapter_number')}",
+                        source_dwg=manual_id,
+                        revision=manual.get("pipeline_version", "STRUCTURE"),
+                        region=clause.get("ref", f"Page {page}"),
+                        crop="",
+                        evidence_text=clause.get("verbatim_text", "")[:500],
+                    )
+
     # Hard isolation gate: no canonical edge may cross between the Manuals and
     # Drawing universes. Future cross-domain relationships belong in a separate
     # relationship layer and must never be inferred here.
