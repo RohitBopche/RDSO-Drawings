@@ -317,254 +317,42 @@ def extract_structural_content(doc_id, chapter_num, page_num, text):
 
 
 def extract_source_headings(doc_id, page_num, text):
-    """Extract conservative numbered source headings without treating arbitrary prose as structure."""
+    """Extract conservative numbered source headings from page text.
+
+    Only standalone numbered lines are candidates. Requirement-like prose,
+    long sentence fragments, and obvious table/figure/page labels are rejected.
+    The output is evidence about source structure, not inferred semantic structure.
+    """
     headings = []
-    for match in re.finditer(r'(?m)^\s*(\d+(?:\.\d+){0,2})\s+([A-Z][^\n]{2,140})\s*
-    """
-    Extracts individual statutory clauses from page text based on numbering schemes.
-    """
-    clauses = []
-    reg = MANUAL_CHAPTER_REGISTRY.get(doc_id)
-    alias = reg['alias'] if reg else 'DOC'
-    
-    # Custom regex patterns per manual
-    if doc_id == 'DOC:IRPWM:2024:ACS14':
-        pattern = re.compile(r'(?:^|\n)\s*(\d{3,4})\.?\s+([A-Z][^\n\.\(]{3,80})', re.MULTILINE)
-    elif doc_id == 'DOC:USFD:2026:ACS4':
-        pattern = re.compile(r'(?:^|\n)\s*(\d+\.\d+(?:\.\d+)?)\.?\s+([A-Z][^\n\.\(]{3,80})', re.MULTILINE)
-    elif doc_id in ('DOC:AT_WELD:2022', 'DOC:FBW:2022:CS5'):
-        pattern = re.compile(r'(?:^|\n)\s*(\d+(?:\.\d+)?)\.?\s+([A-Z][^\n\.\(]{3,80})', re.MULTILINE)
-    else: # TMM and STMM
-        pattern = re.compile(r'(?:^|\n)\s*(\d{3,4})\.?\s+([A-Z][^\n\.\(]{3,80})', re.MULTILINE)
-        
-    matches = list(pattern.finditer(text))
-    
-    for i, m in enumerate(matches):
-        para_num = m.group(1).strip()
-        # Filter out false positives (e.g. Figure numbers or page numbers)
-        if any(bad in m.group(2).upper() for bad in ['FIGURE', 'TABLE', 'PAGE', 'ACS -', 'SKETCH']):
-            continue
-            
-        title = m.group(2).strip()
-        start_pos = m.start()
-        end_pos = matches[i+1].start() if i+1 < len(matches) else len(text)
-        clause_body = text[start_pos:end_pos].strip()
-        
-        # Extract tolerances
-        tolerances = []
-        for tr in TOL_RANGE_RE.finditer(clause_body):
-            tolerances.append({
-                'text': tr.group(0),
-                'min': float(tr.group(1)),
-                'max': float(tr.group(2)),
-                'unit': tr.group(3)
-            })
-        for ts in TOL_SINGLE_RE.finditer(clause_body):
-            tolerances.append({
-                'text': ts.group(0),
-                'value': float(ts.group(1)),
-                'unit': ts.group(2)
-            })
-            
-        # Extract requirements
-        reqs = [r.strip() for r in REQUIREMENT_RE.findall(clause_body) if len(r.strip()) > 10][:3]
-        
-        # Roles, Equipment, Failure Modes, Components
-        roles = sorted(list(set(ROLE_RE.findall(clause_body))))
-        equips = sorted(list(set(EQUIP_RE.findall(clause_body))))
-        fails = sorted(list(set(FAIL_RE.findall(clause_body))))
-        comps = sorted(list(set(COMP_RE.findall(clause_body))))
-        
-        # Deterministic Stable ID
-        clean_para = re.sub(r'[^A-Za-z0-9_]', '_', para_num)
-        clause_id = f"CLAUSE:{alias}:PARA_{clean_para}"
-        
-        # Summary (first 2 clean sentences)
-        sentences = [s.strip() for s in re.split(r'\. |\n', clause_body) if len(s.strip()) > 15]
-        summary = ". ".join(sentences[:2]) + ("." if sentences else "")
-        if len(summary) > 250:
-            summary = summary[:247] + "..."
-            
-        # Deterministic content hierarchy derived from the clause reference.
-        # This is explicitly marked as derived, not treated as an authoritative
-        # TOC/heading hierarchy until source headings are ingested.
-        section_ref = para_num.split('.')[0].split('(')[0]
-        subsection_match = re.match(r'^([^.(]+(?:\\.[^.(]+)?(?:\\([^)]*\\))?)', para_num)
-        subsection_ref = subsection_match.group(1) if subsection_match else section_ref
-
-        clauses.append({
-            'clause_id': clause_id,
-            'para_number': para_num,
-            'section_ref': section_ref,
-            'subsection_ref': subsection_ref,
-            'title': title,
-            'page_number': page_num,
-            'source_document': doc_id,
-            'source_page': page_num,
-            'source_section': para_num,
-            'source_text': clause_body[:1200],
-            'confidence': 0.95,
-            'extraction_method': 'deterministic_manual_clause_numbering',
-            'summary': summary if summary else title,
-            'verbatim_text': clause_body[:1200], # Keep high-fidelity block
-            'tolerances': tolerances[:5],
-            'requirements': reqs,
-            'roles': roles,
-            'equipment': equips,
-            'failure_modes': fails,
-            'related_components': comps
-        })
-        
-    return clauses
-
-
-def main():
-    print("================================================================================")
-    print("           DEEP CHAPTER-BY-CHAPTER MANUALS KNOWLEDGE EXTRACTION")
-    print("================================================================================")
-    
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    
-    manual_data = {doc_id: {
-        'document_id': doc_id,
-        'alias': meta['alias'],
-        'title': meta['title'],
-        'chapters': {ch['num']: {
-            'chapter_id': f"CHAPTER:{meta['alias']}:CH_{ch['num']:02d}",
-            'chapter_number': ch['num'],
-            'title': ch['title'],
-            'page_range': [ch['page_start'], ch['page_end']],
-            'parent_manual_id': doc_id,
-            'universe': 'manuals',
-            'order': ch['num'],
-            'structure_status': 'STRUCTURE_VERIFIED',
-            'topics': ch['topics'],
-            'clauses': []
-        } for ch in meta['chapters']}
-    } for doc_id, meta in MANUAL_CHAPTER_REGISTRY.items()}
-    
-    total_pages_read = 0
-    total_clauses_extracted = 0
-    pages_by_doc = {}
-    
-    print(f"Reading raw pages from: {EXTRACTED_PAGES_PATH} ...")
-    with open(EXTRACTED_PAGES_PATH, 'r', encoding='utf-8') as f:
-        for line in f:
-            data = json.loads(line)
-            doc_id = data.get('document_id')
-            if doc_id not in MANUAL_CHAPTER_REGISTRY:
-                continue
-                
-            total_pages_read += 1
-            pages_by_doc[doc_id] = pages_by_doc.get(doc_id, 0) + 1
-            pnum = data.get('page_number', 0)
-            txt = data.get('text_content', '')
-            
-            # Identify chapter
-            target_ch = get_chapter_for_page(doc_id, pnum)
-            if not target_ch:
-                # Preserve the page as an explicit extraction gap rather than
-                # contaminating a neighboring chapter.
-                continue
-                
-            ch_num = target_ch['num']
-            
-            # Extract clauses and explicitly labeled source artifacts.
-            extracted = extract_clauses_from_text(doc_id, pnum, txt)
-            if extracted:
-                manual_data[doc_id]['chapters'][ch_num]['clauses'].extend(extracted)
-                total_clauses_extracted += len(extracted)
-            structural = extract_structural_content(doc_id, ch_num, pnum, txt)
-            manual_data[doc_id]['chapters'][ch_num]['headings'].extend(extract_source_headings(doc_id, pnum, txt))
-            seen_headings = {(h.get('reference'), h.get('title'), h.get('page_number')): h for h in cinfo.get('headings', [])}
-            cinfo['headings'] = list(seen_headings.values())
-            for key in ('tables', 'figures', 'evidence'):
-                manual_data[doc_id]['chapters'][ch_num][key].extend(structural[key])
-
-    # Format structured output
-    structured_manuals = []
-    total_chapters_count = 0
-    
-    for doc_id, mdata in manual_data.items():
-        ch_list = []
-        for ch_num, cinfo in sorted(mdata['chapters'].items()):
-            # Deduplicate clauses by clause_id, preserving richest
-            seen_clauses = {}
-            for cl in cinfo['clauses']:
-                cid = cl['clause_id']
-                if cid not in seen_clauses or len(cl['verbatim_text']) > len(seen_clauses[cid]['verbatim_text']):
-                    seen_clauses[cid] = cl
-            cinfo['clauses'] = list(seen_clauses.values())
-            for key in ('tables', 'figures', 'evidence'):
-                seen_artifacts = {}
-                for artifact in cinfo[key]:
-                    aid = artifact.get('id')
-                    if aid and (aid not in seen_artifacts or len(artifact.get('source_text', '')) > len(seen_artifacts[aid].get('source_text', ''))):
-                        seen_artifacts[aid] = artifact
-                cinfo[key] = list(seen_artifacts.values())
-            ch_list.append(cinfo)
-            total_chapters_count += 1
-            
-        structured_manuals.append({
-            'document_id': doc_id,
-            'alias': mdata['alias'],
-            'title': mdata['title'],
-            'universe': 'manuals',
-            'total_chapters': len(ch_list),
-            'total_clauses': sum(len(c['clauses']) for c in ch_list),
-            'total_tables': sum(len(c['tables']) for c in ch_list),
-            'total_figures': sum(len(c['figures']) for c in ch_list),
-            'total_evidence': sum(len(c['evidence']) for c in ch_list),
-            'total_headings': sum(len(c.get('headings', [])) for c in ch_list),
-            'chapters': ch_list
-        })
-
-    final_payload = {
-        'extracted_at': datetime.now().isoformat(),
-        'pipeline_version': '4.1.0-deterministic-structural-artifacts',
-        'total_manuals': len(structured_manuals),
-        'total_chapters': total_chapters_count,
-        'total_pages_processed': total_pages_read,
-        'total_clauses_extracted': total_clauses_extracted,
-        'manuals': structured_manuals
+    pattern = re.compile(
+        r"(?m)^\s*(\d+(?:\.\d+){0,2})\.?\s+([A-Z][^\n]{2,140})\s*$"
+    )
+    reject_terms = {
+        "shall", "should", "must", "will", " is ", " are ", " were ",
+        " may ", " can ", " required ", " ensure ", " provided ",
     }
-    
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-        json.dump(final_payload, f, indent=2, ensure_ascii=False)
-        
-    print(f"\n[SUCCESS] Extraction Complete!")
-    print(f"  Processed Manuals: {len(structured_manuals)}")
-    print(f"  Processed Pages:   {total_pages_read}")
-    print(f"  Cataloged Chapters: {total_chapters_count}")
-    print(f"  Extracted Clauses: {total_clauses_extracted}")
-    print(f"  Extracted Tables:   {sum(m['total_tables'] for m in structured_manuals)}")
-    print(f"  Extracted Figures:  {sum(m['total_figures'] for m in structured_manuals)}")
-    print(f"  Extracted Evidence: {sum(m['total_evidence'] for m in structured_manuals)}")
-    print(f"  Saved Payload to:  {OUTPUT_FILE}")
-    print("\nBreakdown by Manual:")
-    for m in structured_manuals:
-        print(f"  - {m['alias']}: {m['total_chapters']} Chapters, {m['total_clauses']} Unique Clauses ({pages_by_doc.get(m['document_id'], 0)} pages)")
-    print("================================================================================")
-
-if __name__ == '__main__':
-    main()
-, text or ''):
-        ref = match.group(1)
-        title = match.group(2).strip()
+    for match in pattern.finditer(text or ""):
+        reference = match.group(1).strip()
+        title = re.sub(r"\s+", " ", match.group(2).strip()).strip(" .:-")
+        if not title:
+            continue
         if len(title.split()) > 20:
             continue
-        if re.search(r'\b(?:shall|should|must|is|are|will)\b', title, re.I):
+        lowered = f" {title.lower()} "
+        if any(term in lowered for term in reject_terms):
+            continue
+        if re.search(r"\b(?:figure|fig\.?|table|page|sketch)\s*[-.:]?\s*\d", lowered):
             continue
         headings.append({
-            'reference': ref,
-            'title': title,
-            'page_number': page_num,
-            'source_document': doc_id,
-            'source_page': page_num,
-            'source_section': ref,
-            'source_text': match.group(0).strip(),
-            'confidence': 0.92,
-            'extraction_method': 'deterministic_numbered_source_heading',
+            "reference": reference,
+            "title": title,
+            "page_number": page_num,
+            "source_document": doc_id,
+            "source_page": page_num,
+            "source_section": reference,
+            "source_text": match.group(0).strip(),
+            "confidence": 0.92,
+            "extraction_method": "deterministic_numbered_source_heading",
         })
     return headings
 
