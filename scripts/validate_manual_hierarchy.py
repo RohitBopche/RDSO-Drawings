@@ -208,14 +208,44 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
             class_name = metrics["coverage_class"]
             class_counts[class_name] += 1
             manual_counts[class_name] += 1
+            chapter_id = chapter.get("chapter_id")
+            ownership_issues = [
+                mismatch for mismatch in ownership_metrics.get("ownership_mismatches", [])
+                if chapter_id in mismatch.get("observed", []) or chapter_id in mismatch.get("expected", [])
+            ]
+            if ownership_issues:
+                chapter_errors.extend(
+                    f"{chapter_id}: registry ownership mismatch on page {item['page']}"
+                    for item in ownership_issues
+                )
+            readiness_reasons = []
+            if chapter_errors:
+                readiness_status = "BLOCKED"
+                readiness_reasons.append("structural_or_ownership_error")
+            elif metrics["coverage_class"] in {"NO_SOURCE_HEADINGS", "SPARSE"}:
+                readiness_status = "ATTENTION"
+                readiness_reasons.append(metrics["coverage_class"].lower())
+            elif metrics["missing_pages"]:
+                readiness_status = "ATTENTION"
+                readiness_reasons.append("missing_pages")
+            elif metrics["content_empty_pages"]:
+                readiness_status = "ATTENTION"
+                readiness_reasons.append("content_empty_pages")
+            else:
+                readiness_status = "HEALTHY"
+                readiness_reasons.append("complete_structural_coverage")
             row = {
                 "manual_id": manual.get("document_id"),
                 "manual_alias": manual.get("alias"),
-                "chapter_id": chapter.get("chapter_id"),
+                "chapter_id": chapter_id,
                 **metrics,
+                "ownership_status": "BLOCKED" if ownership_issues else "CLEAN",
+                "ownership_issue_pages": [item["page"] for item in ownership_issues],
+                "readiness_status": readiness_status,
+                "readiness_reasons": readiness_reasons,
                 "errors": chapter_errors,
                 "warnings": chapter_warnings,
-                "status": "BLOCKED" if chapter_errors else ("ATTENTION" if chapter_warnings else "HEALTHY"),
+                "status": readiness_status,
             }
             rows.append(row)
 
