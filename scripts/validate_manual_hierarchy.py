@@ -121,7 +121,7 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
             manual_counts["chapters"] += 1
             headings, heading_errors = resolve_heading_sequence(chapter.get("headings", []) or [], chapter.get("page_range", []))
             chapter_errors = [f"{chapter.get('chapter_id')}: {e}" for e in heading_errors]
-            cov_errors, cov_warnings, metrics = _coverage_audit(chapter, manual.get("unmapped_pages", []) or [])
+            cov_errors, cov_warnings, metrics = _coverage_audit(chapter)
             manual_page_expected += metrics["pages_expected"] or 0
             manual_page_seen.update(chapter.get("pages_seen", []) or [])
             manual_missing_pages.update(metrics["missing_pages"])
