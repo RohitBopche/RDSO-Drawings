@@ -55,9 +55,8 @@ def test_manual_hierarchy_allows_only_structural_relationships():
 def test_manual_frontend_hard_blocks_cross_universe_edges():
     source = _source()
     assert "function addEdgeToGraph(edgeData)" in source
-    assert "getNodeUniverse(sourceNode.data)" in source
-    assert "getNodeUniverse(targetNode.data)" in source
-    assert "sourceUniverse !== targetUniverse" in source
+    assert "getNodeUniverse(sourceData) !== getNodeUniverse(targetData)" in source
+    assert "Manual and Drawing universes remain hard-isolated" in source
 
 
 def test_manual_entry_resets_descendants_and_selects_canonical_root():
