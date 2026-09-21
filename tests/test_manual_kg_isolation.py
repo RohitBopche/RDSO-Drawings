@@ -28,7 +28,16 @@ def test_canonical_manual_chapters_are_isolated():
         if n.get("domain") == "manual":
             assert n.get("universe", "manuals") == "manuals" or n["type"] in {"DOCUMENT", "CHAPTER", "CLAUSE", "TOLERANCE", "EQUIPMENT", "FAILURE_MODE"}
 
+    structure = json.loads(
+        (ROOT / "data" / "knowledge-graph" / "intermediate" / "all_chapters_extracted.json").read_text(encoding="utf-8")
+    )
+    authoritative_roots = {manual["document_id"] for manual in structure["manuals"]}
+    assert authoritative_roots.issubset(nodes)
+
     for edge in data["edges"]:
+        assert edge["from"] in nodes and edge["to"] in nodes, (
+            f"dangling canonical edge: {edge['from']} -> {edge['to']}"
+        )
         a = nodes[edge["from"]]
         b = nodes[edge["to"]]
         assert (a.get("domain") == "manual") == (b.get("domain") == "manual"), (
