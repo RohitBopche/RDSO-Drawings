@@ -248,10 +248,9 @@ def get_chapter_for_page(doc_id, page_num):
     for ch in reg['chapters']:
         if ch['page_start'] <= page_num <= ch['page_end']:
             return ch
-    # Fallback to last chapter if slightly beyond registered range
-    if page_num > reg['chapters'][-1]['page_end']:
-        return reg['chapters'][-1]
-    return reg['chapters'][0]
+    # Never silently assign out-of-range pages to the first/last chapter.
+    # Unmapped pages are handled explicitly by the caller for review.
+    return None
 
 
 def extract_clauses_from_text(doc_id, page_num, text):
@@ -354,6 +353,10 @@ def main():
             'chapter_number': ch['num'],
             'title': ch['title'],
             'page_range': [ch['page_start'], ch['page_end']],
+            'parent_manual_id': doc_id,
+            'universe': 'manuals',
+            'order': ch['num'],
+            'structure_status': 'STRUCTURE_VERIFIED',
             'topics': ch['topics'],
             'clauses': []
         } for ch in meta['chapters']}
@@ -379,6 +382,8 @@ def main():
             # Identify chapter
             target_ch = get_chapter_for_page(doc_id, pnum)
             if not target_ch:
+                # Preserve the page as an explicit extraction gap rather than
+                # contaminating a neighboring chapter.
                 continue
                 
             ch_num = target_ch['num']
@@ -410,6 +415,7 @@ def main():
             'document_id': doc_id,
             'alias': mdata['alias'],
             'title': mdata['title'],
+            'universe': 'manuals',
             'total_chapters': len(ch_list),
             'total_clauses': sum(len(c['clauses']) for c in ch_list),
             'chapters': ch_list
