@@ -66,8 +66,8 @@ class ManualKG:
                     "id": c["chapter_id"],
                     "number": c.get("chapter_number", c.get("order")),
                     "title": c["title"],
-                    "page_start": c.get("page_start"),
-                    "page_end": c.get("page_end"),
+                    "page_start": (c.get("page_range") or [None, None])[0],
+                    "page_end": (c.get("page_range") or [None, None])[1],
                 }
                 for c in manual.get("chapters", [])
             ],
@@ -93,6 +93,11 @@ class ManualKG:
                 "type": child.get("type"),
                 "label": child.get("label"),
                 "page": child.get("page", child.get("source_page")),
+                "source_page": child.get("source_page", child.get("page")),
+                "source_section": child.get("source_section"),
+                "source_text": child.get("source_text"),
+                "confidence": child.get("confidence"),
+                "extraction_method": child.get("extraction_method"),
                 "rel": edge.get("rel"),
             })
         children.sort(key=lambda x: (x["page"] if x["page"] is not None else 999999, x["id"]))
