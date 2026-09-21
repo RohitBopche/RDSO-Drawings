@@ -286,3 +286,31 @@ def test_audit_manual_corpus_uses_union_of_overlapping_chapter_ranges():
     assert row["observed_page_owner_count"] == 4
     assert row["observed_pages_with_multiple_chapters"] == [12]
     assert row["coverage_ratio"] == 0.8
+
+
+def test_corpus_audit_exposes_registry_page_ownership_metrics():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    first = registry["chapters"][0]
+    chapter_id = f"CHAPTER:{registry['alias']}:CH_{first['num']:02d}"
+    payload = {"manuals": [{
+        "document_id": doc_id,
+        "alias": registry["alias"],
+        "chapters": [{
+            "chapter_id": chapter_id,
+            "page_range": [first["page_start"], first["page_end"]],
+            "pages_seen": [first["page_start"]],
+            "headings": [],
+            "clauses": [],
+        }]
+    }]}
+
+    report = audit_manual_corpus(payload)
+    row = report["manuals"][0]
+    audit = row["registry_page_audit"]
+    assert audit["registered_pages"] == first["page_end"] - first["page_start"] + 1
+    assert audit["observed_pages"] == 1
+    assert audit["missing_pages"]
+    assert audit["unmapped_pages"] == []
+    assert audit["ownership_mismatches"] == []
