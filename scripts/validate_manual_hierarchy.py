@@ -56,6 +56,14 @@ def _coverage_audit(chapter: dict) -> tuple[list[str], list[str], dict]:
     }
     if len(headings) > 0 and metrics["pages_with_headings"] == 0:
         errors.append("headings have no valid source-page coverage")
+    if errors:
+        metrics["coverage_class"] = "MALFORMED"
+    elif not headings:
+        metrics["coverage_class"] = "NO_SOURCE_HEADINGS"
+    elif len(headings) == 1 or len(warnings) > 0:
+        metrics["coverage_class"] = "SPARSE"
+    else:
+        metrics["coverage_class"] = "HEALTHY"
     return errors, warnings, metrics
 
 def main() -> int:
@@ -71,6 +79,7 @@ def main() -> int:
     warnings = []
     coverage_rows = []
     checked = 0
+    class_counts = {"HEALTHY": 0, "SPARSE": 0, "NO_SOURCE_HEADINGS": 0, "MALFORMED": 0}
     canonical_entities = {e.get("id"): e for e in (canonical or {}).get("entities", []) if e.get("id")}
     canonical_edges = (canonical or {}).get("edges", [])
     for manual in payload.get("manuals", []):
@@ -84,6 +93,7 @@ def main() -> int:
             errors.extend(f"{chapter.get('chapter_id')}: {e}" for e in cov_errors)
             warnings.extend(f"{chapter.get('chapter_id')}: {w}" for w in cov_warnings)
             coverage_rows.append((chapter.get('chapter_id'), metrics))
+            class_counts[metrics['coverage_class']] += 1
             refs = [h["reference"] for h in headings]
             if len(refs) != len(set(refs)):
                 errors.append(f"{chapter.get('chapter_id')}: duplicate references remain after resolution")
@@ -118,7 +128,8 @@ def main() -> int:
     print(f"Checked {checked} manual chapters.")
     print("Coverage report:")
     for chapter_id, metrics in coverage_rows:
-        print(f"  {chapter_id}: pages {metrics['pages_seen']}/{metrics['pages_expected']}, headings {metrics['headings']}, clauses {metrics['clauses']}, artifacts {metrics['tables']}/{metrics['figures']}/{metrics['evidence']}, first={metrics['first_heading']}, last={metrics['last_heading']}")
+        print(f"  {chapter_id}: class={metrics['coverage_class']}, pages {metrics['pages_seen']}/{metrics['pages_expected']}, headings {metrics['headings']}, clauses {metrics['clauses']}, artifacts {metrics['tables']}/{metrics['figures']}/{metrics['evidence']}, first={metrics['first_heading']}, last={metrics['last_heading']}")
+    print(f"Coverage classes: {class_counts}")
     if warnings:
         print(f"WARN: {len(warnings)} coverage warning(s)")
         for warning in warnings[:50]:
