@@ -265,3 +265,15 @@ The canonical graph attaches such a heading directly to its authoritative Chapte
 
 This policy prevents incomplete source extraction from suppressing an otherwise valid chapter hierarchy while keeping the missing structural evidence explicit and auditable.
 \n
+
+## Source-heading gap diagnostics
+
+The Gate K coverage audit now separates source-heading coverage from generic page/content coverage. Each chapter row exposes:
+
+- `heading_gap_pages` — observed pages containing a clause, table, figure, or evidence artifact but no persisted source heading.
+- `heading_coverage_ratio` — source-heading-covered content pages divided by pages carrying any persisted content/artifact.
+- `heading_gap_class` — `NO_SOURCE_HEADING_EVIDENCE`, `PARTIAL_SOURCE_HEADING_COVERAGE`, or `FULL_SOURCE_HEADING_COVERAGE`.
+
+These fields are diagnostics for the next extraction-improvement loop. They do **not** synthesize headings, alter chapter identity, or promote clause numbering into authoritative structure. A page with no extracted content remains separately classified as `content_empty_pages`.
+
+This distinction lets the next manual extraction pass target pages where useful source content exists but the conservative heading extractor found no source heading, without weakening the deterministic hierarchy contract.
