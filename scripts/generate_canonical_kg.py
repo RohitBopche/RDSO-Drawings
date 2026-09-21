@@ -1060,12 +1060,18 @@ def build_canonical_knowledge_graph():
     entity_domains = {e["id"]: e.get("domain") for e in entities}
     allowed_manual_domains = {"manual"}
     blocked_cross_domain = []
+    dangling_edges = []
     kept_edges = []
     kept_facts = []
     edge_to_fact = {}
     for idx, edge in enumerate(edges):
-        from_domain = entity_domains.get(edge.get("from"))
-        to_domain = entity_domains.get(edge.get("to"))
+        src = edge.get("from")
+        dst = edge.get("to")
+        if src not in entity_domains or dst not in entity_domains:
+            dangling_edges.append(edge)
+            continue
+        from_domain = entity_domains.get(src)
+        to_domain = entity_domains.get(dst)
         if {from_domain, to_domain} == {"manual", "drawing"} or (
             from_domain in allowed_manual_domains and to_domain not in allowed_manual_domains
         ) or (
