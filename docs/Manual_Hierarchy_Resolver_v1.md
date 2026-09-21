@@ -167,6 +167,17 @@ Each chapter audit row now exposes a deterministic `status`:
 Each manual receives the same status based on its chapter rows plus manual-level registry ownership errors/warnings. This is a readiness signal, not a semantic quality score: it identifies where extraction or ownership requires attention without hiding the underlying evidence lists and metrics.
 
 
+## Readiness field contract
+
+The machine-readable chapter row exposes both the legacy `status` field and explicit readiness fields:
+
+- `readiness_status`: `HEALTHY`, `ATTENTION`, or `BLOCKED`.
+- `readiness_reasons`: deterministic reason codes such as `complete_structural_coverage`, `no_source_headings`, `sparse`, `missing_pages`, `content_empty_pages`, or `structural_or_ownership_error`.
+- `ownership_status`: `CLEAN` or `BLOCKED`.
+- `ownership_issue_pages`: exact pages with registry ownership mismatches.
+
+These fields are intended for downstream QA/UI consumption without requiring consumers to reinterpret free-form warnings. The classification remains evidence-based and does not infer semantic completeness from chapter topics.
+
 ## Corpus audit summary
 
 The audit report also exposes a dashboard-ready `summary` object containing total Manuals/Chapters, readiness counts, IDs requiring attention or blocked, coverage-class counts, aggregate page gaps (`missing`, `unmapped`, `content_empty`), and validation error/warning totals. The summary is derived from the detailed Manual and Chapter rows and does not replace their evidence.
