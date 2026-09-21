@@ -68,3 +68,47 @@ def test_source_provenance_is_required():
     canonical["entities"][2].pop("source_page")
     errors, _ = validate(structure, canonical)
     assert any("missing source_page" in e for e in errors)
+
+
+def test_nested_section_subsection_ownership_and_page_bounds():
+    structure = {
+        "manuals": [{
+            "document_id": "DOC:M:1",
+            "chapters": [{
+                "chapter_id": "CHAPTER:M:CH_01",
+                "chapter_number": 1,
+                "page_range": [10, 20],
+                "clauses": [{
+                    "clause_id": "CLAUSE:M:PARA_101",
+                    "page_number": 12,
+                }],
+            }],
+        }]
+    }
+    canonical = {
+        "entities": [
+            {"id": "CHAPTER:M:CH_01", "type": "CHAPTER", "domain": "manual",
+             "universe": "manuals", "specs": {"PageRange": [10, 20]}},
+            {"id": "SECTION:M:SEC_101", "type": "SECTION", "domain": "manual",
+             "universe": "manuals", "parent_chapter_id": "CHAPTER:M:CH_01",
+             "source_document": "DOC:M:1", "source_page": 12,
+             "extraction_method": "deterministic_manual_clause_numbering"},
+            {"id": "SUBSECTION:M:SEC_101", "type": "SUBSECTION", "domain": "manual",
+             "universe": "manuals", "parent_chapter_id": "CHAPTER:M:CH_01",
+             "source_document": "DOC:M:1", "source_page": 12,
+             "extraction_method": "deterministic_manual_clause_numbering"},
+            {"id": "CLAUSE:M:PARA_101", "type": "CLAUSE", "domain": "manual",
+             "universe": "manuals", "parent_chapter_id": "CHAPTER:M:CH_01",
+             "source_document": "DOC:M:1", "source_page": 12,
+             "extraction_method": "deterministic_manual_clause_numbering"},
+        ],
+        "edges": [
+            {"from": "CHAPTER:M:CH_01", "to": "SECTION:M:SEC_101", "rel": "HAS_SECTION"},
+            {"from": "SECTION:M:SEC_101", "to": "SUBSECTION:M:SEC_101", "rel": "HAS_SECTION"},
+            {"from": "SUBSECTION:M:SEC_101", "to": "CLAUSE:M:PARA_101", "rel": "HAS_CLAUSE"},
+            {"from": "CHAPTER:M:CH_01", "to": "CLAUSE:M:PARA_101", "rel": "HAS_CLAUSE"},
+        ],
+    }
+    errors, warnings = validate(structure, canonical)
+    assert errors == []
+    assert warnings == []
