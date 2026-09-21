@@ -116,6 +116,10 @@ def test_manual_clause_metadata_maps_to_exactly_one_registered_chapter():
     assert not ambiguous, f"Ambiguous manual clauses: {ambiguous[:20]}"
 
 
+def load_manual_structure():
+    return load_structure()
+
+
 def test_manual_content_index_is_chapter_scoped():
     content_path = ROOT / "data" / "manual_content_index.js"
     text = content_path.read_text(encoding="utf-8")
