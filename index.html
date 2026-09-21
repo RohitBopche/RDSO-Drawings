@@ -3308,6 +3308,7 @@
 
     function getNodeUniverse(data) {
       if (!data) return 'drawings';
+      if (data.universe === 'manuals' || data.universe === 'drawings') return data.universe;
       const id = data.id || '';
       const type = data.type || '';
       const domain = data.domain || '';
@@ -3539,6 +3540,25 @@
     }
     window.switchKnowledgeUniverse = switchKnowledgeUniverse;
 
+    function layoutManualChildren(manualId) {
+      const parent = nodeHierarchyMap.get(manualId);
+      if (!parent || parent.universe !== 'manuals' || parent.childrenIds.length === 0) return;
+      const children = parent.childrenIds
+        .map(id => kgPhysicsNodesMap.get(id))
+        .filter(Boolean)
+        .sort((a, b) => (nodeHierarchyMap.get(a.data.id)?.depth || 0) - (nodeHierarchyMap.get(b.data.id)?.depth || 0));
+      const count = children.length;
+      const radius = Math.max(13, Math.min(30, count * 1.55));
+      children.forEach((n, idx) => {
+        const angle = count === 1 ? 0 : -Math.PI / 2 + (idx / (count - 1)) * Math.PI;
+        n.targetX = parent.id === manualId ? Math.cos(angle) * radius : 0;
+        n.targetY = parent.id === manualId ? 16 : 0;
+        n.targetZ = parent.id === manualId ? Math.sin(angle) * radius : 0;
+      });
+      isPhysicsSleeping = true;
+      isTransitioningLayout = true;
+    }
+
     function toggleNodeExpansion(nodeId) {
       const entry = nodeHierarchyMap.get(nodeId);
       if (!entry || entry.childrenIds.length === 0) return;
@@ -3567,6 +3587,9 @@
       }
 
       updateGraphVisibility();
+      if (entry.universe === 'manuals' && entry.childrenIds.length > 0) {
+        layoutManualChildren(nodeId);
+      }
       updateExpansionBillboards();
       if (currentSelectedNode) {
         renderDrawingOverview(currentSelectedNode.data, currentActiveDossier);
@@ -4410,36 +4433,27 @@
     }
 
     function highlightManualsEcosystem() {
+      // Manual semantic mode must respect the Manuals universe boundary.
+      if (currentKnowledgeUniverse !== 'manuals') switchKnowledgeUniverse('manuals');
       const manualIds = new Set();
       kgPhysicsNodes.forEach(n => {
-        if (n.data.domain === "manual" || n.data.domain === "manuals" || n.data.domain === "tolerance" || n.data.domain === "equipment" ||
-            n.data.type === "DOCUMENT" || n.data.type === "CHAPTER" || n.data.type === "CLAUSE" ||
-            n.data.type === "SPECIFICATION" || n.data.type === "SOP" ||
-            n.data.type === "TOLERANCE" || n.data.type === "EQUIPMENT") {
-          manualIds.add(n.data.id);
-        }
+        if (n.universe === 'manuals') manualIds.add(n.data.id);
       });
-      // Switch drawer tab to manuals tree and open
       switchDrawerTab('manuals');
       toggleIntelligenceDrawer(true);
 
-      // Expand to 1-hop connected drawings, components, notes
-      kgPhysicsEdges.forEach(e => {
-        if (manualIds.has(e.from)) manualIds.add(e.to);
-        if (manualIds.has(e.to)) manualIds.add(e.from);
-      });
-
       kgPhysicsNodes.forEach(n => {
         const isHit = manualIds.has(n.data.id);
-        n.mesh.material.opacity = isHit ? 1.0 : 0.15;
+        n.mesh.material.opacity = isHit ? 1.0 : 0.08;
         n.mesh.material.transparent = !isHit;
-        n.sprite.material.opacity = isHit ? 1.0 : 0.15;
+        n.sprite.material.opacity = isHit ? 1.0 : 0.08;
       });
 
       kgPhysicsEdges.forEach(e => {
-        const isHit = manualIds.has(e.from) && manualIds.has(e.to);
-        e.line.material.opacity = isHit ? 0.95 : 0.08;
-        if (isHit) e.line.material.color.setHex(0x00f5d4);
+        const sameUniverse = e.sourceNode && e.targetNode && e.sourceNode.universe === 'manuals' && e.targetNode.universe === 'manuals';
+        const isHit = sameUniverse && manualIds.has(e.from) && manualIds.has(e.to);
+        e.line.material.opacity = isHit ? 0.75 : 0.05;
+        if (isHit) e.line.material.color.setHex(0xf72585);
         else e.line.material.color.setHex(0x182844);
       });
     }
