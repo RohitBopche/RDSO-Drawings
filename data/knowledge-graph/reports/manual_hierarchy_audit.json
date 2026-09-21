@@ -11,8 +11,8 @@
         "unmapped_pages"
       ],
       "chapters": 15,
-      "HEALTHY": 10,
-      "SPARSE": 2,
+      "HEALTHY": 11,
+      "SPARSE": 1,
       "NO_SOURCE_HEADINGS": 3,
       "MALFORMED": 0,
       "chapter_status_counts": {
@@ -57,7 +57,7 @@
         29,
         30
       ],
-      "pages_with_headings": 39,
+      "pages_with_headings": 51,
       "pages_with_clauses": 379,
       "content_empty_pages": [
         33,
@@ -93,7 +93,6 @@
         174,
         178,
         183,
-        188,
         189,
         196,
         197,
@@ -132,6 +131,7 @@
         496,
         504,
         518,
+        524,
         526
       ],
       "coverage_ratio": 1.0,
@@ -154,8 +154,8 @@
         "unmapped_pages"
       ],
       "chapters": 15,
-      "HEALTHY": 11,
-      "SPARSE": 4,
+      "HEALTHY": 13,
+      "SPARSE": 2,
       "NO_SOURCE_HEADINGS": 0,
       "MALFORMED": 0,
       "chapter_status_counts": {
@@ -182,7 +182,7 @@
         11,
         12
       ],
-      "pages_with_headings": 50,
+      "pages_with_headings": 46,
       "pages_with_clauses": 48,
       "content_empty_pages": [
         14,
@@ -193,10 +193,7 @@
         45,
         51,
         69,
-        74,
-        75,
         76,
-        77,
         80,
         82,
         83,
@@ -204,7 +201,6 @@
         86,
         87,
         88,
-        90,
         91,
         95,
         97,
@@ -247,28 +243,29 @@
     {
       "manual_id": "DOC:AT_WELD:2022",
       "alias": "AT_WELD",
-      "status": "BLOCKED",
-      "readiness_status": "BLOCKED",
+      "status": "ATTENTION",
+      "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "registry_ownership_error",
-        "chapter_blocked",
+        "registry_ownership_warning",
         "chapter_attention",
         "unmapped_pages"
       ],
       "chapters": 9,
-      "HEALTHY": 7,
-      "SPARSE": 1,
-      "NO_SOURCE_HEADINGS": 1,
+      "HEALTHY": 9,
+      "SPARSE": 0,
+      "NO_SOURCE_HEADINGS": 0,
       "MALFORMED": 0,
       "chapter_status_counts": {
-        "HEALTHY": 5,
+        "HEALTHY": 7,
         "ATTENTION": 2,
-        "BLOCKED": 2
+        "BLOCKED": 0
       },
       "pages_expected": 43,
       "pages_seen": 43,
       "missing_pages": [],
-      "observed_pages_with_multiple_chapters": [],
+      "observed_pages_with_multiple_chapters": [
+        7
+      ],
       "observed_page_owner_count": 43,
       "unmapped_pages": [
         1,
@@ -278,10 +275,11 @@
         5,
         6
       ],
-      "pages_with_headings": 23,
+      "pages_with_headings": 20,
       "pages_with_clauses": 38,
       "content_empty_pages": [
         16,
+        30,
         42
       ],
       "coverage_ratio": 1.0,
@@ -290,53 +288,45 @@
         "observed_pages": 43,
         "missing_pages": [],
         "unmapped_pages": [],
-        "multiply_owned_pages": [],
-        "ownership_mismatches": [
-          {
-            "page": 7,
-            "observed": [
-              "CHAPTER:AT_WELD:CH_01"
-            ],
-            "expected": [
-              "CHAPTER:AT_WELD:CH_01",
-              "CHAPTER:AT_WELD:CH_02"
-            ]
-          }
-        ]
+        "multiply_owned_pages": [
+          7
+        ],
+        "ownership_mismatches": []
       }
     },
     {
       "manual_id": "DOC:FBW:2022:CS5",
       "alias": "FBW",
-      "status": "BLOCKED",
-      "readiness_status": "BLOCKED",
+      "status": "ATTENTION",
+      "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "registry_ownership_error",
-        "chapter_blocked",
+        "registry_ownership_warning",
         "chapter_attention",
         "unmapped_pages"
       ],
       "chapters": 9,
       "HEALTHY": 6,
-      "SPARSE": 1,
-      "NO_SOURCE_HEADINGS": 2,
+      "SPARSE": 3,
+      "NO_SOURCE_HEADINGS": 0,
       "MALFORMED": 0,
       "chapter_status_counts": {
         "HEALTHY": 4,
-        "ATTENTION": 3,
-        "BLOCKED": 2
+        "ATTENTION": 5,
+        "BLOCKED": 0
       },
       "pages_expected": 66,
       "pages_seen": 66,
       "missing_pages": [],
-      "observed_pages_with_multiple_chapters": [],
+      "observed_pages_with_multiple_chapters": [
+        4
+      ],
       "observed_page_owner_count": 66,
       "unmapped_pages": [
         1,
         2,
         3
       ],
-      "pages_with_headings": 20,
+      "pages_with_headings": 19,
       "pages_with_clauses": 44,
       "content_empty_pages": [
         5,
@@ -363,19 +353,10 @@
         "observed_pages": 66,
         "missing_pages": [],
         "unmapped_pages": [],
-        "multiply_owned_pages": [],
-        "ownership_mismatches": [
-          {
-            "page": 4,
-            "observed": [
-              "CHAPTER:FBW:CH_01"
-            ],
-            "expected": [
-              "CHAPTER:FBW:CH_01",
-              "CHAPTER:FBW:CH_02"
-            ]
-          }
-        ]
+        "multiply_owned_pages": [
+          4
+        ],
+        "ownership_mismatches": []
       }
     },
     {
@@ -388,9 +369,9 @@
         "unmapped_pages"
       ],
       "chapters": 12,
-      "HEALTHY": 9,
-      "SPARSE": 0,
-      "NO_SOURCE_HEADINGS": 3,
+      "HEALTHY": 10,
+      "SPARSE": 1,
+      "NO_SOURCE_HEADINGS": 1,
       "MALFORMED": 0,
       "chapter_status_counts": {
         "HEALTHY": 1,
@@ -427,7 +408,7 @@
         22,
         23
       ],
-      "pages_with_headings": 46,
+      "pages_with_headings": 60,
       "pages_with_clauses": 245,
       "content_empty_pages": [
         27,
@@ -438,7 +419,6 @@
         43,
         51,
         54,
-        58,
         67,
         81,
         83,
@@ -503,8 +483,15 @@
         322,
         328,
         329,
-        331,
+        335,
+        336,
+        337,
         338,
+        339,
+        340,
+        341,
+        342,
+        346,
         351,
         353,
         361,
@@ -569,7 +556,7 @@
       "observed_pages_with_multiple_chapters": [],
       "observed_page_owner_count": 222,
       "unmapped_pages": [],
-      "pages_with_headings": 47,
+      "pages_with_headings": 50,
       "pages_with_clauses": 93,
       "content_empty_pages": [
         1,
@@ -598,34 +585,34 @@
         52,
         53,
         55,
-        57,
+        58,
         59,
         61,
+        62,
         63,
         64,
         65,
-        66,
         67,
+        68,
         69,
-        71,
+        70,
+        72,
         73,
         75,
         76,
-        77,
         80,
         81,
         87,
         88,
-        94,
         95,
         98,
         102,
-        106,
         107,
         109,
         110,
         111,
-        112,
+        113,
+        114,
         115,
         116,
         117,
@@ -690,7 +677,7 @@
       "pages_seen": 30,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 4,
+      "pages_with_headings": 5,
       "pages_with_clauses": 9,
       "content_empty_pages": [
         33,
@@ -708,7 +695,7 @@
         57
       ],
       "coverage_ratio": 1.0,
-      "headings": 25,
+      "headings": 27,
       "clauses": 19,
       "tables": 4,
       "figures": 0,
@@ -734,7 +721,7 @@
       "pages_seen": 26,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 2,
+      "pages_with_headings": 3,
       "pages_with_clauses": 19,
       "content_empty_pages": [
         64,
@@ -742,12 +729,12 @@
         86
       ],
       "coverage_ratio": 1.0,
-      "headings": 3,
+      "headings": 4,
       "clauses": 36,
       "tables": 0,
       "figures": 0,
       "evidence": 8,
-      "first_heading": "32",
+      "first_heading": "31",
       "last_heading": "60",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -768,7 +755,7 @@
       "pages_seen": 88,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 14,
+      "pages_with_headings": 22,
       "pages_with_clauses": 49,
       "content_empty_pages": [
         102,
@@ -788,12 +775,12 @@
         174
       ],
       "coverage_ratio": 1.0,
-      "headings": 14,
+      "headings": 22,
       "clauses": 80,
       "tables": 3,
       "figures": 12,
       "evidence": 39,
-      "first_heading": "61",
+      "first_heading": "57",
       "last_heading": "99",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -814,12 +801,11 @@
       "pages_seen": 118,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 1,
+      "pages_with_headings": 2,
       "pages_with_clauses": 108,
       "content_empty_pages": [
         178,
         183,
-        188,
         189,
         196,
         197,
@@ -828,12 +814,12 @@
         235
       ],
       "coverage_ratio": 1.0,
-      "headings": 2,
+      "headings": 3,
       "clauses": 154,
       "tables": 1,
       "figures": 0,
       "evidence": 21,
-      "first_heading": "52",
+      "first_heading": "0",
       "last_heading": "60",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -854,20 +840,20 @@
       "pages_seen": 14,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 1,
+      "pages_with_headings": 2,
       "pages_with_clauses": 11,
       "content_empty_pages": [
         301,
         302
       ],
       "coverage_ratio": 1.0,
-      "headings": 4,
+      "headings": 9,
       "clauses": 31,
       "tables": 0,
       "figures": 0,
       "evidence": 1,
-      "first_heading": "4",
-      "last_heading": "8",
+      "first_heading": "1",
+      "last_heading": "9",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -901,7 +887,7 @@
         369
       ],
       "coverage_ratio": 1.0,
-      "headings": 13,
+      "headings": 16,
       "clauses": 96,
       "tables": 4,
       "figures": 2,
@@ -1038,25 +1024,22 @@
         468
       ],
       "coverage_ratio": 1.0,
-      "headings": 1,
+      "headings": 2,
       "clauses": 12,
       "tables": 0,
       "figures": 0,
       "evidence": 3,
-      "first_heading": "10",
+      "first_heading": "1",
       "last_heading": "10",
-      "coverage_class": "SPARSE",
+      "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
       "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "sparse",
         "content_empty_pages"
       ],
       "errors": [],
-      "warnings": [
-        "CHAPTER:IRPWM:CH_10: only one source heading"
-      ],
+      "warnings": [],
       "status": "ATTENTION"
     },
     {
@@ -1067,7 +1050,7 @@
       "pages_seen": 36,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 4,
+      "pages_with_headings": 5,
       "pages_with_clauses": 26,
       "content_empty_pages": [
         471,
@@ -1082,12 +1065,12 @@
         504
       ],
       "coverage_ratio": 1.0,
-      "headings": 8,
+      "headings": 10,
       "clauses": 41,
       "tables": 0,
       "figures": 0,
       "evidence": 16,
-      "first_heading": "6",
+      "first_heading": "2",
       "last_heading": "54",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -1175,9 +1158,10 @@
       "pages_seen": 8,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 2,
+      "pages_with_headings": 1,
       "pages_with_clauses": 6,
       "content_empty_pages": [
+        524,
         526
       ],
       "coverage_ratio": 1.0,
@@ -1187,7 +1171,7 @@
       "figures": 0,
       "evidence": 6,
       "first_heading": "1",
-      "last_heading": "19",
+      "last_heading": "30",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -1246,12 +1230,12 @@
         18
       ],
       "coverage_ratio": 1.0,
-      "headings": 18,
+      "headings": 19,
       "clauses": 14,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "1.1",
+      "first_heading": "1",
       "last_heading": "9",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -1276,12 +1260,12 @@
       "pages_with_clauses": 1,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 2,
+      "headings": 6,
       "clauses": 4,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "2.2",
+      "first_heading": "1",
       "last_heading": "30",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -1306,7 +1290,7 @@
       "pages_with_clauses": 3,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 2,
+      "headings": 3,
       "clauses": 15,
       "tables": 0,
       "figures": 1,
@@ -1332,7 +1316,7 @@
       "pages_seen": 8,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 1,
+      "pages_with_headings": 2,
       "pages_with_clauses": 4,
       "content_empty_pages": [
         25,
@@ -1340,25 +1324,22 @@
         31
       ],
       "coverage_ratio": 1.0,
-      "headings": 1,
+      "headings": 2,
       "clauses": 7,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "14",
+      "first_heading": "12",
       "last_heading": "14",
-      "coverage_class": "SPARSE",
+      "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
       "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "sparse",
         "content_empty_pages"
       ],
       "errors": [],
-      "warnings": [
-        "CHAPTER:USFD:CH_04: only one source heading"
-      ],
+      "warnings": [],
       "status": "ATTENTION"
     },
     {
@@ -1369,27 +1350,29 @@
       "pages_seen": 2,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 2,
+      "pages_with_headings": 1,
       "pages_with_clauses": 2,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 3,
+      "headings": 1,
       "clauses": 4,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "5.1.1",
-      "last_heading": "5.1.3",
-      "coverage_class": "HEALTHY",
+      "first_heading": "20",
+      "last_heading": "20",
+      "coverage_class": "SPARSE",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
-      "readiness_status": "HEALTHY",
+      "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "complete_structural_coverage"
+        "sparse"
       ],
       "errors": [],
-      "warnings": [],
-      "status": "HEALTHY"
+      "warnings": [
+        "CHAPTER:USFD:CH_05: only one source heading"
+      ],
+      "status": "ATTENTION"
     },
     {
       "manual_id": "DOC:USFD:2026:ACS4",
@@ -1399,16 +1382,16 @@
       "pages_seen": 4,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 4,
+      "pages_with_headings": 2,
       "pages_with_clauses": 4,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 7,
+      "headings": 2,
       "clauses": 12,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "6.2",
+      "first_heading": "22",
       "last_heading": "25",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -1429,27 +1412,29 @@
       "pages_seen": 3,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 2,
+      "pages_with_headings": 1,
       "pages_with_clauses": 3,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 3,
+      "headings": 1,
       "clauses": 4,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "7.0",
-      "last_heading": "7.3",
-      "coverage_class": "HEALTHY",
+      "first_heading": "26",
+      "last_heading": "26",
+      "coverage_class": "SPARSE",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
-      "readiness_status": "HEALTHY",
+      "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "complete_structural_coverage"
+        "sparse"
       ],
       "errors": [],
-      "warnings": [],
-      "status": "HEALTHY"
+      "warnings": [
+        "CHAPTER:USFD:CH_07: only one source heading"
+      ],
+      "status": "ATTENTION"
     },
     {
       "manual_id": "DOC:USFD:2026:ACS4",
@@ -1459,19 +1444,19 @@
       "pages_seen": 13,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 8,
+      "pages_with_headings": 9,
       "pages_with_clauses": 11,
       "content_empty_pages": [
         45,
         51
       ],
       "coverage_ratio": 1.0,
-      "headings": 25,
+      "headings": 31,
       "clauses": 41,
       "tables": 0,
       "figures": 3,
       "evidence": 0,
-      "first_heading": "8.3",
+      "first_heading": "8.1",
       "last_heading": "8.15.1",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -1496,7 +1481,7 @@
       "pages_with_clauses": 3,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 15,
+      "headings": 17,
       "clauses": 18,
       "tables": 0,
       "figures": 0,
@@ -1522,17 +1507,17 @@
       "pages_seen": 3,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 2,
+      "pages_with_headings": 1,
       "pages_with_clauses": 3,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 11,
+      "headings": 9,
       "clauses": 20,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "10.3.3",
-      "last_heading": "10.6",
+      "first_heading": "10.2",
+      "last_heading": "44",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -1552,17 +1537,17 @@
       "pages_seen": 7,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 6,
+      "pages_with_headings": 1,
       "pages_with_clauses": 7,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 15,
+      "headings": 5,
       "clauses": 27,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
       "first_heading": "11.2",
-      "last_heading": "20",
+      "last_heading": "47",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -1586,25 +1571,23 @@
       "pages_with_clauses": 1,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 1,
+      "headings": 2,
       "clauses": 1,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
       "first_heading": "12.1",
-      "last_heading": "12.1",
-      "coverage_class": "SPARSE",
+      "last_heading": "54",
+      "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
-      "readiness_status": "ATTENTION",
+      "readiness_status": "HEALTHY",
       "readiness_reasons": [
-        "sparse"
+        "complete_structural_coverage"
       ],
       "errors": [],
-      "warnings": [
-        "CHAPTER:USFD:CH_12: only one source heading"
-      ],
-      "status": "ATTENTION"
+      "warnings": [],
+      "status": "HEALTHY"
     },
     {
       "manual_id": "DOC:USFD:2026:ACS4",
@@ -1620,25 +1603,22 @@
         69
       ],
       "coverage_ratio": 1.0,
-      "headings": 1,
+      "headings": 2,
       "clauses": 5,
       "tables": 0,
       "figures": 0,
       "evidence": 2,
       "first_heading": "13.1.1",
-      "last_heading": "13.1.1",
-      "coverage_class": "SPARSE",
+      "last_heading": "55",
+      "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
       "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "sparse",
         "content_empty_pages"
       ],
       "errors": [],
-      "warnings": [
-        "CHAPTER:USFD:CH_13: only one source heading"
-      ],
+      "warnings": [],
       "status": "ATTENTION"
     },
     {
@@ -1653,25 +1633,23 @@
       "pages_with_clauses": 1,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 1,
+      "headings": 2,
       "clauses": 2,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
       "first_heading": "14.1.1",
-      "last_heading": "14.1.1",
-      "coverage_class": "SPARSE",
+      "last_heading": "56",
+      "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
-      "readiness_status": "ATTENTION",
+      "readiness_status": "HEALTHY",
       "readiness_reasons": [
-        "sparse"
+        "complete_structural_coverage"
       ],
       "errors": [],
-      "warnings": [
-        "CHAPTER:USFD:CH_14: only one source heading"
-      ],
-      "status": "ATTENTION"
+      "warnings": [],
+      "status": "HEALTHY"
     },
     {
       "manual_id": "DOC:USFD:2026:ACS4",
@@ -1681,13 +1659,10 @@
       "pages_seen": 87,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 12,
+      "pages_with_headings": 16,
       "pages_with_clauses": 0,
       "content_empty_pages": [
-        74,
-        75,
         76,
-        77,
         80,
         82,
         83,
@@ -1695,7 +1670,6 @@
         86,
         87,
         88,
-        90,
         91,
         95,
         97,
@@ -1726,7 +1700,7 @@
         141
       ],
       "coverage_ratio": 1.0,
-      "headings": 13,
+      "headings": 17,
       "clauses": 0,
       "tables": 0,
       "figures": 49,
@@ -1764,60 +1738,45 @@
       "first_heading": "1",
       "last_heading": "2",
       "coverage_class": "HEALTHY",
-      "ownership_status": "BLOCKED",
-      "ownership_issue_pages": [
-        7
-      ],
-      "readiness_status": "BLOCKED",
+      "ownership_status": "CLEAN",
+      "ownership_issue_pages": [],
+      "readiness_status": "HEALTHY",
       "readiness_reasons": [
-        "structural_or_ownership_error"
+        "complete_structural_coverage"
       ],
-      "errors": [
-        "CHAPTER:AT_WELD:CH_01: registry ownership mismatch on page 7"
-      ],
+      "errors": [],
       "warnings": [],
-      "status": "BLOCKED"
+      "status": "HEALTHY"
     },
     {
       "manual_id": "DOC:AT_WELD:2022",
       "manual_alias": "AT_WELD",
       "chapter_id": "CHAPTER:AT_WELD:CH_02",
       "pages_expected": 1,
-      "pages_seen": 0,
-      "missing_pages": [
-        7
-      ],
+      "pages_seen": 1,
+      "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 0,
-      "pages_with_clauses": 0,
+      "pages_with_headings": 1,
+      "pages_with_clauses": 1,
       "content_empty_pages": [],
-      "coverage_ratio": 0.0,
-      "headings": 0,
-      "clauses": 0,
+      "coverage_ratio": 1.0,
+      "headings": 6,
+      "clauses": 6,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": null,
-      "last_heading": null,
-      "coverage_class": "NO_SOURCE_HEADINGS",
-      "ownership_status": "BLOCKED",
-      "ownership_issue_pages": [
-        7
-      ],
-      "readiness_status": "BLOCKED",
+      "first_heading": "1",
+      "last_heading": "2",
+      "coverage_class": "HEALTHY",
+      "ownership_status": "CLEAN",
+      "ownership_issue_pages": [],
+      "readiness_status": "HEALTHY",
       "readiness_reasons": [
-        "structural_or_ownership_error",
-        "no_source_headings",
-        "missing_pages"
+        "complete_structural_coverage"
       ],
-      "errors": [
-        "CHAPTER:AT_WELD:CH_02: registry ownership mismatch on page 7"
-      ],
-      "warnings": [
-        "CHAPTER:AT_WELD:CH_02: 1 declared page(s) not observed in extraction",
-        "CHAPTER:AT_WELD:CH_02: zero source headings"
-      ],
-      "status": "BLOCKED"
+      "errors": [],
+      "warnings": [],
+      "status": "HEALTHY"
     },
     {
       "manual_id": "DOC:AT_WELD:2022",
@@ -1827,17 +1786,17 @@
       "pages_seen": 2,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 2,
+      "pages_with_headings": 1,
       "pages_with_clauses": 2,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 2,
+      "headings": 3,
       "clauses": 7,
       "tables": 2,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "3",
-      "last_heading": "3.3",
+      "first_heading": "2",
+      "last_heading": "5",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -1861,13 +1820,13 @@
       "pages_with_clauses": 5,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 12,
+      "headings": 13,
       "clauses": 12,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
       "first_heading": "4",
-      "last_heading": "4.8",
+      "last_heading": "4.9",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -1893,25 +1852,22 @@
         16
       ],
       "coverage_ratio": 1.0,
-      "headings": 1,
+      "headings": 2,
       "clauses": 1,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "4.10.1",
+      "first_heading": "4.10",
       "last_heading": "4.10.1",
-      "coverage_class": "SPARSE",
+      "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
       "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "sparse",
         "content_empty_pages"
       ],
       "errors": [],
-      "warnings": [
-        "CHAPTER:AT_WELD:CH_05: only one source heading"
-      ],
+      "warnings": [],
       "status": "ATTENTION"
     },
     {
@@ -1926,7 +1882,7 @@
       "pages_with_clauses": 3,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 5,
+      "headings": 6,
       "clauses": 11,
       "tables": 0,
       "figures": 1,
@@ -1986,7 +1942,7 @@
       "pages_with_clauses": 3,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 3,
+      "headings": 4,
       "clauses": 14,
       "tables": 0,
       "figures": 0,
@@ -2012,13 +1968,14 @@
       "pages_seen": 24,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 7,
+      "pages_with_headings": 5,
       "pages_with_clauses": 21,
       "content_empty_pages": [
+        30,
         42
       ],
       "coverage_ratio": 1.0,
-      "headings": 12,
+      "headings": 8,
       "clauses": 53,
       "tables": 3,
       "figures": 7,
@@ -2044,75 +2001,61 @@
       "pages_seen": 1,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 0,
+      "pages_with_headings": 1,
       "pages_with_clauses": 1,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 0,
+      "headings": 1,
       "clauses": 1,
       "tables": 0,
       "figures": 22,
       "evidence": 0,
-      "first_heading": null,
-      "last_heading": null,
-      "coverage_class": "NO_SOURCE_HEADINGS",
-      "ownership_status": "BLOCKED",
-      "ownership_issue_pages": [
-        4
-      ],
-      "readiness_status": "BLOCKED",
+      "first_heading": "62",
+      "last_heading": "62",
+      "coverage_class": "SPARSE",
+      "ownership_status": "CLEAN",
+      "ownership_issue_pages": [],
+      "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "structural_or_ownership_error",
-        "no_source_headings"
+        "sparse"
       ],
-      "errors": [
-        "CHAPTER:FBW:CH_01: registry ownership mismatch on page 4"
-      ],
+      "errors": [],
       "warnings": [
-        "CHAPTER:FBW:CH_01: zero source headings"
+        "CHAPTER:FBW:CH_01: only one source heading"
       ],
-      "status": "BLOCKED"
+      "status": "ATTENTION"
     },
     {
       "manual_id": "DOC:FBW:2022:CS5",
       "manual_alias": "FBW",
       "chapter_id": "CHAPTER:FBW:CH_02",
       "pages_expected": 1,
-      "pages_seen": 0,
-      "missing_pages": [
-        4
-      ],
+      "pages_seen": 1,
+      "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 0,
-      "pages_with_clauses": 0,
+      "pages_with_headings": 1,
+      "pages_with_clauses": 1,
       "content_empty_pages": [],
-      "coverage_ratio": 0.0,
-      "headings": 0,
-      "clauses": 0,
+      "coverage_ratio": 1.0,
+      "headings": 1,
+      "clauses": 1,
       "tables": 0,
-      "figures": 0,
+      "figures": 22,
       "evidence": 0,
-      "first_heading": null,
-      "last_heading": null,
-      "coverage_class": "NO_SOURCE_HEADINGS",
-      "ownership_status": "BLOCKED",
-      "ownership_issue_pages": [
-        4
-      ],
-      "readiness_status": "BLOCKED",
+      "first_heading": "62",
+      "last_heading": "62",
+      "coverage_class": "SPARSE",
+      "ownership_status": "CLEAN",
+      "ownership_issue_pages": [],
+      "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "structural_or_ownership_error",
-        "no_source_headings",
-        "missing_pages"
+        "sparse"
       ],
-      "errors": [
-        "CHAPTER:FBW:CH_02: registry ownership mismatch on page 4"
-      ],
+      "errors": [],
       "warnings": [
-        "CHAPTER:FBW:CH_02: 1 declared page(s) not observed in extraction",
-        "CHAPTER:FBW:CH_02: zero source headings"
+        "CHAPTER:FBW:CH_02: only one source heading"
       ],
-      "status": "BLOCKED"
+      "status": "ATTENTION"
     },
     {
       "manual_id": "DOC:FBW:2022:CS5",
@@ -2161,12 +2104,12 @@
       "pages_with_clauses": 2,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 11,
+      "headings": 12,
       "clauses": 11,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "1.1",
+      "first_heading": "1",
       "last_heading": "3.1.3",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -2191,7 +2134,7 @@
       "pages_with_clauses": 5,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 17,
+      "headings": 19,
       "clauses": 18,
       "tables": 0,
       "figures": 0,
@@ -2253,7 +2196,7 @@
         16
       ],
       "coverage_ratio": 1.0,
-      "headings": 4,
+      "headings": 7,
       "clauses": 9,
       "tables": 0,
       "figures": 0,
@@ -2279,17 +2222,17 @@
       "pages_seen": 5,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 3,
+      "pages_with_headings": 4,
       "pages_with_clauses": 4,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 7,
+      "headings": 6,
       "clauses": 10,
       "tables": 3,
       "figures": 0,
       "evidence": 2,
       "first_heading": "10.1",
-      "last_heading": "72",
+      "last_heading": "90",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -2309,7 +2252,7 @@
       "pages_seen": 45,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 5,
+      "pages_with_headings": 2,
       "pages_with_clauses": 28,
       "content_empty_pages": [
         44,
@@ -2329,13 +2272,13 @@
         69
       ],
       "coverage_ratio": 1.0,
-      "headings": 13,
+      "headings": 6,
       "clauses": 79,
       "tables": 1,
       "figures": 0,
       "evidence": 22,
       "first_heading": "13",
-      "last_heading": "60",
+      "last_heading": "90",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -2355,7 +2298,7 @@
       "pages_seen": 18,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 0,
+      "pages_with_headings": 1,
       "pages_with_clauses": 12,
       "content_empty_pages": [
         27,
@@ -2365,25 +2308,22 @@
         40
       ],
       "coverage_ratio": 1.0,
-      "headings": 0,
+      "headings": 5,
       "clauses": 16,
       "tables": 2,
       "figures": 0,
       "evidence": 1,
-      "first_heading": null,
-      "last_heading": null,
-      "coverage_class": "NO_SOURCE_HEADINGS",
+      "first_heading": "1",
+      "last_heading": "6",
+      "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
       "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "no_source_headings",
         "content_empty_pages"
       ],
       "errors": [],
-      "warnings": [
-        "CHAPTER:TMM:CH_01: zero source headings"
-      ],
+      "warnings": [],
       "status": "ATTENTION"
     },
     {
@@ -2394,13 +2334,12 @@
       "pages_seen": 79,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 12,
+      "pages_with_headings": 29,
       "pages_with_clauses": 30,
       "content_empty_pages": [
         43,
         51,
         54,
-        58,
         67,
         81,
         83,
@@ -2412,12 +2351,12 @@
         116
       ],
       "coverage_ratio": 1.0,
-      "headings": 16,
+      "headings": 30,
       "clauses": 36,
       "tables": 8,
       "figures": 40,
       "evidence": 21,
-      "first_heading": "1",
+      "first_heading": "19",
       "last_heading": "97",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -2438,7 +2377,7 @@
       "pages_seen": 35,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 0,
+      "pages_with_headings": 1,
       "pages_with_clauses": 24,
       "content_empty_pages": [
         124,
@@ -2449,24 +2388,24 @@
         145
       ],
       "coverage_ratio": 1.0,
-      "headings": 0,
+      "headings": 1,
       "clauses": 34,
       "tables": 0,
       "figures": 20,
       "evidence": 11,
-      "first_heading": null,
-      "last_heading": null,
-      "coverage_class": "NO_SOURCE_HEADINGS",
+      "first_heading": "98",
+      "last_heading": "98",
+      "coverage_class": "SPARSE",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
       "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "no_source_headings",
+        "sparse",
         "content_empty_pages"
       ],
       "errors": [],
       "warnings": [
-        "CHAPTER:TMM:CH_03: zero source headings"
+        "CHAPTER:TMM:CH_03: only one source heading"
       ],
       "status": "ATTENTION"
     },
@@ -2485,7 +2424,7 @@
         169
       ],
       "coverage_ratio": 1.0,
-      "headings": 3,
+      "headings": 4,
       "clauses": 32,
       "tables": 3,
       "figures": 14,
@@ -2511,7 +2450,7 @@
       "pages_seen": 78,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 7,
+      "pages_with_headings": 8,
       "pages_with_clauses": 37,
       "content_empty_pages": [
         186,
@@ -2535,12 +2474,12 @@
         255
       ],
       "coverage_ratio": 1.0,
-      "headings": 10,
+      "headings": 22,
       "clauses": 44,
       "tables": 13,
       "figures": 13,
       "evidence": 16,
-      "first_heading": "2",
+      "first_heading": "0",
       "last_heading": "52",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -2565,13 +2504,13 @@
       "pages_with_clauses": 7,
       "content_empty_pages": [],
       "coverage_ratio": 1.0,
-      "headings": 3,
+      "headings": 13,
       "clauses": 10,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "3",
-      "last_heading": "16",
+      "first_heading": "1",
+      "last_heading": "19",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -2646,27 +2585,34 @@
       "pages_seen": 45,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 10,
+      "pages_with_headings": 2,
       "pages_with_clauses": 25,
       "content_empty_pages": [
         320,
         322,
         328,
         329,
-        331,
+        335,
+        336,
+        337,
         338,
+        339,
+        340,
+        341,
+        342,
+        346,
         351,
         353,
         361
       ],
       "coverage_ratio": 1.0,
-      "headings": 68,
+      "headings": 8,
       "clauses": 37,
       "tables": 0,
       "figures": 0,
       "evidence": 23,
-      "first_heading": "1",
-      "last_heading": "74",
+      "first_heading": "02",
+      "last_heading": "75",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -2695,7 +2641,7 @@
         371
       ],
       "coverage_ratio": 1.0,
-      "headings": 5,
+      "headings": 6,
       "clauses": 8,
       "tables": 1,
       "figures": 0,
@@ -2768,13 +2714,13 @@
         391
       ],
       "coverage_ratio": 1.0,
-      "headings": 9,
+      "headings": 11,
       "clauses": 14,
       "tables": 0,
       "figures": 0,
       "evidence": 4,
-      "first_heading": "2",
-      "last_heading": "17",
+      "first_heading": "1",
+      "last_heading": "18",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -2794,7 +2740,7 @@
       "pages_seen": 59,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 4,
+      "pages_with_headings": 6,
       "pages_with_clauses": 44,
       "content_empty_pages": [
         405,
@@ -2813,7 +2759,7 @@
         458
       ],
       "coverage_ratio": 1.0,
-      "headings": 12,
+      "headings": 63,
       "clauses": 79,
       "tables": 0,
       "figures": 0,
@@ -2839,7 +2785,7 @@
       "pages_seen": 29,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 4,
+      "pages_with_headings": 7,
       "pages_with_clauses": 15,
       "content_empty_pages": [
         1,
@@ -2855,7 +2801,7 @@
         28
       ],
       "coverage_ratio": 1.0,
-      "headings": 11,
+      "headings": 19,
       "clauses": 276,
       "tables": 1,
       "figures": 0,
@@ -2891,12 +2837,12 @@
         41
       ],
       "coverage_ratio": 1.0,
-      "headings": 6,
+      "headings": 3,
       "clauses": 10,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "1",
+      "first_heading": "11",
       "last_heading": "60",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -2917,7 +2863,7 @@
       "pages_seen": 15,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 2,
+      "pages_with_headings": 3,
       "pages_with_clauses": 3,
       "content_empty_pages": [
         43,
@@ -2932,12 +2878,12 @@
         55
       ],
       "coverage_ratio": 1.0,
-      "headings": 6,
+      "headings": 3,
       "clauses": 5,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "1",
+      "first_heading": "23",
       "last_heading": "90",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -2958,33 +2904,37 @@
       "pages_seen": 9,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 3,
+      "pages_with_headings": 1,
       "pages_with_clauses": 1,
       "content_empty_pages": [
-        57,
+        58,
         59,
         61,
+        62,
         63,
         64,
         65
       ],
       "coverage_ratio": 1.0,
-      "headings": 10,
+      "headings": 1,
       "clauses": 1,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "1",
-      "last_heading": "21",
-      "coverage_class": "HEALTHY",
+      "first_heading": "38",
+      "last_heading": "38",
+      "coverage_class": "SPARSE",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
       "readiness_status": "ATTENTION",
       "readiness_reasons": [
+        "sparse",
         "content_empty_pages"
       ],
       "errors": [],
-      "warnings": [],
+      "warnings": [
+        "CHAPTER:STMM:CH_04: only one source heading"
+      ],
       "status": "ATTENTION"
     },
     {
@@ -2995,24 +2945,25 @@
       "pages_seen": 11,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 4,
+      "pages_with_headings": 3,
       "pages_with_clauses": 0,
       "content_empty_pages": [
-        66,
         67,
+        68,
         69,
-        71,
+        70,
+        72,
         73,
         75,
         76
       ],
       "coverage_ratio": 1.0,
-      "headings": 11,
+      "headings": 3,
       "clauses": 0,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "1",
+      "first_heading": "47",
       "last_heading": "55",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -3033,20 +2984,19 @@
       "pages_seen": 6,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 2,
+      "pages_with_headings": 3,
       "pages_with_clauses": 1,
       "content_empty_pages": [
-        77,
         80,
         81
       ],
       "coverage_ratio": 1.0,
-      "headings": 2,
+      "headings": 3,
       "clauses": 2,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "59",
+      "first_heading": "58",
       "last_heading": "80",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -3072,18 +3022,17 @@
       "content_empty_pages": [
         87,
         88,
-        94,
         95,
         98
       ],
       "coverage_ratio": 1.0,
-      "headings": 10,
+      "headings": 4,
       "clauses": 18,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "1",
-      "last_heading": "71",
+      "first_heading": "64",
+      "last_heading": "75",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -3109,13 +3058,13 @@
         102
       ],
       "coverage_ratio": 1.0,
-      "headings": 5,
+      "headings": 6,
       "clauses": 9,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
       "first_heading": "1",
-      "last_heading": "13",
+      "last_heading": "80",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -3135,22 +3084,21 @@
       "pages_seen": 6,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 1,
+      "pages_with_headings": 2,
       "pages_with_clauses": 0,
       "content_empty_pages": [
-        106,
         107,
         109,
         110,
         111
       ],
       "coverage_ratio": 1.0,
-      "headings": 7,
+      "headings": 2,
       "clauses": 0,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "1",
+      "first_heading": "87",
       "last_heading": "90",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -3171,32 +3119,36 @@
       "pages_seen": 8,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 2,
+      "pages_with_headings": 1,
       "pages_with_clauses": 1,
       "content_empty_pages": [
-        112,
+        113,
+        114,
         115,
         116,
         117,
         119
       ],
       "coverage_ratio": 1.0,
-      "headings": 7,
+      "headings": 1,
       "clauses": 1,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "1",
-      "last_heading": "7",
-      "coverage_class": "HEALTHY",
+      "first_heading": "93",
+      "last_heading": "93",
+      "coverage_class": "SPARSE",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
       "readiness_status": "ATTENTION",
       "readiness_reasons": [
+        "sparse",
         "content_empty_pages"
       ],
       "errors": [],
-      "warnings": [],
+      "warnings": [
+        "CHAPTER:STMM:CH_10: only one source heading"
+      ],
       "status": "ATTENTION"
     },
     {
@@ -3214,7 +3166,7 @@
         123
       ],
       "coverage_ratio": 1.0,
-      "headings": 5,
+      "headings": 6,
       "clauses": 1,
       "tables": 0,
       "figures": 0,
@@ -3247,7 +3199,7 @@
         127
       ],
       "coverage_ratio": 1.0,
-      "headings": 8,
+      "headings": 9,
       "clauses": 3,
       "tables": 0,
       "figures": 0,
@@ -3281,7 +3233,7 @@
         135
       ],
       "coverage_ratio": 1.0,
-      "headings": 11,
+      "headings": 12,
       "clauses": 3,
       "tables": 0,
       "figures": 0,
@@ -3353,7 +3305,7 @@
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "1",
+      "first_heading": "02",
       "last_heading": "7",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -3382,13 +3334,13 @@
         151
       ],
       "coverage_ratio": 1.0,
-      "headings": 6,
+      "headings": 7,
       "clauses": 2,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
       "first_heading": "1",
-      "last_heading": "6",
+      "last_heading": "7",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
@@ -3449,7 +3401,7 @@
         163
       ],
       "coverage_ratio": 1.0,
-      "headings": 5,
+      "headings": 6,
       "clauses": 2,
       "tables": 0,
       "figures": 0,
@@ -3481,7 +3433,7 @@
         165
       ],
       "coverage_ratio": 1.0,
-      "headings": 2,
+      "headings": 6,
       "clauses": 17,
       "tables": 0,
       "figures": 0,
@@ -3513,25 +3465,22 @@
         178
       ],
       "coverage_ratio": 1.0,
-      "headings": 1,
+      "headings": 6,
       "clauses": 4,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "5",
-      "last_heading": "5",
-      "coverage_class": "SPARSE",
+      "first_heading": "1",
+      "last_heading": "6",
+      "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
       "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "sparse",
         "content_empty_pages"
       ],
       "errors": [],
-      "warnings": [
-        "CHAPTER:STMM:CH_20: only one source heading"
-      ],
+      "warnings": [],
       "status": "ATTENTION"
     },
     {
@@ -3550,25 +3499,22 @@
         184
       ],
       "coverage_ratio": 1.0,
-      "headings": 1,
+      "headings": 2,
       "clauses": 8,
       "tables": 0,
       "figures": 0,
       "evidence": 0,
-      "first_heading": "2",
+      "first_heading": "1",
       "last_heading": "2",
-      "coverage_class": "SPARSE",
+      "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
       "ownership_issue_pages": [],
       "readiness_status": "ATTENTION",
       "readiness_reasons": [
-        "sparse",
         "content_empty_pages"
       ],
       "errors": [],
-      "warnings": [
-        "CHAPTER:STMM:CH_21: only one source heading"
-      ],
+      "warnings": [],
       "status": "ATTENTION"
     },
     {
@@ -3612,7 +3558,7 @@
       "pages_seen": 30,
       "missing_pages": [],
       "unmapped_pages": [],
-      "pages_with_headings": 4,
+      "pages_with_headings": 5,
       "pages_with_clauses": 15,
       "content_empty_pages": [
         201,
@@ -3634,7 +3580,7 @@
       "tables": 1,
       "figures": 0,
       "evidence": 4,
-      "first_heading": "1",
+      "first_heading": "03",
       "last_heading": "58",
       "coverage_class": "HEALTHY",
       "ownership_status": "CLEAN",
@@ -3653,13 +3599,13 @@
     "chapters_total": 83,
     "manuals_by_status": {
       "HEALTHY": 0,
-      "ATTENTION": 4,
-      "BLOCKED": 2
+      "ATTENTION": 6,
+      "BLOCKED": 0
     },
     "chapters_by_status": {
-      "HEALTHY": 18,
-      "ATTENTION": 61,
-      "BLOCKED": 4
+      "HEALTHY": 20,
+      "ATTENTION": 63,
+      "BLOCKED": 0
     },
     "manuals_requiring_attention": [
       "DOC:IRPWM:2024:ACS14",
@@ -3669,10 +3615,7 @@
       "DOC:TMM:2020:ACS10",
       "DOC:STMM:2024"
     ],
-    "blocked_manuals": [
-      "DOC:AT_WELD:2022",
-      "DOC:FBW:2022:CS5"
-    ],
+    "blocked_manuals": [],
     "chapters_requiring_attention": [
       "CHAPTER:IRPWM:CH_01",
       "CHAPTER:IRPWM:CH_02",
@@ -3691,13 +3634,11 @@
       "CHAPTER:IRPWM:CH_15",
       "CHAPTER:USFD:CH_01",
       "CHAPTER:USFD:CH_04",
+      "CHAPTER:USFD:CH_05",
+      "CHAPTER:USFD:CH_07",
       "CHAPTER:USFD:CH_08",
-      "CHAPTER:USFD:CH_12",
       "CHAPTER:USFD:CH_13",
-      "CHAPTER:USFD:CH_14",
       "CHAPTER:USFD:CH_15",
-      "CHAPTER:AT_WELD:CH_01",
-      "CHAPTER:AT_WELD:CH_02",
       "CHAPTER:AT_WELD:CH_05",
       "CHAPTER:AT_WELD:CH_09",
       "CHAPTER:FBW:CH_01",
@@ -3740,16 +3681,11 @@
       "CHAPTER:STMM:CH_22",
       "CHAPTER:STMM:CH_23"
     ],
-    "blocked_chapters": [
-      "CHAPTER:AT_WELD:CH_01",
-      "CHAPTER:AT_WELD:CH_02",
-      "CHAPTER:FBW:CH_01",
-      "CHAPTER:FBW:CH_02"
-    ],
+    "blocked_chapters": [],
     "coverage_classes": {
-      "HEALTHY": 64,
-      "SPARSE": 10,
-      "NO_SOURCE_HEADINGS": 9,
+      "HEALTHY": 70,
+      "SPARSE": 9,
+      "NO_SOURCE_HEADINGS": 4,
       "MALFORMED": 0
     },
     "pages": {
@@ -3757,53 +3693,40 @@
       "seen": 1411,
       "missing": 0,
       "unmapped": 74,
-      "content_empty": 341
+      "content_empty": 344
     },
     "validation": {
-      "errors": 6,
-      "warnings": 21,
-      "status": "FAIL"
+      "errors": 0,
+      "warnings": 15,
+      "status": "PASS"
     }
   },
   "class_counts": {
-    "HEALTHY": 64,
-    "SPARSE": 10,
-    "NO_SOURCE_HEADINGS": 9,
+    "HEALTHY": 70,
+    "SPARSE": 9,
+    "NO_SOURCE_HEADINGS": 4,
     "MALFORMED": 0
   },
   "checked_chapters": 83,
-  "error_count": 6,
-  "warning_count": 21,
-  "errors": [
-    "DOC:AT_WELD:2022: page 7 ownership mismatch; observed=['CHAPTER:AT_WELD:CH_01'] expected=['CHAPTER:AT_WELD:CH_01', 'CHAPTER:AT_WELD:CH_02']",
-    "CHAPTER:AT_WELD:CH_01: registry ownership mismatch on page 7",
-    "CHAPTER:AT_WELD:CH_02: registry ownership mismatch on page 7",
-    "DOC:FBW:2022:CS5: page 4 ownership mismatch; observed=['CHAPTER:FBW:CH_01'] expected=['CHAPTER:FBW:CH_01', 'CHAPTER:FBW:CH_02']",
-    "CHAPTER:FBW:CH_01: registry ownership mismatch on page 4",
-    "CHAPTER:FBW:CH_02: registry ownership mismatch on page 4"
-  ],
+  "error_count": 0,
+  "warning_count": 15,
+  "errors": [],
   "warnings": [
     "CHAPTER:IRPWM:CH_08: zero source headings",
-    "CHAPTER:IRPWM:CH_10: only one source heading",
     "CHAPTER:IRPWM:CH_12: only one source heading",
     "CHAPTER:IRPWM:CH_13: zero source headings",
     "CHAPTER:IRPWM:CH_15: zero source headings",
-    "CHAPTER:USFD:CH_04: only one source heading",
-    "CHAPTER:USFD:CH_12: only one source heading",
-    "CHAPTER:USFD:CH_13: only one source heading",
-    "CHAPTER:USFD:CH_14: only one source heading",
-    "CHAPTER:AT_WELD:CH_02: 1 declared page(s) not observed in extraction",
-    "CHAPTER:AT_WELD:CH_02: zero source headings",
-    "CHAPTER:AT_WELD:CH_05: only one source heading",
-    "CHAPTER:FBW:CH_01: zero source headings",
-    "CHAPTER:FBW:CH_02: 1 declared page(s) not observed in extraction",
-    "CHAPTER:FBW:CH_02: zero source headings",
+    "CHAPTER:USFD:CH_05: only one source heading",
+    "CHAPTER:USFD:CH_07: only one source heading",
+    "DOC:AT_WELD:2022: 1 observed page(s) have multiple chapter owners",
+    "DOC:FBW:2022:CS5: 1 observed page(s) have multiple chapter owners",
+    "CHAPTER:FBW:CH_01: only one source heading",
+    "CHAPTER:FBW:CH_02: only one source heading",
     "CHAPTER:FBW:CH_03: only one source heading",
-    "CHAPTER:TMM:CH_01: zero source headings",
-    "CHAPTER:TMM:CH_03: zero source headings",
+    "CHAPTER:TMM:CH_03: only one source heading",
     "CHAPTER:TMM:CH_10: zero source headings",
-    "CHAPTER:STMM:CH_20: only one source heading",
-    "CHAPTER:STMM:CH_21: only one source heading"
+    "CHAPTER:STMM:CH_04: only one source heading",
+    "CHAPTER:STMM:CH_10: only one source heading"
   ],
-  "status": "FAIL"
+  "status": "PASS"
 }\n
