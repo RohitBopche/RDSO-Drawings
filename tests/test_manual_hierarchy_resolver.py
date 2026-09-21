@@ -485,6 +485,84 @@ def test_manual_readiness_treats_unmapped_pages_as_manual_attention_not_ownershi
     assert manual["unmapped_pages"] == [9999]
 
 
+def test_chapter_readiness_includes_content_empty_reason():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    spec = registry["chapters"][0]
+    chapter_id = f"CHAPTER:{registry['alias']}:CH_{spec['num']:02d}"
+    payload = {"manuals": [{"document_id": doc_id, "alias": registry["alias"], "chapters": [{
+        "chapter_id": chapter_id,
+        "page_range": [spec["page_start"], spec["page_start"] + 2],
+        "pages_seen": [spec["page_start"], spec["page_start"] + 1, spec["page_start"] + 2],
+        "headings": [{"reference": "1", "source_page": spec["page_start"], "title": "SECTION ONE"}],
+        "clauses": [{"clause_id": "C1", "source_page": spec["page_start"] + 2}],
+        "tables": [], "figures": [], "evidence": [],
+    }]}]}
+
+    report = audit_manual_corpus(payload)
+    row = report["chapters"][0]
+    assert row["readiness_status"] == "ATTENTION"
+    assert row["readiness_reasons"] == ["sparse", "content_empty_pages"]
+    assert row["content_empty_pages"] == [spec["page_start"] + 1]
+
+
+def test_manual_readiness_reasons_explain_status_precedence():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    first, second = registry["chapters"][:2]
+    first_id = f"CHAPTER:{registry['alias']}:CH_{first['num']:02d}"
+    second_id = f"CHAPTER:{registry['alias']}:CH_{second['num']:02d}"
+    boundary = first["page_end"]
+    payload = {"manuals": [{"document_id": doc_id, "alias": registry["alias"], "chapters": [
+        {
+            "chapter_id": first_id,
+            "page_range": [first["page_start"], first["page_start"]],
+            "pages_seen": [first["page_start"]],
+            "headings": [{"reference": "1", "source_page": first["page_start"], "title": "SECTION ONE"}],
+            "clauses": [],
+        },
+        {
+            "chapter_id": second_id,
+            "page_range": [second["page_start"], second["page_start"] + 1],
+            "pages_seen": [second["page_start"], second["page_start"] + 1],
+            "headings": [{"reference": "2.1", "source_page": second["page_start"], "title": "SUBSECTION WITHOUT PARENT"}],
+            "clauses": [],
+        },
+    ], "unmapped_pages": [9999]}]}
+    payload["manuals"][0]["chapters"][1]["pages_seen"].append(boundary)
+
+    report = audit_manual_corpus(payload)
+    manual = report["manuals"][0]
+    assert manual["readiness_status"] == "BLOCKED"
+    assert manual["readiness_reasons"] == ["chapter_blocked", "unmapped_pages"]
+
+
+def test_manual_readiness_is_healthy_only_when_no_signals_apply():
+    from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
+
+    doc_id, registry = next(iter(MANUAL_CHAPTER_REGISTRY.items()))
+    spec = registry["chapters"][0]
+    chapter_id = f"CHAPTER:{registry['alias']}:CH_{spec['num']:02d}"
+    payload = {"manuals": [{"document_id": doc_id, "alias": registry["alias"], "chapters": [{
+        "chapter_id": chapter_id,
+        "page_range": [spec["page_start"], spec["page_start"] + 1],
+        "pages_seen": [spec["page_start"], spec["page_start"] + 1],
+        "headings": [
+            {"reference": "1", "source_page": spec["page_start"], "title": "SECTION ONE"},
+            {"reference": "1.1", "source_page": spec["page_start"] + 1, "title": "SUBSECTION ONE"},
+        ],
+        "clauses": [],
+    }]}]}
+
+    report = audit_manual_corpus(payload)
+    manual = report["manuals"][0]
+    assert manual["readiness_status"] == "HEALTHY"
+    assert manual["readiness_reasons"] == ["complete_manual_readiness"]
+
+
+
 def test_chapter_readiness_preserves_multiple_attention_reasons():
     from validate_manual_hierarchy import audit_manual_corpus, MANUAL_CHAPTER_REGISTRY
 
