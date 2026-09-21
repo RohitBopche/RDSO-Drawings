@@ -97,3 +97,24 @@ def test_manual_frontend_preserves_structural_heading_relationships():
     assert "const parentRef = n.parent_heading_ref || n.provenance?.parent_heading_ref;" in source
     assert "const parentId = parent ? parent.id : chapterId;" in source
     assert "rel: 'HAS_SECTION'" in source
+
+
+def test_manual_frontend_consumes_readiness_as_qa_metadata_only():
+    source = _source()
+    assert "manualReadinessAudit" in source
+    assert "manual_hierarchy_audit_v1" in source
+    assert "readiness_status" in source
+    assert "readiness_reasons" in source
+    assert "ownership_status" in source
+    assert "ownership_issue_pages" in source
+    assert "Manual readiness is a QA signal only. It never participates in hierarchy construction." in source
+    assert "manual-readiness-card" in source
+
+
+def test_manual_readiness_does_not_replace_authoritative_hierarchy():
+    source = _source()
+    hierarchy_start = source.index("function buildHierarchyStructure()")
+    readiness_start = source.index("function renderManualReadiness(data)")
+    assert readiness_start < hierarchy_start
+    assert "MANUAL_STRUCTURAL_RELS" in source
+    assert "authoritativeHeadingByChapter" in source
