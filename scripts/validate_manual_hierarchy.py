@@ -17,23 +17,37 @@ from resolve_manual_hierarchy import resolve_heading_sequence, heading_kind
 
 
 
-def _coverage_audit(chapter: dict) -> tuple[list[str], list[str], dict]:
-    """Return hard errors, warnings, and deterministic coverage metrics."""
+def _item_page(item: dict) -> int | None:
+    """Return the persisted source page for an extracted item."""
+    for key in ("source_page", "page_number", "page"):
+        value = item.get(key)
+        if isinstance(value, int):
+            return value
+    return None
+
+
+def _coverage_audit(chapter: dict, unmapped_pages: list[int] | None = None) -> tuple[list[str], list[str], dict]:
+    """Return hard errors, warnings, and deterministic page/content coverage metrics."""
     page_start, page_end = chapter.get("page_range", [None, None])
-    pages = sorted(set(chapter.get("pages_seen", []) or []))
+    pages = sorted({p for p in (chapter.get("pages_seen", []) or []) if isinstance(p, int)})
     headings = chapter.get("headings", []) or []
+    clauses = chapter.get("clauses", []) or []
+    tables = chapter.get("tables", []) or []
+    figures = chapter.get("figures", []) or []
+    evidence = chapter.get("evidence", []) or []
     refs = [h.get("reference") for h in headings if h.get("reference")]
     malformed = [r for r in refs if not re.fullmatch(r"\d+(?:\.\d+){0,2}", str(r)) and not re.match(r"^(ANNEXURE|APPENDIX|SCHEDULE|TABLE)", str(r), re.I)]
     errors = []
     warnings = []
+    expected_pages = set(range(page_start, page_end + 1)) if page_start is not None and page_end is not None else set()
+    seen_pages = set(pages)
+    missing_pages = sorted(expected_pages - seen_pages)
     if page_start is not None and page_end is not None:
-        out_of_range = [p for p in pages if not isinstance(p, int) or p < page_start or p > page_end]
+        out_of_range = [p for p in (chapter.get("pages_seen", []) or []) if not isinstance(p, int) or p < page_start or p > page_end]
         if out_of_range:
             errors.append(f"pages_seen outside declared range: {out_of_range[:10]}")
-        expected = max(0, page_end - page_start + 1)
-        missing = expected - len(pages)
-        if missing > 0:
-            warnings.append(f"{missing} declared page(s) not observed in extraction")
+        if missing_pages:
+            warnings.append(f"{len(missing_pages)} declared page(s) not observed in extraction")
     if malformed:
         errors.append(f"malformed heading reference(s): {malformed[:10]}")
     if len(headings) == 0:
@@ -42,16 +56,33 @@ def _coverage_audit(chapter: dict) -> tuple[list[str], list[str], dict]:
         warnings.append("only one source heading")
     if refs and len(refs) != len(set(refs)):
         errors.append("duplicate source heading references")
-    pages_with_headings = sorted({h.get("source_page") for h in headings if isinstance(h.get("source_page"), int)})
+
+    def pages_for(items: list[dict]) -> set[int]:
+        return {page for item in items if isinstance(item, dict) for page in [_item_page(item)] if page is not None}
+
+    pages_with_headings = pages_for(headings)
+    pages_with_clauses = pages_for(clauses)
+    pages_with_tables = pages_for(tables)
+    pages_with_figures = pages_for(figures)
+    pages_with_evidence = pages_for(evidence)
+    content_pages = pages_with_headings | pages_with_clauses | pages_with_tables | pages_with_figures | pages_with_evidence
+    content_empty_pages = sorted(seen_pages - content_pages)
+    unmapped = sorted({p for p in (unmapped_pages or []) if isinstance(p, int)})
+
     metrics = {
-        "pages_expected": max(0, page_end - page_start + 1) if page_start is not None and page_end is not None else None,
-        "pages_seen": len(pages),
+        "pages_expected": len(expected_pages) if expected_pages else None,
+        "pages_seen": len(seen_pages),
+        "missing_pages": missing_pages,
+        "unmapped_pages": unmapped,
         "pages_with_headings": len(pages_with_headings),
+        "pages_with_clauses": len(pages_with_clauses),
+        "content_empty_pages": content_empty_pages,
+        "coverage_ratio": (len(seen_pages & expected_pages) / len(expected_pages)) if expected_pages else None,
         "headings": len(headings),
-        "clauses": len(chapter.get("clauses", []) or []),
-        "tables": len(chapter.get("tables", []) or []),
-        "figures": len(chapter.get("figures", []) or []),
-        "evidence": len(chapter.get("evidence", []) or []),
+        "clauses": len(clauses),
+        "tables": len(tables),
+        "figures": len(figures),
+        "evidence": len(evidence),
         "first_heading": refs[0] if refs else None,
         "last_heading": refs[-1] if refs else None,
     }
@@ -79,11 +110,28 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
 
     for manual in payload.get("manuals", []):
         manual_counts = {"chapters": 0, "HEALTHY": 0, "SPARSE": 0, "NO_SOURCE_HEADINGS": 0, "MALFORMED": 0}
+        manual_page_expected = 0
+        manual_page_seen: set[int] = set()
+        manual_missing_pages: set[int] = set()
+        manual_unmapped_pages = {p for p in (manual.get("unmapped_pages", []) or []) if isinstance(p, int)}
+        manual_pages_with_headings: set[int] = set()
+        manual_pages_with_clauses: set[int] = set()
+        manual_content_empty_pages: set[int] = set()
         for chapter in manual.get("chapters", []):
             manual_counts["chapters"] += 1
             headings, heading_errors = resolve_heading_sequence(chapter.get("headings", []) or [], chapter.get("page_range", []))
             chapter_errors = [f"{chapter.get('chapter_id')}: {e}" for e in heading_errors]
-            cov_errors, cov_warnings, metrics = _coverage_audit(chapter)
+            cov_errors, cov_warnings, metrics = _coverage_audit(chapter, manual.get("unmapped_pages", []) or [])
+            manual_page_expected += metrics["pages_expected"] or 0
+            manual_page_seen.update(chapter.get("pages_seen", []) or [])
+            manual_missing_pages.update(metrics["missing_pages"])
+            manual_pages_with_headings.update(
+                _item_page(h) for h in (chapter.get("headings", []) or []) if _item_page(h) is not None
+            )
+            manual_pages_with_clauses.update(
+                _item_page(cl) for cl in (chapter.get("clauses", []) or []) if _item_page(cl) is not None
+            )
+            manual_content_empty_pages.update(metrics["content_empty_pages"])
             chapter_errors.extend(f"{chapter.get('chapter_id')}: {e}" for e in cov_errors)
             chapter_warnings = [f"{chapter.get('chapter_id')}: {w}" for w in cov_warnings]
             errors.extend(chapter_errors)
@@ -124,7 +172,19 @@ def audit_manual_corpus(payload: dict, canonical: dict | None = None) -> dict:
                     if not any(e.get("from") == owner and e.get("to") == hid and e.get("rel") == "HAS_SECTION" for e in canonical_edges):
                         errors.append(f"{chapter_id}: missing canonical HAS_SECTION for heading {ref}")
 
-        manual_rows.append({"manual_id": manual.get("document_id"), "alias": manual.get("alias"), **manual_counts})
+        manual_rows.append({
+            "manual_id": manual.get("document_id"),
+            "alias": manual.get("alias"),
+            **manual_counts,
+            "pages_expected": manual_page_expected,
+            "pages_seen": len(manual_page_seen),
+            "missing_pages": sorted(manual_missing_pages),
+            "unmapped_pages": sorted(manual_unmapped_pages),
+            "pages_with_headings": len(manual_pages_with_headings),
+            "pages_with_clauses": len(manual_pages_with_clauses),
+            "content_empty_pages": sorted(manual_content_empty_pages),
+            "coverage_ratio": (len(manual_page_seen) / manual_page_expected) if manual_page_expected else None,
+        })
 
     return {"schema_version": "manual_hierarchy_audit_v1", "manuals": manual_rows, "chapters": rows, "class_counts": class_counts, "checked_chapters": len(rows), "error_count": len(errors), "warning_count": len(warnings), "errors": errors, "warnings": warnings, "status": "FAIL" if errors else "PASS"}
 
