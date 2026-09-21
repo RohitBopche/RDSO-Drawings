@@ -84,3 +84,8 @@ their `HAS_SECTION` edges.
 ### Ingestion contract
 
 Manual ingestion now persists `headings[]` directly in each authoritative chapter record. Each heading carries its source document, source page, source reference/text, confidence, and deterministic extraction method. The ingestion stage deduplicates headings by `(reference, source_page, title)` and initializes structural artifact collections explicitly. This makes the resolver input complete and machine-readable rather than depending on a later enrichment pass.
+
+
+### Coverage classification policy
+
+Gate K classifies each chapter deterministically as `HEALTHY`, `SPARSE`, `NO_SOURCE_HEADINGS`, or `MALFORMED`. Sparse and missing-heading states are warnings because source PDFs may legitimately expose limited machine-readable heading structure; malformed references and out-of-range provenance remain hard failures. No missing source heading is synthesized. Chapters without authoritative headings therefore retain the resolver's existing fallback behavior until the real corpus audit demonstrates that a stronger extraction rule is justified.
