@@ -28,7 +28,7 @@ def base():
              "specs": {"PageRange": [10, 20]}},
             {"id": "CLAUSE:M:PARA_1", "domain": "manual", "universe": "manuals", "type": "CLAUSE",
              "source_document": "DOC:M:1", "source_page": 12,
-             "extraction_method": "test", "parent_chapter_id": "CHAPTER:M:CH_01"},
+             "extraction_method": "test", "source_text": "Clause text", "parent_chapter_id": "CHAPTER:M:CH_01"},
         ],
         "edges": [{
             "from": "CHAPTER:M:CH_01", "to": "CLAUSE:M:PARA_1", "rel": "HAS_CLAUSE"
