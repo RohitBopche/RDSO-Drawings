@@ -319,11 +319,26 @@ def extract_clauses_from_text(doc_id, page_num, text):
         if len(summary) > 250:
             summary = summary[:247] + "..."
             
+        # Deterministic content hierarchy derived from the clause reference.
+        # This is explicitly marked as derived, not treated as an authoritative
+        # TOC/heading hierarchy until source headings are ingested.
+        section_ref = para_num.split('.')[0].split('(')[0]
+        subsection_match = re.match(r'^([^.(]+(?:\\.[^.(]+)?(?:\\([^)]*\\))?)', para_num)
+        subsection_ref = subsection_match.group(1) if subsection_match else section_ref
+
         clauses.append({
             'clause_id': clause_id,
             'para_number': para_num,
+            'section_ref': section_ref,
+            'subsection_ref': subsection_ref,
             'title': title,
             'page_number': page_num,
+            'source_document': doc_id,
+            'source_page': page_num,
+            'source_section': para_num,
+            'source_text': clause_body[:1200],
+            'confidence': 0.95,
+            'extraction_method': 'deterministic_manual_clause_numbering',
             'summary': summary if summary else title,
             'verbatim_text': clause_body[:1200], # Keep high-fidelity block
             'tolerances': tolerances[:5],
