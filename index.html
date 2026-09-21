@@ -2613,7 +2613,7 @@
   </style>
   <script src="./lib/three.min.js"></script>
   <script src="./lib/OrbitControls.js"></script>
-  <script src="./data/rdso_kg_data.js"></script>
+  <script src="./data/rdso_kg_data.js"></script>\n  <script src="./data/manual_structure.js"></script>
   <style>
     #kg-hover-hud {
       position: absolute;
@@ -3327,8 +3327,51 @@
     }
 
     function buildHierarchyStructure() {
+      // Manuals are structurally authoritative: Manual -> Chapter -> content.
+      const manualStructure = window.RDSO_MANUAL_STRUCTURE || { manuals: [] };
+      const manualChapterById = new Map();
+
+      manualStructure.manuals.forEach(m => {
+        if (!rawNodes.some(n => n.id === m.id)) {
+          rawNodes.push({
+            id: m.id, label: m.title, type: 'DOCUMENT', domain: 'manual', universe: 'manuals',
+            color: '#ff007f', desc: m.title, specs: { ChapterCount: m.chapters.length, Structure: 'AUTHORITATIVE' },
+            x: 0, y: 24, z: 10, alt: 13
+          });
+        }
+        m.chapters.forEach((ch, idx) => {
+          const chapterId = 'CHAPTER:' + m.alias + ':CH_' + String(idx + 1).padStart(2, '0');
+          manualChapterById.set(m.alias + '|' + ch[0], chapterId);
+          if (!rawNodes.some(n => n.id === chapterId)) {
+            rawNodes.push({
+              id: chapterId, label: 'Chapter ' + (idx + 1) + ' — ' + ch[0], type: 'CHAPTER', domain: 'manual', universe: 'manuals',
+              parent_id: m.id, order: idx + 1, color: '#ff4fa3',
+              desc: 'Pages ' + ch[1] + '–' + ch[2],
+              specs: { ChapterNumber: idx + 1, PageRange: ch[1] + '–' + ch[2], Manual: m.alias },
+              x: 0, y: 18 - idx * 0.6, z: 0, alt: 13
+            });
+          }
+          const edgeKey = m.id + '|HAS_CHAPTER|' + chapterId;
+          if (!rawEdges.some(e => e.from + '|' + e.rel + '|' + e.to === edgeKey)) {
+            rawEdges.push({ from: m.id, to: chapterId, rel: 'HAS_CHAPTER', rationale: 'Authoritative manual chapter registry' });
+          }
+        });
+      });
+
+      // Attach extracted clauses to their authoritative chapter; never directly to the manual.
+      const clauses = window.RDSO_MANUALS_KNOWLEDGE && window.RDSO_MANUALS_KNOWLEDGE.clauses || {};
+      Object.values(clauses).forEach(c => {
+        const cid = c.id || c.clause_id;
+        const chapterId = manualChapterById.get((c.manual || c.alias) + '|' + c.chapter);
+        if (!cid || !chapterId || !rawNodes.some(n => n.id === cid)) return;
+        const edgeKey = chapterId + '|HAS_CLAUSE|' + cid;
+        if (!rawEdges.some(e => e.from + '|' + e.rel + '|' + e.to === edgeKey)) {
+          rawEdges.push({ from: chapterId, to: cid, rel: 'HAS_CLAUSE', rationale: 'Clause assigned by authoritative chapter structure' });
+        }
+      });
+
       const HIERARCHY_RELS = new Set([
-        'HAS_SECTION', 'HAS_CLAUSE', 'SPECIFIES', 'REQUIRES',
+        'HAS_CHAPTER', 'HAS_SECTION', 'HAS_CLAUSE', 'SPECIFIES', 'REQUIRES',
         'HAS_REVISION', 'SUPERSEDES', 'CONTAINS', 'HAS_NOTE',
         'CONTAINS_SLEEPER', 'HAS_BOM_ITEM', 'HAS_SPARE',
         'CAN_CAUSE', 'MITIGATED_BY', 'INSPECTED_BY', 'GOVERNS',
@@ -3351,18 +3394,17 @@
         });
       });
 
-      // Child -> parent links
+      // Child -> parent links. Manual document children are ONLY chapters.
       rawEdges.forEach(e => {
         if (!HIERARCHY_RELS.has(e.rel)) return;
         const parentEntry = nodeHierarchyMap.get(e.from);
         const childEntry = nodeHierarchyMap.get(e.to);
         if (!parentEntry || !childEntry) return;
-
+        if (parentEntry.universe === 'manuals' && parentEntry.id.startsWith('DOC:') && e.rel !== 'HAS_CHAPTER') return;
+        if (childEntry.universe !== parentEntry.universe) return;
         if (!childEntry.parentId && childEntry.id !== parentEntry.id) {
           childEntry.parentId = parentEntry.id;
-          if (!parentEntry.childrenIds.includes(childEntry.id)) {
-            parentEntry.childrenIds.push(childEntry.id);
-          }
+          if (!parentEntry.childrenIds.includes(childEntry.id)) parentEntry.childrenIds.push(childEntry.id);
         }
       });
 
@@ -3397,13 +3439,9 @@
         }
       });
 
-      // Initial expansion: pre-expand drawings roots and level 2 components/revisions
+      // Drawings preserve existing expansion. Manuals remain collapsed until the user opens a manual.
       nodeHierarchyMap.forEach(entry => {
-        if (entry.universe === 'drawings') {
-          if (entry.isRoot || entry.depth <= 2) {
-            expandedNodeIds.add(entry.id);
-          }
-        }
+        if (entry.universe === 'drawings' && (entry.isRoot || entry.depth <= 2)) expandedNodeIds.add(entry.id);
       });
     }
 
@@ -3482,6 +3520,11 @@
       } else if (universe === 'manuals') {
         kgControls.target.set(0, 14, 0);
         kgCamera.position.set(0, 22, 45);
+        // Manuals are chapter-first: collapse manual descendants on universe entry.
+        Array.from(expandedNodeIds).forEach(id => {
+          const h = nodeHierarchyMap.get(id);
+          if (h && h.universe === 'manuals') expandedNodeIds.delete(id);
+        });
         const docNode = kgPhysicsNodes.find(n => n.data.id === 'DOC:IRPWM:2024:ACS14' || n.data.id === 'doc_irpwm_2024');
         if (docNode) inspectNode(docNode);
         switchDrawerTab('manuals');
