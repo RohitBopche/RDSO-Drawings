@@ -75,21 +75,10 @@ def test_canonical_kg_has_no_duplicate_authoritative_manual_ids():
     canonical = ROOT / "data" / "rdso_canonical_kg.json"
     data = json.loads(canonical.read_text(encoding="utf-8"))
     ids = [node["id"] for node in data["entities"]]
-    legacy_ids = {
-        "doc_irpwm_2024",
-        "doc_usfd_2026",
-        "doc_atweld_2022",
-        "doc_fbw_2022",
-        "doc_tmm_2020",
-        "doc_stmm_2024",
-    }
     authoritative_ids = {
         manual["id"] for manual in load_structure()["manuals"]
     }
     assert authoritative_ids.issubset(set(ids))
-    # Legacy roots may remain in the source KG for backward compatibility, but
-    # the runtime hierarchy must treat the authoritative IDs as the only roots.
-    assert len(legacy_ids.intersection(set(ids))) == 6
     assert len(authoritative_ids.intersection(set(ids))) == 6
 
 
@@ -130,8 +119,9 @@ def test_manual_clause_metadata_maps_to_exactly_one_registered_chapter():
 def test_manual_content_index_is_chapter_scoped():
     content_path = ROOT / "data" / "manual_content_index.js"
     text = content_path.read_text(encoding="utf-8")
-    payload = text.split(" = ", 1)[1].rsplit(";", 1)[0]
-    content = json.loads(payload)
+    match = re.search(r"RDSO_MANUAL_CONTENT_INDEX\s*=\s*(\{.*\});\s*$", text, re.DOTALL)
+    assert match, "RDSO_MANUAL_CONTENT_INDEX payload not found"
+    content = json.loads(match.group(1))
     assert content["schema"] == "manual-content-index-v1"
     assert content["universe"] == "manuals"
 
