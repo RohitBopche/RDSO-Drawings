@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from resolve_manual_hierarchy import resolve_heading_sequence
+from resolve_manual_hierarchy import resolve_heading_sequence, heading_kind
 
 
 
