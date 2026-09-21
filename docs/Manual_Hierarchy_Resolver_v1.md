@@ -108,3 +108,8 @@ The report schema is `manual_hierarchy_audit_v1` and contains:
 - `error_count` / `warning_count` / `status`: aggregate audit outcome
 
 This report is intended for the first real six-manual corpus audit. It makes the audit result machine-readable without requiring downstream tooling to parse console output. No corpus health result is assumed until the actual intermediate corpus is available.
+
+
+## Extraction-gap preservation
+
+Manual ingestion now preserves pages that fall outside the authoritative Chapter Boundary Registry as explicit `unmapped_pages` at the manual level and reports `total_unmapped_pages` at corpus level. Such pages are never silently assigned to the first or last chapter. This is an audit signal for registry/PDF alignment and is intentionally separate from chapter heading coverage.
