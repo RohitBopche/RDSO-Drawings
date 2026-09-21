@@ -68,6 +68,22 @@ def _coverage_audit(chapter: dict, unmapped_pages: list[int] | None = None) -> t
     pages_with_evidence = pages_for(evidence)
     content_pages = pages_with_headings | pages_with_clauses | pages_with_tables | pages_with_figures | pages_with_evidence
     content_empty_pages = sorted(seen_pages - content_pages)
+
+    # A heading-gap page has usable persisted content/artifacts but no
+    # authoritative source heading. This is a diagnostic signal only: it
+    # must never synthesize a heading or alter the canonical hierarchy.
+    heading_gap_pages = sorted(content_pages - pages_with_headings)
+    heading_coverage_ratio = (
+        len(pages_with_headings & seen_pages) / len(content_pages)
+        if content_pages else None
+    )
+    if not headings:
+        heading_gap_class = "NO_SOURCE_HEADING_EVIDENCE"
+    elif heading_gap_pages:
+        heading_gap_class = "PARTIAL_SOURCE_HEADING_COVERAGE"
+    else:
+        heading_gap_class = "FULL_SOURCE_HEADING_COVERAGE"
+
     unmapped = sorted({p for p in (unmapped_pages or []) if isinstance(p, int)})
 
     metrics = {
@@ -76,6 +92,10 @@ def _coverage_audit(chapter: dict, unmapped_pages: list[int] | None = None) -> t
         "missing_pages": missing_pages,
         "unmapped_pages": unmapped,
         "pages_with_headings": len(pages_with_headings),
+        "pages_with_clauses": len(pages_with_clauses),
+        "heading_gap_pages": heading_gap_pages,
+        "heading_coverage_ratio": heading_coverage_ratio,
+        "heading_gap_class": heading_gap_class,
         "pages_with_clauses": len(pages_with_clauses),
         "content_empty_pages": content_empty_pages,
         "coverage_ratio": (len(seen_pages & expected_pages) / len(expected_pages)) if expected_pages else None,
