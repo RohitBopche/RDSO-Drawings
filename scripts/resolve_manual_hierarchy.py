@@ -229,6 +229,18 @@ def resolve_canonical_graph(intermediate: dict, canonical: dict) -> tuple[dict, 
 
             # Re-parent clauses to the deepest matching heading by reference.
             structural = [h for h in headings if NUMERIC_REF.fullmatch(h["reference"])]
+            # Remove only clause-parent edges produced by the fallback numbering
+            # hierarchy when an authoritative source heading can own that clause.
+            matched_clause_ids = set()
+            for clause in chapter.get("clauses", []) or []:
+                pref = str(clause.get("para_number", ""))
+                matches = [h for h in structural if pref == h["reference"] or pref.startswith(h["reference"] + ".")]
+                if matches:
+                    matched_clause_ids.add(clause.get("clause_id"))
+            if matched_clause_ids:
+                structural_ids = {e.get("id") for e in entities if e.get("type") in {"SECTION", "SUBSECTION"} and e.get("universe") == "manuals"}
+                edges[:] = [e for e in edges if not (e.get("rel") == "HAS_CLAUSE" and e.get("to") in matched_clause_ids and e.get("from") in structural_ids)]
+                facts[:] = [f for f in facts if not (f.get("predicate") == "HAS_CLAUSE" and f.get("object_id") in matched_clause_ids and f.get("subject_id") in structural_ids)]
             for clause in chapter.get("clauses", []) or []:
                 cid = clause.get("clause_id")
                 pref = str(clause.get("para_number", ""))
