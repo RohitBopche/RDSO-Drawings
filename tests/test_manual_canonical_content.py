@@ -28,7 +28,9 @@ def base():
              "specs": {"PageRange": [10, 20]}},
             {"id": "CLAUSE:M:PARA_1", "domain": "manual", "universe": "manuals", "type": "CLAUSE",
              "source_document": "DOC:M:1", "source_page": 12,
-             "extraction_method": "test", "source_text": "Clause text", "parent_chapter_id": "CHAPTER:M:CH_01"},
+             "extraction_method": "test", "source_text": "Clause text",
+             "source_reference": "1.0", "confidence": 0.95,
+             "parent_chapter_id": "CHAPTER:M:CH_01"},
         ],
         "edges": [{
             "from": "CHAPTER:M:CH_01", "to": "CLAUSE:M:PARA_1", "rel": "HAS_CLAUSE"
@@ -92,17 +94,20 @@ def test_nested_section_subsection_ownership_and_page_bounds():
             {"id": "SECTION:M:SEC_101", "type": "SECTION", "domain": "manual",
              "universe": "manuals", "parent_chapter_id": "CHAPTER:M:CH_01",
              "source_document": "DOC:M:1", "source_page": 12,
-             "source_text": "Section text",
+             "source_text": "Section text", "source_reference": "1",
+             "confidence": 0.95,
              "extraction_method": "deterministic_manual_clause_numbering"},
             {"id": "SUBSECTION:M:SEC_101", "type": "SUBSECTION", "domain": "manual",
              "universe": "manuals", "parent_chapter_id": "CHAPTER:M:CH_01",
              "source_document": "DOC:M:1", "source_page": 12,
-             "source_text": "Section text",
+             "source_text": "Section text", "source_reference": "1.1",
+             "confidence": 0.95,
              "extraction_method": "deterministic_manual_clause_numbering"},
             {"id": "CLAUSE:M:PARA_101", "type": "CLAUSE", "domain": "manual",
              "universe": "manuals", "parent_chapter_id": "CHAPTER:M:CH_01",
              "source_document": "DOC:M:1", "source_page": 12,
-             "source_text": "Section text",
+             "source_text": "Section text", "source_reference": "1.1.1",
+             "confidence": 0.95,
              "extraction_method": "deterministic_manual_clause_numbering"},
         ],
         "edges": [
@@ -160,7 +165,7 @@ def test_source_artifact_provenance_and_id_passes():
     structure = {"manuals": [{"document_id": "DOC:M:1", "chapters": [{"chapter_id": "CHAPTER:M:CH_01", "page_range": [10, 20], "clauses": [], "tables": [{"id": "TABLE:M:CH_01:P0012:01_abcdef12"}]}]}]}
     canonical = {"entities": [
         {"id": "CHAPTER:M:CH_01", "type": "CHAPTER", "domain": "manual", "universe": "manuals", "specs": {"PageRange": [10, 20]}},
-        {"id": "TABLE:M:CH_01:P0012:01_abcdef12", "type": "TABLE", "domain": "manual", "universe": "manuals", "parent_chapter_id": "CHAPTER:M:CH_01", "source_document": "DOC:M:1", "source_page": 12, "source_text": "Table 1 — limits", "extraction_method": "deterministic_explicit_source_label", "confidence": 0.9}
+        {"id": "TABLE:M:CH_01:P0012:01_abcdef12", "type": "TABLE", "domain": "manual", "universe": "manuals", "parent_chapter_id": "CHAPTER:M:CH_01", "source_document": "DOC:M:1", "source_page": 12, "source_text": "Table 1 — limits", "source_reference": "Table 1", "extraction_method": "deterministic_explicit_source_label", "confidence": 0.9}
     ], "edges": [{"from": "CHAPTER:M:CH_01", "to": "TABLE:M:CH_01:P0012:01_abcdef12", "rel": "HAS_TABLE"}]}
     errors, _ = validate(structure, canonical)
     assert errors == []
@@ -170,7 +175,7 @@ def test_source_artifact_id_and_confidence_are_validated():
     structure = {"manuals": [{"document_id": "DOC:M:1", "chapters": [{"chapter_id": "CHAPTER:M:CH_01", "page_range": [10, 20], "clauses": [], "figures": [{"id": "FIGURE:M:BAD"}]}]}]}
     canonical = {"entities": [
         {"id": "CHAPTER:M:CH_01", "type": "CHAPTER", "domain": "manual", "universe": "manuals", "specs": {"PageRange": [10, 20]}},
-        {"id": "FIGURE:M:BAD", "type": "FIGURE", "domain": "manual", "universe": "manuals", "parent_chapter_id": "CHAPTER:M:CH_01", "source_document": "DOC:M:1", "source_page": 12, "source_text": "Figure 1", "extraction_method": "test", "confidence": 1.5}
+        {"id": "FIGURE:M:BAD", "type": "FIGURE", "domain": "manual", "universe": "manuals", "parent_chapter_id": "CHAPTER:M:CH_01", "source_document": "DOC:M:1", "source_page": 12, "source_text": "Figure 1", "source_reference": "Figure 1", "extraction_method": "test", "confidence": 1.5}
     ], "edges": [{"from": "CHAPTER:M:CH_01", "to": "FIGURE:M:BAD", "rel": "HAS_FIGURE"}]}
     errors, _ = validate(structure, canonical)
     assert any("invalid source artifact id" in e for e in errors)
