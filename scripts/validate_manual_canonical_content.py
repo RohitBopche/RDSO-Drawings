@@ -17,6 +17,31 @@ CHAPTER_RE = re.compile(r"^CHAPTER:[^:]+:CH_\d{2}$")
 SECTION_RE = re.compile(r"^SECTION:[^:]+:(?:SEC_.+|CHAPTER_[A-Za-z0-9_]+:SEC_.+)$")
 SUBSECTION_RE = re.compile(r"^SUBSECTION:[^:]+:(?:SEC_.+|CHAPTER_[A-Za-z0-9_]+:SEC_.+)$")
 ARTIFACT_RE = re.compile(r"^(TABLE|FIGURE|EVIDENCE):[^:]+:CH_\d{2}:P\d{4}:\d{2}_[0-9a-f]{8}$")
+STRUCTURAL_CHILD_TYPES = {"SECTION", "SUBSECTION", "CLAUSE", "TABLE", "FIGURE", "EVIDENCE"}
+
+
+def validate_child_provenance(child: str, node: dict, errors: list[str]) -> None:
+    """Require the provenance contract on every source-derived structural child."""
+    for field in ("source_document", "source_text", "extraction_method"):
+        if not node.get(field):
+            errors.append(f"{child}: missing {field} provenance")
+
+    if node.get("source_page") is None:
+        errors.append(f"{child}: missing source_page provenance")
+
+    confidence = node.get("confidence")
+    if not isinstance(confidence, (int, float)) or not 0 <= confidence <= 1:
+        errors.append(f"{child}: invalid confidence provenance")
+
+    # Source section/reference is intentionally an either/or requirement because
+    # different extraction paths identify the source at different semantic levels.
+    source_reference = (
+        node.get("source_section")
+        or node.get("source_reference")
+        or node.get("source_heading_reference")
+    )
+    if not source_reference:
+        errors.append(f"{child}: missing source_section/source_reference provenance")
 
 
 def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
@@ -84,15 +109,8 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
 
         if child_node.get("domain") != "manual" or child_node.get("universe") != "manuals":
             errors.append(f"{child}: structural child is not isolated in manuals universe")
-        for field in ("source_document", "source_text", "extraction_method"):
-            if not child_node.get(field):
-                errors.append(f"{child}: missing {field} provenance")
-        if child_node.get("source_page") is None:
-            errors.append(f"{child}: missing source_page provenance")
-        if child_node.get("type") in {"TABLE", "FIGURE", "EVIDENCE"}:
-            confidence = child_node.get("confidence")
-            if not isinstance(confidence, (int, float)) or not 0 <= confidence <= 1:
-                errors.append(f"{child}: invalid confidence provenance")
+
+        validate_child_provenance(child, child_node, errors)
 
         page_range = (chapters[parent_chapter].get("specs") or {}).get("PageRange")
         page = child_node.get("source_page")
@@ -115,7 +133,7 @@ def validate(structure: dict, canonical: dict) -> tuple[list[str], list[str]]:
     for child, node in entities.items():
         if node.get("domain") != "manual" or node.get("universe") != "manuals":
             continue
-        if node.get("type") not in {"SECTION", "SUBSECTION", "CLAUSE", "TABLE", "FIGURE", "EVIDENCE"}:
+        if node.get("type") not in STRUCTURAL_CHILD_TYPES:
             continue
 
         if node.get("type") in {"SECTION", "SUBSECTION"}:
