@@ -7731,6 +7731,67 @@
 
     const CANONICAL_QA_DATABASE = [
       {
+        id: "qa_keyman_duties_greasing",
+        intent: "REGULATORY_DUTY_AND_MAINTENANCE",
+        keywords: [
+          "duties of keyman and greasing", "keyman and greasing", "duties of keyman", "keyman duties",
+          "keyman greasing", "keyman joggled fish plate", "keyman joggled", "keyman fish bolts",
+          "keyman lubrication", "keyman inspection of joggled fish plates", "greasing by keyman"
+        ],
+        question: "What are the duties of Keyman regarding track inspection, joggled fish plates, and greasing?",
+        statement: `Keyman duties and track greasing provisions are governed by **IRPWM 2024 (ACS 1-14) Para 116, 619, and 620**, alongside **USFD Manual Para 8.10**:
+
+1. **Daily Beat Inspection (Para 116)**:
+   While walking the beat daily, the Keyman must examine all track fittings and specifically look for defects such as:
+   • **Loose fish bolts** and **loose bolts on joggled fish plates**
+   • **Switch Expansion Joints (SEJ)** fittings and slide chairs
+   • Fittings in switches & crossings, girder bridges, and open top culverts
+   • Broken or notched sleepers, broken plates or tie bars.
+
+2. **Immediate Tightening & Defect Reporting (Para 116)**:
+   • The Keyman must tighten any loose fish bolts or joggled fish plate bolts found during the inspection.
+   • If fittings repeatedly work loose even after repeated attention, he must immediately report the matter to the **Gang Mate** and **JE/SSE/P.Way**.
+   • For severe defects (broken rail, cracked weld, or missing fittings), he must protect the line at once as per rules and report to the Station Master.
+
+3. **Special Watch on USFD-Marked Welds & Joggled Joints (Para 116(2) & USFD 8.10)**:
+   • The Keyman must keep a special daily watch on rails and welds marked for observation by the USFD testing team.
+   • Where joggled fish plates are clamped over defective welds (DFWR/DFWO) with 2 clamps, ensure clamps and bolts remain fully tightened and lubricated.
+
+4. **Periodic Joint Greasing & Lubrication Protocol (Para 619 & 620)**:
+   • All fish-plated joints and joggled fish plates must undergo systematic **annual dismantling and lubrication**.
+   • **Surface Preparation**: Fishing surfaces of rails and fishplates must be thoroughly scraped with wire brushes to remove rust, scale, and caked grease, cleaned with kerosene oil, and wiped dry.
+   • **Approved Lubricant**: Plumbago / Graphite grease conforming strictly to **IS:408** must be uniformly applied to fishing contact angles. Fish bolts and nuts must be oiled with black oil.
+   • **Fastener Care**: Fishplates must NEVER be hammered onto rails; bolts must be tightened uniformly from inside to outside.`,
+        params: [
+          { name: "Beat Inspection Schedule", nominal: "Daily (100% Beat)", limit: "Mandatory Daily Walk", unit: "Daily", risk: "Unobserved loose fittings cause joint collapse or track geometry distortion", remedy: "Cover full beat daily as per Para 116" },
+          { name: "Fish Bolt & Clamp Attention", nominal: "Immediate Tightening", limit: "Zero Loose Bolts", unit: "Torque", risk: "Loose bolts on joggled fishplates over rail flaws risk dynamic weld separation", remedy: "Tighten on sight; report persistent loose bolts" },
+          { name: "Joint Greasing Frequency", nominal: "Once a Year (Annual)", limit: "Pre-Summer / Pre-Winter", unit: "Annual", risk: "Unlubricated joints seize, freeze thermal expansion, and cause track buckling", remedy: "Execute complete joint dismantling & greasing per Para 619" },
+          { name: "Approved Lubricant", nominal: "Graphite Grease", limit: "IS:408 Mandatory", unit: "Standard", risk: "Substandard grease cakes, accelerating joint wear and seized expansion", remedy: "Use only IS:408 compliant plumbago/graphite grease" },
+          { name: "Defective Weld Clamping", nominal: "2 Clamps Minimum", limit: "Tight Clamped (30 km/h)", unit: "Clamps", risk: "Unprotected defective weld causes catastrophic rail break under train load", remedy: "Maintain joggled fishplates with 2 tight clamps per USFD 8.10" }
+        ],
+        traversal: [
+          { id: "role_keyman", label: "Keyman (Track Maintainer)", universe: "manuals" },
+          { id: "CLAUSE:IRPWM:CH_01:PARA_116", label: "IRPWM Para 116: Duties of Keyman", universe: "manuals" },
+          { id: "comp_joggled_fish_plate", label: "Joggled Fish Plate (Weld Protection)", universe: "manuals" },
+          { id: "comp_fish_bolt", label: "Fish Bolt & Nut", universe: "manuals" },
+          { id: "CLAUSE:IRPWM:CH_06:PARA_619", label: "IRPWM Para 619: Lubrication of Rail Joints", universe: "manuals" },
+          { id: "CLAUSE:IRPWM:CH_06:PARA_620", label: "IRPWM Para 620: Maintenance of Rail Joints", universe: "manuals" },
+          { id: "act_greasing_lubrication", label: "Greasing & Lubrication SOP", universe: "manuals" },
+          { id: "mat_graphite_grease", label: "Graphite Grease (IS:408)", universe: "manuals" }
+        ],
+        primaryNodeId: "CLAUSE:IRPWM:CH_01:PARA_116",
+        provenance: {
+          doc: "Indian Railways Permanent Way Manual (IRPWM 2024 ACS-14) & USFD Manual",
+          edition: "2024-2026 Canonical Regulatory Core",
+          chapter: "Chapter 1 (Duties of Keyman) & Chapter 6 (Rail Joint Greasing)",
+          clause: "Paras 116, 619, 620, 206 & USFD Para 8.10",
+          status: "VERIFIED",
+          confidence: 0.99
+        },
+        conflictNote: null,
+        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
+      },
+      {
         id: "qa_tongue_wear",
         intent: "TOLERANCE_INQUIRY",
         keywords: ["wear", "tongue rail", "permissible", "vertical wear", "lateral wear", "limit"],
@@ -8203,6 +8264,204 @@
       return null;
     }
 
+    
+    // =========================================================================
+    // 3D MULTI-HOP KNOWLEDGE GRAPH PATH HIGHLIGHTING ENGINE
+    // =========================================================================
+    let activeHighlightedPath = null; // { nodes: Set<string>, edges: Set<string> }
+
+    function findMultiHopPath(startIds, endIds, maxDepth = 4) {
+      if (!Array.isArray(startIds)) startIds = [startIds];
+      if (!Array.isArray(endIds)) endIds = [endIds];
+
+      const queue = [];
+      const visited = new Map();
+
+      startIds.forEach(id => {
+        if (kgPhysicsNodesMap.has(id)) {
+          queue.push(id);
+          visited.set(id, { prevNodeId: null, edgeKey: null });
+        }
+      });
+
+      let foundEndId = null;
+      const targetSet = new Set(endIds);
+
+      while (queue.length > 0) {
+        const currId = queue.shift();
+        if (targetSet.has(currId) && !startIds.includes(currId)) {
+          foundEndId = currId;
+          break;
+        }
+
+        const outgoing = kgPhysicsEdges.filter(e => e.from === currId);
+        const incoming = kgPhysicsEdges.filter(e => e.to === currId);
+
+        for (const e of [...outgoing, ...incoming]) {
+          const neighborId = (e.from === currId) ? e.to : e.from;
+          if (!visited.has(neighborId)) {
+            visited.set(neighborId, { prevNodeId: currId, edgeKey: e.from + '|' + e.rel + '|' + e.to });
+            queue.push(neighborId);
+          }
+        }
+      }
+
+      if (!foundEndId) return null;
+
+      const pathNodes = [];
+      const pathEdges = [];
+      let curr = foundEndId;
+      while (curr) {
+        pathNodes.unshift(curr);
+        const info = visited.get(curr);
+        if (info && info.edgeKey) {
+          pathEdges.unshift(info.edgeKey);
+        }
+        curr = info ? info.prevNodeId : null;
+      }
+
+      return { nodes: pathNodes, edges: pathEdges };
+    }
+    window.findMultiHopPath = findMultiHopPath;
+
+    function frameCameraOnNodes(nodeIds) {
+      const validNodes = nodeIds.map(id => kgPhysicsNodesMap.get(id)).filter(Boolean);
+      if (validNodes.length === 0) return;
+
+      let minX = Infinity, maxX = -Infinity;
+      let minY = Infinity, maxY = -Infinity;
+      let minZ = Infinity, maxZ = -Infinity;
+
+      validNodes.forEach(n => {
+        minX = Math.min(minX, n.x); maxX = Math.max(maxX, n.x);
+        minY = Math.min(minY, n.y); maxY = Math.max(maxY, n.y);
+        minZ = Math.min(minZ, n.z); maxZ = Math.max(maxZ, n.z);
+      });
+
+      const centerX = (minX + maxX) / 2;
+      const centerY = (minY + maxY) / 2;
+      const centerZ = (minZ + maxZ) / 2;
+
+      const sizeX = maxX - minX;
+      const sizeY = maxY - minY;
+      const sizeZ = maxZ - minZ;
+      const maxDim = Math.max(sizeX, sizeY, sizeZ, 12);
+
+      const targetCamZ = centerZ + maxDim * 1.8 + 15;
+
+      kgControls.target.set(centerX, centerY, centerZ);
+      kgCamera.position.set(centerX, centerY + maxDim * 0.4 + 4, targetCamZ);
+      kgControls.update();
+    }
+
+    function showPathResetControl(show, count = 0) {
+      const hud = document.getElementById('path-focus-hud');
+      const lbl = document.getElementById('path-focus-label');
+      if (!hud) return;
+      if (show) {
+        if (lbl) lbl.innerText = `Knowledge Path Highlighted: ${count} Entities Active`;
+        hud.style.display = 'flex';
+      } else {
+        hud.style.display = 'none';
+      }
+    }
+
+    function highlightGraphPath(nodeIds, edgeKeys) {
+      if (!nodeIds || nodeIds.length === 0) {
+        clearHighlightedPath();
+        return;
+      }
+
+      activeHighlightedPath = {
+        nodes: new Set(nodeIds),
+        edges: new Set(edgeKeys || [])
+      };
+
+      nodeIds.forEach(id => {
+        expandedNodeIds.add(id);
+        const h = nodeHierarchyMap.get(id);
+        let curr = h ? h.parentId : null;
+        let guard = 0;
+        while (curr && guard < 10) {
+          expandedNodeIds.add(curr);
+          const p = nodeHierarchyMap.get(curr);
+          curr = p ? p.parentId : null;
+          guard++;
+        }
+      });
+
+      updateGraphVisibility();
+
+      kgPhysicsNodes.forEach(n => {
+        const isPath = activeHighlightedPath.nodes.has(n.data.id);
+        if (isPath) {
+          n.group.visible = true;
+          n.group.traverse(child => {
+            if (child.isMesh && child.material) {
+              child.material.transparent = true;
+              child.material.opacity = 1.0;
+              if (child.material.emissiveIntensity !== undefined) {
+                child.material.emissiveIntensity = 0.95;
+              }
+            }
+            if (child.isSprite && child.material) {
+              child.material.opacity = 1.0;
+            }
+          });
+        } else {
+          n.group.traverse(child => {
+            if (child.isMesh && child.material) {
+              child.material.transparent = true;
+              child.material.opacity = 0.15;
+            }
+            if (child.isSprite && child.material) {
+              child.material.opacity = 0.15;
+            }
+          });
+        }
+      });
+
+      kgPhysicsEdges.forEach(e => {
+        const isPathEdge = activeHighlightedPath.edges.has(e.from + '|' + e.rel + '|' + e.to) ||
+                           (activeHighlightedPath.nodes.has(e.from) && activeHighlightedPath.nodes.has(e.to));
+        if (isPathEdge) {
+          e.line.visible = true;
+          e.line.material.color.setHex(0x00f0ff);
+          e.line.material.opacity = 1.0;
+        } else {
+          e.line.material.opacity = 0.08;
+        }
+      });
+
+      frameCameraOnNodes(nodeIds);
+      showPathResetControl(true, nodeIds.length);
+    }
+    window.highlightGraphPath = highlightGraphPath;
+
+    function clearHighlightedPath() {
+      activeHighlightedPath = null;
+      showPathResetControl(false);
+      updateGraphVisibility();
+      kgPhysicsNodes.forEach(n => {
+        n.group.traverse(child => {
+          if (child.isMesh && child.material) {
+            child.material.opacity = 1.0;
+            if (child.material.emissiveIntensity !== undefined) {
+              child.material.emissiveIntensity = 0.55;
+            }
+          }
+          if (child.isSprite && child.material) {
+            child.material.opacity = 1.0;
+          }
+        });
+      });
+      kgPhysicsEdges.forEach(e => {
+        e.line.material.opacity = 0.45;
+        e.line.material.color.setHex(e.color);
+      });
+    }
+    window.clearHighlightedPath = clearHighlightedPath;
+
     function focusAnswerEntityIn3D(nodeId) {
       if (!nodeId) return;
       if (typeof ensureNodeVisibleAndExpanded === "function") {
@@ -8452,12 +8711,15 @@
       if (ans) {
         toggleIntelligenceDrawer(true);
         switchDrawerTab('qa');
-        renderEngineeringAnswerCard(ans);
-        traverseQuestionSubgraph(ans);
+        renderQuestionAnswerCard(ans, document.getElementById('qa-answer-mount'));
+        if (ans.traversal && ans.traversal.length > 0) {
+          highlightGraphPath(ans.traversal.map(t => t.id));
+        }
       } else {
         const results = rankSearchResults(q);
         if (results.length > 0) {
           inspectNode(results[0]);
+          toggleIntelligenceDrawer(true);
         }
       }
 
@@ -10582,6 +10844,19 @@
           updateActiveCardSelection();
           e.preventDefault();
         } else if (e.key === 'Enter') {
+          const qVal = input.value.trim();
+          const ans = answerEngineeringQuestion(qVal);
+          if (ans) {
+            toggleIntelligenceDrawer(true);
+            switchDrawerTab('qa');
+            renderQuestionAnswerCard(ans, document.getElementById('qa-answer-mount'));
+            if (ans.traversal && ans.traversal.length > 0) {
+              highlightGraphPath(ans.traversal.map(t => t.id));
+            }
+            dropdown.style.display = "none";
+            e.preventDefault();
+            return;
+          }
           if (activeCardIndex >= 0 && activeCardIndex <= maxIdx) {
             handleSelectMatch(currentMatches[activeCardIndex]);
             e.preventDefault();
@@ -10702,6 +10977,16 @@
     window.addEventListener('DOMContentLoaded', () => { loadManualReadinessAudit().then(() => { if (currentSelectedNode) renderManualReadiness(currentSelectedNode.data); }); });
     window.addEventListener('DOMContentLoaded', initKnowledgeGraphApp);
   </script>
+
+  <!-- Floating 3D Path Focus & Reset HUD -->
+  <div id="path-focus-hud">
+    <span style="display:flex; align-items:center; gap:6px;">
+      <span style="color:var(--accent-cyan); font-size:14px;">⚡</span>
+      <strong id="path-focus-label">Knowledge Path Highlighted: 8 Entities</strong>
+    </span>
+    <button class="path-reset-btn" onclick="clearHighlightedPath()">Reset View ✕</button>
+  </div>
+
 </body>
 </html>
 
