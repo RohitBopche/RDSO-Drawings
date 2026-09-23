@@ -526,7 +526,9 @@ def build_canonical_layer():
                 if n.get("specs", {}).get("Paragraph"):
                     req_obj["clause"] = str(n["specs"]["Paragraph"])
                 doc_ref = n.get("document_id") or n.get("source")
-                if doc_ref and doc_ref in node_id_set:
+                if isinstance(doc_ref, dict):
+                    doc_ref = doc_ref.get("document") or doc_ref.get("doc_id") or doc_ref.get("id")
+                if isinstance(doc_ref, str) and doc_ref in node_id_set:
                     req_obj["source_document_id"] = doc_ref
                 f.write(json.dumps(req_obj, ensure_ascii=False) + "\n")
 

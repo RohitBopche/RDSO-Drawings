@@ -1054,6 +1054,211 @@ def build_canonical_knowledge_graph():
             for error in hierarchy_errors[:20]:
                 print(f"  - {error}")
 
+    # Semantic Domain Ontology & Cross-Clause Concept Nodes (Universe: manuals)
+    # Provides formal traversable concept hubs for procedures, components, materials,
+    # defect mitigations, and inspection duties.
+    ontology_entities = [
+        {
+            "id": "act_greasing_lubrication",
+            "label": "Greasing & Lubrication SOP",
+            "type": "PROCEDURE",
+            "domain": "manual",
+            "color": "#00f5d4",
+            "desc": "Standard operating procedure for rail joint lubrication, switch slide chair greasing, and joggled fishplate maintenance to prevent jamming, corrosion, and fracture.",
+            "specs": {
+                "Category": "Track Maintenance Procedure",
+                "Lubricant": "Graphite Grease conforming to IS:408",
+                "CleaningAgent": "Kerosene Oil and Wire Brush",
+                "Frequency": "Annual / Pre-winter / Pre-summer",
+                "GoverningManuals": ["IRPWM 2024", "USFD 2026", "AT Weld Manual"]
+            }
+        },
+        {
+            "id": "comp_joggled_fish_plate",
+            "label": "Joggled Fish Plate",
+            "type": "COMPONENT",
+            "domain": "manual",
+            "color": "#fee440",
+            "desc": "Special fishplate with forged joggles to span over welded joints (AT welds) or clamp fractured/cracked rails as emergency track protection.",
+            "specs": {
+                "StandardDrawings": ["RDSO/T-5849 (60kg)", "RDSO/T-5848 (52kg)", "EDO/T-2246 (75mm gap)"],
+                "ClampingRequirement": "Minimum 2 tight C-clamps or fish bolts",
+                "SpeedRestriction": "30 km/h under emergency clamp until permanent repair",
+                "Application": "Defective AT Welds (DFWO/DFWR), fractured rails, and in-service rail flaws"
+            }
+        },
+        {
+            "id": "comp_fish_plate",
+            "label": "Fish Plate (Rail Joint)",
+            "type": "COMPONENT",
+            "domain": "manual",
+            "color": "#fee440",
+            "desc": "Joint bar used to mechanically join adjacent rail ends with fish bolts in track.",
+            "specs": {
+                "Types": ["Standard Fishplate", "Joggled Fishplate", "Special Fishplate"],
+                "Maintenance": "Annual dismantling, wire brushing fishing surfaces, and lubricating with graphite grease"
+            }
+        },
+        {
+            "id": "comp_fish_bolt",
+            "label": "Fish Bolt & Nut",
+            "type": "FASTENER",
+            "domain": "manual",
+            "color": "#3a86ff",
+            "desc": "High tensile bolt securing fish plates to rail webs, requiring regular oiling and specified torque without hammering.",
+            "specs": {
+                "Maintenance": "Daily tapping by Keyman, regular oiling of threads, uniform tightening"
+            }
+        },
+        {
+            "id": "comp_sej",
+            "label": "Switch Expansion Joint (SEJ)",
+            "type": "COMPONENT",
+            "domain": "manual",
+            "color": "#fee440",
+            "desc": "Track expansion joint accommodating thermal expansion of Long Welded Rails (LWR).",
+            "specs": {
+                "Maintenance": "Regular greasing and lubrication of sliding surfaces to ensure free thermal movement"
+            }
+        },
+        {
+            "id": "comp_at_weld",
+            "label": "Alumino-Thermic (AT) Weld",
+            "type": "COMPONENT",
+            "domain": "manual",
+            "color": "#fee440",
+            "desc": "Field-welded rail joint subject to ultrasonic flaw detection and mandatory joggled fishplate clamping.",
+            "specs": {
+                "InitialTesting": "USFD within 30 days of execution",
+                "Protection": "Mandatory joggled fishplates with 2 clamps until passed by USFD"
+            }
+        },
+        {
+            "id": "mat_graphite_grease",
+            "label": "Plumbago / Graphite Grease (IS:408)",
+            "type": "MATERIAL",
+            "domain": "manual",
+            "color": "#ff9e00",
+            "desc": "Approved lubricant composition of graphite and mineral oil conforming to IS:408 used for rail joints and joggled fishplates.",
+            "specs": {
+                "Standard": "IS:408",
+                "Application": "Fishing surfaces of rails and fishplates, fishbolt threads"
+            }
+        },
+        {
+            "id": "mat_wire_brush",
+            "label": "Wire Brush & Kerosene Cleaning",
+            "type": "EQUIPMENT",
+            "domain": "manual",
+            "color": "#3a86ff",
+            "desc": "Tools and cleaning agent mandated for cleaning rust, dirt, and caked grease from rail and fishplate fishing surfaces before grease application.",
+            "specs": {
+                "Process": "Scrape rust and dirt with wire brush, clean with kerosene oil, wipe dry before greasing"
+            }
+        },
+        {
+            "id": "defect_rail_fracture",
+            "label": "Rail Fracture / Weld Crack",
+            "type": "FAILURE_MODE",
+            "domain": "manual",
+            "color": "#ff3366",
+            "desc": "Complete or partial transverse break in rail or weld requiring emergency joggled fishplating with clamps.",
+            "specs": {
+                "Mitigation": "Emergency clamping with joggled fishplate and 2 C-clamps, stop trains or impose 30 km/h restriction"
+            }
+        },
+        {
+            "id": "defect_dipped_joint",
+            "label": "Dipped Joint / Seized Joint",
+            "type": "FAILURE_MODE",
+            "domain": "manual",
+            "color": "#ff3366",
+            "desc": "Permanent downward deflection or thermal locking of rail joint caused by neglected lubrication or loose bolts.",
+            "specs": {
+                "Prevention": "Regular joint packing, annual greasing of fishing surfaces, bolt torque maintenance"
+            }
+        },
+        {
+            "id": "role_keyman",
+            "label": "Keyman",
+            "type": "ROLE",
+            "domain": "manual",
+            "color": "#9d4edd",
+            "desc": "Track maintenance staff responsible for daily beat patrol, checking rail joints, and tapping fish bolts.",
+            "specs": {
+                "GoverningClause": "IRPWM Para 116",
+                "Duties": "Inspect every joint, tap fish bolts, check joggled fishplate clamps, oil/grease as mandated"
+            }
+        }
+    ]
+
+    for ent in ontology_entities:
+        node = add_entity(
+            ent["id"],
+            ent["label"],
+            ent["type"],
+            "manual",
+            ent["color"],
+            ent["desc"],
+            ent["specs"],
+            x=0, y=5, z=0, alt=13
+        )
+        node["universe"] = "manuals"
+
+    # Semantic relationships linking concepts, materials, procedures, and governing clauses
+    # Using 100% controlled relationship types from schema vocabulary
+    ontology_edges = [
+        # Action -> Target Components
+        ("act_greasing_lubrication", "comp_joggled_fish_plate", "APPLIES_TO", "Lubrication of joggled fishplate contact surfaces to prevent seizing and fretting corrosion"),
+        ("act_greasing_lubrication", "comp_fish_plate", "APPLIES_TO", "Lubrication of fishing surfaces of rail joints per annual schedule"),
+        ("act_greasing_lubrication", "comp_fish_bolt", "APPLIES_TO", "Oiling of threads and bearing faces of fishbolts and nuts"),
+        ("act_greasing_lubrication", "comp_sej", "APPLIES_TO", "Greasing of SEJ slide chairs and tongue/stock contact areas"),
+        
+        # Action -> Materials / Tools
+        ("act_greasing_lubrication", "mat_graphite_grease", "REQUIRES", "Mandatory use of graphite grease conforming to IS:408"),
+        ("act_greasing_lubrication", "mat_wire_brush", "REQUIRES", "Cleaning of fishing surfaces with wire brush and kerosene oil before grease application"),
+        
+        # Action -> Failure Prevention
+        ("defect_dipped_joint", "act_greasing_lubrication", "MITIGATED_BY", "Regular joint greasing prevents joint seizure, wear, and dipped joints"),
+        
+        # Component -> Protection & Failure Mitigation
+        ("defect_rail_fracture", "comp_joggled_fish_plate", "MITIGATED_BY", "Provides emergency bridge and clamping over fractured or cracked rail ends"),
+        ("comp_joggled_fish_plate", "comp_at_weld", "SUPPORTS", "Protects newly cast or defective AT welds from sudden catastrophic failure"),
+        ("comp_fish_plate", "comp_fish_bolt", "FASTENED_BY", "Standard fishplates secured with fish bolts and nuts"),
+        
+        # Governing Clauses -> Actions & Components
+        ("CLAUSE:IRPWM:CH_06:PARA_619", "act_greasing_lubrication", "SPECIFIES", "Para 619 specifies complete annual rail joint lubrication procedure and IS:408 graphite grease"),
+        ("CLAUSE:IRPWM:CH_06:PARA_619", "comp_fish_plate", "APPLIES_TO", "Para 619 applies to dismantling, wire brushing, and greasing of fish plates"),
+        ("CLAUSE:IRPWM:CH_06:PARA_619", "mat_graphite_grease", "REQUIRES", "Para 619 mandates plumbago / graphite grease to IS:408"),
+        ("CLAUSE:IRPWM:CH_06:PARA_620", "act_greasing_lubrication", "SPECIFIES", "Para 620 specifies joint maintenance, bolt tightening, and prohibition of hammering fishplates"),
+        ("CLAUSE:IRPWM:CH_06:PARA_620", "comp_fish_bolt", "GOVERNS", "Para 620 governs uniform torque tightening of fish bolts"),
+        
+        ("CLAUSE:IRPWM:CH_02:PARA_206", "comp_joggled_fish_plate", "SPECIFIES", "Para 206 specifies standard joggled fishplates (RDSO/T-5849 60kg, RDSO/T-5848 52kg)"),
+        ("CLAUSE:IRPWM:CH_02:PARA_2243", "comp_joggled_fish_plate", "SPECIFIES", "Para 2243 specifies joggled fish plates for 75 mm wide gap AT welds (EDO/T-2246)"),
+        ("CLAUSE:IRPWM:CH_03:PARA_307", "comp_joggled_fish_plate", "SPECIFIES", "Para 307 mandates joggled fishplating with 2 clamps over AT welds until cleared by USFD"),
+        ("CLAUSE:IRPWM:CH_03:PARA_307", "comp_at_weld", "APPLIES_TO", "Para 307 applies safety precautions to AT welding in track"),
+        ("CLAUSE:IRPWM:CH_03:PARA_349", "comp_joggled_fish_plate", "SPECIFIES", "Para 349 mandates emergency joggled fishplating of rail fractures allowing 30 km/h train passage"),
+        ("CLAUSE:IRPWM:CH_03:PARA_349", "defect_rail_fracture", "SPECIFIES", "Para 349 defines emergency rectification of rail fractures"),
+        ("CLAUSE:IRPWM:CH_06:PARA_618", "comp_joggled_fish_plate", "SPECIFIES", "Para 618 specifies action in case of rail fracture / weld failure using joggled fishplates"),
+        
+        ("CLAUSE:USFD:CH_08:PARA_8_10", "comp_joggled_fish_plate", "SPECIFIES", "Para 8.10 mandates joggled fishplates with 2 clamps for defective AT welds (DFWR/DFWO)"),
+        ("comp_at_weld", "CLAUSE:USFD:CH_08:PARA_8_10", "INSPECTED_BY", "Para 8.10 specifies testing and defect classification of AT welds"),
+        
+        ("CLAUSE:IRPWM:CH_01:PARA_116", "role_keyman", "SPECIFIES", "Para 116 specifies Keyman daily joint inspection, tapping fish bolts, and greasing duties"),
+        ("comp_fish_bolt", "role_keyman", "INSPECTED_BY", "Keyman daily taps and checks tight condition of fish bolts"),
+        ("act_greasing_lubrication", "role_keyman", "MAINTAINED_BY", "Keyman assists and carries out joint greasing and bolt oiling in beat"),
+    ]
+
+    for src, dst, rel, rat in ontology_edges:
+        add_edge(
+            src, dst, rel, rat,
+            source_dwg="IRPWM_USFD_STANDARDS",
+            revision="2024-2026",
+            region="TRACK_JOINTS_ONTOLOGY",
+            crop="",
+            evidence_text=rat
+        )
+
     # Hard isolation gate: no canonical edge may cross between the Manuals and
     # Drawing universes. Future cross-domain relationships belong in a separate
     # relationship layer and must never be inferred here.

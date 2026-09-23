@@ -18,6 +18,51 @@
     ]
   },
   {
+    "file": "RDSO_T_3901 TO  RDSOT_T_3902_A_ALT_3.pdf",
+    "drawing_number": "RDSO/T-3901",
+    "detected_alteration": "ALT_3",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_3901 TO  RDSOT_T_3902_A_ALT_3.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1716.8 x 1051.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_3911 TO RDSO_T_3918_ALT_2.pdf",
+    "drawing_number": "RDSO/T-3911",
+    "detected_alteration": "ALT_2",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_3911 TO RDSO_T_3918_ALT_2.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 842.0 x 595.0 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_4018_ALT_1.pdf",
+    "drawing_number": "RDSO/T-4018",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_4018_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2460.8 x 1243.8 pt."
+    ]
+  },
+  {
     "file": "RDSO_T_6154_ALT_6.pdf",
     "drawing_number": "RDSO/T-6154",
     "detected_alteration": "ALT_6",
@@ -80,6 +125,156 @@
       "Detail 'B' introduced for M.S. Flat Tie Bar between Sleeper 03 & 04.",
       "Notes 23-27 added for tie bar segregation, dowel drilling SOP, and versine pre-curving.",
       "Welded tongue rail joint ('W') carried over from Alt 11."
+    ]
+  },
+  {
+    "file": "RDSO_T_6156 To RDSO_T_6156_2_ALT_2.pdf",
+    "drawing_number": "RDSO/T-6156",
+    "detected_alteration": "ALT_2",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6156 To RDSO_T_6156_2_ALT_2.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2652.5 x 1357.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6166 & RDSO_T_6166_A_ALT_2.pdf",
+    "drawing_number": "RDSO/T-6166",
+    "detected_alteration": "ALT_2",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6166 & RDSO_T_6166_A_ALT_2.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 3353.0 x 1287.0 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6167_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6167",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6167_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1978.6 x 1256.0 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6168 & RDSO_T_6169_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6168",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6168 & RDSO_T_6169_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2409.8 x 1269.0 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6170_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6170",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6170_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2365.9 x 1255.7 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6171 To RDSO_T_6173_ALT_2.pdf",
+    "drawing_number": "RDSO/T-6171",
+    "detected_alteration": "ALT_2",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6171 To RDSO_T_6173_ALT_2.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1699.2 x 1091.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6174 & RDSO_T_6175_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6174",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6174 & RDSO_T_6175_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2427.8 x 1277.6 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6176_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6176",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6176_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2365.9 x 1245.1 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6177 To RDSO_T_6179_ALT_2.pdf",
+    "drawing_number": "RDSO/T-6177",
+    "detected_alteration": "ALT_2",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6177 To RDSO_T_6179_ALT_2.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1690.2 x 1050.7 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6180 TO RDSO_T_6191_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6180",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6180 TO RDSO_T_6191_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1712.9 x 1114.2 pt."
     ]
   },
   {
@@ -185,6 +380,186 @@
     ]
   },
   {
+    "file": "RDSO_T_6281 To RDSO_T_6281_2_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6281",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6281 To RDSO_T_6281_2_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2705.4 x 1278.0 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6288_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6288",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6288_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1708.2 x 1108.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6289_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6289",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6289_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2040.8 x 1312.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6290_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6290",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6290_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2018.2 x 1317.6 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6291 & RDSO_T_6293_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6291",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6291 & RDSO_T_6293_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2383.6 x 1247.0 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6292 & RDSO_T_6294_ALT_1.pdf",
+    "drawing_number": "RDSO/T-6292",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6292 & RDSO_T_6294_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2374.9 x 1229.4 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6295_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-6295",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6295_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1708.2 x 1280.5 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6296 TO RDSO_T-6299_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-6296",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6296 TO RDSO_T-6299_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2484.2 x 1285.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6300 & RDSO_T_6301_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-6300",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6300 & RDSO_T_6301_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1706.9 x 1312.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6302 & RDSO_T_6303_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-6302",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6302 & RDSO_T_6303_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1635.8 x 1258.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6304_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-6304",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6304_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1635.8 x 1132.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_6306_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-6306",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_6306_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1564.2 x 1103.0 pt."
+    ]
+  },
+  {
     "file": "RDSO_T_7075_ALT_1.pdf",
     "drawing_number": "RDSO/T-7075",
     "detected_alteration": "ALT_1",
@@ -233,6 +608,306 @@
       "Switch length: 6425 mm with ZU-1-60 Thick Web Tongue Rails.",
       "Speed potential: 25 km/h on loop line.",
       "Throw at toe: 115 mm (compared to 160 mm for 1:12 switch)."
+    ]
+  },
+  {
+    "file": "RDSO_T_7085 & RDSO_T_7086_ALT_1.pdf",
+    "drawing_number": "RDSO/T-7085",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_7085 & RDSO_T_7086_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1717.2 x 997.6 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_7087 & RDSO_T_7088_ALT_1.pdf",
+    "drawing_number": "RDSO/T-7087",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_7087 & RDSO_T_7088_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1681.2 x 1002.1 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_7089_ALT_1.pdf",
+    "drawing_number": "RDSO/T-7089",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_7089_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1699.2 x 1109.9 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_7090_ALT_1.pdf",
+    "drawing_number": "RDSO/T-7090",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_7090_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1690.2 x 1072.9 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_7091 To RDSO_T_7100_ALT_1.pdf",
+    "drawing_number": "RDSO/T-7091",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_7091 To RDSO_T_7100_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1699.2 x 1063.4 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9010 & RDSO_T_9010_1_ALT_1.pdf",
+    "drawing_number": "RDSO/T-9010",
+    "detected_alteration": "ALT_1",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9010 & RDSO_T_9010_1_ALT_1.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1669.8 x 882.8 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9616_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9616",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9616_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1664.9 x 927.4 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9617_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9617",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9617_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1672.7 x 1110.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9618 & RDSO_T_9619_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9618",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9618 & RDSO_T_9619_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1669.0 x 966.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9620_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9620",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9620_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1670.6 x 1081.8 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9621 To RDSO_T_9623_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9621",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9621 To RDSO_T_9623_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1669.9 x 997.6 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9624 & RDSO_T_9625_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9624",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9624 & RDSO_T_9625_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1674.1 x 957.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9626_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9626",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9626_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1675.8 x 1002.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9627 To RDSO_T_9629_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9627",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9627 To RDSO_T_9629_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1669.2 x 1047.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9630_Alt_NIL.pdf",
+    "drawing_number": "RDSO/T-9630",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9630_Alt_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1640.9 x 1018.4 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9631_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9631",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9631_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1169.9 x 680.8 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9632 To RDSO_T_9632_3_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9632",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9632 To RDSO_T_9632_3_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2594.9 x 1358.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9633 & RDSO_T_9634_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9633",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9633 & RDSO_T_9634_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1677.7 x 1149.1 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9635_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9635",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9635_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 1172.9 x 718.2 pt."
+    ]
+  },
+  {
+    "file": "RDSO_T_9653 To RDSO_T_9653_3_ALT_NIL.pdf",
+    "drawing_number": "RDSO/T-9653",
+    "detected_alteration": "ALT_UNKNOWN",
+    "category": "General Track Drawing",
+    "title": "RDSO Drawing Specification (RDSO_T_9653 To RDSO_T_9653_3_ALT_NIL.pdf)",
+    "turnout_ratio": "1 in 12",
+    "rail_section": "60 kg (UIC) / 60E1",
+    "sleeper_type": "Prestressed Concrete (PSC)",
+    "num_pages": 1,
+    "key_highlights": [
+      "Standard Indian Railways track engineering drawing (General Track Drawing).",
+      "Document contains 1 page(s) with dimensions 2481.1 x 1410.2 pt."
     ]
   }
 ]

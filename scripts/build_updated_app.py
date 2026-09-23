@@ -9906,7 +9906,7 @@ html_template = r'''<!DOCTYPE html>
 </html>
 '''
 
-final_html = html_template.replace("__EXTRACTED_KNOWLEDGE_JSON__", extracted_json_str).replace("__CANONICAL_KG_JSON__", canonical_json_str).replace("__MANUALS_KNOWLEDGE_JSON__", manuals_json_str).replace("__MANUALS_TREE_JSON__", tree_json_str)
+final_html = html_template.replace("__EXTRACTED_KNOWLEDGE_JSON__", "{}").replace("__CANONICAL_KG_JSON__", "{}").replace("__MANUALS_KNOWLEDGE_JSON__", "{}").replace("__MANUALS_TREE_JSON__", "[]")
 
 output_html_path = os.path.join(REPO_ROOT, "index.html")
 with open(output_html_path, "w", encoding="utf-8") as f:

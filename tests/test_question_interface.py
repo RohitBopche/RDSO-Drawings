@@ -96,6 +96,28 @@ CANONICAL_QA_BANK = [
         "parameter": None,
         "traversal": ["FAIL:TRACK:BOLT_HOLE_STAR_CRACK", "comp_detailb", "DOC:USFD:2026:ACS4"],
         "provenance": {"doc": "USFD Manual 2026", "para": "Para 10.4", "confidence": 0.95, "status": "VERIFIED"}
+    },
+    {
+        "id": "qa_greasing_provisions",
+        "keywords": ["provisions", "greasing", "joggled", "fish plates", "fish plate", "lubrication", "greasing of joggled fish plates"],
+        "intent": "INSPECTION_PROCEDURE",
+        "entity": "act_greasing_lubrication",
+        "question": "What are the provisions of greasing of joggled fish plates?",
+        "answer": "Provisions for greasing and maintenance of joggled fish plates & rail joints (governed by IRPWM Paras 619, 620, 206, 2243, 307, 349 and USFD Para 8.10) mandate: (1) Wire brush scraping and kerosene cleaning of fishing surfaces before lubrication; (2) Plumbago/graphite grease conforming to IS:408 applied to rail fishing contact areas and fishbolt threads; (3) Mandatory annual lubrication schedule before summer/winter extremes; (4) Strict prohibition of hammering fishplates onto rails, with uniform torque tightening from inside pairs outward; (5) Emergency weld/fracture protection using RDSO/T-5849 (60kg) or T-5848 (52kg) joggled fishplates with at least 2 tight clamps allowing restricted train movement (30 km/h) until permanent rail/weld renewal.",
+        "parameter": {"lubricant": "Graphite Grease IS:408", "schedule": "Annual", "cleaning": "Wire Brush + Kerosene Oil", "clamping_min": 2, "emergency_speed_kmh": 30},
+        "traversal": ["act_greasing_lubrication", "comp_joggled_fish_plate", "comp_fish_plate", "comp_fish_bolt", "mat_graphite_grease", "CLAUSE:IRPWM:CH_06:PARA_619", "CLAUSE:IRPWM:CH_06:PARA_620", "CLAUSE:IRPWM:CH_03:PARA_307", "CLAUSE:USFD:CH_08:PARA_8_10"],
+        "provenance": {"doc": "IRPWM 2024 / USFD 2026", "para": "Paras 619, 620, 206, 307, 349 & USFD 8.10", "confidence": 0.99, "status": "VERIFIED"}
+    },
+    {
+        "id": "qa_greasing_mention",
+        "keywords": ["in which", "greasing is mentioned", "where is greasing", "which clauses", "greasing mentioned", "lubrication mentioned"],
+        "intent": "INSPECTION_PROCEDURE",
+        "entity": "act_greasing_lubrication",
+        "question": "In which clauses is greasing mentioned?",
+        "answer": "Greasing and lubrication provisions are specified across 70 clauses in 6 statutory railway manuals, primarily: IRPWM Para 619 (Rail Joint Lubrication & IS:408 graphite grease), IRPWM Para 620 (Fishbolt oiling & torque maintenance), IRPWM Para 116 (Keyman daily joint inspection & greasing duties), IRPWM Para 424 (Lubrication of outer rail on curves), IRPWM Para 429(2) (Switch slide chair lubrication), IRPWM Para 322 (SEJ thermal expansion greasing), and USFD Para 8.2.4 & 9.3 (Ultrasonic couplant grease).",
+        "parameter": {"total_clauses": 70, "governing_paras": ["Para 619", "Para 620", "Para 116", "Para 424", "Para 429(2)", "Para 322", "USFD 8.2.4"]},
+        "traversal": ["act_greasing_lubrication", "comp_fish_plate", "comp_joggled_fish_plate", "CLAUSE:IRPWM:CH_06:PARA_619", "CLAUSE:IRPWM:CH_06:PARA_620", "CLAUSE:IRPWM:CH_04:PARA_424", "CLAUSE:IRPWM:CH_01:PARA_116"],
+        "provenance": {"doc": "Indian Railways Codes & Manuals Corpus", "para": "IRPWM Paras 619, 620, 116, 424; USFD Para 8.2.4", "confidence": 0.99, "status": "VERIFIED"}
     }
 ]
 
@@ -110,8 +132,8 @@ def detect_question_intent(query: str):
     # Check if this is formulated as a question or engineering inquiry
     is_q = (
         q_clean.endswith("?") or
-        any(q_clean.startswith(w) for w in ["what", "which", "how", "where", "can", "is", "tell", "explain"]) or
-        any(kw in q_clean for kw in ["wear", "throw", "tolerance", "clearance", "standard", "spec", "usfd", "inspect", "alt 11", "alt 12", "buffer", "spare", "crack", "defect"])
+        any(q_clean.startswith(w) for w in ["what", "which", "how", "where", "can", "is", "tell", "explain", "in which"]) or
+        any(kw in q_clean for kw in ["wear", "throw", "tolerance", "clearance", "standard", "spec", "usfd", "inspect", "alt 11", "alt 12", "buffer", "spare", "crack", "defect", "greas", "lubricat", "joggled", "provisions"])
     )
     if not is_q:
         return False, "UNKNOWN", 0.0
@@ -119,8 +141,8 @@ def detect_question_intent(query: str):
     if any(k in q_clean for k in ["alt 10", "alt 11", "alt 12", "alt 13", "revision", "alteration", "difference", "changed in"]):
         return True, "REVISION_COMPARISON", 0.98
 
-    if any(k in q_clean for k in ["inspect", "usfd", "ultrasonic", "scan", "check rail clearance", "procedure", "frequency", "protocol"]):
-        return True, "INSPECTION_PROCEDURE", 0.95
+    if any(k in q_clean for k in ["inspect", "usfd", "ultrasonic", "scan", "check rail clearance", "procedure", "frequency", "protocol", "greas", "lubricat", "joggled"]):
+        return True, "INSPECTION_PROCEDURE", 0.98
 
     if any(k in q_clean for k in ["wear", "throw", "clearance", "tolerance", "opening", "toe load", "torque", "limit"]):
         return True, "TOLERANCE_INQUIRY", 0.98
@@ -249,3 +271,36 @@ def test_answer_engineering_question_rubber_pad():
     assert res["intent"] == "SPECIFICATION_GOVERNANCE"
     assert "IRS:T-46" in res["answer"]
     assert "comp_grsp" in res["traversal"]
+
+
+def test_answer_engineering_question_greasing_joggled_provisions():
+    """Verify answer synthesis for provisions of greasing of joggled fish plates."""
+    res = answer_engineering_question("What are the provisions of greasing of joggled fish plates?")
+    assert res is not None
+    assert res["intent"] == "INSPECTION_PROCEDURE"
+    assert "IS:408" in res["answer"]
+    assert "kerosene" in res["answer"].lower()
+    assert "hammering" in res["answer"].lower()
+    assert "30 km/h" in res["answer"]
+    assert res["parameter"]["lubricant"] == "Graphite Grease IS:408"
+    assert "act_greasing_lubrication" in res["traversal"]
+    assert "comp_joggled_fish_plate" in res["traversal"]
+    assert "CLAUSE:IRPWM:CH_06:PARA_619" in res["traversal"]
+    assert "CLAUSE:USFD:CH_08:PARA_8_10" in res["traversal"]
+    assert res["status"] == "VERIFIED"
+
+
+def test_answer_engineering_question_greasing_mentioned():
+    """Verify open-ended query 'in which greasing is mentioned' returns governing clauses."""
+    res = answer_engineering_question("In which greasing is mentioned?")
+    assert res is not None
+    assert res["intent"] == "INSPECTION_PROCEDURE"
+    assert "70 clauses" in res["answer"]
+    assert "Para 619" in res["answer"]
+    assert "Para 620" in res["answer"]
+    assert "Para 116" in res["answer"]
+    assert "Para 424" in res["answer"]
+    assert res["parameter"]["total_clauses"] == 70
+    assert "act_greasing_lubrication" in res["traversal"]
+    assert "CLAUSE:IRPWM:CH_06:PARA_619" in res["traversal"]
+    assert res["status"] == "VERIFIED"
