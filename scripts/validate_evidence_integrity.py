@@ -14,6 +14,8 @@ import json
 import sys
 from pathlib import Path
 
+from kg_utils import load_jsonl, add_error as add
+
 ROOT = Path(__file__).resolve().parents[1]
 CANONICAL = ROOT / "data" / "knowledge-graph" / "canonical"
 EVIDENCE_FILE = CANONICAL / "evidence.jsonl"
@@ -27,28 +29,6 @@ VALID_EXTRACTION_METHODS = {
 VALID_VERIFICATION_STATUSES = {
     "unverified", "machine_extracted", "reviewed", "verified", "disputed"
 }
-MAX_ERRORS = 25
-
-
-def load_jsonl(path: Path) -> tuple[list[dict], list[str]]:
-    records: list[dict] = []
-    errors: list[str] = []
-    if not path.exists():
-        return records, [f"Missing file: {path.name}"]
-    with path.open(encoding="utf-8") as handle:
-        for line_no, raw in enumerate(handle, 1):
-            if not raw.strip():
-                continue
-            try:
-                records.append(json.loads(raw))
-            except json.JSONDecodeError as exc:
-                errors.append(f"{path.name}:{line_no}: invalid JSON: {exc.msg}")
-    return records, errors
-
-
-def add(errors: list[str], msg: str) -> None:
-    if len(errors) < MAX_ERRORS:
-        errors.append(msg)
 
 
 def validate_evidence():

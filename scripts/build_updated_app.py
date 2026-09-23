@@ -7,59 +7,20 @@ Engineering Answer Cards in full compliance with the Knowledge Graph Improvement
 
 import json
 import os
+import subprocess
+import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 data_dir = os.path.join(REPO_ROOT, "data")
-ext_path = os.path.join(data_dir, "rdso_extracted_knowledge.json")
-can_path = os.path.join(data_dir, "rdso_canonical_kg.json")
-man_path = os.path.join(data_dir, "rdso_manuals_knowledge.json")
-
-with open(ext_path, "r", encoding="utf-8") as f:
-    extracted_knowledge = json.load(f)
-
-with open(can_path, "r", encoding="utf-8") as f:
-    canonical_kg = json.load(f)
-
-manuals_knowledge = {}
-if os.path.exists(man_path):
-    with open(man_path, "r", encoding="utf-8") as f:
-        manuals_knowledge = json.load(f)
-
-all_ch_path = os.path.join(data_dir, "knowledge-graph", "intermediate", "all_chapters_extracted.json")
-compacted_tree = []
-if os.path.exists(all_ch_path):
-    with open(all_ch_path, "r", encoding="utf-8") as f:
-        all_ch_data = json.load(f)
-    for m in all_ch_data.get("manuals", []):
-        compacted_tree.append({
-            "doc_id": m["document_id"],
-            "alias": m["alias"],
-            "title": m["title"],
-            "total_chapters": m["total_chapters"],
-            "total_clauses": m["total_clauses"],
-            "chapters": [{
-                "id": ch["chapter_id"],
-                "num": ch["chapter_number"],
-                "title": ch["title"],
-                "pages": ch["page_range"],
-                "topics": ch["topics"],
-                "clauses": [{"id": cl["clause_id"], "para": cl["para_number"], "title": cl["title"], "page": cl["page_number"]} for cl in ch["clauses"]]
-            } for ch in m["chapters"]]
-        })
 
 # Generate data/rdso_kg_data.js bundle if needed
-import subprocess
 try:
     export_script = os.path.join(REPO_ROOT, "scripts", "export_kg_bundle.py")
     if os.path.exists(export_script):
-        subprocess.run(["python", export_script], check=True)
+        subprocess.run([sys.executable, export_script], check=True)
 except Exception as e:
     print(f"[!] Warning updating bundle: {e}")
 
-extracted_json_str = "{}"
-canonical_json_str = "{}"
-manuals_json_str = "{}"
-tree_json_str = "[]"
 
 html_template = r'''<!DOCTYPE html>
 <html lang="en">

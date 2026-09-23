@@ -65,58 +65,56 @@ def run_document_segmentation():
 
     print(f"[*] Loaded {len(registry_records)} documents from source registry.")
 
-    out_file = open(OUTPUT_PAGES_PATH, "w", encoding="utf-8")
-    total_pages_processed = 0
-    total_text_pages = 0
-    total_clauses_indexed = 0
+    with open(OUTPUT_PAGES_PATH, "w", encoding="utf-8") as out_file:
+        total_pages_processed = 0
+        total_text_pages = 0
+        total_clauses_indexed = 0
 
-    for doc_idx, rec in enumerate(registry_records):
-        doc_id = rec["id"]
-        file_path = os.path.join(REPO_ROOT, rec["file_path"])
-        
-        if not os.path.exists(file_path):
-            print(f"  [WARN] File missing: {file_path}")
-            continue
+        for doc_idx, rec in enumerate(registry_records):
+            doc_id = rec["id"]
+            file_path = os.path.join(REPO_ROOT, rec["file_path"])
+            
+            if not os.path.exists(file_path):
+                print(f"  [WARN] File missing: {file_path}")
+                continue
 
-        try:
-            pdf_doc = pymupdf.open(file_path)
-            num_pages = len(pdf_doc)
-            doc_text_count = 0
+            try:
+                pdf_doc = pymupdf.open(file_path)
+                num_pages = len(pdf_doc)
+                doc_text_count = 0
 
-            for p_num in range(num_pages):
-                page = pdf_doc[p_num]
-                page_text = page.get_text()
-                clean_text = page_text.strip()
-                is_ext = len(clean_text) > 30
+                for p_num in range(num_pages):
+                    page = pdf_doc[p_num]
+                    page_text = page.get_text()
+                    clean_text = page_text.strip()
+                    is_ext = len(clean_text) > 30
 
-                struct = detect_structural_elements(clean_text)
-                if is_ext:
-                    doc_text_count += 1
-                    total_clauses_indexed += len(struct["clauses"])
+                    struct = detect_structural_elements(clean_text)
+                    if is_ext:
+                        doc_text_count += 1
+                        total_clauses_indexed += len(struct["clauses"])
 
-                page_record = {
-                    "page_id": f"PAGE:{doc_id}:{p_num+1}",
-                    "document_id": doc_id,
-                    "document_family": rec["document_family"],
-                    "page_number": p_num + 1,
-                    "total_pages": num_pages,
-                    "text_length": len(clean_text),
-                    "is_extractable": is_ext,
-                    "detected_headings": struct["headings"],
-                    "detected_clauses": struct["clauses"],
-                    "detected_tables": struct["tables"],
-                    "text_content": clean_text
-                }
-                out_file.write(json.dumps(page_record, ensure_ascii=False) + "\n")
-                total_pages_processed += 1
+                    page_record = {
+                        "page_id": f"PAGE:{doc_id}:{p_num+1}",
+                        "document_id": doc_id,
+                        "document_family": rec["document_family"],
+                        "page_number": p_num + 1,
+                        "total_pages": num_pages,
+                        "text_length": len(clean_text),
+                        "is_extractable": is_ext,
+                        "detected_headings": struct["headings"],
+                        "detected_clauses": struct["clauses"],
+                        "detected_tables": struct["tables"],
+                        "text_content": clean_text
+                    }
+                    out_file.write(json.dumps(page_record, ensure_ascii=False) + "\n")
+                    total_pages_processed += 1
 
-            total_text_pages += doc_text_count
-            print(f"  [{doc_idx+1}/{len(registry_records)}] {doc_id}: {num_pages} pages processed ({doc_text_count} text pages)")
+                total_text_pages += doc_text_count
+                print(f"  [{doc_idx+1}/{len(registry_records)}] {doc_id}: {num_pages} pages processed ({doc_text_count} text pages)")
 
-        except Exception as e:
-            print(f"  [ERROR] Failed processing {file_path}: {e}")
-
-    out_file.close()
+            except Exception as e:
+                print(f"  [ERROR] Failed processing {file_path}: {e}")
 
     print("\n================================================================================")
     print("PHASE B SEGMENTATION AUDIT SUMMARY")

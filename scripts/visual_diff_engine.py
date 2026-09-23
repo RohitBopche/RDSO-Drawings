@@ -6,23 +6,24 @@ Author: Antigravity AI - Advanced Agentic Coding for Indian Railways
 import os
 import sys
 import pymupdf
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 
 def ensure_dir(path):
     os.makedirs(path, exist_ok=True)
 
 def extract_crops():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    crops_dir = os.path.join(base_dir, "crops")
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    drawings_dir = os.path.join(repo_root, "drawings")
+    crops_dir = os.path.join(repo_root, "crops")
     ensure_dir(crops_dir)
 
     drawings = {
-        "alt10": os.path.join(base_dir, "RDSO_T_6155_ALT_10.pdf"),
-        "alt12": os.path.join(base_dir, "RDSO_T_6155_ALT_12.pdf"),
-        "alt13": os.path.join(base_dir, "2025-01-28-RDSO_T_6155_ALT_13.pdf"),
-        "layout_6154": os.path.join(base_dir, "RDSO_T_6154_ALT_6.pdf"),
-        "crossing_6280": os.path.join(base_dir, "RDSO_T_6280_ALT_4.pdf"),
-        "switch_7075": os.path.join(base_dir, "RDSO_T_7075_ALT_1.pdf")
+        "alt10": os.path.join(drawings_dir, "RDSO_T_6155_ALT_10.pdf"),
+        "alt12": os.path.join(drawings_dir, "RDSO_T_6155_ALT_12.pdf"),
+        "alt13": os.path.join(drawings_dir, "2025-01-28-RDSO_T_6155_ALT_13.pdf"),
+        "layout_6154": os.path.join(drawings_dir, "RDSO_T_6154_ALT_6.pdf"),
+        "crossing_6280": os.path.join(drawings_dir, "RDSO_T_6280_ALT_4.pdf"),
+        "switch_7075": os.path.join(drawings_dir, "RDSO_T_7075_ALT_1.pdf")
     }
 
     # Region coordinates (x0, y0, x1, y1) in relative coordinates [0..1]

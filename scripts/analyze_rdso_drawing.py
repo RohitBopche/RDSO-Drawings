@@ -197,7 +197,7 @@ class RDSODrawingAnalyzer:
         return report
 
 def analyze_all():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "drawings")
     pdf_files = sorted(glob.glob(os.path.join(base_dir, "*.pdf")))
     print(f"[*] Found {len(pdf_files)} RDSO PDF drawing(s) in {base_dir}...\n")
     
@@ -216,7 +216,8 @@ def analyze_all():
             print(f"{idx:<3} | ERROR: {os.path.basename(pdf_path)} -> {e}")
 
     # Output JSON catalog
-    out_json = os.path.join(base_dir, "rdso_drawing_catalog.json")
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    out_json = os.path.join(repo_root, "data", "rdso_drawing_catalog.json")
     with open(out_json, "w", encoding="utf-8") as f:
         json.dump(catalog, f, indent=2)
         
@@ -229,7 +230,8 @@ def main():
 
     target = sys.argv[1] if len(sys.argv) > 1 else "2025-01-28-RDSO_T_6155_ALT_13.pdf"
     if not os.path.isabs(target):
-        target = os.path.join(os.path.dirname(os.path.abspath(__file__)), target)
+        drawings_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "drawings")
+        target = os.path.join(drawings_dir, target)
 
     if not os.path.exists(target):
         print(f"Error: File {target} not found.")

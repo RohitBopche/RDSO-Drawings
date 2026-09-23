@@ -8,28 +8,29 @@ import json
 import os
 import sys
 
-# Controlled Entity Vocabularies from Blueprint Section 5 & REKG Architecture
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Load controlled relationship vocabulary from the authoritative schema
+_VOCAB_PATH = os.path.join(REPO_ROOT, "data", "knowledge-graph", "schemas", "vocabularies", "relationship-types.json")
+try:
+    with open(_VOCAB_PATH, "r", encoding="utf-8") as _f:
+        _vocab_doc = json.load(_f)
+    CONTROLLED_PREDICATES = set(_vocab_doc["items"]["enum"])
+except (OSError, KeyError, json.JSONDecodeError):
+    print(f"[WARN] Could not load vocabulary from {_VOCAB_PATH}, falling back to empty set")
+    CONTROLLED_PREDICATES = set()
+
+# Controlled Entity Vocabularies (no external schema file yet — keep in sync manually)
 CONTROLLED_ENTITY_TYPES = {
     "DOCUMENT", "DRAWING", "REVISION", "COMPONENT", "SUBASSEMBLY", "ASSEMBLY",
     "RAIL", "TONGUE_RAIL", "STOCK_RAIL", "SLEEPER", "FASTENER", "TIE_BAR",
     "SLIDE_CHAIR", "POINT_MACHINE", "LOCKING_DEVICE", "DIMENSION", "TOLERANCE",
     "MATERIAL", "STANDARD", "SPECIFICATION", "NOTE", "BOM_ITEM", "SPARE_PART",
-    "INTERFACE", "CONSTRAINT", "FAILURE_MODE", "HAZARD", "FAILUREMODE", "INSPECTION",
+    "INTERFACE", "CONSTRAINT", "FAILURE_MODE", "HAZARD", "INSPECTION",
     "MAINTENANCE_ACTION", "SOP", "FIELD_OBSERVATION", "LOCATION", "EQUIPMENT", "ZONE",
     "CLAUSE", "CHAPTER", "REQUIREMENT", "PROCEDURE"
 }
 
-# Controlled Relationship Vocabularies from Blueprint Section 6 & REKG Architecture
-CONTROLLED_PREDICATES = {
-    "HAS_REVISION", "SUPERSEDES", "PRECEDES", "REFERENCES", "GOVERNS", "SPECIFIES",
-    "CONTAINS", "HAS_NOTE", "HAS_DIMENSION", "HAS_TOLERANCE", "HAS_BOM_ITEM",
-    "HAS_SPARE", "PART_OF", "ASSEMBLED_FROM", "INSTALLED_ON", "FASTENED_BY",
-    "INTERFACES_WITH", "CONNECTED_TO", "OPERATED_BY", "CONTROLLED_BY", "REQUIRES",
-    "INSPECTED_BY", "MAINTAINED_BY", "HAS_FAILURE_MODE", "CAN_CAUSE", "MITIGATED_BY",
-    "APPLIES_TO", "DERIVED_FROM", "SUPPORTED_BY", "CONFLICTS_WITH", "VALID_DURING",
-    "MODIFIED_IN", "INTRODUCED_IN", "REMOVED_IN", "CONTAINS_SLEEPER",
-    "CONTAINS_CLAUSE", "SPECIFIES_TOLERANCE", "MANDATES_EQUIPMENT", "CONTAINS_CHAPTER", "DETECTS_FAILURE"
-}
 
 def validate():
     print("================================================================================")
