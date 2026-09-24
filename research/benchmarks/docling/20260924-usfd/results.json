@@ -1,0 +1,33 @@
+{
+  "experiment": "EXP-01",
+  "benchmark": "current PyMuPDF extraction baseline vs Docling",
+  "input": {
+    "file": "usfd_new.pdf",
+    "sha256": "e4030a3edd4d3c679fb246411dd25ed263c0eec1a04843b4bc87574ed312d28f",
+    "source": "Project Library materialized file"
+  },
+  "pymupdf": {
+    "pages": 147,
+    "text_pages": 147,
+    "empty_pages": 0,
+    "characters": 164213,
+    "structural_signals": {
+      "headings": 36,
+      "clauses": 387,
+      "tables": 0,
+      "figures": 119
+    },
+    "runtime_seconds": 0.644
+  },
+  "docling": {
+    "available": false,
+    "reason": "Docling is not installed in the execution environment; no Docling metrics were fabricated."
+  },
+  "interpretation": [
+    "The source PDF is text-extractable on all 147 pages with the current PyMuPDF baseline.",
+    "The current regex signal pass detected 36 heading-like signals, 387 clause-like signals, 0 table labels, and 119 figure labels.",
+    "These counts are diagnostics, not ground-truth accuracy measurements.",
+    "A Docling comparison remains pending until Docling is available in the benchmark environment."
+  ],
+  "next_step": "Add page-level structural ground truth for a representative sample, then rerun the same benchmark with Docling available."
+}
