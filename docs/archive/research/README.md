@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../../ROADMAP.md).
+
 # RDSO-Drawings Research Workspace
 
 This directory is intentionally separate from docs/.

@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # RDSO Drawings — Manuals Knowledge Graph Separation & Chapter-First Architecture
 
 ## 1. Problem

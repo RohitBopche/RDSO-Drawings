@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # Manual Structural Hierarchy Resolver v1
 
 ## Purpose

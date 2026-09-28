@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../../ROADMAP.md).
+
 # Research -> RDSO Architecture Mapping
 
 This is a research working document. It converts the bibliography into concrete engineering experiments.

@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # RDSO Track Knowledge Graph Studio: Session Chat History & Pipeline Record
 
 **Timestamp**: 2026-09-16 (Session Archive)  

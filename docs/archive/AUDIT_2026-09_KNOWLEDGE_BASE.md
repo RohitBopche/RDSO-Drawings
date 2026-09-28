@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # Audit — Offline Railway Manuals Knowledge Base & Knowledge Graph
 
 **Date:** 2026-09-28

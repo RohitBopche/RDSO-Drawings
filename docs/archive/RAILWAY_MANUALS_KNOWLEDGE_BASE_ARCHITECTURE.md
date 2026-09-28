@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # Railway Manuals Knowledge Base & Evidence-Grounded Question Answering Architecture
 
 **Project:** RDSO-Drawings  

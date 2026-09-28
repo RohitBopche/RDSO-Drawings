@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # Indian Railways Codes, Manuals & Standards Repository
 
 Place your official PDF manuals, IRS specifications, and Indian Standard (IS) codes in this directory (`manuals/`).

@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # Railway Engineering Knowledge Graph Architecture
 
 ## RDSO Drawings — Manuals, Codes, Drawings, Letters and Circulars

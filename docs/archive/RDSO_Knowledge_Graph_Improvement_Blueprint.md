@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # RDSO Drawings — Complete Knowledge Graph Upgrade Blueprint
 
 **Status:** Implementation handoff specification  

@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # Repository Structure
 
 This repository is organized into five logical areas while preserving the existing application entrypoint and drawing files.

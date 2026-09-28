@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # Complete Manuals Knowledge Graph Plan
 
 ## 1. Objective

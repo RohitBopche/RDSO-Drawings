@@ -1,3 +1,5 @@
+> **Archived.** Not maintained. The only live project document is [`docs/ROADMAP.md`](../ROADMAP.md).
+
 # Knowledge Graph Data
 
 This folder is the target home for canonical and intermediate knowledge-graph datasets.
