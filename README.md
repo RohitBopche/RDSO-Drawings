@@ -3,6 +3,8 @@
 **Developed for:** Track Analytical Cell, Bhusawal Division, Central Railway, Indian Railways  
 **System Classification:** Offline 3D Engineering Digital Twin, Modular Component Assembly Suite & Continuous Learning Knowledge Graph
 
+> **Project direction (2026-09):** the primary goal is an **offline, AI-quality, citation-backed Q&A knowledge base over Indian Railways manuals** that improves with use. The plan is in [`docs/ROADMAP.md`](docs/ROADMAP.md) and the baseline audit in [`docs/AUDIT_2026-09_KNOWLEDGE_BASE.md`](docs/AUDIT_2026-09_KNOWLEDGE_BASE.md). The drawings/digital-twin features below are frozen until manuals Q&A v1 ships.
+
 ---
 
 ## 1. Executive Problem Statement: What Problem Does This Project Solve?

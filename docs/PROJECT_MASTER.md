@@ -3,6 +3,7 @@
 **Status:** Canonical project document  
 **Purpose:** Single source of project direction, architecture, implementation roadmap, data contracts, UX requirements, validation gates, and agent handoff rules.  
 **Supersedes:** Multiple overlapping documents previously maintained under `docs/`.  
+**Roadmap:** see [`ROADMAP.md`](ROADMAP.md) — the single forward plan.  
 **Archive policy:** Historical/source documents are retained under `docs/archive/` for traceability; new project decisions belong here.
 
 ---
@@ -599,7 +600,7 @@ data/
     indexes/
   drawings/
   shared/
-~~~
+```
 
 Never overwrite raw source extraction with normalized output.
 
@@ -1143,6 +1144,8 @@ If a continuous GitHub workflow is used, it should:
 
 ## 26. Implementation Roadmap
 
+> **Superseded (2026-09-28):** the forward plan, phase order and acceptance metrics now live in [`ROADMAP.md`](ROADMAP.md). The P0–P8 list below is kept for history only.
+
 ### P0 — Foundation and reliability
 
 1. Inspect current repository state.
@@ -1479,7 +1482,7 @@ Commit:
 
 Next priority:
 - one task
-~~~
+```
 
 Use conventional commits such as:
 

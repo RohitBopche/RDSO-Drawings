@@ -265,3 +265,48 @@ This is measurable, reversible (config versioned), and keeps humans in control o
 | "Not found" when the answer is absent (negative questions) | ≥ 0.9 |
 | p95 latency, search / LLM answer (CPU) | < 300 ms / < 20 s |
 | Works with network cable unplugged | yes |
+
+---
+
+## 7. Documentation audit
+
+Every doc in the repo was checked against the goal and against the code and data as they are today.
+
+### 7.1 Summary
+
+| Doc | Lines | Verdict | Key problems |
+|---|---|---|---|
+| `README.md` | 205 | 🔴 Off-goal & stale | Describes a turnout **digital twin** (3D sleepers, spares calculator, 14 drawings) — manuals KB/Q&A barely mentioned. Unsourced stat ("40 %+ of derailments in S&C"). Windows path `F:\git\…`. `python analyze_rdso_drawing.py --all` (file is in `scripts/`). Claims "Continuous Learning Engine" = a browser form whose nodes are not persisted. Links `rdso_living_knowledge_graph_exported.*` that don't exist. Repo tree omits `data/knowledge-graph/`, `research/`, manuals pipeline. |
+| `docs/PROJECT_MASTER.md` | 1,569 | 🟡 Good principles, wrong order | Strong: evidence-first rules, answer contract (§17), conflict handling (§18), AI guardrails (§29), pilot-manual strategy (§27). Problems: (1) roadmap puts drawings P3 and graph P4 **before** retrieval P5 and QA P6, so the stated goal comes last; (2) recommends PostgreSQL + pgvector, which is heavy for single-PC offline field use; (3) has no concept of a self-improvement loop beyond "search analytics"; (4) "Current Baseline" §2 quotes Sep-2026 session metrics (2,157 nodes, 3,256 edges), while the repo has 6,469 and 8,370; (5) relationship vocabulary §8 misses 7 types actually used (`SPECIFIES`, `MITIGATED_BY`, `CAN_CAUSE`, `INTRODUCED_IN`, `HAS_NOTE`, `MAINTAINED_BY`, `CONTAINS_SLEEPER`); (6) mixed ``` / `~~~` fences break rendering in §11 and §33; (7) too long to act on. |
+| `docs/archive/RDSO_Knowledge_Graph_Improvement_Blueprint.md` | 2,220 | 🟠 Superseded | Drawing/turnout-centric 9-phase plan. Still referenced by `data/rdso_canonical_kg.json` metadata (`docs/RDSO_Knowledge_Graph_Improvement_Blueprint.md`, which is now a broken path). Its SQLite-first tiering ("Introduce SQLite when… PostgreSQL when… Neo4j when…") is the most sensible DB guidance in the repo, and it is lost in the archive. |
+| `docs/archive/RAILWAY_MANUALS_KNOWLEDGE_BASE_ARCHITECTURE.md` | 1,246 | 🟢 Best match to goal | Hierarchy-aware chunking (§13), hybrid search (§14), QA pipeline (§16), human review (§25), pilot acceptance (§41). But it is archived, so no one follows it. §14 is duplicated verbatim, and it has fence errors. |
+| `docs/archive/RAILWAY_ENGINEERING_KNOWLEDGE_GRAPH_ARCHITECTURE.md` | 456 | 🟠 Overlap | Adds Railway Board letters/circulars layer (useful), otherwise repeats the above. |
+| `docs/archive/COMPLETE_MANUALS_KNOWLEDGE_GRAPH_PLAN.md` | 381 | 🟠 Overlap | Phase A–G ingestion plan, largely absorbed into PROJECT_MASTER §11. |
+| `docs/archive/MANUAL_KNOWLEDGE_GRAPH_UPGRADE.md` | 817 | 🟢 Implemented | Manual/drawing separation + chapter-first expansion. Its contract is in code and gates F–K. Keep as history. |
+| `docs/archive/Manuals_Knowledge_Graph_v2_Blueprint.md` | 149 | 🟢 Implemented | Same as above, short form. |
+| `docs/archive/Manual_Hierarchy_Resolver_v1.md` | 279 | 🟠 Agent-loop churn | 21 near-duplicate "readiness/aggregation" sections appended iteratively. The work tracks *structure* readiness only; content quality (F1–F3) is never measured. |
+| `docs/archive/CHAT_HISTORY_MANUALS_EXTRACTION.md` | 291 | 🔴 Misleading if read as status | Claims "100 % automated verification" and "121,229 inverted search tokens enabling real-time autocomplete". The search index (`exports/search_index.json`, 8,438 entries) is **never loaded by `index.html`**. Mentions `implementation_plan.md`, which doesn't exist. |
+| `docs/archive/UX_SEARCH_WORKFLOW.md` | 186 | 🟡 Useful acceptance criteria | Drawing-first (`T-6155` flow). Its search → result → evidence criteria still apply to provisions. |
+| `docs/archive/REPO_STRUCTURE.md` | 30 | ⚪ Obsolete | — |
+| `research/README.md`, `RESEARCH_INDEX.md` | 247 | 🟢 Good | Clean separation, 15 relevant papers, sensible rules. |
+| `research/RESEARCH_TO_ARCHITECTURE.md` | 290 | 🟢 Good | EXP-01…06 are the right experiments. EXP-03 (evidence-grounded retrieval) is the one that matters most for the goal and hasn't started. |
+| `research/benchmarks/.../20260924-usfd` | — | 🟡 Invalid comparison | Benchmarked a different USFD file (147 pp) than the pipeline registry (157 pp). Docling never ran. |
+| `data/knowledge-graph/schemas/ONTOLOGY.md` | 56 | 🟢 OK | Consistent with `relationship-types.json`, which contains all used types. The vocabulary in PROJECT_MASTER §8 is the one out of sync. |
+| `manuals/README.md` | 45 | 🟡 Aspirational | Lists 13 target sources, and only 6 are present. Its claim that "Paras will automatically link to drawings via GOVERNS…" contradicts PROJECT_MASTER §3.3 (no Manual↔Drawing edges). |
+| `scripts/README.md`, `data/knowledge-graph/README.md` | — | 🟡 Thin | No CLI/usage/pipeline order. The "root-level JSON retained temporarily" note has been temporary for months. |
+
+### 7.2 Cross-document problems
+
+1. **Too many plans.** There are 12 planning/architecture docs (~7,800 lines) with 5 different phase numberings (P0–P8, M0–M7, Phase 0–9, Phase A–G, EXP-01…06). No doc says what to do *next week*.
+2. **Goal drift.** The docs oscillate between a *turnout digital twin* (README, Blueprint) and a *manuals knowledge base with Q&A* (KB Architecture, PROJECT_MASTER). The user's goal is the second one.
+3. **Status claims are not tied to measurement.** "100 % verified" and "real-time autocomplete" refer to structural checks and an unused index.
+4. **Database guidance conflicts.** It is SQLite-first in the Blueprint and PostgreSQL in PROJECT_MASTER and the KB Architecture.
+5. **Self-improvement is never specified.** Every doc says "learning", but it means user training (flashcards) or manual node entry. None defines a feedback → evaluation → tuning loop.
+6. **No single definition of done** that can be measured on a question set.
+
+### 7.3 Resolution
+
+Everything above is consolidated into **`docs/ROADMAP.md`**, the single forward plan.
+- PROJECT_MASTER stays the reference for data contracts, the answer contract and AI guardrails; its §26 roadmap is superseded.
+- The README gets a pointer.
+- Archive docs stay as history only.
