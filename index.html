@@ -2473,6 +2473,46 @@
       border-radius: 6px;
     }
 
+    /* Official Manual PDF Source Viewer Modal */
+    #manual-pdf-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(5, 10, 20, 0.94);
+      backdrop-filter: blur(12px);
+      z-index: 1001;
+      display: none;
+      flex-direction: column;
+      padding: 16px 24px;
+    }
+
+    .manual-pdf-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    .manual-pdf-modal-body {
+      flex: 1;
+      display: flex;
+      background: #111;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 35px rgba(0, 0, 0, 0.6);
+    }
+
+    .manual-pdf-modal-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
     /* Manuals Chapter Tree & TOC Navigator */
     .manuals-tree-container {
       display: flex;
@@ -2840,7 +2880,8 @@
   </script>
   <script src="./lib/three.min.js"></script>
   <script src="./lib/OrbitControls.js"></script>
-  <script src="./data/rdso_kg_data.js"></script>\n  <script src="./data/manual_structure.js"></script>
+  <script src="./data/rdso_kg_data.js"></script>
+  <script src="./data/manual_structure.js"></script>
   <script src="./data/manual_content_index.js"></script>
   <style>
     #kg-hover-hud {
@@ -2955,6 +2996,12 @@
         </button>
         <button class="semantic-mode-btn" data-mode="failure" onclick="switchSemanticMode('failure')" title="Failure Analysis">
           <span>⚠️</span> Hazards
+        </button>
+        <button class="semantic-mode-btn" data-mode="bom" onclick="switchSemanticMode('bom')" title="Procurement & BOM">
+          <span>📦</span> BOM
+        </button>
+        <button class="semantic-mode-btn" data-mode="manuals" onclick="switchSemanticMode('manuals')" title="Codes & Manuals">
+          <span>📚</span> Manuals
         </button>
       </div>
 
@@ -3349,6 +3396,26 @@
     </div>
     <div class="blueprint-modal-body">
       <img id="blueprint-modal-img" class="blueprint-modal-img" src="" alt="RDSO Blueprint Full Resolution">
+    </div>
+  </div>
+
+  <!-- Official Railway Manual PDF Source Viewer Modal -->
+  <div id="manual-pdf-modal">
+    <div class="manual-pdf-modal-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 18px;">📄</span>
+        <h3 style="font-size: 14px; color: #fff; margin: 0;" id="manual-pdf-modal-title">Official Railway Manual Source Evidence</h3>
+        <span id="manual-pdf-modal-page-badge" style="font-size: 11px; background: rgba(0, 240, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 4px; padding: 2px 8px; font-weight: 600;">Page 1</span>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <a id="manual-pdf-external-link" href="#" target="_blank" class="btn" style="text-decoration: none; padding: 6px 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 6px;">
+          <span>↗</span> Open in Browser Tab
+        </a>
+        <button class="close-drawer-btn" style="position: static;" onclick="closeManualPdfModal()">✕</button>
+      </div>
+    </div>
+    <div class="manual-pdf-modal-body">
+      <iframe id="manual-pdf-modal-iframe" class="manual-pdf-modal-iframe" src="about:blank"></iframe>
     </div>
   </div>
 
@@ -4039,18 +4106,6 @@
           const h = nodeHierarchyMap.get(id);
           if (h && h.universe === 'manuals') expandedNodeIds.delete(id);
         });
-        // Expand the 6 root manuals so chapters are visible as an interconnected constellation!
-        const manualRootIds = [
-          'DOC:IRPWM:2024:ACS14',
-          'DOC:USFD:2026:ACS4',
-          'DOC:AT_WELD:2022',
-          'DOC:FBW:2022:CS5',
-          'DOC:TMM:2020:ACS10',
-          'DOC:STMM:2024'
-        ];
-        manualRootIds.forEach(id => expandedNodeIds.add(id));
-        expandedNodeIds.add('act_greasing_lubrication');
-        expandedNodeIds.add('comp_joggled_fish_plate');
 
         const docNode = kgPhysicsNodes.find(n => n.data.id === 'DOC:IRPWM:2024:ACS14' || n.data.id === 'doc_irpwm_2024');
         if (docNode) inspectNode(docNode);
@@ -4146,7 +4201,7 @@
       updateExpansionBillboards();
       if (currentSelectedNode) {
         renderDrawingOverview(currentSelectedNode.data, currentActiveDossier);
-      renderManualReadiness(data);
+        renderManualReadiness(currentSelectedNode.data);
       }
     }
     window.toggleNodeExpansion = toggleNodeExpansion;
@@ -5043,12 +5098,17 @@
 
       kgPhysicsNodes.forEach(n => {
         const isHit = manualIds.has(n.data.id);
-        n.mesh.material.opacity = isHit ? 1.0 : 0.08;
-        n.mesh.material.transparent = !isHit;
-        n.sprite.material.opacity = isHit ? 1.0 : 0.08;
+        if (n.mesh && n.mesh.material) {
+          n.mesh.material.opacity = isHit ? 1.0 : 0.08;
+          n.mesh.material.transparent = !isHit;
+        }
+        if (n.sprite && n.sprite.material) {
+          n.sprite.material.opacity = isHit ? 1.0 : 0.08;
+        }
       });
 
       kgPhysicsEdges.forEach(e => {
+        if (!e.line || !e.line.material) return;
         const sameUniverse = e.sourceNode && e.targetNode && e.sourceNode.universe === 'manuals' && e.targetNode.universe === 'manuals';
         const isHit = sameUniverse && manualIds.has(e.from) && manualIds.has(e.to);
         e.line.material.opacity = isHit ? 0.75 : 0.05;
@@ -5059,11 +5119,16 @@
 
     function resetNodeOpacities() {
       kgPhysicsNodes.forEach(n => {
-        n.mesh.material.opacity = 1.0;
-        n.mesh.material.transparent = false;
-        n.sprite.material.opacity = 1.0;
+        if (n.mesh && n.mesh.material) {
+          n.mesh.material.opacity = 1.0;
+          n.mesh.material.transparent = false;
+        }
+        if (n.sprite && n.sprite.material) {
+          n.sprite.material.opacity = 1.0;
+        }
       });
       kgPhysicsEdges.forEach(e => {
+        if (!e.line || !e.line.material) return;
         e.line.material.color.setHex(e.color);
         e.line.material.opacity = 0.45;
       });
@@ -5079,12 +5144,17 @@
 
       kgPhysicsNodes.forEach(n => {
         const isHit = activeIds.has(n.data.id);
-        n.mesh.material.opacity = isHit ? 1.0 : 0.15;
-        n.mesh.material.transparent = !isHit;
-        n.sprite.material.opacity = isHit ? 1.0 : 0.15;
+        if (n.mesh && n.mesh.material) {
+          n.mesh.material.opacity = isHit ? 1.0 : 0.15;
+          n.mesh.material.transparent = !isHit;
+        }
+        if (n.sprite && n.sprite.material) {
+          n.sprite.material.opacity = isHit ? 1.0 : 0.15;
+        }
       });
 
       kgPhysicsEdges.forEach(e => {
+        if (!e.line || !e.line.material) return;
         const isHit = activeIds.has(e.from) && activeIds.has(e.to);
         e.line.material.opacity = isHit ? 0.95 : 0.08;
         if (isHit) e.line.material.color.setHex(0x00ff88);
@@ -5096,12 +5166,17 @@
       kgPhysicsNodes.forEach(n => {
         const isTargetAlt = (n.data.alt === altLevel);
         const isPreceding = (n.data.alt <= altLevel);
-        n.mesh.material.opacity = isTargetAlt ? 1.0 : (isPreceding ? 0.4 : 0.1);
-        n.mesh.material.transparent = true;
-        n.sprite.material.opacity = isTargetAlt ? 1.0 : (isPreceding ? 0.4 : 0.1);
+        if (n.mesh && n.mesh.material) {
+          n.mesh.material.opacity = isTargetAlt ? 1.0 : (isPreceding ? 0.4 : 0.1);
+          n.mesh.material.transparent = true;
+        }
+        if (n.sprite && n.sprite.material) {
+          n.sprite.material.opacity = isTargetAlt ? 1.0 : (isPreceding ? 0.4 : 0.1);
+        }
       });
 
       kgPhysicsEdges.forEach(e => {
+        if (!e.line || !e.line.material) return;
         const isRevRel = (e.rel === "SUPERSEDES" || e.rel === "HAS_REVISION" || e.rel === "INTRODUCED_IN");
         e.line.material.opacity = isRevRel ? 0.95 : 0.1;
         if (isRevRel) e.line.material.color.setHex(0x3a86ff);
@@ -5125,12 +5200,17 @@
 
       kgPhysicsNodes.forEach(n => {
         const isHit = failureIds.has(n.data.id);
-        n.mesh.material.opacity = isHit ? 1.0 : 0.15;
-        n.mesh.material.transparent = !isHit;
-        n.sprite.material.opacity = isHit ? 1.0 : 0.15;
+        if (n.mesh && n.mesh.material) {
+          n.mesh.material.opacity = isHit ? 1.0 : 0.15;
+          n.mesh.material.transparent = !isHit;
+        }
+        if (n.sprite && n.sprite.material) {
+          n.sprite.material.opacity = isHit ? 1.0 : 0.15;
+        }
       });
 
       kgPhysicsEdges.forEach(e => {
+        if (!e.line || !e.line.material) return;
         const isHit = failureIds.has(e.from) && failureIds.has(e.to);
         e.line.material.opacity = isHit ? 0.95 : 0.08;
         if (isHit) e.line.material.color.setHex(0xff3366);
@@ -5153,12 +5233,17 @@
 
       kgPhysicsNodes.forEach(n => {
         const isHit = bomIds.has(n.data.id);
-        n.mesh.material.opacity = isHit ? 1.0 : 0.15;
-        n.mesh.material.transparent = !isHit;
-        n.sprite.material.opacity = isHit ? 1.0 : 0.15;
+        if (n.mesh && n.mesh.material) {
+          n.mesh.material.opacity = isHit ? 1.0 : 0.15;
+          n.mesh.material.transparent = !isHit;
+        }
+        if (n.sprite && n.sprite.material) {
+          n.sprite.material.opacity = isHit ? 1.0 : 0.15;
+        }
       });
 
       kgPhysicsEdges.forEach(e => {
+        if (!e.line || !e.line.material) return;
         const isHit = bomIds.has(e.from) && bomIds.has(e.to);
         e.line.material.opacity = isHit ? 0.95 : 0.08;
         if (isHit) e.line.material.color.setHex(0xf72585);
@@ -5320,7 +5405,7 @@
         const manualName = specs.Manual || (manClause && (manClause.manual || manClause.ref)) || "Official Code";
         const pageNum = specs.Page || (manClause && manClause.page) || "";
         const chapterName = specs.Chapter || (manClause && manClause.chapter) || "";
-        const verbatim = specs.Verbatim || (manClause && (manClause.verbatim || manClause.verbatim_text)) || data.desc;
+        const verbatim = specs.Verbatim || (manClause && (manClause.verbatim || manClause.verbatim_text)) || data.provenance?.source_text || data.desc;
         const roles = specs.Roles || (manClause && manClause.roles) || [];
         const tols = specs.Tolerances || (manClause && manClause.tolerances) || [];
         const equips = specs.Equipment || (manClause && manClause.equipment) || [];
@@ -5361,6 +5446,14 @@
                 ${fails.map(f => `<span style="font-size:10px; background:rgba(255,51,102,0.1); border:1px solid rgba(255,51,102,0.3); border-radius:4px; padding:2px 6px; color:var(--accent-red); font-weight:600;">⚠️ ${f}</span>`).join('')}
               </div>
             </div>` : ''}
+          <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; border-top:1px solid rgba(255,255,255,0.08); padding-top:10px;">
+            <button class="btn btn-primary" id="btn-open-clause-pdf" style="padding:5px 12px; font-size:11px; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" onclick="openManualPdf('${manualName}', ${pageNum || 1}, '${title.replace(/'/g, "\\'")}')">
+              <span>📄</span> Open Source PDF (Page ${pageNum || 1}) ↗
+            </button>
+            <button class="btn" style="padding:5px 10px; font-size:11px;" onclick="switchDrawerTab('manuals'); filterManualsTree('${specs.ClauseNumber || (title.match(/(\\d+)/) || [])[1] || ''}')">
+              <span>🌲</span> Find in Chapter Tree
+            </button>
+          </div>
         `;
       } else if (data.type === "CHAPTER" || data.id.startsWith("CHAPTER:")) {
         const specs = data.specs || {};
@@ -5374,9 +5467,12 @@
           <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
             ${(specs.KeyTopics || []).map(t => `<span style="font-size:10px; background:rgba(157,78,221,0.15); border:1px solid rgba(157,78,221,0.35); border-radius:4px; padding:2px 6px; color:var(--text-main);">${t}</span>`).join('')}
           </div>
-          <div style="font-size:11px; color:var(--text-muted); display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:11px; color:var(--text-muted); display:flex; justify-content:space-between; align-items:center; margin-top:8px; border-top:1px solid rgba(255,255,255,0.08); padding-top:10px;">
             <span>Indexed Clauses in Chapter: <strong style="color:var(--accent-cyan); font-size:13px;">${specs.ClauseCount || 0}</strong></span>
-            <button class="btn" style="padding:4px 8px; font-size:10px;" onclick="switchDrawerTab('manuals'); filterManualsTree('Ch ${specs.ChapterNumber || ''}')">View in TOC Tree ➔</button>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-primary" id="btn-open-chapter-pdf" style="padding:4px 10px; font-size:10px; display:inline-flex; align-items:center; gap:4px;" onclick="openManualPdf('${specs.Manual || data.id}', ${parseInt((specs.PageRange || '1').split('-')[0]) || 1}, '${data.label.replace(/'/g, "\\'")}')"><span>📄</span> Open PDF (p.${parseInt((specs.PageRange || '1').split('-')[0]) || 1}) ↗</button>
+              <button class="btn" style="padding:4px 8px; font-size:10px;" onclick="switchDrawerTab('manuals'); filterManualsTree('Ch ${specs.ChapterNumber || ''}')">View in TOC Tree ➔</button>
+            </div>
           </div>
         `;
       } else if (manDoc || data.type === "DOCUMENT") {
@@ -5395,14 +5491,19 @@
             <div style="margin-top:4px;"><strong>Edition:</strong> ${docEd}</div>
             <div style="margin-top:4px;"><strong>Volume:</strong> ${docPages} Pages</div>
             <div style="margin-top:4px;"><strong>Local Archive:</strong> <code style="color:var(--accent-cyan);">${docFile}</code></div>
+            <div style="margin-top:10px;">
+              <button class="btn btn-primary" id="btn-open-doc-pdf" style="padding:5px 12px; font-size:11px; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" onclick="openManualPdf('${data.id}', 1, '${docTitle.replace(/'/g, "\\'")}')">
+                <span>📄</span> Open Full Volume PDF ↗
+              </button>
+            </div>
           </div>
         `;
-      } else if (manTol || data.type === "TOLERANCE") {
-        const tolVal = (manTol && manTol.value) || (data.specs && (data.specs.text || data.specs.value)) || data.label;
-        const tolClause = (manTol && manTol.clause) || (data.specs && data.specs.unit) || "Standard";
+      } else if (manTol || data.type === "TOLERANCE" || data.type === "DIMENSION" || (data.specs && (data.specs["Min Permissible"] || data.specs.Min))) {
+        const tolVal = (manTol && manTol.value) || (data.specs && (data.specs.Nominal || data.specs.text || data.specs.value)) || data.label;
+        const tolClause = (manTol && manTol.clause) || (data.specs && (data.specs["Clause"] || data.specs.unit)) || "Design Parameter";
         const tolPurpose = (manTol && manTol.purpose) || data.desc || "Statutory track parameter limit";
-        const tolMin = (manTol && manTol.min_val) || (data.specs && data.specs.min) || "";
-        const tolMax = (manTol && manTol.max_val) || (data.specs && data.specs.max) || "";
+        const tolMin = (manTol && manTol.min_val) || (data.specs && (data.specs.min || data.specs["Min Permissible"])) || "";
+        const tolMax = (manTol && manTol.max_val) || (data.specs && (data.specs.max || data.specs["Max Permissible"])) || "";
         const tolUnit = (manTol && manTol.unit) || (data.specs && data.specs.unit) || "";
 
         descEl.innerHTML = `
@@ -5411,7 +5512,7 @@
             <span style="font-size:10px; color:var(--accent-cyan); background:rgba(0,240,255,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(0,240,255,0.3);">${tolClause}</span>
           </div>
           <p style="font-size:12px; line-height:1.5; color:#e0e8f8;"><strong>Safety & Engineering Purpose:</strong> ${tolPurpose}</p>
-          ${(tolMin !== "" && tolMax !== "") ? `<div style="margin-top:8px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Design Limits: [${tolMin} ${tolUnit} — ${tolMax} ${tolUnit}]</div>` : ''}
+          ${(tolMin !== "" && tolMax !== "") ? `<div style="margin-top:8px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Design Limits: [${tolMin}${tolUnit ? ' ' + tolUnit : ''} — ${tolMax}${tolUnit ? ' ' + tolUnit : ''}]</div>` : ''}
         `;
       } else if (manEq || data.type === "EQUIPMENT") {
         const eqLabel = (manEq && manEq.label) || data.label;
@@ -5919,6 +6020,27 @@
       const q = String(idOrQuery).toLowerCase().trim();
       let node = kgPhysicsNodes.find(n => n.data.id === idOrQuery || n.data.id.toLowerCase() === q);
       if (!node) {
+        const QUERY_ALIASES = {
+          'clause:irpwm:para_429': 'CLAUSE:IRPWM:CH_04:PARA_429',
+          'spec_irpwm_para429_crossing': 'CLAUSE:IRPWM:CH_04:PARA_429',
+          'tol_checkrail_clearance': 'dim_check_flange_44',
+          'tol:checkrail_clearance:41_45mm': 'dim_check_flange_44',
+          'sop_usfd_switch_testing': 'CHAPTER:USFD:CH_10'
+        };
+        if (QUERY_ALIASES[q]) {
+          node = kgPhysicsNodes.find(n => n.data.id === QUERY_ALIASES[q]);
+        }
+      }
+      if (!node) {
+        // Match clause or section without chapter segment, e.g. CLAUSE:IRPWM:PARA_429 -> CLAUSE:IRPWM:CH_04:PARA_429
+        node = kgPhysicsNodes.find(n => {
+          const nid = n.data.id.toLowerCase();
+          const normNid = nid.replace(/:ch_\d+:/g, ':');
+          const normQ = q.replace(/:ch_\d+:/g, ':');
+          return normNid === normQ;
+        });
+      }
+      if (!node) {
         node = kgPhysicsNodes.find(n => {
           const nid = n.data.id.toLowerCase();
           const nlbl = n.data.label.toLowerCase();
@@ -6009,7 +6131,7 @@
               <span style="margin-left:4px; font-weight:500;">${ch.title}</span>
             </div>
             <div style="display:flex; gap:6px; align-items:center;">
-              <span style="font-size:9.5px; color:var(--text-dim);">p.${ch.pages[0]}-${ch.pages[1]}</span>
+              <span class="clause-page-badge" title="Open chapter in PDF" style="cursor:pointer;" onclick="event.stopPropagation(); openManualPdf('${manual.id}', ${ch.pages[0]}, 'Chapter ${ch.num} — ${ch.title.replace(/'/g, "\\'")}');">p.${ch.pages[0]}-${ch.pages[1]} ↗</span>
               <span style="font-size:9.5px; padding:1px 5px; border-radius:3px; background:rgba(157,78,221,0.2); color:var(--accent-purple);">${matchingClauses.length}</span>
             </div>
           `;
@@ -6029,7 +6151,7 @@
             clRow.innerHTML = `
               <span class="clause-para-badge">§ ${cl.para}</span>
               <span class="clause-title-text" title="${cl.title}">${cl.title}</span>
-              <span class="clause-page-badge">p.${cl.page}</span>
+              <span class="clause-page-badge" title="Open source PDF at page ${cl.page}" style="cursor:pointer;" onclick="event.stopPropagation(); openManualPdf('${manual.id}', ${cl.page}, '${cl.title.replace(/'/g, "\\'")}');">p.${cl.page} ↗</span>
             `;
             clRow.onclick = (e) => {
               e.stopPropagation();
@@ -6071,6 +6193,12 @@
       if (topAnswerCard) {
         topAnswerCard.style.display = (tabId === 'qa') ? 'none' : 'block';
       }
+      if (tabId === 'manuals') {
+        const container = document.getElementById('manuals-tree-container');
+        if (container && (!container.children || container.children.length === 0)) {
+          renderManualsTree();
+        }
+      }
       if (tabId === 'paths') {
         const container = document.getElementById('pathfinder-container');
         if (container && (!container.children || container.children.length === 0)) {
@@ -6110,6 +6238,83 @@
       }
     }
 
+    const MANUAL_PDF_REGISTRY = {
+      'DOC:IRPWM:2024:ACS14': 'manuals/IRPWM 2024 Corrected Up To ACS - 14 (29-07-2026)-1.pdf',
+      'doc_irpwm_2024': 'manuals/IRPWM 2024 Corrected Up To ACS - 14 (29-07-2026)-1.pdf',
+      'IRPWM': 'manuals/IRPWM 2024 Corrected Up To ACS - 14 (29-07-2026)-1.pdf',
+      
+      'DOC:USFD:2026:ACS4': 'manuals/usfd_new 24-2-26.pdf',
+      'doc_usfd_2026': 'manuals/usfd_new 24-2-26.pdf',
+      'USFD': 'manuals/usfd_new 24-2-26.pdf',
+      
+      'DOC:AT_WELD:2022': 'manuals/ATWeld_Manual-2022.pdf',
+      'doc_atweld_2022': 'manuals/ATWeld_Manual-2022.pdf',
+      'AT_WELD': 'manuals/ATWeld_Manual-2022.pdf',
+      'ATWELD': 'manuals/ATWeld_Manual-2022.pdf',
+      
+      'DOC:FBW:2022:CS5': 'manuals/FBW Manual-Reprint 2022- Incorporated up to CS5.pdf',
+      'doc_fbw_2022': 'manuals/FBW Manual-Reprint 2022- Incorporated up to CS5.pdf',
+      'FBW': 'manuals/FBW Manual-Reprint 2022- Incorporated up to CS5.pdf',
+      
+      'DOC:TMM:2020:ACS10': 'manuals/INDIAN RAILWAYS TRACK MACHINE MANUAL (INCORPORATED UPTO ACS 10)_FINAL.pdf',
+      'doc_tmm_2020': 'manuals/INDIAN RAILWAYS TRACK MACHINE MANUAL (INCORPORATED UPTO ACS 10)_FINAL.pdf',
+      'TMM': 'manuals/INDIAN RAILWAYS TRACK MACHINE MANUAL (INCORPORATED UPTO ACS 10)_FINAL.pdf',
+      
+      'DOC:STMM:2024': 'manuals/STMM-date  27.05.24.pdf',
+      'doc_stmm_2024': 'manuals/STMM-date  27.05.24.pdf',
+      'STMM': 'manuals/STMM-date  27.05.24.pdf'
+    };
+
+    function resolveManualPdfPath(docRef) {
+      if (!docRef) return MANUAL_PDF_REGISTRY['DOC:IRPWM:2024:ACS14'];
+      if (MANUAL_PDF_REGISTRY[docRef]) return MANUAL_PDF_REGISTRY[docRef];
+      const s = String(docRef).toUpperCase();
+      if (s.includes('IRPWM')) return MANUAL_PDF_REGISTRY['DOC:IRPWM:2024:ACS14'];
+      if (s.includes('USFD')) return MANUAL_PDF_REGISTRY['DOC:USFD:2026:ACS4'];
+      if (s.includes('AT_WELD') || s.includes('ATWELD') || s.includes('ALUMINO')) return MANUAL_PDF_REGISTRY['DOC:AT_WELD:2022'];
+      if (s.includes('FBW') || s.includes('FLASH BUTT')) return MANUAL_PDF_REGISTRY['DOC:FBW:2022:CS5'];
+      if (s.includes('TMM') || s.includes('TRACK MACHINE')) return MANUAL_PDF_REGISTRY['DOC:TMM:2020:ACS10'];
+      if (s.includes('STMM') || s.includes('SMALL TRACK')) return MANUAL_PDF_REGISTRY['DOC:STMM:2024'];
+      if (String(docRef).startsWith('manuals/') || String(docRef).endsWith('.pdf')) return docRef;
+      return MANUAL_PDF_REGISTRY['DOC:IRPWM:2024:ACS14'];
+    }
+
+    function openManualPdf(docRef, page, title) {
+      const pdfPath = resolveManualPdfPath(docRef);
+      const pageNum = parseInt(page) || 1;
+      const pdfUrl = `${pdfPath}#page=${pageNum}`;
+      const modal = document.getElementById('manual-pdf-modal');
+      const titleEl = document.getElementById('manual-pdf-modal-title');
+      const pageBadge = document.getElementById('manual-pdf-modal-page-badge');
+      const externalLink = document.getElementById('manual-pdf-external-link');
+      const iframe = document.getElementById('manual-pdf-modal-iframe');
+
+      if (titleEl) titleEl.innerText = title || `Official Railway Code / Manual: ${docRef}`;
+      if (pageBadge) pageBadge.innerText = `Page ${pageNum}`;
+      if (externalLink) {
+        externalLink.href = pdfUrl;
+        externalLink.title = `Open ${pdfPath} directly at page ${pageNum}`;
+      }
+      if (iframe) {
+        iframe.src = pdfUrl;
+      }
+      if (modal) {
+        modal.style.display = "flex";
+      }
+      return { pdfPath, pageNum, pdfUrl };
+    }
+
+    function closeManualPdfModal() {
+      const modal = document.getElementById('manual-pdf-modal');
+      const iframe = document.getElementById('manual-pdf-modal-iframe');
+      if (iframe) iframe.src = "about:blank";
+      if (modal) modal.style.display = "none";
+    }
+
+    window.openManualPdf = openManualPdf;
+    window.closeManualPdfModal = closeManualPdfModal;
+    window.resolveManualPdfPath = resolveManualPdfPath;
+
     function openFullscreenBlueprint(src, title) {
       if (!src) return;
       const modal = document.getElementById('blueprint-modal');
@@ -6131,13 +6336,37 @@
 
     function updateDrawerBreadcrumbs(query, nodeData, section) {
       window.lastSearchQuery = query || window.lastSearchQuery || '';
-      const currentLabelEl = document.getElementById('breadcrumb-current-node');
+      const trailContainer = document.getElementById('breadcrumb-trail');
       const backBtn = document.getElementById('breadcrumb-back-btn');
-      if (currentLabelEl && nodeData) {
-        currentLabelEl.innerText = nodeData.label || nodeData.id;
+      if (!trailContainer || !nodeData) return;
+
+      const trail = [];
+      let currId = nodeData.id;
+      let guard = 0;
+      while (currId && guard < 10) {
+        guard++;
+        const hEntry = window.nodeHierarchyMap ? window.nodeHierarchyMap.get(currId) : null;
+        const nodeObj = window.kgPhysicsNodesMap ? window.kgPhysicsNodesMap.get(currId) : null;
+        const label = (nodeObj && nodeObj.data.label) || currId;
+        trail.unshift({ id: currId, label });
+        if (!hEntry || !hEntry.parentId || hEntry.isRoot) break;
+        currId = hEntry.parentId;
       }
+
+      let html = `<span class="breadcrumb-item" onclick="reopenSearchDropdown()">Studio Search</span>`;
+      trail.forEach((item, idx) => {
+        html += `<span class="breadcrumb-sep">➔</span>`;
+        if (idx === trail.length - 1) {
+          html += `<span class="breadcrumb-active" id="breadcrumb-current-node">${item.label}</span>`;
+        } else {
+          html += `<span class="breadcrumb-item" style="cursor:pointer;" onclick="selectGraphNode('${item.id}')">${item.label}</span>`;
+        }
+      });
+      trailContainer.innerHTML = html;
+
       if (backBtn) {
         backBtn.style.display = window.lastSearchQuery ? 'flex' : 'none';
+        backBtn.innerHTML = `<span>↶</span> Back to Search`;
       }
     }
 
@@ -7377,12 +7606,17 @@
 
       kgPhysicsNodes.forEach(n => {
         const inPath = pathSet.has(n.data.id);
-        n.mesh.material.opacity = inPath ? 1.0 : 0.12;
-        n.mesh.material.transparent = !inPath;
-        n.sprite.material.opacity = inPath ? 1.0 : 0.15;
+        if (n.mesh && n.mesh.material) {
+          n.mesh.material.opacity = inPath ? 1.0 : 0.12;
+          n.mesh.material.transparent = !inPath;
+        }
+        if (n.sprite && n.sprite.material) {
+          n.sprite.material.opacity = inPath ? 1.0 : 0.15;
+        }
       });
 
       kgPhysicsEdges.forEach(e => {
+        if (!e.line || !e.line.material) return;
         const inPath = pathSet.has(e.from) && pathSet.has(e.to);
         e.line.material.opacity = inPath ? 1.0 : 0.05;
         if (inPath) {
@@ -7409,7 +7643,7 @@
       } else if (templateType === 'failure') {
         renderPathFinderUI('defect_joint_fatigue', 'hazard_derailment_split');
       } else if (templateType === 'procedure') {
-        renderPathFinderUI('doc_usfd_2026', 'equip_usfd_tester');
+        renderPathFinderUI('sop_epoxy_retrofit', 'drg_6155');
       } else if (templateType === 'procurement') {
         renderPathFinderUI('drg_6155', 'spare_bolt_25x310');
       }
@@ -7513,7 +7747,7 @@
               </button>
               <button class="path-template-btn" onclick="loadPathTemplate('procedure')">
                 <div class="path-template-title"><span>📋</span> Procedure Path</div>
-                <div class="path-template-sub">USFD Code ➔ SOP ➔ Flaw Tester</div>
+                <div class="path-template-sub">Epoxy SOP ➔ Note 25 ➔ T-6155</div>
               </button>
               <button class="path-template-btn" onclick="loadPathTemplate('procurement')">
                 <div class="path-template-title"><span>📦</span> Procurement Path</div>
@@ -8702,6 +8936,7 @@
       });
 
       kgPhysicsEdges.forEach(e => {
+        if (!e.line || !e.line.material) return;
         const isPathEdge = activeHighlightedPath.edges.has(e.from + '|' + e.rel + '|' + e.to) ||
                            (activeHighlightedPath.nodes.has(e.from) && activeHighlightedPath.nodes.has(e.to));
         if (isPathEdge) {
@@ -8736,6 +8971,7 @@
         });
       });
       kgPhysicsEdges.forEach(e => {
+        if (!e.line || !e.line.material) return;
         e.line.material.opacity = 0.45;
         e.line.material.color.setHex(e.color);
       });
@@ -10057,13 +10293,13 @@
         if (type.toLowerCase() === q || domain === q) sMetadata += 150;
 
         // Level 3: Graph centrality - ONLY add if node had actual lexical or semantic relevance!
+        const nodeEdges = (data.edges || []);
         if (sLexical > 0 || sSemantic > 0 || isDrawingQuery) {
-          const edges = (data.edges || []);
-          sGraph += Math.min(edges.length * 10, 80);
+          sGraph += Math.min(nodeEdges.length * 10, 80);
         }
         if (currentSelectedNode && currentSelectedNode.data) {
           const selId = currentSelectedNode.data.id;
-          if (edges.some(e => e.target === selId || e.source === selId)) {
+          if (nodeEdges.some(e => e.target === selId || e.source === selId || e.from === selId || e.to === selId)) {
             sGraph += 120;
           }
         }
@@ -11074,6 +11310,14 @@
           const typeName = d.type || (DOMAIN_METADATA[d.domain]?.label || d.domain || 'ASSET').toUpperCase();
           const descSnippet = (d.desc || 'Canonical railway track infrastructure asset.').slice(0, 110) + (d.desc && d.desc.length > 110 ? '...' : '');
 
+          let displayName = d.label;
+          if (d.type === 'DRAWING' || d.id.startsWith('drg_')) {
+            const dwgNo = d.specs?.DrawingNumber || d.specs?.["Drawing No"] || (d.id.match(/(RDSO_[A-Z0-9_]+)/i) || [])[1] || '';
+            if (dwgNo && !displayName.includes(dwgNo)) {
+              displayName = `${dwgNo.replace(/_/g, '/')} · ${displayName}`;
+            }
+          }
+
           let revPill = '';
           if (d.id.includes('6155') || (d.specs && d.specs.Alteration)) {
             revPill = '<span class="search-card-rev-badge">ALT 13</span>';
@@ -11082,12 +11326,26 @@
           }
 
           let evidenceHtml = '';
-          if (d.id.startsWith('drg_')) {
-            evidenceHtml = '<span class="search-card-evidence"><span>📸</span> 3 Crops · 28 Notes</span>';
-          } else if (d.type === 'CLAUSE') {
-            evidenceHtml = '<span class="search-card-evidence"><span>📜</span> IRPWM 2024 ACS-14</span>';
+          if (d.id.startsWith('drg_') || d.type === 'DRAWING') {
+            evidenceHtml = '<span class="search-card-evidence"><span>📸</span> Blueprint & Notes</span>';
+          } else if (d.type === 'CLAUSE' || d.type === 'EVIDENCE' || d.id.startsWith('CLAUSE:') || d.id.startsWith('EVIDENCE:')) {
+            const rawMan = d.specs?.Manual || d.provenance?.document_id || 'Manual';
+            const manClean = rawMan.startsWith('DOC:') ? (rawMan.split(':')[1] || rawMan) : rawMan;
+            const pg = d.specs?.Page || d.provenance?.page_number || '';
+            evidenceHtml = `<span class="search-card-evidence"><span>📜</span> ${manClean}${pg ? ' · p.' + pg : ''}</span>`;
+          } else if (d.type === 'CHAPTER' || d.id.startsWith('CHAPTER:')) {
+            const rawMan = d.specs?.Manual || 'Manual';
+            const manClean = rawMan.startsWith('DOC:') ? (rawMan.split(':')[1] || rawMan) : rawMan;
+            evidenceHtml = `<span class="search-card-evidence"><span>📖</span> ${manClean} · Ch.${d.specs?.ChapterNumber || ''}</span>`;
+          } else if (d.type === 'DOCUMENT' || d.id.startsWith('DOC:')) {
+            evidenceHtml = `<span class="search-card-evidence"><span>📚</span> ${d.specs?.TotalPages || ''} Pages</span>`;
           } else {
             evidenceHtml = '<span class="search-card-evidence"><span>🔗</span> RDSO Knowledge Core</span>';
+          }
+
+          let pdfActionHtml = '';
+          if (d.type === 'CLAUSE' || d.type === 'EVIDENCE' || d.type === 'CHAPTER' || d.type === 'DOCUMENT' || d.id.startsWith('CLAUSE:') || d.id.startsWith('EVIDENCE:') || d.id.startsWith('CHAPTER:') || d.id.startsWith('DOC:')) {
+            pdfActionHtml = `<button class="search-card-btn action-pdf" style="color:var(--accent-cyan);" title="Open PDF source page">PDF ↗</button>`;
           }
 
           const meta = hybridMeta[d.id];
@@ -11102,7 +11360,7 @@
             <div class="search-card-header">
               <div class="search-card-title search-item-title">
                 <span style="color: ${color};">●</span>
-                <span>${d.label}</span>
+                <span>${displayName}</span>
               </div>
               <div style="display: flex; gap: 4px; align-items: center;">
                 ${semHits > 0 ? `<span class="search-card-type-badge" style="background: rgba(180,80,255,0.15); color: var(--accent-purple); border: 1px solid rgba(180,80,255,0.4); font-size: 8px;">✨ ${semHits} semantic</span>` : ''}
@@ -11111,10 +11369,12 @@
                 <span class="search-card-type-badge" style="background: ${color}22; color: ${color}; border: 1px solid ${color}44;">${typeName}</span>
               </div>
             </div>
+            <div class="search-card-canonical-id" style="font-size: 9px; font-family: var(--font-mono); color: var(--text-dim); margin: 2px 0 4px 14px;"><code>${d.id}</code></div>
             <div class="search-card-body">${descSnippet}</div>
             <div class="search-card-footer">
               ${evidenceHtml}
               <div class="search-card-actions">
+                ${pdfActionHtml}
                 <button class="search-card-btn action-inspect">Inspect</button>
                 <button class="search-card-btn action-3d">Focus 3D</button>
               </div>
@@ -11123,6 +11383,12 @@
 
           // Card Click
           card.onclick = (e) => {
+            if (e.target.closest('.action-pdf')) {
+              e.stopPropagation();
+              const page = d.specs?.Page || (d.specs?.PageRange ? d.specs.PageRange.split('-')[0].trim() : 1);
+              openManualPdf(d.specs?.Manual || d.id, page, d.label);
+              return;
+            }
             if (e.target.closest('.action-3d')) {
               e.stopPropagation();
               focusNodeIn3D(d.id);
@@ -11204,8 +11470,25 @@
         }
       });
 
-      // Shortcut '/' to focus search
+      // Shortcut '/' to focus search, 'Escape' to close modals
       window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const pdfModal = document.getElementById('manual-pdf-modal');
+          if (pdfModal && pdfModal.style.display === 'flex') {
+            closeManualPdfModal();
+            return;
+          }
+          const bpModal = document.getElementById('blueprint-modal');
+          if (bpModal && bpModal.style.display === 'flex') {
+            closeFullscreenBlueprint();
+            return;
+          }
+          const evModal = document.getElementById('evidence-modal');
+          if (evModal && evModal.style.display === 'flex') {
+            closeEvidenceModal();
+            return;
+          }
+        }
         if (e.key === '/' && document.activeElement !== input && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
           e.preventDefault();
           input.focus();

@@ -385,8 +385,91 @@ async function run() {
         await client.captureScreenshot('rdso_chapter_tree_navigator.png');
         console.log("[PASS] Interactive Chapter Tree & TOC Navigator validated!");
 
+        // 9. Test Source PDF Page Opening (P1.5)
+        console.log("\n--- TEST 9: Official Railway Manual Source PDF Page Opening ---");
+        const pdfModalState = await client.evaluate(`(() => {
+            const res = window.openManualPdf('DOC:IRPWM:2024:ACS14', 195, 'Para 429 Crossing Maintenance');
+            const modal = document.getElementById('manual-pdf-modal');
+            const iframe = document.getElementById('manual-pdf-modal-iframe');
+            const extLink = document.getElementById('manual-pdf-external-link');
+            const title = document.getElementById('manual-pdf-modal-title');
+            const pageBadge = document.getElementById('manual-pdf-modal-page-badge');
+            return {
+                display: modal?.style.display,
+                iframeSrc: iframe?.src,
+                extHref: extLink?.href,
+                titleText: title?.innerText,
+                pageBadgeText: pageBadge?.innerText,
+                pdfUrl: res?.pdfUrl
+            };
+        })()`);
+        console.log(`[*] PDF Modal Display: ${pdfModalState.display}`);
+        console.log(`[*] Target Page Badge: ${pdfModalState.pageBadgeText}`);
+        console.log(`[*] Iframe URL: ${pdfModalState.iframeSrc}`);
+        console.log(`[*] External Link: ${pdfModalState.extHref}`);
+
+        if (pdfModalState.display !== 'flex') throw new Error("manual-pdf-modal failed to display flex");
+        if (!pdfModalState.iframeSrc.includes('#page=195')) throw new Error("Iframe source does not contain #page=195");
+        if (!pdfModalState.iframeSrc.includes('IRPWM%202024') && !pdfModalState.iframeSrc.includes('IRPWM 2024')) throw new Error("Iframe source does not reference IRPWM 2024 PDF");
+        if (!pdfModalState.pageBadgeText.includes('195')) throw new Error("Page badge missing page 195 citation");
+
+        await client.captureScreenshot('rdso_manual_pdf_modal.png');
+
+        // Close modal test
+        await client.evaluate(`window.closeManualPdfModal()`);
+        const closedDisplay = await client.evaluate(`document.getElementById('manual-pdf-modal').style.display`);
+        if (closedDisplay !== 'none') throw new Error("manual-pdf-modal failed to close cleanly");
+        console.log("[PASS] Official Railway Manual PDF opening validated!");
+
+        // 10. Test Hierarchical Breadcrumbs & Context Preservation
+        console.log("\n--- TEST 10: Hierarchical Breadcrumb Navigation & Context Preservation ---");
+        await client.evaluate(`window.selectGraphNode('CLAUSE:IRPWM:CH_04:PARA_429')`);
+        await sleep(800);
+
+        const breadcrumbs = await client.evaluate(`(() => {
+            const trail = Array.from(document.querySelectorAll('#breadcrumb-trail .breadcrumb-item, #breadcrumb-trail .breadcrumb-active')).map(el => el.innerText);
+            const backBtnDisplay = document.getElementById('breadcrumb-back-btn')?.style.display;
+            const lastQuery = window.lastSearchQuery;
+            return { trail, backBtnDisplay, lastQuery };
+        })()`);
+        console.log(`[*] Breadcrumb Trail: ${breadcrumbs.trail.join(' ➔ ')}`);
+        console.log(`[*] Back to Search Button: ${breadcrumbs.backBtnDisplay}`);
+        console.log(`[*] Preserved Search Query: "${breadcrumbs.lastQuery}"`);
+
+        if (breadcrumbs.trail.length < 3) throw new Error("Breadcrumb trail does not contain full hierarchy (Manual ➔ Chapter ➔ Clause)");
+        if (!breadcrumbs.trail.some(t => t.includes('IRPWM') || t.includes('Permanent Way'))) throw new Error("Breadcrumb missing Manual ancestor");
+        if (!breadcrumbs.trail.some(t => t.includes('Chapter 4') || t.includes('Curves'))) throw new Error("Breadcrumb missing Chapter ancestor");
+        console.log("[PASS] Hierarchical breadcrumb navigation & context preservation validated!");
+
+        // 11. Test Search Result Cards with Canonical IDs & PDF Action Buttons
+        console.log("\n--- TEST 11: Search Result Cards with Canonical IDs & PDF Action Buttons ---");
+        const searchCardDetails = await client.evaluate(`(() => {
+            const input = document.getElementById('global-search');
+            input.value = "Para 429";
+            input.dispatchEvent(new Event('input'));
+            const firstCard = document.querySelector('#search-dropdown .search-item');
+            if (!firstCard) return { error: 'No search card found' };
+            const canonicalId = firstCard.querySelector('.search-card-canonical-id')?.innerText;
+            const evidence = firstCard.querySelector('.search-card-evidence')?.innerText;
+            const hasPdfBtn = !!firstCard.querySelector('.action-pdf');
+            return { canonicalId, evidence, hasPdfBtn };
+        })()`);
+        console.log(`[*] First Card Canonical ID: ${searchCardDetails.canonicalId}`);
+        console.log(`[*] First Card Evidence: ${searchCardDetails.evidence}`);
+        console.log(`[*] Has PDF Direct Action Button: ${searchCardDetails.hasPdfBtn}`);
+
+        if (searchCardDetails.error) throw new Error(searchCardDetails.error);
+        if (!searchCardDetails.canonicalId || (!searchCardDetails.canonicalId.startsWith('EVIDENCE:') && !searchCardDetails.canonicalId.startsWith('CLAUSE:') && !searchCardDetails.canonicalId.startsWith('DOC:'))) {
+            throw new Error("Search result card missing canonical ID element");
+        }
+        if (!searchCardDetails.evidence || (!searchCardDetails.evidence.includes('IRPWM') && !searchCardDetails.evidence.includes('DOC:IRPWM') && !searchCardDetails.evidence.includes('p.'))) {
+            throw new Error("Search result card evidence missing manual citation");
+        }
+        if (!searchCardDetails.hasPdfBtn) throw new Error("Search result card missing direct PDF button");
+        console.log("[PASS] Search result cards with canonical IDs and PDF action buttons validated!");
+
         console.log("\n================================================================================");
-        console.log("ALL 8 AUTOMATED VERIFICATION TESTS PASSED SUCCESSFULLY!");
+        console.log("ALL 11 AUTOMATED VERIFICATION TESTS PASSED SUCCESSFULLY!");
         console.log("================================================================================");
 
     } catch (err) {

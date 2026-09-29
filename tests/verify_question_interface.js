@@ -13,10 +13,15 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const CHROME_PATH = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+const chromeCandidates = [
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe')
+];
+const CHROME_PATH = chromeCandidates.find(p => fs.existsSync(p)) || chromeCandidates[0];
 const PORT = 9240;
-const URL_TARGET = "file:///F:/git/RDSO-Drawings/index.html";
-const ARTIFACTS_DIR = "F:\\git\\RDSO-Drawings\\artifacts";
+const URL_TARGET = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
+const ARTIFACTS_DIR = path.join(__dirname, '..', 'artifacts');
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
