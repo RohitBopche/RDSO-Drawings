@@ -27,6 +27,7 @@ GATES = [
     ("Gate I: Manuals Chapter & Content Ownership", [sys.executable, str(ROOT / "scripts" / "validate_manual_chapter_content.py")]),
     ("Gate J: Manuals Canonical Content Ownership", [sys.executable, str(ROOT / "scripts" / "validate_manual_canonical_content.py")]),
     ("Gate K: Manuals Source-Heading Hierarchy", [sys.executable, str(ROOT / "scripts" / "validate_manual_hierarchy.py")]),
+    ("Gate L: Manual Text Integrity & Single Source", [sys.executable, str(ROOT / "scripts" / "validate_manual_text_integrity.py")]),
 ]
 
 

@@ -1,0 +1,67 @@
+{
+  "edges": 9037,
+  "edges_with_evidence": 667,
+  "evidence": 1875,
+  "generated_by": "scripts/unify_manual_canonical.py",
+  "manual_clauses": {
+    "DOC:AT_WELD:2022": {
+      "clauses": 115,
+      "clauses_with_text": 115
+    },
+    "DOC:FBW:2022:CS5": {
+      "clauses": 131,
+      "clauses_with_text": 131
+    },
+    "DOC:IRPWM:2024:ACS14": {
+      "clauses": 673,
+      "clauses_with_text": 673
+    },
+    "DOC:STMM:2024": {
+      "clauses": 396,
+      "clauses_with_text": 396
+    },
+    "DOC:TMM:2020:ACS10": {
+      "clauses": 349,
+      "clauses_with_text": 349
+    },
+    "DOC:USFD:2026:ACS4": {
+      "clauses": 174,
+      "clauses_with_text": 174
+    }
+  },
+  "node_types": {
+    "BOM_ITEM": 2,
+    "CHAPTER": 83,
+    "COMPONENT": 15,
+    "DIMENSION": 6,
+    "DOCUMENT": 6,
+    "DRAWING": 6,
+    "EQUIPMENT": 1,
+    "EVIDENCE": 300,
+    "FAILURE_MODE": 6,
+    "FASTENER": 1,
+    "FIGURE": 206,
+    "HAZARD": 2,
+    "MATERIAL": 6,
+    "NOTE": 10,
+    "PROCEDURE": 1,
+    "REVISION": 5,
+    "ROLE": 1,
+    "SECTION": 2082,
+    "SLEEPER": 3,
+    "SOP": 3,
+    "SPARE_PART": 3,
+    "SPECIFICATION": 1838,
+    "STANDARD": 2,
+    "SUBSECTION": 1819,
+    "TABLE": 57,
+    "TOLERANCE": 361,
+    "ZONE": 5
+  },
+  "nodes": 6830,
+  "requirements": 2199,
+  "verification_status": {
+    "machine_extracted": 2199,
+    "verified": 4631
+  }
+}

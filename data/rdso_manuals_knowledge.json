@@ -4,7 +4,8 @@
     "version": "3.0.0-deep-chapter-extraction",
     "manuals_count": 6,
     "clauses_count": 1838,
-    "tolerances_count": 361
+    "tolerances_count": 361,
+    "derived_from": "data/knowledge-graph/canonical (do not edit)"
   },
   "manuals": [
     {

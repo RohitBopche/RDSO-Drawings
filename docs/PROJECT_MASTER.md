@@ -90,6 +90,8 @@ The September 2026 session record reported:
 - 100% referential integrity in the recorded validation run.
 - 8/8 browser/CDP verification tests passed in that recorded run.
 
+> **Correction (§37):** the "2,731 clauses", "2,157 nodes / 3,256 edges" and later "7,321 nodes / 9,305 edges / 8,370 facts" figures are not reproducible from the repository. Quote only `data/knowledge-graph/reports/metrics.json` (generated). At HEAD after P0-R.1/R.2: 6,830 canonical nodes, 9,037 edges, 1,838 manual clauses, 361 tolerance nodes.
+
 These numbers are **baseline/session metrics, not permanent acceptance targets**. Always regenerate current metrics before making claims about the present repository state.
 
 The six recorded manuals were:
@@ -1662,3 +1664,87 @@ One task: **P0-R.1 + P0-R.2**, unify canonical data and store full clause text, 
 ### 37.7 Process note
 
 The Gemini agent kept this document read-only and recorded status separately. Per §36, project status and audit results belong here. `docs/gemini/*` should be treated as **historical agent logs, not authoritative status**; where they conflict with §37, §37 governs.
+
+
+### 37.8 Remediation progress
+
+| Item | Status | Result (verified by re-run) |
+|---|---|---|
+| P0-R.1 single canonical source | **DONE (partial, see limits)** | `scripts/unify_manual_canonical.py` merges the two diverged stores (JSONL had name/status, compact JSON had provenance/hierarchy) into one node record; `rdso_manuals_knowledge.json` is now a *derived view* (content identical to the previous file); exports and `metrics.json` regenerate from it. |
+| P0-R.2 full clause text | **DONE** | 1,838/1,838 clauses carry `text`, `page`, `document_id`, evidence id; requirements regenerated (2,199 rows, 0 empty, 0 dangling); 1,573 legacy dangling rows moved to `intermediate/quarantine_dangling_requirements.jsonl` (nothing deleted); 361 tolerance nodes and 667 evidence-linked `SPECIFIES` edges now in canonical. |
+| Honest status | **DONE for new/rewritten content** | Extracted clauses/tolerances are `machine_extracted`; invented `mandatory/recommended` priority replaced by `unknown`. Older nodes still say `verified` until P0-R.3. |
+| Gate L | **DONE** | `scripts/validate_manual_text_integrity.py` (in `validate_all.py`): empty text, dangling/duplicate/empty requirements, JSONL vs core divergence, derived-view and browser-bundle drift, stale metrics, short-clause ratchet. Negative test proves it fails on empty clause text. |
+| Regression | **PASS** | 12/12 gates, 131 pytest (126 + 5 new), `verify_kg_manuals.js` 11/11 and `verify_knowledge_universes.js` pass in headless Chromium after the change. |
+
+**Limits found while doing this (carry into the plan):**
+1. **325 of 1,838 clauses (18%) have under 60 characters of text**: the extractor kept the heading, not the body (e.g. USFD 8.2 "Apparatus required:"). Gate L ratchets this at 325; it may only fall. Root cause: paragraph-boundary logic; fix in P0-R.6.
+2. **Tolerance nodes are bare numbers** ("30 mm"): 783 mentions collapse to 361 ids with no subject/quantity/limit type. They are indexed but are not engineering facts. Needs a structured `Measurement` model (P2-facts below).
+3. **Runtime merge still exists in `index.html`** (it reads `RDSO_MANUALS_KNOWLEDGE`). It is now a generated view so it cannot diverge (Gate L), but the frontend should read canonical directly (P1-R.10).
+4. **Two edge vocabularies**: compact JSON keeps `CONTAINS_CHAPTER`, JSONL uses `HAS_SECTION`; Gate L compares them after normalisation. Retire `CONTAINS_CHAPTER` when gates F/J are ported.
+5. `rdso_kg_data.js` is 24 MB (text now included twice: canonical + view). Acceptable now; shrink in the retrieval work (SQLite).
+6. Some "clauses" are not clauses (e.g. title `CHAPTER – 4` for Para 145; `Annexure` headers); see P0-R.6.
+
+---
+
+## 38. Plan for Remaining Work (post P0-R.1/R.2)
+
+**Ordering principle:** data truth first, then retrieval, then answers, then learning. Each work package (WP) is one small validated increment: it ends with a gate or test that fails before the change and passes after, a conventional commit, and an updated metrics file. Do not start a WP whose dependency is open.
+
+### 38.1 Work packages
+
+| WP | Title | Depends | Deliverable | Acceptance test (must fail today) |
+|---|---|---|---|---|
+| **P0-R.3** | Provenance re-baseline | R.2 | Every non-drawing node/edge/evidence/requirement is `machine_extracted` unless a review record exists; remove false `raster_blueprint_crop_and_transcription`/confidence 1.0 stamps on text-derived facts; add `reviews.jsonl` (reviewer, date, decision) as the only path to `reviewed`/`verified`. | Gate M: no `verified` without a review record; no fact whose `extraction_method` contradicts its source type. |
+| **P0-R.4** | Evidence on every edge and clause | R.3 | Evidence record carries `page_number`, `bbox` (PyMuPDF word boxes), `page_sha256`, `source_pdf_sha256`; every edge lists `evidence_ids`. | Gate D extended: 0 edges without evidence (structural HAS_SECTION edges cite the heading evidence); every evidence page hash matches the PDF on disk. |
+| **P0-R.5** | Metrics as single truth | R.2 | `metrics.json` extended (short clauses, non-extractable pages, per-manual coverage); docs/UI read only it; a CI step diffs regenerated vs committed. | CI fails if committed metrics differ from regenerated. |
+| **P0-R.6** | Clause-boundary repair | R.2 | Extractor rewrite for paragraph bodies: numbering monotonic per chapter, reject values outside manual range (`PARA_5300`), drop header/annexure pseudo-clauses, join body until next valid paragraph; per-manual detected-vs-kept reconciliation report. Target: short clauses under 5%, IRPWM kept/detected above 90%. Benchmark against Docling result in `research/` before choosing the parser. | Gate L ratchet tightened stepwise; new gate for para-number monotonicity and range. |
+| **P0-R.7** | OCR for image-only pages | none | OCR (offline Tesseract or Docling) for the 64 pages without text; `extraction_method: ocr`, per-page confidence, low-confidence pages enter the review queue. | 0 pages with `is_extractable=false` and no OCR record. |
+| **P0-R.8** | Portable browser tests + CI | none | Env-driven Chrome path, headless flags, repo-relative artifacts; a `run_browser_tests.py`; CI job on all branches and PRs including browser tests; stop committing regenerated PNGs (upload as CI artifacts). | Fresh Linux CI runs the CDP suites green. |
+| **P0-R.9** | Repo hygiene | none | Untrack `__pycache__`, `index.html.bak`, `scratch/`; enforce conventional commits and one concern per commit; retire `docs/gemini/*` status claims (link to §37). | `git ls-files` contains none of those paths. |
+| **P0-R.10** | Bootstrap | none | `validate_all.py` checks/installs dependencies (or prints exact fix); dependency versions pinned. | Fresh clone: one command yields a green run. |
+| **P1-R.1** | Frontend reads canonical only | R.2 | Remove `RDSO_MANUALS_KNOWLEDGE` reads from `index.html`; provision cards use canonical `text`/`page`/`evidence_ids`; drop the derived legacy view once unused. | Test: card text equals canonical node text; grep gate for `RDSO_MANUALS_KNOWLEDGE` = 0. |
+| **P1-R.2** | Honest P1 sign-off | R.6 | Tick the pilot checklist (§28) for IRPWM with evidence links; only then scale to other manuals. | Every checklist line has a reproducible command or test. |
+| **P2.1** | Cross-reference extraction and resolution | R.6 | Extract "Para N", "Annexure", "Chapter", "Rule", external IS/IRS/RDSO refs (~640 in IRPWM); classify `RESOLVED / AMBIGUOUS / EXTERNAL / NOT_FOUND`; edges `REFERENCES` with evidence; broken-reference report. | Every reference in the raw text is classified; 0 unclassified; resolved targets exist. |
+| **P2.2** | Source highlighting | R.4 | Render page image with evidence `bbox` highlight (PyMuPDF, offline); UI opens the highlighted region, not just the page. | Test opens a clause and finds the highlighted rect over the quoted words. |
+| **P2.3** | Measurement and requirement facts | R.6 | Structured `Measurement {subject, quantity, comparator, value, unit, applies_to, clause_id, evidence}` replacing bare tolerance nodes; requirement priority from modal verbs ("shall/should/may") with reviewed overrides. | Every tolerance has a subject and comparator; sample of 100 reviewed with at least 95% precision. |
+| **P5.1** | Offline retrieval core | R.6 | SQLite FTS5 (BM25) over clause text and headings in a single `.db` served with the app; identifier and para-number exact match; abbreviation/synonym dictionary (SSE/P.Way, CMS, USFD, ...); filters by manual/chapter/type/edition. | Retrieval eval set (below): Recall@5 at least 0.85 on keyword and identifier queries. |
+| **P5.2** | Semantic layer | P5.1 | Small local embedding model (quantised, CPU) with an ANN index built offline; hybrid score = BM25 + vector + graph proximity; cross-encoder re-rank optional. Model file versioned and hashed. | Recall@5 at least 0.90 on natural-language set; no network calls (test blocks sockets). |
+| **P6.1** | Grounded answers | P5.1 | Extractive answer builder: top evidence spans, quoted with citation (manual, para, page, evidence id); confidence from retrieval scores and agreement; explicit "insufficient evidence" refusal below threshold; conflict/applicability flags. Replace the 13 hand-written answers and their hard-coded confidences; keep them as regression questions. | 0 answers without a citation; refusal correct on the out-of-corpus set; every quoted span verifiable in the source text. |
+| **P6.2** | Optional local LLM | P6.1 | Optional offline small LLM (llama.cpp class) only to rephrase extractive answers; output checked by a citation verifier that rejects any sentence not supported by retrieved spans. | Verifier rejects seeded hallucinations in tests. |
+| **P7.1** | Evaluation harness | P5.1 | `eval/questions.jsonl` (start 150: 60 keyword, 40 natural-language, 20 identifier, 15 conflict/revision, 15 out-of-scope), each with gold clause ids and page; `scripts/eval_retrieval.py` prints Recall@k, MRR, refusal precision; results tracked per commit; regression gate. | Metrics file changes are diffed in CI; drops beyond tolerance fail the build. |
+| **P7.2** | Local feedback capture | P6.1 | Opt-in local log (IndexedDB/JSONL): query, results shown, clicked evidence, thumbs up/down, "wrong page" flag; never leaves the machine; exportable. | Log records round-trip; schema validated. |
+| **P7.3** | Self-improvement loop | P7.1, P7.2 | Nightly/on-demand job: (a) zero-result and low-confidence queries into `review_queue`; (b) suggested synonyms/aliases from co-clicked queries, applied only after reviewer approval; (c) accepted corrections become new eval questions; (d) re-index and re-run eval, refusing to publish if metrics regress. Dashboard of knowledge gaps per manual/chapter. | An accepted correction changes the answer to that query, and the eval gate stays green. |
+| **P7.4** | Learning content from evidence | P6.1 | Flashcards/quizzes generated only from cited clauses, stored with their clause ids; remove hand-authored quiz facts not traceable to a clause. | Every card links to a clause id and page. |
+| **P3 / P4** | Drawings and engineering graph | P2.3 | As specified in §26; do not begin until manuals are proven. | Per §26 exit criteria. |
+| **Scale** | Roll out to remaining manuals | P1-R.2, P2.1 | Apply pipeline to USFD, AT Weld, FBW, TMM, STMM one at a time using the IRPWM acceptance checklist. | Same checklist per manual. |
+
+### 38.2 Recommended sequence and effort (relative)
+
+1. **Sprint A, data truth:** R.3, R.4, R.5, R.10, R.9, R.8 (small each; R.4 is the largest).
+2. **Sprint B, extraction quality:** R.6 (largest risk; benchmark Docling vs current parser first), R.7, P1-R.1, P1-R.2.
+3. **Sprint C, retrieval:** P7.1 eval set first (so improvements are measurable), then P5.1, then P2.1 and P2.2 in parallel.
+4. **Sprint D, answers:** P6.1, P2.3, then P5.2.
+5. **Sprint E, self-improvement:** P7.2, P7.3, P7.4, then optional P6.2.
+6. **Then** scale to the other five manuals, and only after that P3/P4.
+
+### 38.3 Evaluation set design (needed before retrieval work)
+
+- Source questions from real usage: senior engineers' typical queries (limits, intervals, who is responsible, procedure for X, difference between revisions), plus queries mined from the manuals' own headings.
+- Each item: question, gold clause ids, acceptable pages, category, expected behaviour (`answer` or `refuse`).
+- Keep the 13 existing hand-written Q&A items and the browser test questions as the first entries.
+- Two-person review of gold labels; inter-reviewer disagreement is itself logged as a gap.
+
+### 38.4 Risks and mitigations
+
+| Risk | Mitigation |
+|---|---|
+| Extractor rewrite (R.6) changes clause ids, breaking links | Keep an id-alias map (`identity_aliases.json`); Gate B already audits references; migrate in one commit with the map. |
+| Machine-extracted text is wrong on safety limits | Priority review queue for any clause containing numbers with units and "shall/mandatory"; answers show the extraction/review state. |
+| OCR errors in scanned pages | Store confidence; show "OCR" badge; exclude low-confidence spans from extractive answers. |
+| Offline embedding model size on low-end PCs | Ship BM25 only as the default; embeddings optional; measure on a low-spec machine. |
+| Scope creep into an LLM before retrieval quality is proven | §34 guardrail: P6.2 is blocked until the P7.1 metrics meet target. |
+| Agents overwrite each other's status docs | Status lives only in §37/§38 and `metrics.json`; other logs are non-authoritative. |
+
+### 38.5 Definition of done for the product goal
+
+An engineer can type a natural-language question offline and receive, in under 2 seconds on a modest laptop, an answer composed of quoted source spans with manual/paragraph/page citations that open on a highlighted region; weak or conflicting evidence is stated, not hidden; every wrong or missing answer reported by users becomes a reviewed correction and a permanent regression question; and all published metrics come from one generated file that CI recomputes.
