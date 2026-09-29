@@ -1567,3 +1567,98 @@ From this point forward:
 Historical plans and session records remain available only as archived evidence.
 
 New project decisions should update this document rather than create another parallel blueprint.
+
+---
+
+## 37. Independent Audit of P0/P1 Delivery (2026-09-29)
+
+**Scope:** verify the P0 (Foundation) and P1 (Manual browsing) completion claims in `docs/gemini/` against the repository at HEAD `04df0ab`, and against the product goal: an offline, self-improving, intelligent search/QA system over the railway manuals.
+**Method:** re-ran `scripts/validate_all.py`, `pytest` and `tests/verify_kg_manuals.js` (headless Chromium), then inspected canonical data (`data/knowledge-graph/`), the UI data bundle and the Q&A code path directly.
+**Verdict:** P0/P1 are **structurally delivered but not up to the mark**. The plumbing (hierarchy, tree, PDF page-jump, breadcrumbs) works and is reproducible. The knowledge content underneath it is thin, partly mislabelled as verified, and the QA layer is hand-authored rather than retrieval-based. P0/P1 should be treated as **PARTIAL**, not COMPLETE. Do not start P2 on the current data without the P0-R/P1-R remediation below.
+
+### 37.1 Reproduction of the claimed results
+
+| Claim (`docs/gemini/`) | Re-run result | Notes |
+|---|---|---|
+| 11/11 validation gates pass | **Reproduced** (after `pip install jsonschema pytest`) | Fresh env fails Gates A, E, G, H on missing dependencies; the gate runner should self-diagnose or install. |
+| 126/126 pytest | **Reproduced** | |
+| 11/11 CDP tests in `verify_kg_manuals.js` | **Reproduced** | Only with local flag patches: the test hard-codes Windows Chrome paths and a `C:\Users\LENOVO` artifact dir; it cannot run on Linux CI as written. |
+| CI validation exists | **Partially true** | `ci.yml` runs Gates A–K only on `main`. Browser/CDP tests are not in CI. |
+
+Passing gates do not imply data quality. Gates check referential integrity and shape, not content (see 37.2).
+
+### 37.2 Claim vs. verified reality (side by side)
+
+| # | Claim in P0/P1 reports | Verified reality | Severity |
+|---|---|---|---|
+| 1 | "2,731 statutory clauses" (P1 report §2.1, Master §2) | Canonical store has **1,838** clause nodes (IRPWM 673, STMM 396, TMM 349, USFD 174, FBW 131, AT Weld 115). Raw extraction detected 3,699 clause-like markers; 2,731 is not reproducible from any file. | High |
+| 2 | "7,321 nodes / 9,305 edges / 8,370 facts" | Canonical: **6,469 nodes / 8,370 edges**. The UI adds the legacy `rdso_manuals_knowledge.json` (1,838 clauses + 361 tolerances) at runtime to reach 7,321/9,305. "8,370 facts" is the **edge list re-emitted** (`facts` and `edges` both 8,370), not engineering facts. | High |
+| 3 | "One canonical knowledge core" (Master §1, §21) | **Two competing sources**: `data/knowledge-graph/canonical/*` and legacy `data/rdso_manuals_knowledge.json` + `manual_content_index.js`. TOLERANCE nodes (e.g. Check-rail 41–45 mm in Test 5) exist only in the legacy file; canonical has 0 TOLERANCE nodes. | High |
+| 4 | "Statutory verbatim provision text on clause cards" | Canonical clause nodes have **empty text** (`desc` is `"..."` for 1,838/1,838; `Manual Ref` and `Key Rule` empty for all). Text lives only in evidence quotes hard-capped at **300 chars** and in the UI bundle. | High |
+| 5 | Requirements complete | `requirements.jsonl` has 3,772 rows: **1,555 have statement `"..."`**; **1,934 IDs match no node** (legacy `CLAUSE:IRPWM:PARA_101` scheme, plus `TOL:`/`REQ:`). Gates pass anyway. | High |
+| 6 | Evidence-verified (Gate D) | **100% of nodes (6,469), requirements (3,772) and evidence (1,875) are `verification_status: verified`**, including automatic text extraction at confidence 0.95. Violates "human review for safety-relevant facts". Fact provenance for structural HAS_CLAUSE edges is stamped `raster_blueprint_crop_and_transcription`, confidence 1.0, `VERIFIED`, which is false (they were text-parsed). | High |
+| 7 | Evidence-backed graph edges (Master §10) | **0 of 8,370 edges carry an evidence reference.** Only 300 HAS_EVIDENCE edges (one evidence node per ~6 clauses). Evidence records lack page number and bbox; page is only inferable via `page_id`. | High |
+| 8 | "Complete manual hierarchy" | Hierarchy nodes exist (83 chapters, 2,082 sections, 1,819 subsections) but clause coverage is partial: IRPWM 1,738 detected vs 673 kept (~39%); TMM 1,062 vs 349; STMM is the reverse (179 detected vs 396 kept). IRPWM clause IDs include impossible paragraph numbers (`CH_02:PARA_5300`, `PARA_5164`, `PARA_2243`…, 18 IDs above 1600 in a manual that ends near 1500): table/figure numbers parsed as paragraphs. | High |
+| 9 | "Source registry and hashes validated" (P0.4) | The 6 manual PDFs have SHA-256 in `raw/source_registry.jsonl`; the 12 `documents.jsonl` rows carry none. Nothing re-verifies file hashes against disk in CI. | Medium |
+| 10 | "1,485 pages ingested" | 1,485 manual pages registered, but **64 pages have no extractable text** (USFD 32/157 = 20%, FBW 13/69, IRPWM 14, TMM 4, AT Weld 1). No OCR path exists, so those pages are invisible to search. | High |
+| 11 | "Search result cards" (P1.6) | UI cards work, but search is over token lists in a 7.5 MB `search_index.json` produced by the pipeline and the in-page filter; there is no BM25/inverted index, no stemming/synonyms, no rank tuning beyond a hand patch (`scratch/fix_search_ranking.py`). | Medium |
+| 12 | "Natural-language Q&A" (Phase 5 UI) | `answerEngineeringQuestion` is a **regex intent detector plus 13 hand-written `CANONICAL_QA_DATABASE` answers**, each with hard-coded `confidence: 0.9x` and `VERIFIED`. Questions outside those 13 topics fall to a substring filter. This is not retrieval, is not grounded per query, and the reported confidence is not computed. Intent labels were tuned to the test queries (Alt 11, Alt 12 etc.). | High |
+| 13 | Cross-references (P2 prerequisite; P1 checklist item) | 404 "Para NNN" and 236 "Annexure" mentions in IRPWM raw text; **5 REFERENCES edges** in the graph; no resolver, no RESOLVED/AMBIGUOUS/NOT_FOUND classification. | High |
+| 14 | "Self-improving / learning" (Learning system, Phase 6) | The "learning system" is a UI quiz/flashcard front-end over static content. `review_queue.jsonl` holds **2 hand-written items**. No query logging, no feedback capture, no gap detection, no regression question suite, no re-ingestion loop. The system does not improve itself. | High |
+| 15 | Offline-first | Achieved for the UI (no external URLs found in `index.html`; local Three.js). But ~48 MB of JSON/JS is loaded into the browser at start, and 22 MB `rdso_kg_data.js` duplicates canonical data. No local search engine or embedding index. | Medium |
+| 16 | Repo hygiene / handoff protocol §33 | Commit `04df0ab` bundles docs, `index.html` (+405/−68), tests and 30+ regenerated PNGs in one non-conventional message; `__pycache__` `.pyc` files, `index.html.bak` and 7 `scratch/` scripts are tracked despite `.gitignore`. Gemini docs reference `f:\my git project\...` paths and were written as "read-only master", so the record diverged from this file. | Medium |
+| 17 | P1 pilot acceptance (Master §28) | `P1_MANUAL_PILOT_PLAN.md` shows all 10 acceptance boxes **unchecked**, yet P1 is declared complete. Criteria such as cross-ref classification, deterministic rerun and "zero ungrounded claims" are unmet. | High |
+
+### 37.3 What is genuinely good (keep)
+
+- Deterministic source registry and per-page raw extraction (`raw/extracted_pages.jsonl`, 1,544 pages with text, headings, detected clauses).
+- Six-manual chapter tree (83 chapters), universe isolation from drawings, Gates F–K enforcing it.
+- Page-anchored PDF viewer (`#page=N`), breadcrumbs, back-to-search: working UX plumbing, verified in a real browser.
+- 126 pytest tests and a single validation entry point (`validate_all.py`).
+- Research workspace with a Docling benchmark harness (`research/`, `scripts/research/`), the right seed for better extraction.
+
+### 37.4 P0/P1 exit-criteria status after audit
+
+| Phase | Gemini status | Audited status | Reason |
+|---|---|---|---|
+| P0.1–P0.3 inventory/coverage | COMPLETE | **PARTIAL** | Inventory correct; coverage numbers wrong (rows 1, 2, 8). |
+| P0.4 registry + hashes | COMPLETE | **PARTIAL** | Hashes recorded but not enforced (row 9). |
+| P0.5 evidence integrity | COMPLETE | **FAIL** | Integrity gate is shape-only; evidence lacks page/bbox, edges unevidenced, false provenance (rows 6, 7). |
+| P0.6 unified command | COMPLETE | **PASS** | Add dependency bootstrap. |
+| P0.7 regression baseline | COMPLETE | **PARTIAL** | Data regression only; no retrieval/QA regression, browser tests not portable (37.1). |
+| P0.8 CI | COMPLETE | **PARTIAL** | Gates only; no browser tests, `main` only. |
+| P1 hierarchy/tree/navigation | COMPLETE | **PASS (structure)** | Content under nodes is empty (rows 4, 8). |
+| P1 provision detail | COMPLETE | **FAIL (canonical)** | Works only from legacy bundle (rows 3, 4). |
+| P1 source page opening | COMPLETE | **PASS** | Whole-page jump only; no highlight/crop (P2.2). |
+| P1 search cards / context | COMPLETE | **PASS (UI)** | Underlying ranking is basic (row 11). |
+
+### 37.5 Remediation plan (ordered; each is one small validated increment)
+
+**P0-R (must precede P2):**
+1. Make canonical the only source: fold legacy clauses/tolerances into canonical, generate `rdso_kg_data.js` from it, delete the runtime merge, add a gate failing on divergence.
+2. Store full clause text in canonical (`text`, `page_start/end`, `bbox` when available); fix the 1,934 dangling requirement IDs and 1,555 empty statements; add gates for empty text and dangling IDs.
+3. Re-baseline provenance: extraction output is `machine_extracted` (not `verified`) until human-reviewed; remove false `raster_blueprint_crop_and_transcription`/1.0 stamps; add review-state gate.
+4. Attach `evidence_id` (doc, page, bbox, hash of page) to every edge and clause; Gate D must fail on edges without evidence.
+5. Publish a single generated metrics file (`reports/metrics.json`) and make the docs quote only it; correct §2 numbers.
+6. Clause-boundary QA: reject paragraph numbers out of the manual's known range/monotonic order (e.g. `PARA_5300`); reconcile detected-vs-kept per manual with a diff report.
+7. OCR the 64 image-only pages (start with USFD 32) and record `extraction_method: ocr` with confidence.
+8. Make CDP tests portable (env-driven Chrome path, headless flags, repo-relative artifacts) and add them to CI; run CI on all branches/PRs.
+9. Repo hygiene: untrack `__pycache__`, `index.html.bak`, `scratch/`; stop committing regenerated PNGs.
+
+**P1-R:**
+10. Provision cards read from canonical text; show page number and offer source-page jump from every card.
+11. Re-mark the P1 pilot checklist honestly and complete it for IRPWM before scaling to other manuals.
+
+**New (needed for the product goal, currently missing):**
+12. **Offline retrieval core (moves P5 earlier):** local SQLite FTS5/BM25 over clause text with identifier and synonym expansion; later add a small local embedding index and graph expansion, all served without network.
+13. **Grounded QA:** replace the 13 hand-written answers with retrieve → rank → cite extractive answers; confidence computed from retrieval scores; refuse when evidence is weak; keep the 13 as regression questions, not as the engine.
+14. **Cross-reference resolver (P2):** classify the ~640 IRPWM references first, then all manuals.
+15. **Self-improvement loop (P7 pulled forward):** log queries locally, record thumbs/corrections, auto-queue zero-result/low-score queries and conflicting facts into `review_queue`, and turn every accepted review into a regression question run by `validate_all.py`.
+
+### 37.6 Recommended next priority
+
+One task: **P0-R.1 + P0-R.2**, unify canonical data and store full clause text, with gates for empty text, dangling requirement IDs and metric drift. Everything else in retrieval, QA and learning depends on that data being real.
+
+### 37.7 Process note
+
+The Gemini agent kept this document read-only and recorded status separately. Per §36, project status and audit results belong here. `docs/gemini/*` should be treated as **historical agent logs, not authoritative status**; where they conflict with §37, §37 governs.
