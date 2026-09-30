@@ -16,6 +16,7 @@
 > python scripts/validate_all.py     # publication gates A to U
 > python -m pytest -q                # unit and regression tests
 > python scripts/run_browser_tests.py  # headless browser suites
+> open chat.html                    # the offline chat assistant: cited answers, follow-up questions, no server needed (also works by double-clicking the file)
 > node scripts/search_cli.js "your question"   # offline search from the terminal
 > python scripts/make_review_packet.py --per-kind 10 --seed 1   # offline human-review packet (see master section 37.22)
 > ```

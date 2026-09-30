@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RDSO Manuals Assistant</title>
+<style>
+  :root{--bg:#f6f8fa;--panel:#fff;--ink:#1b1f24;--muted:#57606a;--line:#d0d7de;--accent:#0b6bcb;--user:#0b6bcb;--userInk:#fff;
+        --ok:#1a7f37;--warn:#9a6700;--bad:#cf222e;--chip:#eaf2fb}
+  @media (prefers-color-scheme:dark){:root{--bg:#0d1117;--panel:#161b22;--ink:#e6edf3;--muted:#8b949e;--line:#30363d;--accent:#58a6ff;
+        --user:#1f6feb;--userInk:#fff;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--chip:#102a43}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;height:100vh}
+  header{padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+  header h1{margin:0;font-size:17px}
+  header p{margin:2px 0 0;color:var(--muted);font-size:12.5px}
+  #log{flex:1;overflow-y:auto;padding:14px 16px;max-width:900px;width:100%;margin:0 auto}
+  .msg{margin:10px 0;display:flex}
+  .msg.user{justify-content:flex-end}
+  .bubble{max-width:92%;padding:9px 13px;border-radius:14px;border:1px solid var(--line);background:var(--panel)}
+  .user .bubble{background:var(--user);color:var(--userInk);border-color:var(--user)}
+  .badge{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;border:1px solid var(--line);color:var(--muted);margin-right:6px}
+  .badge.high{color:var(--ok);border-color:var(--ok)}.badge.medium{color:var(--warn);border-color:var(--warn)}.badge.low{color:var(--bad);border-color:var(--bad)}
+  ul.pts{margin:6px 0 4px 18px;padding:0}ul.pts li{margin:4px 0}
+  .cite{display:inline-block;font-size:11.5px;background:var(--chip);color:var(--accent);border-radius:9px;padding:0 7px;margin-left:4px;text-decoration:none;white-space:nowrap}
+  .cite:hover{text-decoration:underline}
+  .muted{color:var(--muted);font-size:12.5px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .chip{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:16px;padding:3px 11px;font-size:13px;cursor:pointer}
+  .chip:hover{border-color:var(--accent);color:var(--accent)}
+  details{margin-top:6px}summary{cursor:pointer;color:var(--accent);font-size:13px}
+  pre.full{white-space:pre-wrap;font:12.5px/1.45 ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;max-height:260px;overflow:auto}
+  .vals{margin:4px 0 0 18px;padding:0;font-size:13px}
+  .caveat{margin-top:6px;font-size:12.5px;color:var(--warn)}
+  .fb{margin-top:6px;font-size:12px;color:var(--muted)}.fb button{border:0;background:none;cursor:pointer;font-size:15px;padding:0 4px}
+  img.crop{max-width:100%;border:1px solid var(--line);border-radius:6px;margin-top:6px}
+  form{border-top:1px solid var(--line);background:var(--panel);padding:10px 16px}
+  .row{max-width:900px;margin:0 auto;display:flex;gap:8px}
+  input[type=text]{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+  button.send{border:0;background:var(--accent);color:#fff;border-radius:10px;padding:0 18px;font:inherit;cursor:pointer}
+  .foot{max-width:900px;margin:6px auto 0;font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+  .foot a,.foot button{color:var(--accent);background:none;border:0;cursor:pointer;font:inherit;padding:0;text-decoration:underline}
+</style>
+</head>
+<body>
+<header>
+  <h1>RDSO Manuals Assistant</h1>
+  <p>Answers only from six railway manuals, offline. Every statement is copied from a manual with its paragraph and page; it says so when the manuals do not answer.</p>
+</header>
+<div id="log" aria-live="polite"></div>
+<form id="f" autocomplete="off">
+  <div class="row"><input id="q" type="text" placeholder="Ask about permanent way, track machines, welding, ultrasonic testing…" aria-label="Your question" disabled>
+  <button class="send" id="go" disabled>Ask</button></div>
+  <div class="foot"><span id="status">Loading the search index…</span>
+    <span><button type="button" id="newchat">New conversation</button> · <button type="button" id="export">Export feedback log</button></span></div>
+</form>
+<script src="./lib/rdso_search.js"></script>
+<script src="./data/search/search_index.js"></script>
+<script src="./data/search/clause_extras.js"></script>
+<script src="./data/search/crossrefs.js"></script>
+<script src="./lib/rdso_chat.js"></script>
+<script>
+(function () {
+  'use strict';
+  var PDF = { IRPWM: 'manuals/IRPWM 2024 Corrected Up To ACS - 14 (29-07-2026)-1.pdf', TMM: 'manuals/INDIAN RAILWAYS TRACK MACHINE MANUAL (INCORPORATED UPTO ACS 10)_FINAL.pdf',
+              STMM: 'manuals/STMM-date  27.05.24.pdf', USFD: 'manuals/usfd_new 24-2-26.pdf', AT_WELD: 'manuals/ATWeld_Manual-2022.pdf',
+              FBW: 'manuals/FBW Manual-Reprint 2022- Incorporated up to CS5.pdf' };
+  var KEY = 'rdso_feedback_v1';   // same local log as the main application, so one export feeds the learning loop
+  var log = document.getElementById('log'), input = document.getElementById('q'), go = document.getElementById('go'), statusEl = document.getElementById('status');
+  var chat, turn = 0;
+
+  var feedback = {
+    read: function () { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } },
+    write: function (rows) { try { localStorage.setItem(KEY, JSON.stringify(rows.slice(-500))); } catch (e) { /* storage unavailable: nothing is kept */ } },
+    log: function (entry) { var rows = this.read(); rows.push(Object.assign({ ts: new Date().toISOString(), via: 'chat' }, entry)); this.write(rows); },
+    exportJsonl: function () { return this.read().map(function (r) { return JSON.stringify(r); }).join('\n') + '\n'; }
+  };
+  window.rdsoFeedback = feedback;
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function safeName(id) { return 'ev_clause_' + String(id).replace(/[^A-Za-z0-9_.-]/g, '_'); }
+  function pdfUrl(c) { return encodeURI(PDF[c.alias] || '') + '#page=' + (c.page || 1); }
+  function citeHtml(c) { return '<a class="cite" target="_blank" rel="noopener" href="' + esc(pdfUrl(c)) + '" title="Open the manual at this page">' + esc(c.label) + ' · p.' + esc(c.page) + '</a>'; }
+  function chip(text, ask) { return '<button type="button" class="chip" data-ask="' + esc(ask || text) + '">' + esc(text) + '</button>'; }
+
+  function add(role, html) {
+    var d = document.createElement('div'); d.className = 'msg ' + role;
+    d.innerHTML = '<div class="bubble">' + html + '</div>';
+    log.appendChild(d); log.scrollTop = log.scrollHeight; return d;
+  }
+
+  function render(r, q) {
+    var h = '';
+    if (r.kind === 'answer') {
+      h += '<span class="badge ' + esc(r.confidence) + '">' + ({ high: 'strong match', medium: 'probable match', low: 'weak match' }[r.confidence] || '') + '</span>';
+      if (r.interpreted) h += '<span class="muted">understood as: ' + esc(r.interpreted) + '</span>';
+      if (r.lead) h += '<div>' + esc(r.lead) + '</div>';
+      h += r.primary.isTable ? '<div class="muted">rows copied from a table:</div>' : '';
+      h += '<ul class="pts">' + r.points.map(function (p) { return '<li>' + esc(p.text) + citeHtml(p.cite) + '</li>'; }).join('') + '</ul>';
+      if (r.values && r.values.length) h += '<div class="muted">Values in those sentences (machine-extracted):</div><ul class="vals">' + r.values.map(function (v) {
+        return '<li>' + (v.quantity ? '<b>' + esc(v.quantity) + '</b>: ' : '') + esc(v.text) + '</li>'; }).join('') + '</ul>';
+      if (r.alsoSee && r.alsoSee.length) h += '<div class="muted" style="margin-top:6px">Also relevant:</div><ul class="pts">' + r.alsoSee.map(function (p) { return '<li>' + esc(p.text) + citeHtml(p.cite) + '</li>'; }).join('') + '</ul>';
+      if (r.subparas && r.subparas.length) h += '<div class="muted">This paragraph continues in sub-paragraphs:</div><div class="chips">' + r.subparas.map(function (s) {
+        return chip(s.para, 'What does ' + r.primary.alias + ' Para ' + s.para + ' say?'); }).join('') + '</div>';
+      if (r.drawings && r.drawings.length) h += '<div class="muted" style="margin-top:6px">Drawings cited here that are in this collection: ' + r.drawings.map(function (d) {
+        return '<a class="cite" target="_blank" rel="noopener" href="' + esc(encodeURI(d.file)) + '">T-' + esc(d.number) + '</a>'; }).join(' ') + '</div>';
+      if (r.caveat) h += '<div class="caveat">' + esc(r.caveat) + '</div>';
+      h += '<details><summary>Show the full paragraph (' + esc(r.primary.label) + ')</summary><pre class="full">' + esc(r.primary.text.slice(0, 3000)) + (r.primary.text.length > 3000 ? '\n…' : '') + '</pre>' +
+           '<img class="crop" alt="" src="artifacts/evidence/' + esc(safeName(r.primary.clause)) + '.png" onerror="this.remove()"></details>';
+      if (r.followups && r.followups.length) h += '<div class="chips">' + r.followups.map(function (f) { return chip(f); }).join('') + '</div>';
+      h += '<div class="fb">Was this helpful? <button type="button" data-fb="up" title="Yes">👍</button><button type="button" data-fb="down" title="No">👎</button> <span class="fbnote"></span></div>';
+    } else if (r.kind === 'clarify') {
+      h += esc(r.text) + '<div class="chips">' + r.options.map(function (o) { return chip(o.name + ' — ' + o.label + ': ' + o.title.slice(0, 50), o.ask); }).join('') + '</div>';
+    } else if (r.kind === 'no_evidence') {
+      h += esc(r.text);
+      if (r.nearest && r.nearest.length) h += '<div class="muted" style="margin-top:6px">Closest topics in the manuals:</div><div class="chips">' + r.nearest.map(function (n) {
+        return chip(n.label + ' — ' + n.title.slice(0, 50), 'What does ' + n.alias + ' Para ' + n.para + ' say?'); }).join('') + '</div>';
+      h += '<div class="fb">This question is saved locally for review. <button type="button" data-fb="down" title="Report">👎</button></div>';
+    } else if (r.kind === 'more') {
+      h += '<pre class="full" style="max-height:none">' + esc(r.text.slice(0, 6000)) + '</pre>' + citeHtml(r.primary);
+    } else if (r.kind === 'source') {
+      h += esc(r.text) + ' ' + citeHtml(r.primary);
+    } else if (r.kind === 'related_list') {
+      h += esc(r.text) + '<div class="chips">' + r.related.map(function (n) { return chip(n.label + ' — ' + n.title.slice(0, 50), 'What does ' + n.alias + ' Para ' + n.para + ' say?'); }).join('') + '</div>';
+    } else {
+      h += esc(r.text || '');
+      if (r.examples) h += '<div class="muted" style="margin-top:6px">Try:</div><div class="chips">' + r.examples.map(function (e) { return chip(e); }).join('') + '</div>';
+    }
+    return h;
+  }
+
+  function ask(text) {
+    text = String(text || '').trim();
+    if (!text || !chat) return;
+    add('user', esc(text));
+    var r = chat.ask(text);
+    var node = add('bot', render(r, text));
+    node.dataset.query = text; node.dataset.clause = r.primary ? r.primary.clause : '';
+    feedback.log({ type: 'query', query: text, status: r.kind === 'answer' ? 'answer' : r.kind, coverage: r.coverage == null ? null : +r.coverage.toFixed(3),
+                   clause: r.primary ? r.primary.clause : null, shown: r.primary ? [r.primary.clause].concat((r.related || []).map(function (x) { return x.clause; })) : [] });
+    turn++;
+  }
+
+  document.getElementById('f').addEventListener('submit', function (e) { e.preventDefault(); var t = input.value; input.value = ''; ask(t); });
+  log.addEventListener('click', function (e) {
+    var c = e.target.closest('.chip');
+    if (c) { ask(c.dataset.ask); return; }
+    var b = e.target.closest('[data-fb]');
+    if (b) {
+      var m = b.closest('.msg');
+      feedback.log({ type: 'feedback', query: m.dataset.query, clause: m.dataset.clause || null, verdict: b.dataset.fb });
+      var note = m.querySelector('.fbnote'); if (note) note.textContent = b.dataset.fb === 'up' ? 'Thanks, saved on this computer.' : 'Saved: it will go to the review queue when the log is exported.';
+    }
+  });
+  document.getElementById('newchat').addEventListener('click', function () { if (chat) chat.reset(); log.innerHTML = ''; greet(); });
+  document.getElementById('export').addEventListener('click', function () {
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([feedback.exportJsonl()], { type: 'application/x-ndjson' }));
+    a.download = 'rdso_feedback.jsonl'; a.click();
+  });
+
+  function greet() { var r = chat.ask('hello'); add('bot', render(r, 'hello')); chat.state.turns.length = 0; }
+
+  function start() {
+    if (!window.RDSOSearch || !window.RDSO_SEARCH_INDEX || !window.RDSOChat) { statusEl.textContent = 'The search index did not load.'; return; }
+    chat = window.RDSOChat.create(window.RDSOSearch.create(window.RDSO_SEARCH_INDEX), { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: window.RDSO_CROSSREFS });
+    window.rdsoChat = chat;
+    statusEl.textContent = 'Ready. Nothing leaves this computer.';
+    input.disabled = go.disabled = false; input.focus();
+    greet();
+  }
+  start();
+})();
+</script>
+</body>
+</html>

@@ -2063,6 +2063,21 @@ Read the upper ends of the intervals, not the point estimates: with 10 to 23 ite
 
 **What this changes.** The review effort asked of a person can now be small and targeted: the estimate is good enough to keep using the extractors, and further rounds can be restricted to (a) items the automatic checks flag and (b) a fresh random 10 items per kind now and then to watch for drift.
 
+### 37.29 Offline chat assistant (chat.html) — 2026-09-30
+
+Requested: make the knowledge base behave like a chatbot that answers relevant questions. Built as `chat.html` (page) over `lib/rdso_chat.js` (dialogue layer, one module for the browser and Node) on top of the existing retrieval engine. **It is not a generative model**: nothing is written by the assistant except fixed sentences (greeting, refusal, clarification, "I am not sure"). Every answer statement is a sentence or table row copied from a cited paragraph; this is what keeps it safe to use for railway rules and is also why it stays offline and instant (about 3 ms per question, 6 MB index).
+
+What it does beyond a search box:
+- **Whole-sentence answers** with a link to the manual page (`manuals/<pdf>#page=N`) on each citation, the full paragraph and its highlighted page image on request (image present only if `render_evidence.py` was run), values that sit in the shown sentences (machine-extracted label), the sub-paragraphs a lead-in paragraph continues in, drawings we hold that the paragraph cites, and "also relevant" from a nearly-as-good second paragraph.
+- **Conversation memory.** "And what is the wear limit?" after a question on Para 429 is searched together with the topic of the previous answer and shows how it was understood. A fresh question is tried alone first and is only combined with the previous topic when it contains follow-up words (and, what about, it, that ...) or is very short and the fresh answer is weak, so a new question is not dragged into the previous manual; a low-confidence answer is never used as context.
+- **Commands:** more, source/which page, what else/related, new conversation. **Clarifying question** when two manuals answer about equally well and none was named. **Honest refusal** with the nearest topics when the terms do not occur together in any passage. A low-confidence answer is prefaced "I am not sure this answers your question" and offered as the closest passage.
+- **Suggested next questions:** related paragraphs and the paragraphs this one refers to (resolved cross-references).
+- **Feedback:** thumbs up/down and every question are logged locally in the same `rdso_feedback_v1` store the main application uses (tagged `via: chat`), exportable as JSONL into the existing ingest, knowledge-gap and review-queue loop. Nothing leaves the computer.
+
+Checks: 8 pytest dialogue tests (greeting, cited answer, commands, follow-up, refusal, no contamination across manuals, reset) and a **grounding sweep: 193 statements shown across 120 evaluation questions were all found verbatim in the cited passages (0 violations)**; a 15th browser suite loads the page, asks, follows a chip, checks the page link, the refusal, local feedback and that HTML typed into a question is not executed. State: 21 gates, 243 pytest, 15 browser suites, all passing.
+
+Limits, stated plainly: it answers only what the manuals state in words the search can match; it does not calculate, compare two values or combine facts from two paragraphs into a new sentence; unusual phrasing or a question whose answer is in a table the parser flattened can miss (weak matches are labelled); follow-up handling is rule-based and can misjudge (it shows its reading so the user can correct it); quality on real engineer questions is still unmeasured (the real-question packet is the next step); conversation state lasts only while the page is open.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
