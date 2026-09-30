@@ -18,7 +18,9 @@ ROOT = Path(__file__).resolve().parents[1]
 STEPS = [
     "ingest_all_manual_chapters.py",
     "generate_canonical_kg.py",
-    "unify_manual_canonical.py",
+    "unify_manual_canonical.py",   # 1st pass: canonical text/clauses (locator needs them)
+    "locate_evidence.py",
+    "unify_manual_canonical.py",   # 2nd pass: attach evidence locations, edge evidence, metrics
     "export_kg_bundle.py",
 ]
 

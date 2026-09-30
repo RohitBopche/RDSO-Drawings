@@ -1,12 +1,13 @@
 {
   "edges": 9037,
-  "edges_with_evidence": 667,
-  "evidence": 1875,
+  "edges_with_evidence": 9025,
+  "edges_without_evidence": 12,
+  "evidence": 6783,
   "evidence_status": {
-    "machine_extracted": 1875
+    "machine_extracted": 6783
   },
-  "evidence_with_bbox": 0,
-  "evidence_with_page": 0,
+  "evidence_with_page": 6746,
+  "evidence_with_region": 6663,
   "generated_by": "scripts/unify_manual_canonical.py",
   "manual_clauses": {
     "DOC:AT_WELD:2022": {

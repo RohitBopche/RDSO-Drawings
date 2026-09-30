@@ -29,6 +29,7 @@ GATES = [
     ("Gate K: Manuals Source-Heading Hierarchy", [sys.executable, str(ROOT / "scripts" / "validate_manual_hierarchy.py")]),
     ("Gate L: Manual Text Integrity & Single Source", [sys.executable, str(ROOT / "scripts" / "validate_manual_text_integrity.py")]),
     ("Gate M: Provenance Policy", [sys.executable, str(ROOT / "scripts" / "validate_provenance_policy.py")]),
+    ("Gate N: Evidence Locations & Hashes", [sys.executable, str(ROOT / "scripts" / "validate_evidence_locations.py")]),
 ]
 
 

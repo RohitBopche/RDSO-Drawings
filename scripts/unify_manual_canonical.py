@@ -63,6 +63,74 @@ def to_int(v):
         return None
 
 
+def sha256_file(path: Path) -> str:
+    import hashlib
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def enrich_evidence(nodes, edges, json_edges, evidence, facts) -> None:
+    """Attach page/region/hash locations to evidence and evidence ids to nodes and edges."""
+    by_ev = {e["evidence_id"]: e for e in evidence}
+    by_node = {n["id"]: n for n in nodes}
+    locs = read_jsonl(LOCATIONS) if LOCATIONS.exists() else []
+    for loc in locs:
+        e = by_ev.get(loc["evidence_id"])
+        if e is None:
+            e = {"evidence_id": loc["evidence_id"], "document_id": loc["document_id"],
+                 "extraction_method": "text_extract", "verification_status": MACHINE,
+                 "confidence": 0.95, "quote": loc["quote"]}
+            evidence.append(e)
+            by_ev[e["evidence_id"]] = e
+        e.update(page_number=loc["page_number"], page_width=loc["page_width"], page_height=loc["page_height"],
+                 pdf_sha256=loc["pdf_sha256"], page_sha256=loc["page_sha256"], locator=loc["locator"],
+                 match_ratio=loc["match_ratio"], source_node_id=loc["node_id"])
+        for k in ("region", "line_regions"):
+            e.pop(k, None)
+        if loc["region"]:
+            e["region"] = loc["region"]
+            e["line_regions"] = loc["line_regions"]
+        node = by_node.get(loc["node_id"])
+        if node is not None:
+            ids = node.setdefault("evidence_ids", [])
+            if loc["evidence_id"] not in ids:
+                ids.append(loc["evidence_id"])
+    for e in evidence:
+        fp = e.get("file_path")
+        if fp and (ROOT / fp).exists():
+            e["file_sha256"] = sha256_file(ROOT / fp)
+
+    crop_ev = {}
+    for e in evidence:
+        if e.get("file_path"):
+            crop_ev[e["file_path"]] = e["evidence_id"]
+    fact_crop = {(f["subject_id"], f["object_id"], f["predicate"]): f.get("source", {}).get("crop") for f in facts}
+
+    def attach(edge_list):
+        for ed in edge_list:
+            if ed.get("evidence_ids"):
+                continue
+            ids = []
+            crop = fact_crop.get((ed["from"], ed["to"], RELATION_NORM.get(ed["rel"], ed["rel"]))) or \
+                fact_crop.get((ed["from"], ed["to"], ed["rel"]))
+            if crop and crop in crop_ev:
+                ids = [crop_ev[crop]]
+            else:
+                for end in ("to", "from"):
+                    n = by_node.get(ed[end])
+                    if n and n.get("evidence_ids"):
+                        ids = [n["evidence_ids"][0]]
+                        break
+            if ids:
+                ed["evidence_ids"] = ids
+
+    attach(edges)
+    attach(json_edges)
+
+
 def build() -> dict:
     src = json.loads(SRC.read_text(encoding="utf-8"))
     legacy = json.loads(LEGACY_JSON.read_text(encoding="utf-8"))
@@ -208,6 +276,7 @@ def build() -> dict:
             "evidence_text": e["rationale"],
         })
     evidence = read_jsonl(CANON / "evidence.jsonl")
+    enrich_evidence(nodes, edges, json_edges, evidence, facts)
     reviews_path = CANON / "reviews.jsonl"
     reviews = read_jsonl(reviews_path) if reviews_path.exists() else []
     provenance_policy.apply(nodes, reqs, evidence, facts, reviews)
@@ -259,6 +328,7 @@ def build() -> dict:
 
 SHORT_CLAUSE_CHARS = 60
 RAW_PAGES = KG / "raw" / "extracted_pages.jsonl"
+LOCATIONS = KG / "raw" / "evidence_locations.jsonl"
 
 
 def compute_metrics() -> dict:
@@ -304,7 +374,8 @@ def compute_metrics() -> dict:
         "reviews": len(reviews),
         "edges_with_evidence": sum(1 for e in edges if e.get("evidence_ids")),
         "evidence_with_page": sum(1 for e in evid if e.get("page_number")),
-        "evidence_with_bbox": sum(1 for e in evid if e.get("bbox")),
+        "evidence_with_region": sum(1 for e in evid if e.get("region")),
+        "edges_without_evidence": sum(1 for e in edges if not e.get("evidence_ids")),
         "node_types": dict(sorted(types.items())),
         "verification_status": statuses(nodes),
         "evidence_status": statuses(evid),
