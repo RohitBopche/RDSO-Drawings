@@ -207,6 +207,9 @@ async function main() {
                  hasDrawings: !!d && d.statement.includes('Drawings cited here that are in this collection') && /href="drawings\\/[^"]+\\.pdf"/.test(d.statement) };
       })()
     `);
+    const t7b = await client.eval(`(() => { const a = window.answerEngineeringQuestion("What does Para 13.1 of USFD say?"); return { clause: a && a.provenance.clause, hasSub: !!a && a.statement.includes('continues in its sub-paragraphs') && a.statement.includes('13.1.1') }; })()`);
+    console.log(t7b);
+    if (t7b.clause !== 'CLAUSE:USFD:CH_13:PARA_13_1' || !t7b.hasSub) throw new Error('Test 7b failed ' + JSON.stringify(t7b));
     console.log(t7);
     if (t7.valuesClause !== 'CLAUSE:IRPWM:CH_05:PARA_522' || !t7.hasValues || t7.drawingClause !== 'CLAUSE:IRPWM:CH_02:PARA_229' || !t7.hasDrawings) throw new Error('Test 7 failed ' + JSON.stringify(t7));
 

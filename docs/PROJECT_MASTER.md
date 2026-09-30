@@ -2041,6 +2041,28 @@ Decision file `eval/reviews/decisions_rohit_s11.json`, 25 items (5 per kind). Re
 
 State: 21 gates, 234 pytest, 14 browser suites, all passing.
 
+### 37.28 Calibration packet 21: the first valid accuracy estimate — 2026-09-30
+
+Decision file `eval/reviews/decisions_rohit_s21.json`: 40 random items (8 per kind), every item boxed in red on its page. **39 approved, 1 rejected.** The one rejection (USFD paragraph 1.1, "not complete, other sub paras complete it") is the same observation the reviewer made on 13.1 earlier: in the decimally numbered manuals a paragraph can be only the lead-in of sub-paragraphs (1.1.1, 1.1.2 ...) that are clauses of their own. That is how the parser splits them, not a parsing error, but the card gave no hint. **Fixed in the interface:** such a card now says "This paragraph continues in its sub-paragraphs: 13.1.1, 13.1.2 ..." with links (from `clause_extras.js`, `s`; browser test 7b).
+
+**Accuracy from packets that actually showed the item (packets 11 and 21, plus tables from packet 1):**
+
+| Kind | Correct / reviewed | Error rate (95% interval) |
+|---|---:|---|
+| table | 22 / 23 | 4% (1 to 21%) |
+| clause | 12 / 13 | 8% (1 to 33%) |
+| cross-reference | 12 / 12 | 0% (0 to 24%) |
+| drawing link | 11 / 11 | 0% (0 to 26%) |
+| measurement | 10 / 10 | 0% (0 to 28%) |
+
+Read the upper ends of the intervals, not the point estimates: with 10 to 23 items per kind, the data are compatible with error rates of 25 to 30% for references, links and values. "Correct" here means what the packet asked: the boxed item is what the record says (a real reference with the right classification, a value with the right number, unit and comparator, a drawing number), judged by one reviewer. It does not mean the value is useful or complete. **These rates were obtained after the fixes that followed the earlier reviews (§37.25 to 37.27); the earlier rates are not comparable.**
+
+**Agreement with my own second reading (§37.26):** I had found problems in 4 of 30 cross-references and about 6 of 40 values from flattened text and fixed the classes behind them before this packet; the reviewer then found none of those in 8 and 8 new items. That is consistent but weak evidence (small numbers, reviewer different from me, items different), not a measured agreement.
+
+**Housekeeping.** Decisions made on packets that did not show the item are voided (`eval/reviews/voided.json`, keys `item@packet` and whole-packet entries) and no longer count or dispute anything: the ten clause rejections from packet 1 moved to `eval/reviews/voided_reviews.jsonl` (history kept) and those clauses are `machine_extracted` again. Clause status today: 12 reviewed (one approver each), 1 disputed (USFD 1.1), 1,159 machine_extracted. An item can be judged again after its earlier decision was voided. State: 21 gates, 235 pytest, 14 browser suites, all passing.
+
+**What this changes.** The review effort asked of a person can now be small and targeted: the estimate is good enough to keep using the extractors, and further rounds can be restricted to (a) items the automatic checks flag and (b) a fresh random 10 items per kind now and then to watch for drift.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

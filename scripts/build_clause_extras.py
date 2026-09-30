@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 KG = ROOT / "data" / "knowledge-graph"
 OUT = ROOT / "data" / "search" / "clause_extras.js"
 MAX_VALUES = 12
+DECIMAL = ("AT_WELD", "FBW", "USFD")
 
 
 def read(p: Path) -> list[dict]:
@@ -31,6 +32,13 @@ def main() -> int:
         if len(e["v"]) < MAX_VALUES:
             e["v"].append([m["comparator"], m["lo"], m["hi"], m["unit"], m["quantity"], " ".join(m["raw"].split()),
                            [f"{c['raw']}" for c in m.get("conditions", [])[:3]]])
+    # decimal manuals: a paragraph such as 13.1 may be only the lead-in of 13.1.1, 13.1.2 ... which are clauses of their own
+    clauses = [n for n in read(KG / "canonical" / "nodes.jsonl") if n["id"].startswith("CLAUSE:") and n["id"].split(":")[1] in DECIMAL]
+    by_para = {(n["id"].split(":")[1], str(n["specs"]["Paragraph"])): n["id"] for n in clauses}
+    for (alias, para), cid in sorted(by_para.items()):
+        kids = [(p2, i2) for (a2, p2), i2 in by_para.items() if a2 == alias and p2.startswith(para + ".") and p2.count(".") == para.count(".") + 1]
+        if kids:
+            extras.setdefault(cid, {})["s"] = [[p2, i2] for p2, i2 in sorted(kids, key=lambda k: [int(x) if x.isdigit() else 0 for x in k[0].split(".")])][:12]
     files = {r["drawing_id"]: r["file"] for r in read(KG / "canonical" / "drawings_registry.jsonl")}
     for l in read(KG / "canonical" / "drawing_links.jsonl"):
         if l["status"] != "SHEET_HELD":

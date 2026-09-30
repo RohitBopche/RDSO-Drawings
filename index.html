@@ -8725,6 +8725,9 @@
       const valuesBlock = extras.v && extras.v.length
         ? `<details style="margin-top:4px;"><summary style="cursor:pointer;font-size:10px;color:var(--accent-cyan);">Values found in this provision (${extras.v.length}, machine-extracted)</summary>` +
           `<ul style="margin:4px 0 0 16px;padding:0;font-size:11px;line-height:1.5;">${extras.v.map(fmtValue).join('')}</ul></details>` : '';
+      const subBlock = extras.s && extras.s.length
+        ? `<div style="font-size:10px;margin-top:6px;color:var(--text-muted);">This paragraph continues in its sub-paragraphs: ` +
+          extras.s.map(([n, id]) => `<a href="#" onclick="selectGraphNode('${escHtml(id)}'); return false;" style="color:var(--accent-cyan);">${escHtml(n)}</a>`).join(', ') + `</div>` : '';
       const drawingsBlock = extras.d && extras.d.length
         ? `<div style="font-size:10px;margin-top:6px;color:var(--text-muted);">Drawings cited here that are in this collection: ` +
           extras.d.map(([n, f]) => `<a href="${escHtml(f)}" target="_blank" rel="noopener" style="color:var(--accent-cyan);">T-${escHtml(n)} ↗</a>`).join(', ') + `</div>` : '';
@@ -8733,7 +8736,7 @@
       const tier = { high: 'Strong match', medium: 'Probable match', low: 'Weak match: check the source' }[ans.confidence];
       const statement = `<div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">${tier} · ${best.kind === 'table' ? 'rows copied from a table in' : 'sentences copied from'} ${cite}${open}</div>` +
         (sentences ? `<ul style="margin:4px 0 6px 16px;padding:0;font-size:12px;line-height:1.5;color:#e0e8f8;">${sentences}</ul>` : '') +
-        valuesBlock + drawingsBlock +
+        valuesBlock + subBlock + drawingsBlock +
         `<details style="margin-top:4px;"><summary style="cursor:pointer;font-size:10px;color:var(--accent-cyan);">Show the full passage</summary>` +
         `<blockquote style="border-left:3px solid var(--accent-cyan);padding-left:10px;margin:4px 0;white-space:pre-wrap;font-size:11.5px;line-height:1.5;color:#e0e8f8;max-height:220px;overflow:auto;">${full}</blockquote></details>` +
         (related ? `<div style="font-size:10px;color:var(--text-muted);margin-top:6px;">Other relevant provisions:</div><ul style="margin:2px 0 0 16px;font-size:11px;">${related}</ul>` : '');

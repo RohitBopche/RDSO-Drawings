@@ -100,10 +100,10 @@
   },
   "nodes": 4862,
   "requirements": 1632,
-  "reviews": 15,
+  "reviews": 13,
   "verification_status": {
-    "disputed": 10,
-    "machine_extracted": 4847,
-    "reviewed": 5
+    "disputed": 1,
+    "machine_extracted": 4849,
+    "reviewed": 12
   }
 }

@@ -87,18 +87,18 @@ def voided() -> dict[str, str]:
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
 
 
+def is_void(r: dict, void: dict) -> bool:
+    pk = void.get("_packets", {}).get(str(r.get("packet_seed")))
+    return f"{r['target_ids'][0]}@{r.get('packet_seed')}" in void or bool(pk and r.get("kind", "clause") in pk["kinds"])
+
+
 def accuracy(all_reviews: list[dict], unsure: int = 0, void: dict[str, str] | None = None) -> dict:
     void = void or {}
     by_kind: dict[str, dict] = {}
     per_target: dict[str, dict[str, str]] = {}
-    packets = void.get("_packets", {})
 
-    def is_void(r: dict) -> bool:
-        pk = packets.get(str(r.get("packet_seed")))
-        return r["target_ids"][0] in void or bool(pk and r.get("kind") in pk["kinds"])
-
-    n_void = sum(1 for r in all_reviews if is_void(r))
-    all_reviews = [r for r in all_reviews if not is_void(r)]
+    n_void = sum(1 for r in all_reviews if is_void(r, void))
+    all_reviews = [r for r in all_reviews if not is_void(r, void)]
     for r in all_reviews:
         k = by_kind.setdefault(r["kind"], {"reviewed": 0, "correct": 0, "wrong": 0})
         k["reviewed"] += 1
@@ -123,9 +123,21 @@ def main() -> int:
     rv_path, ex_path = CAN / "reviews.jsonl", CAN / "extractor_reviews.jsonl"
     reviews, extractor = read(rv_path), read(ex_path)
     unsure = 0
+    # A voided clause decision must not keep the clause "disputed" or "reviewed": it moves to an archive (history kept, status unaffected).
+    void = voided()
+    gone = [r for r in reviews if is_void(r, void)]
+    if gone:
+        arch = CAN.parent.parent.parent / "eval" / "reviews" / "voided_reviews.jsonl"
+        old = read(arch)
+        seen = {r["review_id"] for r in old}
+        arch.write_text("".join(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n" for r in old + [g for g in gone if g["review_id"] not in seen]), encoding="utf-8")
+        reviews = [r for r in reviews if not is_void(r, void)]
+        rv_path.write_text("".join(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n" for r in reviews), encoding="utf-8")
+        print(f"moved {len(gone)} voided clause decisions to eval/reviews/voided_reviews.jsonl")
     if a.files:
         files = [json.loads(Path(f).read_text(encoding="utf-8")) for f in a.files]
-        have = {(t, r["reviewer"]) for r in reviews + extractor for t in r["target_ids"]}
+        void = voided()     # an item can be judged again when its earlier decision was voided (the packet had not shown it)
+        have = {(t, r["reviewer"]) for r in reviews + extractor if not is_void(r, void) for t in r["target_ids"]}
         now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         c, o, errors, unsure = process(files, known_ids(), have, now)
         for e in errors:
