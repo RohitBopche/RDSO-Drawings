@@ -9,6 +9,7 @@ manuals view or browser bundle drift from canonical, or metrics.json is stale.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -89,24 +90,32 @@ def main() -> int:
     if norm(core["edges"]) != norm(edges):
         errors.append("edge sets differ between JSONL and core JSON (after vocabulary normalisation)")
 
-    # 4. derived legacy manuals view
-    view = json.loads(MANUALS_VIEW.read_text(encoding="utf-8"))
-    if set(view["clauses"]) != {n["id"] for n in clauses}:
-        errors.append("manuals view clause ids differ from canonical")
-    else:
-        for n in clauses:
-            if view["clauses"][n["id"]]["verbatim"] != n["text"]:
-                errors.append(f"manuals view text differs from canonical for {n['id']}")
-                break
-    for tid in view["tolerances"]:
-        if tid not in by_id:
-            errors.append(f"manuals view tolerance {tid} not in canonical")
+    # 4. the legacy manuals view is gone: the browser reads canonical only
+    if MANUALS_VIEW.exists():
+        errors.append("data/rdso_manuals_knowledge.json must not exist (browser reads canonical only)")
 
     # 5. extraction drift
     src = json.loads(EXTRACTION.read_text(encoding="utf-8"))
     src_ids = {cl["clause_id"] for m in src["manuals"] for c in m["chapters"] for cl in c["clauses"]}
     if src_ids != {n["id"] for n in clauses}:
         errors.append("canonical clause ids differ from deterministic extraction")
+
+    # 5b. numbering continuity: in the paragraph-numbered manuals every number between the first and
+    # last of a chapter is either a clause, a bare heading, or a deleted-paragraph tombstone.
+    stats = src.get("clause_parse_stats", {})
+    for m in src["manuals"]:
+        doc = m["document_id"]
+        if not (stats.get(doc) and re.match(r"^(IRPWM|TMM|STMM)$", m["alias"])):
+            continue
+        known = {int(re.match(r"\d+", c["para_number"]).group()) for ch in m["chapters"] for c in ch["clauses"]}
+        known |= {int(re.match(r"\d+", n).group()) for n in stats[doc].get("heading_only_paras", []) + stats[doc].get("deleted_paras", [])}
+        by_chapter: dict[int, list[int]] = {}
+        for n in known:
+            by_chapter.setdefault(n // 100, []).append(n)
+        for ch, nums in sorted(by_chapter.items()):
+            gaps = [n for n in range(min(nums), max(nums) + 1) if n not in nums]
+            if gaps:
+                errors.append(f"{m['alias']} chapter {ch}: unexplained numbering gaps {gaps[:10]}")
 
     # 6. metrics freshness
     sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -119,9 +128,9 @@ def main() -> int:
         b = bundle_object("RDSO_CANONICAL_KG")
         if len(b["entities"]) != len(nodes) or len(b["edges"]) != len(core["edges"]):
             errors.append("rdso_kg_data.js is stale; run scripts/export_kg_bundle.py")
-        bm = bundle_object("RDSO_MANUALS_KNOWLEDGE")
-        if len(bm["clauses"]) != len(view["clauses"]):
-            errors.append("rdso_kg_data.js manuals view is stale")
+        if "RDSO_MANUALS_KNOWLEDGE" in BUNDLE.read_text(encoding="utf-8")[:2000] or \
+                "_root.RDSO_MANUALS_KNOWLEDGE" in BUNDLE.read_text(encoding="utf-8"):
+            errors.append("rdso_kg_data.js still exports the legacy RDSO_MANUALS_KNOWLEDGE view")
 
     for e in errors[:50]:
         print(f"[ERROR] {e}")

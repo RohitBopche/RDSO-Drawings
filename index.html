@@ -3492,8 +3492,6 @@
     // =========================================================================
     const RDSO_EXTRACTED_KNOWLEDGE = window.RDSO_EXTRACTED_KNOWLEDGE || {} || {};
     const CANONICAL_DATA = window.RDSO_CANONICAL_KG || {} || { entities: [], edges: [], facts: [] };
-    const RDSO_MANUALS_KNOWLEDGE = window.RDSO_MANUALS_KNOWLEDGE || {} || {};
-    window.RDSO_MANUALS_KNOWLEDGE = RDSO_MANUALS_KNOWLEDGE;
     const RDSO_MANUALS_TREE = window.RDSO_COMPACTED_TREE || [] || [];
     window.RDSO_MANUALS_TREE = RDSO_MANUALS_TREE;
 
@@ -3847,64 +3845,20 @@
         });
       });
 
-      // Attach extracted clauses to their authoritative chapter; never directly to the manual.
-      // Primary key: (manual, chapter title). Fallback: manual + page range. The page fallback
-      // is deterministic and covers canonical clauses whose compact metadata does not carry
-      // the full chapter title.
-      const clauses = window.RDSO_MANUALS_KNOWLEDGE && window.RDSO_MANUALS_KNOWLEDGE.clauses || {};
+      // Attach canonical clauses to their authoritative chapter; never directly to the manual.
+      // The canonical clause id carries its chapter (CLAUSE:<alias>:CH_nn:PARA_x), which the
+      // extractor derives from the paragraph numbering, so no second data source is consulted.
       const manualByAlias = new Map(manualStructure.manuals.map(m => [m.alias, m]));
-
-      function resolveChapterForClause(c) {
-        const alias = c.manual || c.alias;
-        const manual = manualByAlias.get(alias);
-        if (!manual) return null;
-
-        const exact = manualChapterById.get(alias + '|' + c.chapter);
-        if (exact) return exact;
-
-        const page = Number(c.page);
-        if (!Number.isFinite(page)) return null;
-        const candidates = manual.chapters
-          .map((ch, idx) => ({ idx, start: Number(ch[1]), end: Number(ch[2]) }))
-          .filter(x => page >= x.start && page <= x.end);
-
-        if (candidates.length !== 1) return null;
-        return 'CHAPTER:' + manual.alias + ':CH_' + String(candidates[0].idx + 1).padStart(2, '0');
-      }
-
-      Object.values(clauses).forEach(c => {
-        const cid = c.id || c.clause_id;
-        const chapterId = resolveChapterForClause(c);
-        if (!cid || !chapterId || !rawNodes.some(n => n.id === cid)) return;
-        const edgeKey = chapterId + '|HAS_CLAUSE|' + cid;
-        if (!rawEdges.some(e => e.from + '|' + e.rel + '|' + e.to === edgeKey)) {
-          rawEdges.push({ from: chapterId, to: cid, rel: 'HAS_CLAUSE', rationale: 'Clause assigned by authoritative chapter title/page structure' });
-        }
-      });
-
-      // Canonical clause nodes may use versioned IDs (e.g. CLAUSE:IRPWM:2024:PARA_428)
-      // while the extracted manual knowledge uses compact IDs. When metadata on the node
-      // includes a chapter and the page is unavailable, use its manual/version identity
-      // and chapter label to attach it without creating a cross-universe edge.
+      const knownChapterIds = new Set(rawNodes.filter(n => n.type === 'CHAPTER').map(n => n.id));
+      const existingClauseEdges = new Set(rawEdges.filter(e => e.rel === 'HAS_CLAUSE').map(e => e.from + '|' + e.to));
       rawNodes.filter(n => n.universe === 'manuals' && n.type === 'CLAUSE').forEach(n => {
-        if (rawEdges.some(e => e.rel === 'HAS_CLAUSE' && e.to === n.id)) return;
-        const manualMatch = String(n.id).match(/^CLAUSE:([^:]+)(?::[^:]+)?:/);
-        const alias = manualMatch ? manualMatch[1] : null;
-        const manual = manualByAlias.get(alias);
-        const chapterLabel = n.specs && n.specs.Chapter;
-        if (!manual || !chapterLabel) return;
-
-        const normalized = String(chapterLabel).replace(/^Chapter\s*\d+\s*/i, '').trim();
-        const idx = manual.chapters.findIndex(ch => {
-          const title = String(ch[0]).trim();
-          return normalized === title || normalized.includes(title) || title.includes(normalized);
-        });
-        if (idx < 0) return;
-
-        const chapterId = 'CHAPTER:' + alias + ':CH_' + String(idx + 1).padStart(2, '0');
+        const m = String(n.id).match(/^CLAUSE:([^:]+):(CH_\d+):/);
+        if (!m) return;
+        const chapterId = 'CHAPTER:' + m[1] + ':' + m[2];
+        if (!knownChapterIds.has(chapterId) || existingClauseEdges.has(chapterId + '|' + n.id)) return;
         rawEdges.push({
           from: chapterId, to: n.id, rel: 'HAS_CLAUSE',
-          rationale: 'Canonical clause attached from verified chapter metadata'
+          rationale: 'Clause owned by the chapter named in its canonical id'
         });
       });
 
@@ -5394,22 +5348,18 @@
 
       // 1. POPULATE ENGINEERING ANSWER CARD
       const descEl = document.getElementById('answer-card-desc');
-      const manClause = (window.RDSO_MANUALS_KNOWLEDGE?.clauses && (Array.isArray(window.RDSO_MANUALS_KNOWLEDGE.clauses) ? window.RDSO_MANUALS_KNOWLEDGE.clauses.find(c => c.id === data.id) : window.RDSO_MANUALS_KNOWLEDGE.clauses[data.id]));
-      const manDoc = window.RDSO_MANUALS_KNOWLEDGE?.manuals?.[data.id];
-      const manTol = (window.RDSO_MANUALS_KNOWLEDGE?.tolerances && (Array.isArray(window.RDSO_MANUALS_KNOWLEDGE.tolerances) ? window.RDSO_MANUALS_KNOWLEDGE.tolerances.find(t => t.id === data.id) : window.RDSO_MANUALS_KNOWLEDGE.tolerances[data.id]));
-      const manEq = (window.RDSO_MANUALS_KNOWLEDGE?.equipment && (Array.isArray(window.RDSO_MANUALS_KNOWLEDGE.equipment) ? window.RDSO_MANUALS_KNOWLEDGE.equipment.find(e => e.id === data.id) : window.RDSO_MANUALS_KNOWLEDGE.equipment[data.id]));
-
-      if (data.type === "CLAUSE" || data.id.startsWith("CLAUSE:") || manClause) {
+      // Everything on the card comes from the canonical node itself (text, page, evidence, roles ...).
+      if (data.type === "CLAUSE" || data.id.startsWith("CLAUSE:")) {
         const specs = data.specs || {};
-        const title = data.label || specs.title || (manClause && manClause.title) || "Regulatory Clause";
-        const manualName = specs.Manual || (manClause && (manClause.manual || manClause.ref)) || "Official Code";
-        const pageNum = specs.Page || (manClause && manClause.page) || "";
-        const chapterName = specs.Chapter || (manClause && manClause.chapter) || "";
-        const verbatim = specs.Verbatim || (manClause && (manClause.verbatim || manClause.verbatim_text)) || data.provenance?.source_text || data.desc;
-        const roles = specs.Roles || (manClause && manClause.roles) || [];
-        const tols = specs.Tolerances || (manClause && manClause.tolerances) || [];
-        const equips = specs.Equipment || (manClause && manClause.equipment) || [];
-        const fails = specs.FailureModes || (manClause && manClause.failure_modes) || [];
+        const title = data.label || specs.title || "Regulatory Clause";
+        const manualName = specs.Manual || "Official Code";
+        const pageNum = data.page || specs.Page || "";
+        const chapterName = specs.Chapter || "";
+        const verbatim = data.text || specs.Verbatim || data.provenance?.source_text || data.desc;
+        const roles = data.roles || specs.Roles || [];
+        const tols = data.tolerance_texts || specs.Tolerances || [];
+        const equips = data.equipment || specs.Equipment || [];
+        const fails = data.failure_modes || specs.FailureModes || [];
 
         descEl.innerHTML = `
           <div style="margin-bottom:8px;">
@@ -5475,13 +5425,13 @@
             </div>
           </div>
         `;
-      } else if (manDoc || data.type === "DOCUMENT") {
-        const docTitle = (manDoc && manDoc.title) || data.label || "Official Manual";
-        const docScope = (manDoc && manDoc.scope) || data.desc || "";
-        const docAuth = (manDoc && manDoc.issuing_authority) || (data.specs && data.specs.issuing_authority) || "Ministry of Railways / RDSO";
-        const docEd = (manDoc && manDoc.edition) || (data.specs && data.specs.edition) || "Latest Standard";
-        const docPages = (manDoc && manDoc.pages) || (data.specs && data.specs.TotalPages) || "530";
-        const docFile = (manDoc && manDoc.filename) || data.id;
+      } else if (data.type === "DOCUMENT") {
+        const docTitle = data.label || "Official Manual";
+        const docScope = data.desc || "";
+        const docAuth = (data.specs && data.specs.issuing_authority) || "Ministry of Railways / RDSO";
+        const docEd = (data.specs && data.specs.edition) || "Latest Standard";
+        const docPages = (data.specs && data.specs.TotalPages) || "";
+        const docFile = data.id;
 
         descEl.innerHTML = `
           <div style="margin-bottom:8px;"><strong style="color:var(--accent-pink); font-size:13px;">${docTitle}</strong></div>
@@ -5498,13 +5448,13 @@
             </div>
           </div>
         `;
-      } else if (manTol || data.type === "TOLERANCE" || data.type === "DIMENSION" || (data.specs && (data.specs["Min Permissible"] || data.specs.Min))) {
-        const tolVal = (manTol && manTol.value) || (data.specs && (data.specs.Nominal || data.specs.text || data.specs.value)) || data.label;
-        const tolClause = (manTol && manTol.clause) || (data.specs && (data.specs["Clause"] || data.specs.unit)) || "Design Parameter";
-        const tolPurpose = (manTol && manTol.purpose) || data.desc || "Statutory track parameter limit";
-        const tolMin = (manTol && manTol.min_val) || (data.specs && (data.specs.min || data.specs["Min Permissible"])) || "";
-        const tolMax = (manTol && manTol.max_val) || (data.specs && (data.specs.max || data.specs["Max Permissible"])) || "";
-        const tolUnit = (manTol && manTol.unit) || (data.specs && data.specs.unit) || "";
+      } else if (data.type === "TOLERANCE" || data.type === "DIMENSION" || (data.specs && (data.specs["Min Permissible"] || data.specs.Min))) {
+        const tolVal = (data.specs && (data.specs.Nominal || data.specs.text || data.specs.value)) || data.label;
+        const tolClause = (data.specs && (data.specs["Clause"] || data.specs.unit)) || "Design Parameter";
+        const tolPurpose = data.desc || "Statutory track parameter limit";
+        const tolMin = (data.specs && (data.specs.min || data.specs["Min Permissible"])) || "";
+        const tolMax = (data.specs && (data.specs.max || data.specs["Max Permissible"])) || "";
+        const tolUnit = (data.specs && data.specs.unit) || "";
 
         descEl.innerHTML = `
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
@@ -5514,10 +5464,10 @@
           <p style="font-size:12px; line-height:1.5; color:#e0e8f8;"><strong>Safety & Engineering Purpose:</strong> ${tolPurpose}</p>
           ${(tolMin !== "" && tolMax !== "") ? `<div style="margin-top:8px; font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Design Limits: [${tolMin}${tolUnit ? ' ' + tolUnit : ''} — ${tolMax}${tolUnit ? ' ' + tolUnit : ''}]</div>` : ''}
         `;
-      } else if (manEq || data.type === "EQUIPMENT") {
-        const eqLabel = (manEq && manEq.label) || data.label;
-        const eqDesc = (manEq && manEq.desc) || data.desc || "Track maintenance equipment";
-        const eqSource = (manEq && manEq.source_doc) || "IR Codes & Manuals";
+      } else if (data.type === "EQUIPMENT") {
+        const eqLabel = data.label;
+        const eqDesc = data.desc || "Track maintenance equipment";
+        const eqSource = "IR Codes & Manuals";
 
         descEl.innerHTML = `
           <div style="margin-bottom:8px;"><strong style="color:var(--accent-cyan); font-size:13px;">${eqLabel}</strong></div>

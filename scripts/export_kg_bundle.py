@@ -13,7 +13,6 @@ def main():
     data_dir = os.path.join(REPO_ROOT, "data")
     ext_path = os.path.join(data_dir, "rdso_extracted_knowledge.json")
     can_path = os.path.join(data_dir, "rdso_canonical_kg.json")
-    man_path = os.path.join(data_dir, "rdso_manuals_knowledge.json")
     all_ch_path = os.path.join(data_dir, "knowledge-graph", "intermediate", "all_chapters_extracted.json")
 
     print("[*] Reading source JSON datasets...")
@@ -52,11 +51,6 @@ def main():
         "facts": drawing_facts,
     }
 
-    man_data = {}
-    if os.path.exists(man_path):
-        with open(man_path, "r", encoding="utf-8") as f:
-            man_data = json.load(f)
-
     compacted_tree = []
     if os.path.exists(all_ch_path):
         with open(all_ch_path, "r", encoding="utf-8") as f:
@@ -90,8 +84,6 @@ def main():
         json.dump(ext_data, f, separators=(',', ':'))
         f.write(";\n\n_root.RDSO_CANONICAL_KG = ")
         json.dump(can_data, f, separators=(',', ':'))
-        f.write(";\n\n_root.RDSO_MANUALS_KNOWLEDGE = ")
-        json.dump(man_data, f, separators=(',', ':'))
         f.write(";\n\n_root.RDSO_COMPACTED_TREE = ")
         json.dump(compacted_tree, f, separators=(',', ':'))
         f.write(";\n")

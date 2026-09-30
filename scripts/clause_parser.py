@@ -35,7 +35,7 @@ import pymupdf
 # Head titles that are really chapter/part banners ("145 CHAPTER - 4" = page number + banner)
 BANNER_TITLE_RE = re.compile(r"^(CHAPTER|PART)\b|^SECTION\s*[-–:]\s*[IVX\d]", re.I)
 BANNER_RE = re.compile(r"^((CHAPTER|PART|SECTION)\b.{0,50}|(ANNEXURE|APPENDIX)\b[^.,;]{0,45})$", re.I)
-DELETED_RE = re.compile(r"^\(?\s*deleted\s*\)?\.?$", re.I)
+DELETED_RE = re.compile(r"^\(?\s*deleted\s*\)?\.?(\s*\(?\s*ACS\b[^)]*\)?)*\s*\.?$", re.I)  # "(Deleted) (ACS - 3)"
 PAGE_NO_RE = re.compile(r"^(\d{1,4}|[ivxlc]{1,6})$", re.I)
 
 # Per-manual head profiles.
@@ -94,6 +94,7 @@ class Clause:
 class ParseResult:
     clauses: list[Clause] = field(default_factory=list)
     heading_only: list[str] = field(default_factory=list)
+    deleted: list[str] = field(default_factory=list)  # tombstones: numbers whose text was deleted by a correction slip
     chapter_pages: dict = field(default_factory=dict)  # chapter number -> (first head page, last body page)
     stats: dict = field(default_factory=dict)
 
@@ -291,7 +292,10 @@ def parse_manual(pdf_path: str, doc_id: str, chapters: list[dict]) -> ParseResul
         deleted = bool(DELETED_RE.match(after_head)) or bool(DELETED_RE.match(h.title))
         lo, hi = res.chapter_pages.get(chapter["num"], (h.page, h.page))
         res.chapter_pages[chapter["num"]] = (min(lo, h.page), max(hi, body[-1].page if body else h.page))
-        if not after_head and not deleted and len(h.title) < 60:
+        if deleted:
+            res.deleted.append(h.number)
+            continue  # a deleted paragraph is a tombstone, not a provision
+        if not after_head and len(h.title) < 60:
             res.heading_only.append(h.number)
             continue  # a bare heading is a section, not a provision
         res.clauses.append(Clause(h.number, _title(h.title), h.page, body[-1].page if body else h.page, text,
@@ -302,7 +306,7 @@ def parse_manual(pdf_path: str, doc_id: str, chapters: list[dict]) -> ParseResul
             total_chars += len(r.text)
     res.stats = {
         "rows": len(rows), "head_candidates": n_cands, "heads_accepted": len(heads),
-        "clauses": len(res.clauses), "heading_only": len(res.heading_only), "deleted": sum(c.deleted for c in res.clauses),
+        "clauses": len(res.clauses), "heading_only": len(res.heading_only), "deleted": len(res.deleted),
         "body_coverage": round(assigned_chars / total_chars, 3) if total_chars else 0.0,
     }
     return res

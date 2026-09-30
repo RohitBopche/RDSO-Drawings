@@ -508,7 +508,7 @@ def main():
     for doc_id, meta in MANUAL_CHAPTER_REGISTRY.items():
         parsed = clause_parser.parse_manual(registry_pdf_path(doc_id), doc_id, meta['chapters'])
         parsed_by_doc[doc_id] = parsed
-        parse_stats[doc_id] = {**parsed.stats, 'heading_only_paras': parsed.heading_only,
+        parse_stats[doc_id] = {**parsed.stats, 'heading_only_paras': parsed.heading_only, 'deleted_paras': parsed.deleted,
                                'chapter_head_pages': {str(k): list(v) for k, v in sorted(parsed.chapter_pages.items())}}
 
     total_pages_read = 0

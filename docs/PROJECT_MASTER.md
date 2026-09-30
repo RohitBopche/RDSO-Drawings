@@ -1705,6 +1705,67 @@ The Gemini agent kept this document read-only and recorded status separately. Pe
 - Evidence text is the first 300 characters of each unit. Full-clause highlighting (whole paragraph span) is a P2.2 refinement.
 - The 12 waived edges and their nodes (`act_*`, `defect_*`, `mat_*`, `role_keyman`) are unsourced knowledge; treat as untrusted until sourced.
 
+### 37.10 Sprint B results (extraction quality) — 2026-09-30
+
+**What was wrong (verified in §37.2 rows 1, 8, 10):** clauses were found by page-local regexes on flat text. That produced false paragraphs (page numbers, drawing dimensions, table values: `PARA_5300`, `PARA_1676 RUNNING TRACK`), cut every clause at page end and at 1,200 characters, ran on contents pages, and hid this behind gates that only checked shape.
+
+**What was built:** `scripts/clause_parser.py`, a document-level layout parser. Heads are bold, left-margin rows starting with the manual's numbering; contents pages and running headers are removed; the numbering chain (longest strictly increasing sequence) rejects values that merely look like numbers; the chapter comes from the numbering itself; bodies run across pages until the next head or a stand-alone chapter/annexure banner; bare headings become sections, not clauses; deleted paragraphs are recorded as tombstones. `scripts/ocr_pages.py` OCRs the image-only pages (RapidOCR, offline).
+
+| Manual | Clauses before | Clauses now | Short bodies (<60 chars) before, now | Image-only pages (OCR'd) | Old regex "detected" |
+|---|---:|---:|---:|---:|---:|
+| IRPWM | 673 | **421** (+2 deleted tombstones) | 22, **0** | 14 | 1,738 |
+| TMM | 349 | **171** | 27, **0** | 4 | 1,062 |
+| STMM | 396 | **258** | 240, **14** | 0 | 179 |
+| USFD | 174 | **192** | ~14, **0** | 32 (6 weak) | 353 |
+| AT Weld | 115 | **73** | 7, **0** | 1 | 163 |
+| FBW | 131 | **57** | 15, **0** | 13 | 204 |
+| **Total** | **1,838** | **1,172** | **325, 14** | **64** | 3,699 |
+
+Interpretation: the earlier totals were inflated by false positives, not "more coverage". Evidence: in IRPWM, TMM and STMM the paragraph numbers now form a **contiguous run inside every chapter** (IRPWM 101 to 1515 with 517/518 explained as deleted; TMM 101 to 1216; STMM 101 to 2311), which the old set (numbers up to 8833) did not. Median IRPWM clause is 1,016 characters (old 437), Para 429 is complete (1,278 characters over its page; it previously stopped at an inline "Annexure" phrase in the old logic and at 1,200 characters).
+
+| Store | Before Sprint B | After |
+|---|---:|---:|
+| Canonical nodes / edges | 6,830 / 9,037 | 4,894 / 6,415 |
+| Requirements / evidence records | 2,199 / 6,783 | 1,632 / 4,847 |
+| Tolerance nodes (bare values, see §37.8) | 361 | 460 (full text now yields more mentions) |
+| Evidence regions located | 6,663 | 4,721 (all text nodes; 9 clause/section items are page-level only, ratcheted) |
+| Edges without evidence | 12 (waived) | 12 (waived) |
+
+**Other changes with reasons:**
+- `generate_canonical_kg.py` no longer reads `rdso_manuals_knowledge.json`. That read was circular (the file was a view written from canonical) and was the original source of the empty-text clause nodes. Nodes and edges are now rebuilt without reading earlier canonical outputs, so stale records cannot survive; `rebuild_all.py` twice gives byte-identical files.
+- **P1-R.1:** `index.html`, the bundle exporter and Gate L no longer use the legacy view; `data/rdso_manuals_knowledge.json` is deleted. Chapter ownership of clauses comes from the canonical id; provision cards read `text`, `page`, `roles`, `equipment`, `failure_modes`, `tolerance_texts` from the canonical node. Tests confirm nothing refers to the view (`test_frontend_single_source.py`); 12/12 browser suites pass; bundle 24 MB to 21 MB.
+- **Gate O** (new): each of the 64 image-only manual pages has an OCR record tied to the current PDF hash; weak results (USFD: 6 pages with no text found or low confidence; a person should confirm they are figures or blank) are in `intermediate/review_queue.jsonl`. OCR is a committed artifact, not part of the byte-identical rebuild (model output can differ across runtimes).
+- **Gate L** now also enforces numbering continuity for IRPWM, TMM and STMM (every number between a chapter's first and last is a clause, a bare heading or a deleted tombstone) and lowers the short-clause ratchet to 15. Gate I no longer fails decimal-manual clauses for sitting outside the *hand-written* registry page range (it warns, 85 warnings), because that registry is wrong for AT Weld (chapter 4 listed as pages 10 to 14, but its paragraphs run to page 17), FBW and parts of USFD.
+- 16 new tests (parser unit tests, continuity, OCR tamper, frontend single source; 141 to 157); 157 pytest and 12 browser suites pass; 15 gates (A to O) pass.
+
+**Known limits after Sprint B (honest):**
+1. **Completeness for decimal manuals is not proven.** The continuity invariant exists only for the paragraph-numbered manuals. USFD, AT Weld and FBW (322 clauses) rely on the bold-head rule; FBW headings are not bold, so it uses margin plus sequence only. A sample review by a person is required (add to the review queue) before treating them as complete. 47 bare headings (USFD 17, AT Weld 19, FBW 11) were kept as sections, not clauses.
+2. **Registry page ranges for AT Weld, FBW and USFD need a human correction** (numbering, not pages, currently owns the chapter). FBW pages 4 to 6 are an index and correction slips, not chapter text.
+3. Body text keeps inline correction-slip markers such as "ACS - 2"; they should become structured amendment metadata (with the amendment date) in P2.3.
+4. Clause bodies include tables and column text in reading order of the layout parser; table structure is not preserved. Table extraction is a separate work package (add to P2.3).
+5. 14 STMM clauses are short (mostly "Nil." consumables and table-only troubleshooting entries); accepted, ratcheted.
+6. There is no independent human gold set yet. All quality statements above rely on invariants (contiguity, coverage, gates) plus my inspection of sampled clauses.
+
+**P1-R.2 pilot sign-off (Master §28) for IRPWM, criterion by criterion:**
+
+| Criterion | Status | Evidence / gap |
+|---|---|---|
+| All pages registered | **MET** | 530/530 pages in `raw/extracted_pages.jsonl`, PDF SHA-256 in the registry (Gate N); 14 image-only pages OCR'd (Gate O). Per-page hashes are stored for every cited page. |
+| Hierarchy represented | **MET** | 15 chapters, sections and subsections from source headings (Gates F, I, J, K). |
+| Chapter order deterministic | **MET** | Numbering-derived; CI rebuild produces no diff. |
+| Provisions preserved where detectable | **MET (IRPWM)** | 421 paragraphs plus 2 tombstones, contiguous 101 to 1515 (Gate L). Tables and annexures are not yet attached to their paragraphs (75% of page text lies inside clauses; the rest is annexures, tables and banners). |
+| Source pages resolvable / source page opens | **MET** | Page numbers and rectangles verified on the PDF; viewer opens `#page=N` (browser suite). |
+| Full-text search works | **PARTIAL** | In-page token search only; no BM25/identifier index (P5.1). |
+| Natural-language queries retrieve evidence | **NOT MET** | Regex intents plus 13 canned answers (P5.1, P6.1). |
+| Citations resolve | **PARTIAL** | Canonical evidence resolves and is hash-checked; the canned answers cite hard-coded paragraph lists. |
+| Cross-references resolve or are classified | **NOT MET** | No resolver; 404 "Para NNN" and 236 "Annexure" mentions in IRPWM (P2.1). |
+| Uncertain extraction is flagged | **PARTIAL** | Everything is `machine_extracted`; weak OCR queued; no per-clause uncertainty score yet. |
+| No answer without retrieved evidence | **NOT MET** | Canned answers and substring fallback (P6.1). |
+| Regression tests exist | **MET for data/extraction, NOT MET for retrieval** | 157 pytest, 12 browser suites; no retrieval/QA evaluation set yet (P7.1). |
+| Rerun is deterministic | **MET** | `rebuild_all.py` twice and in CI: byte-identical (OCR excluded by design). |
+
+Verdict: the **structural half of the pilot (PDF to registry to hierarchy to provisions to evidence to source page) is MET for IRPWM**. The **retrieval half (search, questions, cross-references, grounded answers) is NOT met**, and the pilot is therefore not complete. Do not scale to other manuals for retrieval until Sprint C.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
@@ -1718,13 +1779,13 @@ The Gemini agent kept this document read-only and recorded status separately. Pe
 | **P0-R.3 (DONE, §37.8)** | Provenance re-baseline | R.2 | Every non-drawing node/edge/evidence/requirement is `machine_extracted` unless a review record exists; remove false `raster_blueprint_crop_and_transcription`/confidence 1.0 stamps on text-derived facts; add `reviews.jsonl` (reviewer, date, decision) as the only path to `reviewed`/`verified`. | Gate M: no `verified` without a review record; no fact whose `extraction_method` contradicts its source type. |
 | **P0-R.4 (DONE, §37.9)** | Evidence on every edge and clause | R.3 | Evidence record carries `page_number`, `bbox` (PyMuPDF word boxes), `page_sha256`, `source_pdf_sha256`; every edge lists `evidence_ids`. | Gate D extended: 0 edges without evidence (structural HAS_SECTION edges cite the heading evidence); every evidence page hash matches the PDF on disk. |
 | **P0-R.5 (DONE, §37.9)** | Metrics as single truth | R.2 | `metrics.json` extended (short clauses, non-extractable pages, per-manual coverage); docs/UI read only it; a CI step diffs regenerated vs committed. | CI fails if committed metrics differ from regenerated. |
-| **P0-R.6** | Clause-boundary repair | R.2 | Extractor rewrite for paragraph bodies: numbering monotonic per chapter, reject values outside manual range (`PARA_5300`), drop header/annexure pseudo-clauses, join body until next valid paragraph; per-manual detected-vs-kept reconciliation report. Target: short clauses under 5%, IRPWM kept/detected above 90%. Benchmark against Docling result in `research/` before choosing the parser. | Gate L ratchet tightened stepwise; new gate for para-number monotonicity and range. |
-| **P0-R.7** | OCR for image-only pages | none | OCR (offline Tesseract or Docling) for the 64 pages without text; `extraction_method: ocr`, per-page confidence, low-confidence pages enter the review queue. | 0 pages with `is_extractable=false` and no OCR record. |
+| **P0-R.6 (DONE, §37.10)** | Clause-boundary repair | R.2 | Extractor rewrite for paragraph bodies: numbering monotonic per chapter, reject values outside manual range (`PARA_5300`), drop header/annexure pseudo-clauses, join body until next valid paragraph; per-manual detected-vs-kept reconciliation report. Target: short clauses under 5%, IRPWM kept/detected above 90%. Benchmark against Docling result in `research/` before choosing the parser. | Gate L ratchet tightened stepwise; new gate for para-number monotonicity and range. |
+| **P0-R.7 (DONE, §37.10)** | OCR for image-only pages | none | OCR (offline Tesseract or Docling) for the 64 pages without text; `extraction_method: ocr`, per-page confidence, low-confidence pages enter the review queue. | 0 pages with `is_extractable=false` and no OCR record. |
 | **P0-R.8 (DONE, §37.9)** | Portable browser tests + CI | none | Env-driven Chrome path, headless flags, repo-relative artifacts; a `run_browser_tests.py`; CI job on all branches and PRs including browser tests; stop committing regenerated PNGs (upload as CI artifacts). | Fresh Linux CI runs the CDP suites green. |
 | **P0-R.9 (DONE, §37.9)** | Repo hygiene | none | Untrack `__pycache__`, `index.html.bak`, `scratch/`; enforce conventional commits and one concern per commit; retire `docs/gemini/*` status claims (link to §37). | `git ls-files` contains none of those paths. |
 | **P0-R.10 (DONE, §37.9)** | Bootstrap | none | `validate_all.py` checks/installs dependencies (or prints exact fix); dependency versions pinned. | Fresh clone: one command yields a green run. |
-| **P1-R.1** | Frontend reads canonical only | R.2 | Remove `RDSO_MANUALS_KNOWLEDGE` reads from `index.html`; provision cards use canonical `text`/`page`/`evidence_ids`; drop the derived legacy view once unused. | Test: card text equals canonical node text; grep gate for `RDSO_MANUALS_KNOWLEDGE` = 0. |
-| **P1-R.2** | Honest P1 sign-off | R.6 | Tick the pilot checklist (§28) for IRPWM with evidence links; only then scale to other manuals. | Every checklist line has a reproducible command or test. |
+| **P1-R.1 (DONE, §37.10)** | Frontend reads canonical only | R.2 | Remove `RDSO_MANUALS_KNOWLEDGE` reads from `index.html`; provision cards use canonical `text`/`page`/`evidence_ids`; drop the derived legacy view once unused. | Test: card text equals canonical node text; grep gate for `RDSO_MANUALS_KNOWLEDGE` = 0. |
+| **P1-R.2 (PARTIAL, §37.10)** | Honest P1 sign-off | R.6 | Tick the pilot checklist (§28) for IRPWM with evidence links; only then scale to other manuals. | Every checklist line has a reproducible command or test. |
 | **P2.1** | Cross-reference extraction and resolution | R.6 | Extract "Para N", "Annexure", "Chapter", "Rule", external IS/IRS/RDSO refs (~640 in IRPWM); classify `RESOLVED / AMBIGUOUS / EXTERNAL / NOT_FOUND`; edges `REFERENCES` with evidence; broken-reference report. | Every reference in the raw text is classified; 0 unclassified; resolved targets exist. |
 | **P2.2** | Source highlighting | R.4 | Render page image with evidence `bbox` highlight (PyMuPDF, offline); UI opens the highlighted region, not just the page. | Test opens a clause and finds the highlighted rect over the quoted words. |
 | **P2.3** | Measurement and requirement facts | R.6 | Structured `Measurement {subject, quantity, comparator, value, unit, applies_to, clause_id, evidence}` replacing bare tolerance nodes; requirement priority from modal verbs ("shall/should/may") with reviewed overrides. | Every tolerance has a subject and comparator; sample of 100 reviewed with at least 95% precision. |

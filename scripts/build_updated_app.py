@@ -1,4 +1,7 @@
 """
+DEPRECATED: index.html is now maintained directly; running this would overwrite it with an older
+template that reads the removed RDSO_MANUALS_KNOWLEDGE view. Kept only for history.
+
 build_updated_app.py
 Compiles index.html integrating both the Canonical Knowledge Core (rdso_canonical_kg.json)
 and Deep Extracted Dossiers (rdso_extracted_knowledge.json) with Semantic Modes and

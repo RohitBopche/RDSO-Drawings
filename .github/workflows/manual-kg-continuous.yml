@@ -6,7 +6,6 @@ on:
     paths:
       - "scripts/**"
       - "data/knowledge-graph/**"
-      - "data/rdso_manuals_knowledge.json"
       - "data/rdso_extracted_knowledge.json"
       - "tests/**"
       - ".github/workflows/manual-kg-continuous.yml"

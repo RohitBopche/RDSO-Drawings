@@ -11,7 +11,6 @@ idempotently:
   rows whose id matches no node are moved to
   `intermediate/quarantine_dangling_requirements.jsonl` (nothing is lost)
 - data/rdso_canonical_kg.json, exports/graph.json, exports/search_index.json
-- data/rdso_manuals_knowledge.json, regenerated as a *derived view* of canonical
 - reports/metrics.json, the only place project metrics should be quoted from
 
 Extraction output is labelled `machine_extracted`, never `verified`.
@@ -36,7 +35,6 @@ EXPORTS = KG / "exports"
 REPORTS = KG / "reports"
 SRC = INTER / "all_chapters_extracted.json"
 LEGACY_JSON = ROOT / "data" / "rdso_canonical_kg.json"
-MANUALS_VIEW = ROOT / "data" / "rdso_manuals_knowledge.json"
 QUARANTINE = INTER / "quarantine_dangling_requirements.jsonl"
 METRICS = REPORTS / "metrics.json"
 
@@ -179,6 +177,12 @@ def build() -> dict:
                 node["document_id"] = doc_id
                 node["extraction_method"] = cl.get("extraction_method", "deterministic_manual_clause_numbering")
                 node["verification_status"] = MACHINE
+                node["page_end"] = cl.get("page_end") or page
+                node["roles"] = list(cl.get("roles", []))
+                node["equipment"] = list(cl.get("equipment", []))
+                node["failure_modes"] = list(cl.get("failure_modes", []))
+                node["tolerance_texts"] = [t["text"] for t in cl.get("tolerances", [])]
+                node["requirements"] = list(cl.get("requirements", []))
                 specs = node.setdefault("specs", {})
                 specs["Manual Ref"] = str(cl["para_number"])
                 specs["Paragraph"] = str(cl["para_number"])
@@ -305,27 +309,6 @@ def build() -> dict:
                       "type": n["type"], "domain": n.get("domain", "general"),
                       "desc": n.get("desc", ""), "tokens": sorted(set(re.findall(r"\b[A-Za-z0-9\-\./_]+\b", blob)))})
     (EXPORTS / "search_index.json").write_text(json.dumps(index, indent=2, ensure_ascii=False), encoding="utf-8")
-
-    # --- derived legacy manuals view ---
-    clauses = {}
-    for cid, info in clause_rows.items():
-        cl = info["cl"]
-        clauses[cid] = {
-            "id": cid, "para": cl["para_number"], "title": cl["title"], "manual": info["alias"],
-            "chapter": info["chapter"]["title"], "page": cl["page_number"],
-            "summary": cl["summary"], "verbatim": info["text"], "roles": cl["roles"],
-            "equipment": cl["equipment"], "failure_modes": cl["failure_modes"],
-            "tolerances": [t["text"] for t in cl["tolerances"]],
-        }
-    tolerances = {n["id"]: n["specs"] for n in nodes
-                  if n["type"] == "TOLERANCE" and n["id"].startswith("TOL:")}
-    MANUALS_VIEW.write_text(json.dumps({
-        "metadata": {"title": "RDSO Railway Codes & Manuals Canonical Knowledge Base",
-                     "version": "3.0.0-deep-chapter-extraction", "manuals_count": len(manual_catalog),
-                     "clauses_count": len(clauses), "tolerances_count": len(tolerances),
-                     "derived_from": "data/knowledge-graph/canonical (do not edit)"},
-        "manuals": manual_catalog, "clauses": clauses, "tolerances": tolerances,
-    }, indent=2, ensure_ascii=False), encoding="utf-8")
 
     return write_metrics()
 

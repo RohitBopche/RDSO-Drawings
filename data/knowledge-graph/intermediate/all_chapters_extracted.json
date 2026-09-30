@@ -6,12 +6,14 @@
       "rows": 21006,
       "head_candidates": 423,
       "heads_accepted": 423,
-      "clauses": 422,
-      "heading_only": 1,
-      "deleted": 0,
+      "clauses": 421,
+      "heading_only": 0,
+      "deleted": 2,
       "body_coverage": 0.749,
-      "heading_only_paras": [
-        "517"
+      "heading_only_paras": [],
+      "deleted_paras": [
+        "517",
+        "518"
       ],
       "chapter_head_pages": {
         "1": [
@@ -103,6 +105,7 @@
         "11.8.3",
         "11.9.4"
       ],
+      "deleted_paras": [],
       "chapter_head_pages": {
         "1": [
           13,
@@ -187,6 +190,7 @@
         "7.3",
         "8"
       ],
+      "deleted_paras": [],
       "chapter_head_pages": {
         "1": [
           7,
@@ -247,6 +251,7 @@
         "5.6.5",
         "8"
       ],
+      "deleted_paras": [],
       "chapter_head_pages": {
         "1": [
           7,
@@ -295,6 +300,7 @@
       "deleted": 0,
       "body_coverage": 0.954,
       "heading_only_paras": [],
+      "deleted_paras": [],
       "chapter_head_pages": {
         "1": [
           24,
@@ -357,6 +363,7 @@
       "heading_only_paras": [
         "1008"
       ],
+      "deleted_paras": [],
       "chapter_head_pages": {
         "1": [
           20,
@@ -456,7 +463,7 @@
   "total_manuals": 6,
   "total_chapters": 83,
   "total_pages_processed": 1485,
-  "total_clauses_extracted": 1173,
+  "total_clauses_extracted": 1172,
   "total_unmapped_pages": 74,
   "manuals": [
     {
@@ -465,7 +472,7 @@
       "title": "Indian Railways Permanent Way Manual 2024 (ACS 1-14)",
       "universe": "manuals",
       "total_chapters": 15,
-      "total_clauses": 422,
+      "total_clauses": 421,
       "total_tables": 18,
       "total_figures": 14,
       "total_evidence": 139,
@@ -7710,29 +7717,6 @@
               "extraction_method": "layout_numbering_chain_v2",
               "summary": "516 Classification of Track Quality:-. For judging the track quality, the following criteria could be used (average total number of.",
               "verbatim_text": "516 Classification of Track Quality:-\nFor judging the track quality, the following criteria could be used (average total number of\npeaks per km) to classify a continuous section for track quality (SSE/P Way’s\njurisdiction/Subdivision/division):\nTrack Quality\nVery Good Good Average",
-              "tolerances": [],
-              "requirements": [],
-              "roles": [],
-              "equipment": [],
-              "failure_modes": [],
-              "related_components": []
-            },
-            {
-              "clause_id": "CLAUSE:IRPWM:CH_05:PARA_518",
-              "para_number": "518",
-              "section_ref": "518",
-              "subsection_ref": "518",
-              "title": "(Deleted) (ACS",
-              "page_number": 298,
-              "page_end": 299,
-              "source_document": "DOC:IRPWM:2024:ACS14",
-              "source_page": 298,
-              "source_section": "518",
-              "source_text": "518 (Deleted) (ACS – 3)\nTrack Tolerances",
-              "confidence": 0.95,
-              "extraction_method": "layout_numbering_chain_v2",
-              "summary": "518 (Deleted) (ACS – 3). Track Tolerances.",
-              "verbatim_text": "518 (Deleted) (ACS – 3)\nTrack Tolerances",
               "tolerances": [],
               "requirements": [],
               "roles": [],

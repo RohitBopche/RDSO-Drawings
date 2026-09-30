@@ -56,3 +56,18 @@ def test_gate_l_detects_empty_clause_text(tmp_path, monkeypatch):
     (bad / "nodes.jsonl").write_text("".join(json.dumps(n) + "\n" for n in nodes), encoding="utf-8")
     monkeypatch.setattr(g, "CANON", bad)
     assert g.main() == 1
+
+
+def test_gate_l_detects_numbering_gap(tmp_path, monkeypatch, capsys):
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import validate_manual_text_integrity as g
+
+    src = json.loads((ROOT / "data/knowledge-graph/intermediate/all_chapters_extracted.json").read_text(encoding="utf-8"))
+    irpwm = next(m for m in src["manuals"] if m["alias"] == "IRPWM")
+    chapter = irpwm["chapters"][0]
+    chapter["clauses"] = [c for c in chapter["clauses"] if c["para_number"] != "105"]
+    p = tmp_path / "extracted.json"
+    p.write_text(json.dumps(src), encoding="utf-8")
+    monkeypatch.setattr(g, "EXTRACTION", p)
+    assert g.main() == 1
+    assert "unexplained numbering gaps" in capsys.readouterr().out
