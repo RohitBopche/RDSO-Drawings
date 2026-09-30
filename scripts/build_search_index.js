@@ -18,7 +18,7 @@ passages.forEach((p, di) => {
   title.forEach(t => { (tf[t] = tf[t] || [0, 0])[1]++; });
   Object.keys(tf).sort().forEach(t => { (postings[t] = postings[t] || []).push(di, tf[t][0], tf[t][1]); });
   docs.push({ id: p.id, clause: p.clause, alias: p.alias, doc: p.doc, chapter: p.chapter, para: p.para, title: p.title,
-              page: p.page, type: p.type, len: body.length + title.length, text: p.text });
+              page: p.page, type: p.type, kind: p.kind, tableId: p.table_id, len: body.length + title.length, text: p.text });
   totalLen += body.length + title.length;
 });
 const df = {};

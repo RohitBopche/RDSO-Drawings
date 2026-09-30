@@ -115,6 +115,9 @@ def main() -> int:
             alias, para = ref.split(" ", 1)
             gold.append(by_para[(alias, para)])
         add(b["question"], gold, "blind", "author_blind_drafted")
+    for b_ in blind.get("table", []):
+        gold = [by_para[tuple(ref.split(" ", 1))] for ref in b_["gold"]]
+        add(b_["question"], gold, "blind_table", "author_blind_drafted")
     for q in blind["unanswerable"]:
         add(q, [], "blind_oos", "author_blind_drafted", expect="refuse")
 

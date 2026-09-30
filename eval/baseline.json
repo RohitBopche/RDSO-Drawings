@@ -3,17 +3,25 @@
   "dev": {
    "categories": {
     "ALL": {
-     "mrr": 0.891,
-     "n": 203,
-     "recall@1": 0.833,
-     "recall@10": 0.985,
-     "recall@3": 0.956,
-     "recall@5": 0.97
+     "mrr": 0.892,
+     "n": 212,
+     "recall@1": 0.835,
+     "recall@10": 0.986,
+     "recall@3": 0.958,
+     "recall@5": 0.972
     },
     "blind": {
-     "mrr": 0.85,
+     "mrr": 0.838,
      "n": 20,
      "recall@1": 0.75,
+     "recall@10": 1.0,
+     "recall@3": 0.95,
+     "recall@5": 1.0
+    },
+    "blind_table": {
+     "mrr": 0.926,
+     "n": 9,
+     "recall@1": 0.889,
      "recall@10": 1.0,
      "recall@3": 1.0,
      "recall@5": 1.0
@@ -35,11 +43,11 @@
      "recall@5": 0.913
     },
     "nl": {
-     "mrr": 0.832,
+     "mrr": 0.836,
      "n": 58,
      "recall@1": 0.759,
      "recall@10": 0.983,
-     "recall@3": 0.897,
+     "recall@3": 0.914,
      "recall@5": 0.948
     },
     "title_auto": {
@@ -52,29 +60,37 @@
     }
    },
    "refusal": {
-    "answerable": 203,
+    "answerable": 212,
     "correctly_refused": 20,
     "out_of_scope": 20,
-    "wrongly_refused": 11
+    "wrongly_refused": 7
    }
   },
   "test": {
    "categories": {
     "ALL": {
-     "mrr": 0.927,
-     "n": 132,
-     "recall@1": 0.871,
-     "recall@10": 0.992,
-     "recall@3": 0.992,
-     "recall@5": 0.992
+     "mrr": 0.928,
+     "n": 135,
+     "recall@1": 0.874,
+     "recall@10": 0.993,
+     "recall@3": 0.993,
+     "recall@5": 0.993
     },
     "blind": {
-     "mrr": 0.789,
+     "mrr": 0.756,
      "n": 15,
-     "recall@1": 0.667,
+     "recall@1": 0.6,
      "recall@10": 0.933,
      "recall@3": 0.933,
      "recall@5": 0.933
+    },
+    "blind_table": {
+     "mrr": 0.833,
+     "n": 3,
+     "recall@1": 0.667,
+     "recall@10": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0
     },
     "ident": {
      "mrr": 1.0,
@@ -85,17 +101,17 @@
      "recall@5": 1.0
     },
     "kw_auto": {
-     "mrr": 0.941,
+     "mrr": 0.971,
      "n": 17,
-     "recall@1": 0.882,
+     "recall@1": 0.941,
      "recall@10": 1.0,
      "recall@3": 1.0,
      "recall@5": 1.0
     },
     "nl": {
-     "mrr": 0.897,
+     "mrr": 0.909,
      "n": 42,
-     "recall@1": 0.81,
+     "recall@1": 0.833,
      "recall@10": 1.0,
      "recall@3": 1.0,
      "recall@5": 1.0
@@ -110,12 +126,12 @@
     }
    },
    "refusal": {
-    "answerable": 132,
+    "answerable": 135,
     "correctly_refused": 10,
     "out_of_scope": 12,
-    "wrongly_refused": 9
+    "wrongly_refused": 6
    }
   }
  },
- "threshold": 0.68
+ "threshold": 0.66
 }

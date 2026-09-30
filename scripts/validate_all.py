@@ -33,6 +33,8 @@ GATES = [
     ("Gate O: OCR Coverage of Image-only Pages", [sys.executable, str(ROOT / "scripts" / "validate_ocr_coverage.py")]),
     ("Gate P: Retrieval Index, Eval Set & Regression", [sys.executable, str(ROOT / "scripts" / "validate_retrieval.py")]),
     ("Gate Q: Cross-references", [sys.executable, str(ROOT / "scripts" / "validate_crossrefs.py")]),
+    ("Gate R: Tables", [sys.executable, str(ROOT / "scripts" / "validate_tables.py")]),
+    ("Gate S: Measurements", [sys.executable, str(ROOT / "scripts" / "validate_measurements.py")]),
 ]
 
 

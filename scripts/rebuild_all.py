@@ -22,6 +22,8 @@ STEPS = [
     "locate_evidence.py",
     "unify_manual_canonical.py",   # 2nd pass: attach evidence locations, edge evidence, metrics
     "export_kg_bundle.py",
+    "extract_tables.py",           # ~2 min: PyMuPDF table finder over the manuals
+    "extract_measurements.py",     # structured values from clause text and table cells
     "build_search_index.py",
 ]
 

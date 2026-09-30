@@ -27,7 +27,7 @@ def main() -> int:
 
     # index freshness: node reads the index exactly as the browser does
     probe = ("require('./data/search/search_index.js');const i=globalThis.RDSO_SEARCH_INDEX;"
-             "const by={};i.docs.forEach(d=>{if(d.type==='CLAUSE'){by[d.clause]=(by[d.clause]||'')+' '+d.text;}});"
+             "const by={};i.docs.forEach(d=>{if(d.type==='CLAUSE'&&!d.kind){by[d.clause]=(by[d.clause]||'')+' '+d.text;}});"
              "console.log(JSON.stringify({n:i.docs.length,by}))")
     r = subprocess.run(["node", "-e", probe], cwd=ROOT, capture_output=True, text=True)
     if r.returncode != 0:

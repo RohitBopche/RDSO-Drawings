@@ -40,6 +40,55 @@ def chunks(text: str) -> list[str]:
     return out or [text]
 
 
+def column_headers(t: dict) -> list[str]:
+    heads = []
+    for j in range(t["n_cols"]):
+        parts = []
+        for r in t["rows"][:t["header_rows"]]:
+            c = r[j].strip()
+            if c and c not in parts:
+                parts.append(c)
+        heads.append(" ".join(parts))
+    return heads
+
+
+def table_passages(by_id: dict, chapters: dict) -> list[dict]:
+    """One passage per group of table rows, each cell prefixed by its column header, owned by the clause
+    that contains the table. Lets a question about a value in a table match the header words and the row."""
+    path = KG / "raw" / "tables.jsonl"
+    if not path.exists():
+        return []
+    out = []
+    for t in (json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()):
+        owner = by_id.get(t["clause"] or "")
+        if not owner:
+            continue
+        alias = owner["id"].split(":")[1]
+        ch = chapters.get("CHAPTER:" + ":".join(owner["id"].split(":")[1:3]))
+        heads = column_headers(t)
+        lines = []
+        for r in t["rows"][t["header_rows"]:]:
+            cells = [f"{heads[j]}: {c}" if heads[j] else c for j, c in enumerate(r) if c.strip()]
+            if len(cells) >= 2:
+                lines.append("; ".join(cells))
+        if not lines:
+            continue
+        caption = t.get("caption") or "Table"
+        title = f"{caption} {owner['label']} table {ch['label'] if ch else ''}"
+        groups, cur = [], ""
+        for line in lines:
+            if cur and len(cur) + len(line) > HARD:
+                groups.append(cur)
+                cur = ""
+            cur = f"{cur}\n{line}" if cur else line
+        groups.append(cur)
+        for k, g in enumerate(groups):
+            out.append({"id": f"{t['table_id']}#{k}", "clause": owner["id"], "alias": alias, "doc": owner.get("document_id", alias),
+                        "chapter": ch["label"] if ch else "", "para": str(owner["specs"]["Paragraph"]), "title": title,
+                        "page": t["page"], "type": "CLAUSE", "kind": "table", "table_id": t["table_id"], "text": g})
+    return out
+
+
 def main() -> int:
     nodes = [json.loads(l) for l in (KG / "canonical" / "nodes.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
     by_id = {n["id"]: n for n in nodes}
@@ -77,6 +126,7 @@ def main() -> int:
                 rows.append({"id": f"{n['id']}#0", "clause": n["id"], "alias": "DRAWINGS", "doc": "RDSO drawings",
                              "chapter": n["type"].title(), "para": n["id"], "title": n["label"], "page": 0,
                              "type": n["type"], "text": body})
+    rows += table_passages(by_id, chapters)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
     print(f"{len(rows)} passages -> {OUT.relative_to(ROOT)}")
