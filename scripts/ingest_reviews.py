@@ -80,9 +80,25 @@ def process(files: list[dict], known: dict[str, set[str]], have: set[tuple[str, 
     return clause_reviews, other, errors, unsure
 
 
-def accuracy(all_reviews: list[dict], unsure: int = 0) -> dict:
+def voided() -> dict[str, str]:
+    """Decisions made on a packet item that did not show what it asked about (reviewer said so, or we found it later). They stay on
+    record but do not count towards accuracy."""
+    p = ROOT / "eval" / "reviews" / "voided.json"
+    return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+
+
+def accuracy(all_reviews: list[dict], unsure: int = 0, void: dict[str, str] | None = None) -> dict:
+    void = void or {}
     by_kind: dict[str, dict] = {}
     per_target: dict[str, dict[str, str]] = {}
+    packets = void.get("_packets", {})
+
+    def is_void(r: dict) -> bool:
+        pk = packets.get(str(r.get("packet_seed")))
+        return r["target_ids"][0] in void or bool(pk and r.get("kind") in pk["kinds"])
+
+    n_void = sum(1 for r in all_reviews if is_void(r))
+    all_reviews = [r for r in all_reviews if not is_void(r)]
     for r in all_reviews:
         k = by_kind.setdefault(r["kind"], {"reviewed": 0, "correct": 0, "wrong": 0})
         k["reviewed"] += 1
@@ -93,7 +109,7 @@ def accuracy(all_reviews: list[dict], unsure: int = 0) -> dict:
         k["error_rate_95ci"] = wilson(k["wrong"], k["reviewed"])
     both = [v for v in per_target.values() if len(v) >= 2]
     agree = sum(len(set(v.values())) == 1 for v in both)
-    return {"by_kind": dict(sorted(by_kind.items())), "unsure_not_recorded": unsure,
+    return {"by_kind": dict(sorted(by_kind.items())), "unsure_not_recorded": unsure, "voided_decisions": n_void,
             "double_reviewed_items": len(both), "reviewer_agreement": round(agree / len(both), 3) if both else None,
             "note": "error rates are estimates for the sampled kind only when the packet items were drawn at random (the default); "
                     "small samples give wide intervals"}
@@ -123,7 +139,7 @@ def main() -> int:
             print("run scripts/rebuild_all.py so clause statuses follow the reviews")
     tagged = [dict(r, kind=r.get("kind", "clause")) for r in reviews if r["target_ids"][0].startswith("CLAUSE:")] + extractor
     REPORT.parent.mkdir(parents=True, exist_ok=True)
-    REPORT.write_text(json.dumps(accuracy(tagged, unsure), indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    REPORT.write_text(json.dumps(accuracy(tagged, unsure, voided()), indent=1, sort_keys=True) + "\n", encoding="utf-8")
     print(f"report -> {REPORT.relative_to(ROOT)}")
     return 0
 

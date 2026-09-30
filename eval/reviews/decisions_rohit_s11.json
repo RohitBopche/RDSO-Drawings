@@ -1,0 +1,156 @@
+{
+ "packet_seed": 11,
+ "reviewer": "rohit",
+ "decisions": [
+  {
+   "target_id": "TBL:TMM:P0317:01",
+   "kind": "table",
+   "decision": "rejected",
+   "note": "there are 1 header, 1 sub header, 4 rows, but each row contain wrapped text. "
+  },
+  {
+   "target_id": "DLINK:00153",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": "highligted text is a drawing number, but it is unrelated to the the screenshot attached and not present in the screenshot. "
+  },
+  {
+   "target_id": "DLINK:00102",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": "highligted text is a drawing number, but it is unrelated to the the screenshot attached and not present in the screenshot. "
+  },
+  {
+   "target_id": "DLINK:00041",
+   "kind": "drawing_link",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00004",
+   "kind": "drawing_link",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:002515",
+   "kind": "measurement",
+   "decision": "approved",
+   "note": " but it is unrelated to the the screenshot attached and not present in the screenshot. "
+  },
+  {
+   "target_id": "XREF:01203",
+   "kind": "xref",
+   "decision": "rejected",
+   "note": " but it is unrelated to the the screenshot attached and not present in the screenshot. "
+  },
+  {
+   "target_id": "TBL:IRPWM:P0161:01",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:IRPWM:P0070:01",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:USFD:CH_07:PARA_7_3",
+   "kind": "clause",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:003249",
+   "kind": "measurement",
+   "decision": "approved",
+   "note": " but it is unrelated to the the screenshot attached"
+  },
+  {
+   "target_id": "XREF:01049",
+   "kind": "xref",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:TMM:CH_07:PARA_705",
+   "kind": "clause",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:000763",
+   "kind": "measurement",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:00975",
+   "kind": "xref",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:IRPWM:P0288:01",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:002580",
+   "kind": "measurement",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:000386",
+   "kind": "measurement",
+   "decision": "approved",
+   "note": " but not present in the screenshot. "
+  },
+  {
+   "target_id": "CLAUSE:TMM:CH_07:PARA_706",
+   "kind": "clause",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:00379",
+   "kind": "xref",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:00389",
+   "kind": "xref",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00116",
+   "kind": "drawing_link",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:USFD:CH_11:PARA_11_8_5_2",
+   "kind": "clause",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:TMM:CH_10:PARA_1007",
+   "kind": "clause",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:STMM:P0096:01",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  }
+ ]
+}

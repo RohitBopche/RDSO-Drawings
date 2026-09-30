@@ -33645,7 +33645,7 @@
       "description": "7.3 Testing on sharp curves, gradients, slack gauge etc.. The USFD trolley has been designed to operate under normal conditions of gauge.",
       "page": 39,
       "document_id": "DOC:USFD:2026:ACS4",
-      "verification_status": "machine_extracted",
+      "verification_status": "reviewed",
       "page_end": 39,
       "roles": [],
       "equipment": [],
@@ -40027,7 +40027,7 @@
       "description": "11.8.5.2 Sensitivity setting:700/2MHz single crystal probe shall be placed on the rail head at a. distance of approximately 70mm from 5mm dia hole in the head as shown in Fig.",
       "page": 63,
       "document_id": "DOC:USFD:2026:ACS4",
-      "verification_status": "machine_extracted",
+      "verification_status": "reviewed",
       "page_end": 63,
       "roles": [],
       "equipment": [],
@@ -56685,7 +56685,7 @@
       "description": "705 Rules for Operation – General. (1) Stabling of Track Machines.",
       "page": 272,
       "document_id": "DOC:TMM:2020:ACS10",
-      "verification_status": "machine_extracted",
+      "verification_status": "reviewed",
       "page_end": 274,
       "roles": [
         "JE/P.Way"
@@ -56748,7 +56748,7 @@
       "description": "706 Working Of Track Machines In Single and Double Line Sections. (1) Single Line Section – Work and Proceed.",
       "page": 274,
       "document_id": "DOC:TMM:2020:ACS10",
-      "verification_status": "machine_extracted",
+      "verification_status": "reviewed",
       "page_end": 277,
       "roles": [
         "JE/P.Way"
@@ -58418,7 +58418,7 @@
       "description": "1007 Condemnation of Track Machine - Track Machines shall be condemned after. completion of codal/useful life.",
       "page": 380,
       "document_id": "DOC:TMM:2020:ACS10",
-      "verification_status": "machine_extracted",
+      "verification_status": "reviewed",
       "page_end": 380,
       "roles": [],
       "equipment": [],

@@ -2029,6 +2029,18 @@ One reviewer, 10 items per kind, so the intervals are wide and there is no agree
 
 **What still needs a person, and how little.** A calibration packet of 25 items (`calibration_s11.html`, 5 per kind, random, with item-level crops): about 15 to 20 minutes. Its purpose is (1) to measure whether my reading and the reviewer's agree, which decides how far model reading can stand in for human review, and (2) to give honest error rates now that the packet shows each item. If agreement is high, later rounds can be mostly automatic with small human spot-checks.
 
+### 37.27 Calibration review (packet 11) and what it exposed — 2026-09-30
+
+Decision file `eval/reviews/decisions_rohit_s11.json`, 25 items (5 per kind). Result as marked: tables 4 of 5 correct (one rejected: a real defect), everything else approved except two drawing links and one cross-reference rejected, and six items carrying the note that the screenshot did not contain the item.
+
+**Packet defect found again, this time by the reviewer's notes.** For clauses whose evidence covered only their opening (65 clauses) and for spans whose words the page matcher could not find exactly, the item crop was silently replaced by the start of the clause, so the reviewer could not see the item. The matcher compared whole words exactly (so "715" did not match the PDF word "715(1)", "RDSO/T- 5855/1" did not match its split words, "60 Kg" did not match "60Kg"), and clauses with partial evidence were searched only in their opening region. **Fixed:** matching ignores spaces and case and accepts a trailing prefix; clauses with partial evidence are searched over all their pages; an item with no crop is now skipped (never replaced by an unrelated crop) and counted. Measured on 60 random items per kind the crop now exists for 93% of cross-references (54/60... see below) and drawing links and 92% of values; the remaining few are skipped. Reviewer decisions made on crops that did not show the item (six items, `eval/reviews/voided.json`) and the whole of packet 1 for clauses, references, measurements and drawing links are excluded from accuracy; they stay on record.
+
+**Real extractor defect from the review: table wrapping.** Table TMM p.317 had 13 physical rows for 4 machines: records that wrap over several lines or have sub-items (i, ii, iii) came out as separate rows, and a wrapped header as three header rows ("Self-" / "propelle" / "d"). **Fixed:** in tables with an index first column (short numbers or letters), a row with an empty first cell continues the record above (cells appended, newline-separated), and a multi-row header becomes one header row. The table is now 1 header row and 4 logical rows, as the reviewer described. Applies to all 549 tables; header text still keeps hyphenation fragments ("Self- propelle d").
+
+**Accuracy figures that can be quoted today (valid packets only):** tables 14 correct of 15 (error 7%, 95% interval 1 to 30%); clauses 5 of 5, cross-references 4 of 4, measurements 2 of 2, drawing links 3 of 3 correct, which is far too few to conclude anything (intervals up to 0 to 66%). Five clauses are now `reviewed` (one approval each); the ten from packet 1 remain `disputed` until re-reviewed on a correct packet. A valid estimate for the other kinds needs about 30 items each from the corrected packet; `calibration_s21.html` (40 items, 8 per kind) is the next step and is mainly for measuring how well my second reading agrees with the reviewer.
+
+State: 21 gates, 234 pytest, 14 browser suites, all passing.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

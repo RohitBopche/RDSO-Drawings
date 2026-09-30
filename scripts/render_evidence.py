@@ -54,29 +54,47 @@ def render(evidence: dict, registry: dict, dpi: int = 110, out_dir: Path = OUT) 
     return path
 
 
+def _norm(t: str) -> str:
+    return re.sub(r"\s+", "", t).lower()
+
+
 def _span_words(page, raw: str):
-    """Word index ranges on `page` whose text equals the tokens of `raw` (fused number+title words split like the parser)."""
+    """Word index ranges on `page` whose text, with spaces removed and case ignored, equals `raw` (tolerates "RDSO/T- 5855/1" versus
+    the PDF's word split, and "60 Kg" versus "60Kg")."""
     import locate_evidence as L
     words = L.split_fused(page.get_text("words"))
-    toks = [w[4] for w in words]
-    q = L.split_fused_tokens(raw.split())
+    toks = [_norm(w[4]) for w in words]
+    target = _norm(raw)
     hits = []
-    for i in range(len(toks) - len(q) + 1):
-        if toks[i:i + len(q)] == q:
-            hits.append(list(range(i, i + len(q))))
+    if not target:
+        return words, hits
+    for i in range(len(toks)):
+        if not toks[i] or not (target.startswith(toks[i]) or toks[i].startswith(target)):
+            continue
+        acc, j = "", i
+        while j < len(toks) and len(acc) < len(target) and j - i < 12:
+            acc += toks[j]
+            j += 1
+        # the span may end inside the last PDF word ("715" inside "715(1)", "Fig.12" inside "Fig.12(b)"): accept a trailing prefix
+        if acc == target or (acc.startswith(target) and len(acc) - len(toks[j - 1]) < len(target)):
+            hits.append(list(range(i, j)))
     return words, hits
 
 
 def render_span(evidence: dict, registry: dict, clause_text: str, start: int, end: int, dpi: int = 110,
-                out_dir: Path = OUT, name: str = "") -> Path | None:
+                out_dir: Path = OUT, name: str = "", page_end: int | None = None) -> Path | None:
     """Crop around ONE extracted span (a reference, value or drawing number): the clause lightly highlighted, the span boxed in red.
     The k-th occurrence of the span's words inside the clause region is used, where k = how many times the same words occur earlier in the clause."""
     raw = " ".join(clause_text[start:end].split())
     k = " ".join(clause_text[:start].split()).count(raw) if raw else 0
     segs = [(evidence["page_number"], evidence.get("line_regions") or [], evidence.get("region"))]
     segs += [(c["page_number"], c["line_regions"], c["region"]) for c in evidence.get("continuation") or []]
+    partial = evidence.get("coverage") != "full_clause"     # clause region unknown beyond its opening: search its whole pages
     reg = registry[evidence["document_id"]]
     doc = pymupdf.open(ROOT / reg["file_path"])
+    if partial and page_end and page_end > evidence["page_number"]:
+        have = {p for p, _, _ in segs}
+        segs += [(p, [], None) for p in range(evidence["page_number"] + 1, min(page_end, evidence["page_number"] + 6) + 1) if p not in have]
     found = []
     for pno, lines, region in segs:
         page = doc[pno - 1]
@@ -84,7 +102,7 @@ def render_span(evidence: dict, registry: dict, clause_text: str, start: int, en
         for h in hits:
             xs = [words[i] for i in h]
             y0, y1 = min(w[1] for w in xs), max(w[3] for w in xs)
-            if region and region[1] - 3 <= y0 and y1 <= region[3] + 3:
+            if (region and region[1] - 3 <= y0 and y1 <= region[3] + 3) or (partial and not lines) or (partial and pno == evidence["page_number"]):
                 found.append((pno, lines, xs))
     if not found:
         return None

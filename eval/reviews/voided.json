@@ -1,0 +1,19 @@
+{
+ "DLINK:00153": "crop did not contain the item (reviewer note); packet defect, fixed in render_span",
+ "DLINK:00102": "crop did not contain the item (reviewer note); packet defect, fixed in render_span",
+ "XREF:01203": "crop did not contain the item (reviewer note); packet defect, fixed in render_span",
+ "MEAS:002515": "crop did not contain the item (reviewer note); packet defect, fixed in render_span",
+ "MEAS:003249": "reviewer noted the crop was unrelated; packet defect",
+ "MEAS:000386": "crop did not contain the item (reviewer note); packet defect, fixed in render_span",
+ "_packets": {
+  "1": {
+   "reason": "packet 1 highlighted only the first ~300 characters of each clause and did not mark the item; decisions on clauses, references, measurements and drawing links are not usable as accuracy (tables were shown whole and stay valid)",
+   "kinds": [
+    "clause",
+    "xref",
+    "measurement",
+    "drawing_link"
+   ]
+  }
+ }
+}

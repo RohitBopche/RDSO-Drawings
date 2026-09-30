@@ -1,58 +1,59 @@
 {
  "by_kind": {
   "clause": {
-   "correct": 0,
-   "error_rate": 1.0,
-   "error_rate_95ci": [
-    0.722,
-    1
-   ],
-   "reviewed": 10,
-   "wrong": 10
-  },
-  "drawing_link": {
-   "correct": 1,
-   "error_rate": 0.9,
-   "error_rate_95ci": [
-    0.596,
-    0.982
-   ],
-   "reviewed": 10,
-   "wrong": 9
-  },
-  "measurement": {
-   "correct": 1,
-   "error_rate": 0.9,
-   "error_rate_95ci": [
-    0.596,
-    0.982
-   ],
-   "reviewed": 10,
-   "wrong": 9
-  },
-  "table": {
-   "correct": 10,
+   "correct": 5,
    "error_rate": 0.0,
    "error_rate_95ci": [
     0,
-    0.278
+    0.434
    ],
-   "reviewed": 10,
+   "reviewed": 5,
    "wrong": 0
   },
-  "xref": {
-   "correct": 2,
-   "error_rate": 0.8,
+  "drawing_link": {
+   "correct": 3,
+   "error_rate": 0.0,
    "error_rate_95ci": [
-    0.49,
-    0.943
+    0,
+    0.562
    ],
-   "reviewed": 10,
-   "wrong": 8
+   "reviewed": 3,
+   "wrong": 0
+  },
+  "measurement": {
+   "correct": 2,
+   "error_rate": 0.0,
+   "error_rate_95ci": [
+    0,
+    0.658
+   ],
+   "reviewed": 2,
+   "wrong": 0
+  },
+  "table": {
+   "correct": 14,
+   "error_rate": 0.067,
+   "error_rate_95ci": [
+    0.012,
+    0.298
+   ],
+   "reviewed": 15,
+   "wrong": 1
+  },
+  "xref": {
+   "correct": 4,
+   "error_rate": 0.0,
+   "error_rate_95ci": [
+    0,
+    0.49
+   ],
+   "reviewed": 4,
+   "wrong": 0
   }
  },
  "double_reviewed_items": 0,
  "note": "error rates are estimates for the sampled kind only when the packet items were drawn at random (the default); small samples give wide intervals",
  "reviewer_agreement": null,
- "unsure_not_recorded": 0
+ "unsure_not_recorded": 0,
+ "voided_decisions": 46
 }

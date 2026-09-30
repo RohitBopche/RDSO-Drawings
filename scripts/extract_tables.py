@@ -76,6 +76,45 @@ def header_row_count(rows: list[list[str]]) -> int:
     return 1
 
 
+INDEX_CELL = re.compile(r"^(?:\d{1,3}|[ivxIVX]{1,5}|[A-Za-z])[.)]?$")
+
+
+def merge_wrapped(rows: list[list[str]], hdr: int) -> tuple[list[list[str]], int]:
+    """Logical rows and one header row.
+
+    (1) The grid reports a record that wraps over several text lines, or has sub-items (i, ii, iii), as several physical rows where
+    only the continuation cells are filled. When the first column is an index column (short numbers or letters), a physical row with an
+    empty first cell continues the record above: its cells are appended to it (newline-separated).
+    (2) A header split over several physical rows ("Speed in kmph" / "Self-" / "propelle" / "d") becomes one header row, each column's
+    parts joined top to bottom."""
+    body = rows[hdr:]
+    first = [r[0] for r in body if r[0]]
+    index_like = bool(first) and sum(bool(INDEX_CELL.match(c)) for c in first) / len(first) >= 0.6
+    merged: list[list[str]] = []
+    if index_like and len(body) >= 3 and len(first) >= 2:
+        for r in body:
+            if r[0] == "" and merged and any(r):
+                for j, c in enumerate(r):
+                    if c:
+                        merged[-1][j] = f"{merged[-1][j]}\n{c}" if merged[-1][j] else c
+            else:
+                merged.append(list(r))
+    else:
+        merged = [list(r) for r in body]
+    head = rows[:hdr]
+    if hdr > 1:
+        joined = []
+        for j in range(len(rows[0])):
+            parts: list[str] = []
+            for r in head:
+                c = r[j]
+                if c and (not parts or c != parts[-1]):
+                    parts.append(c)
+            joined.append(" ".join(parts))
+        head = [joined]
+    return head + merged, len(head)
+
+
 def main() -> int:
     registry = {r["id"]: r for r in read_jsonl(KG / "raw" / "source_registry.jsonl")}
     evidence = [e for e in read_jsonl(KG / "canonical" / "evidence.jsonl") if e["evidence_id"].startswith("ev:clause:") and e.get("region")]
@@ -113,6 +152,8 @@ def main() -> int:
                 owner = heads[doc_id][idx][2] if idx >= 0 else None
                 k += 1
                 hdr = header_row_count(rows)
+                if hdr:
+                    rows, hdr = merge_wrapped(rows, hdr)
                 inherited = False
                 prev = records[-1] if records else None
                 if hdr == 0 and prev and prev["document_id"] == doc_id and prev["page"] == pno - 1 and prev["n_cols"] == width and prev["header_rows"]:
