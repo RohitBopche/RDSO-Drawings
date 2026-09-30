@@ -1,0 +1,56 @@
+{
+ "alt_inconsistent": [],
+ "catalog": {
+  "entries": 59,
+  "multi_drawing_files_described_by_one_number": 28,
+  "note": "catalog titles that are just the file name carry no drawing information; key_highlights are unverified free text",
+  "placeholder_titles": 45
+ },
+ "files": 59,
+ "files_with_several_numbers": 28,
+ "identity_confirmed": 58,
+ "identity_partial": 0,
+ "identity_unconfirmed": 1,
+ "lineage_groups": {
+  "T-6155": {
+   "agree": true,
+   "files": [
+    {
+     "alteration": 13,
+     "file": "drawings/2025-01-28-RDSO_T_6155_ALT_13.pdf",
+     "latest_sheet_date": "2025-01-27"
+    },
+    {
+     "alteration": 10,
+     "file": "drawings/RDSO_T_6155_ALT_10.pdf",
+     "latest_sheet_date": null
+    },
+    {
+     "alteration": 12,
+     "file": "drawings/RDSO_T_6155_ALT_12.pdf",
+     "latest_sheet_date": "2024-10-01"
+    }
+   ],
+   "latest_by_alteration": "drawings/2025-01-28-RDSO_T_6155_ALT_13.pdf",
+   "latest_by_sheet_date": "drawings/2025-01-28-RDSO_T_6155_ALT_13.pdf"
+  }
+ },
+ "title_block": {
+  "alt_contradicts_table": [
+   "drawings/RDSO_T_6290_ALT_1.pdf"
+  ],
+  "alt_matches_table": 7,
+  "alteration_rows": 28,
+  "catalog_title_vs_sheet": {
+   "close_0.9_plus": 3,
+   "compared": 14,
+   "different_below_0.6": 5,
+   "note": "bigram overlap between the hand-made catalogue title and the title read from the sheet; OCR noise lowers it, so below 0.6 means 'probably a different drawing', not proof",
+   "partial_0.6_to_0.9": 6
+  },
+  "sheets_with_alteration_rows": 23,
+  "sheets_with_scale": 46,
+  "sheets_with_specification": 54,
+  "sheets_with_title": 58
+ }
+}

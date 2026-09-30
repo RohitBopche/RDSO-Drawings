@@ -1,0 +1,137 @@
+{
+ "splits": {
+  "dev": {
+   "categories": {
+    "ALL": {
+     "mrr": 0.892,
+     "n": 210,
+     "recall@1": 0.838,
+     "recall@10": 0.986,
+     "recall@3": 0.952,
+     "recall@5": 0.962
+    },
+    "blind": {
+     "mrr": 0.842,
+     "n": 20,
+     "recall@1": 0.75,
+     "recall@10": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0
+    },
+    "blind_table": {
+     "mrr": 0.926,
+     "n": 9,
+     "recall@1": 0.889,
+     "recall@10": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0
+    },
+    "ident": {
+     "mrr": 1.0,
+     "n": 29,
+     "recall@1": 1.0,
+     "recall@10": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0
+    },
+    "kw_auto": {
+     "mrr": 0.782,
+     "n": 25,
+     "recall@1": 0.68,
+     "recall@10": 0.96,
+     "recall@3": 0.88,
+     "recall@5": 0.88
+    },
+    "nl": {
+     "mrr": 0.845,
+     "n": 58,
+     "recall@1": 0.776,
+     "recall@10": 0.983,
+     "recall@3": 0.914,
+     "recall@5": 0.948
+    },
+    "title_auto": {
+     "mrr": 0.937,
+     "n": 69,
+     "recall@1": 0.899,
+     "recall@10": 0.986,
+     "recall@3": 0.971,
+     "recall@5": 0.971
+    }
+   },
+   "refusal": {
+    "answerable": 210,
+    "correctly_refused": 20,
+    "out_of_scope": 20,
+    "wrongly_refused": 4
+   }
+  },
+  "test": {
+   "categories": {
+    "ALL": {
+     "mrr": 0.938,
+     "n": 137,
+     "recall@1": 0.891,
+     "recall@10": 0.993,
+     "recall@3": 0.993,
+     "recall@5": 0.993
+    },
+    "blind": {
+     "mrr": 0.756,
+     "n": 15,
+     "recall@1": 0.6,
+     "recall@10": 0.933,
+     "recall@3": 0.933,
+     "recall@5": 0.933
+    },
+    "blind_table": {
+     "mrr": 0.833,
+     "n": 3,
+     "recall@1": 0.667,
+     "recall@10": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0
+    },
+    "ident": {
+     "mrr": 1.0,
+     "n": 11,
+     "recall@1": 1.0,
+     "recall@10": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0
+    },
+    "kw_auto": {
+     "mrr": 0.967,
+     "n": 15,
+     "recall@1": 0.933,
+     "recall@10": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0
+    },
+    "nl": {
+     "mrr": 0.925,
+     "n": 42,
+     "recall@1": 0.857,
+     "recall@10": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0
+    },
+    "title_auto": {
+     "mrr": 0.987,
+     "n": 51,
+     "recall@1": 0.98,
+     "recall@10": 1.0,
+     "recall@3": 1.0,
+     "recall@5": 1.0
+    }
+   },
+   "refusal": {
+    "answerable": 137,
+    "correctly_refused": 10,
+    "out_of_scope": 12,
+    "wrongly_refused": 7
+   }
+  }
+ },
+ "threshold": 0.66
+}

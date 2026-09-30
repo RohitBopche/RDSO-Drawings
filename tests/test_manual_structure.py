@@ -82,38 +82,28 @@ def test_canonical_kg_has_no_duplicate_authoritative_manual_ids():
     assert len(authoritative_ids.intersection(set(ids))) == 6
 
 
-def test_manual_clause_metadata_maps_to_exactly_one_registered_chapter():
-    knowledge_path = ROOT / "data" / "rdso_manuals_knowledge.json"
-    if not knowledge_path.exists():
-        return
-    knowledge = json.loads(knowledge_path.read_text(encoding="utf-8"))
+def test_manual_clause_ids_map_to_registered_chapters():
+    """Canonical clause ids carry their chapter (CH_nn); it must be a registered chapter, and for
+    page-range-owned manuals the clause page must lie inside that chapter."""
+    import re
     structure = load_structure()
     manuals = {m["alias"]: m for m in structure["manuals"]}
-
-    unresolved = []
-    ambiguous = []
-    for clause in knowledge.get("clauses", {}).values():
-        manual = manuals.get(clause.get("manual") or clause.get("alias"))
-        if not manual:
+    decimal = {"USFD", "AT_WELD", "FBW"}  # numbering owns the chapter; registry page ranges are advisory
+    nodes = [json.loads(l) for l in (ROOT / "data/knowledge-graph/canonical/nodes.jsonl").read_text(encoding="utf-8").splitlines()]
+    clauses = [n for n in nodes if n["id"].startswith("CLAUSE:")]
+    assert clauses
+    bad = []
+    for n in clauses:
+        m = re.match(r"CLAUSE:([^:]+):CH_(\d+):", n["id"])
+        manual = manuals.get(m.group(1)) if m else None
+        idx = int(m.group(2)) - 1 if m else -1
+        if not manual or not 0 <= idx < len(manual["chapters"]):
+            bad.append(n["id"])
             continue
-        exact = [i for i, ch in enumerate(manual["chapters"]) if ch[0] == clause.get("chapter")]
-        if len(exact) == 1:
-            continue
-        page = clause.get("page")
-        if page is None:
-            unresolved.append(clause.get("id"))
-            continue
-        candidates = [
-            i for i, ch in enumerate(manual["chapters"])
-            if ch[1] <= page <= ch[2]
-        ]
-        if len(candidates) != 1:
-            if not candidates:
-                unresolved.append(clause.get("id"))
-            else:
-                ambiguous.append(clause.get("id"))
-    assert not unresolved, f"Unmapped manual clauses: {unresolved[:20]}"
-    assert not ambiguous, f"Ambiguous manual clauses: {ambiguous[:20]}"
+        _, start, end = manual["chapters"][idx][:3]
+        if m.group(1) not in decimal and not start <= n["page"] <= end:
+            bad.append(n["id"])
+    assert not bad, f"Clauses not inside their registered chapter: {bad[:20]}"
 
 
 def load_manual_structure():

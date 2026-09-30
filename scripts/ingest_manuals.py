@@ -1,4 +1,7 @@
 """
+DEPRECATED: superseded by ingest_all_manual_chapters.py + clause_parser.py. Its output file
+(data/rdso_manuals_knowledge.json) no longer exists and Gate L rejects it.
+
 ingest_manuals.py
 Extracts structured clauses, regulations, tolerances, SOPs, and equipment
 from official Indian Railways manuals in manuals/ directory.

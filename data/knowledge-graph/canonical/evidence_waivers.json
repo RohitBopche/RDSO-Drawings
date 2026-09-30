@@ -1,0 +1,17 @@
+{
+  "_note": "Edges allowed to exist without evidence. Each is an ungrounded claim awaiting a source or removal; the list may only shrink (Gate N).",
+  "edges": [
+    {"from": "act_greasing_lubrication", "rel": "APPLIES_TO", "to": "comp_joggled_fish_plate", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "act_greasing_lubrication", "rel": "APPLIES_TO", "to": "comp_fish_plate", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "act_greasing_lubrication", "rel": "APPLIES_TO", "to": "comp_fish_bolt", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "act_greasing_lubrication", "rel": "APPLIES_TO", "to": "comp_sej", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "act_greasing_lubrication", "rel": "REQUIRES", "to": "mat_graphite_grease", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "act_greasing_lubrication", "rel": "REQUIRES", "to": "mat_wire_brush", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "defect_dipped_joint", "rel": "MITIGATED_BY", "to": "act_greasing_lubrication", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "defect_rail_fracture", "rel": "MITIGATED_BY", "to": "comp_joggled_fish_plate", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "comp_joggled_fish_plate", "rel": "SUPPORTS", "to": "comp_at_weld", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "comp_fish_plate", "rel": "FASTENED_BY", "to": "comp_fish_bolt", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "comp_fish_bolt", "rel": "INSPECTED_BY", "to": "role_keyman", "reason": "hand-authored in UI Q&A work; no source citation"},
+    {"from": "act_greasing_lubrication", "rel": "MAINTAINED_BY", "to": "role_keyman", "reason": "hand-authored in UI Q&A work; no source citation"}
+  ]
+}

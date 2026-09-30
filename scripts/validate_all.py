@@ -27,6 +27,16 @@ GATES = [
     ("Gate I: Manuals Chapter & Content Ownership", [sys.executable, str(ROOT / "scripts" / "validate_manual_chapter_content.py")]),
     ("Gate J: Manuals Canonical Content Ownership", [sys.executable, str(ROOT / "scripts" / "validate_manual_canonical_content.py")]),
     ("Gate K: Manuals Source-Heading Hierarchy", [sys.executable, str(ROOT / "scripts" / "validate_manual_hierarchy.py")]),
+    ("Gate L: Manual Text Integrity & Single Source", [sys.executable, str(ROOT / "scripts" / "validate_manual_text_integrity.py")]),
+    ("Gate M: Provenance Policy", [sys.executable, str(ROOT / "scripts" / "validate_provenance_policy.py")]),
+    ("Gate N: Evidence Locations & Hashes", [sys.executable, str(ROOT / "scripts" / "validate_evidence_locations.py")]),
+    ("Gate O: OCR Coverage of Image-only Pages", [sys.executable, str(ROOT / "scripts" / "validate_ocr_coverage.py")]),
+    ("Gate P: Retrieval Index, Eval Set & Regression", [sys.executable, str(ROOT / "scripts" / "validate_retrieval.py")]),
+    ("Gate Q: Cross-references", [sys.executable, str(ROOT / "scripts" / "validate_crossrefs.py")]),
+    ("Gate R: Tables", [sys.executable, str(ROOT / "scripts" / "validate_tables.py")]),
+    ("Gate S: Measurements", [sys.executable, str(ROOT / "scripts" / "validate_measurements.py")]),
+    ("Gate T: Drawing registry", [sys.executable, str(ROOT / "scripts" / "validate_drawings.py")]),
+    ("Gate U: Drawing links", [sys.executable, str(ROOT / "scripts" / "validate_drawing_links.py")]),
 ]
 
 
@@ -44,7 +54,24 @@ def run_gate(name: str, cmd: list[str]) -> tuple[bool, str]:
     return passed, output
 
 
+def check_dependencies() -> bool:
+    """Fail fast with the exact fix instead of five confusing gate failures."""
+    import importlib.util
+    missing = [m for m in ("jsonschema", "pytest") if importlib.util.find_spec(m) is None]
+    if not missing:
+        return True
+    cmd = [sys.executable, "-m", "pip", "install", "-r", str(ROOT / "requirements-dev.txt")]
+    if "--install" in sys.argv:
+        print(f"Installing missing dependencies: {', '.join(missing)}")
+        return subprocess.run(cmd).returncode == 0
+    print(f"Missing Python packages: {', '.join(missing)}")
+    print(f"Fix: {' '.join(cmd)}   (or rerun with --install)")
+    return False
+
+
 def main() -> int:
+    if not check_dependencies():
+        return 2
     print("=" * 80)
     print("RDSO KNOWLEDGE GRAPH — UNIFIED PUBLICATION VALIDATION PIPELINE")
     print("=" * 80)

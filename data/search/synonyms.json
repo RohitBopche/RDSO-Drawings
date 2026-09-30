@@ -1,0 +1,150 @@
+{
+ "_note": "Railway abbreviations and equivalent phrasings. Keys and values are analysed (lower-case, stemmed) by the engine; expansion terms are down-weighted. Add entries only from the manuals' own usage; reviewed additions come from the feedback loop (P7.3).",
+ "groups": [
+  [
+   "usfd",
+   "ultrason",
+   "flaw detect",
+   "ultrasonic flaw detector"
+  ],
+  [
+   "lwr",
+   "long welded rail"
+  ],
+  [
+   "cwr",
+   "continuous welded rail"
+  ],
+  [
+   "swr",
+   "short welded rail"
+  ],
+  [
+   "sse",
+   "senior section engineer",
+   "section engineer"
+  ],
+  [
+   "aden",
+   "assistant divisional engineer"
+  ],
+  [
+   "den",
+   "divisional engineer"
+  ],
+  [
+   "psc",
+   "prestressed concrete sleeper",
+   "concrete sleeper"
+  ],
+  [
+   "erc",
+   "elastic rail clip"
+  ],
+  [
+   "sej",
+   "switch expansion joint"
+  ],
+  [
+   "isej",
+   "insulated switch expansion joint"
+  ],
+  [
+   "cms",
+   "cast manganese steel crossing"
+  ],
+  [
+   "fbw",
+   "flash butt weld"
+  ],
+  [
+   "gmt",
+   "gross million tonne"
+  ],
+  [
+   "trc",
+   "track recording car"
+  ],
+  [
+   "rgm",
+   "rail grinding machine"
+  ],
+  [
+   "dts",
+   "dynamic track stabiliser",
+   "dynamic track stabilizer"
+  ],
+  [
+   "ioh",
+   "intermediate overhaul"
+  ],
+  [
+   "poh",
+   "periodic overhaul"
+  ],
+  [
+   "lc",
+   "level crossing"
+  ],
+  [
+   "tvu",
+   "train vehicle unit"
+  ],
+  [
+   "keyman",
+   "key man"
+  ],
+  [
+   "gangmate",
+   "gang mate"
+  ],
+  [
+   "fishplate",
+   "fish plate"
+  ],
+  [
+   "fishbolt",
+   "fish bolt"
+  ],
+  [
+   "kmph",
+   "km/h",
+   "kilometre per hour"
+  ],
+  [
+   "rdso",
+   "research designs standards organisation"
+  ],
+  [
+   "turnout",
+   "points and crossing",
+   "point and crossing"
+  ],
+  [
+   "stm",
+   "small track machine"
+  ],
+  [
+   "tmm",
+   "track machine"
+  ],
+  [
+   "alumino thermic",
+   "aluminothermic",
+   "thermit",
+   "thermite"
+  ],
+  [
+   "destress",
+   "stress free temperature"
+  ],
+  [
+   "sse/p.way",
+   "senior section engineer permanent way"
+  ],
+  [
+   "bcm",
+   "ballast cleaning machine"
+  ]
+ ]
+}

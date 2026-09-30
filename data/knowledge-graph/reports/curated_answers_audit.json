@@ -1,0 +1,235 @@
+[
+ {
+  "id": "qa_destressing_temperature",
+  "question": "What is the destressing temperature range (td) for LWR/CWR track?",
+  "cited_clauses": [
+   "CLAUSE:IRPWM:CH_03:PARA_333",
+   "CLAUSE:IRPWM:CH_03:PARA_335",
+   "CLAUSE:IRPWM:CH_03:PARA_339",
+   "CLAUSE:IRPWM:CH_03:PARA_340",
+   "CLAUSE:IRPWM:CH_03:PARA_341",
+   "CLAUSE:IRPWM:CH_03:PARA_347"
+  ],
+  "numbers_checked": [
+   "1660",
+   "20",
+   "52",
+   "60"
+  ],
+  "unsupported_numbers": [],
+  "retired": true,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "supported"
+ },
+ {
+  "id": "qa_keyman_duties_greasing",
+  "question": "What are the duties of Keyman regarding track inspection, joggled fish plates, and greasing?",
+  "cited_clauses": [
+   "CLAUSE:IRPWM:CH_01:PARA_116",
+   "CLAUSE:IRPWM:CH_06:PARA_619",
+   "CLAUSE:IRPWM:CH_06:PARA_620"
+  ],
+  "numbers_checked": [
+   "100",
+   "30"
+  ],
+  "unsupported_numbers": [
+   "100",
+   "30"
+  ],
+  "retired": true,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "unsupported"
+ },
+ {
+  "id": "qa_tongue_wear",
+  "question": "What is the permissible wear for 60kg tongue rails?",
+  "cited_clauses": [
+   "CLAUSE:IRPWM:CH_04:PARA_429"
+  ],
+  "numbers_checked": [
+   "0.0",
+   "6.0",
+   "60",
+   "8.0"
+  ],
+  "unsupported_numbers": [
+   "0.0"
+  ],
+  "retired": true,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "unsupported"
+ },
+ {
+  "id": "qa_switch_throw",
+  "question": "What is the standard switch throw at the toe of curved switch?",
+  "cited_clauses": [],
+  "numbers_checked": [
+   "0",
+   "160",
+   "160.0",
+   "163",
+   "163.0",
+   "3"
+  ],
+  "unsupported_numbers": [],
+  "retired": false,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "uncited"
+ },
+ {
+  "id": "qa_check_rail",
+  "question": "What is the check rail clearance limit for 1:12 BG turnouts?",
+  "cited_clauses": [
+   "CLAUSE:IRPWM:CH_04:PARA_429"
+  ],
+  "numbers_checked": [
+   "41",
+   "41.0",
+   "43.0",
+   "45",
+   "45.0"
+  ],
+  "unsupported_numbers": [
+   "41.0",
+   "43.0",
+   "45.0"
+  ],
+  "retired": true,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "unsupported"
+ },
+ {
+  "id": "qa_rubber_pad_spec",
+  "question": "Which IRS specification governs sleeper rubber pads?",
+  "cited_clauses": [],
+  "numbers_checked": [
+   "10",
+   "10.0",
+   "6"
+  ],
+  "unsupported_numbers": [],
+  "retired": false,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "uncited"
+ },
+ {
+  "id": "qa_erc_mkv_toe_load",
+  "question": "What is the toe load standard for ERC Mk-V fasteners?",
+  "cited_clauses": [],
+  "numbers_checked": [
+   "1200",
+   "1250",
+   "1500",
+   "25"
+  ],
+  "unsupported_numbers": [],
+  "retired": false,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "uncited"
+ },
+ {
+  "id": "qa_usfd_testing",
+  "question": "What is the USFD testing protocol for curved switches?",
+  "cited_clauses": [],
+  "numbers_checked": [
+   "3"
+  ],
+  "unsupported_numbers": [],
+  "retired": false,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "uncited"
+ },
+ {
+  "id": "qa_alt11_changes",
+  "question": "What was changed in Alt 11 for T-6155?",
+  "cited_clauses": [],
+  "numbers_checked": [
+   "10",
+   "222",
+   "222.0"
+  ],
+  "unsupported_numbers": [],
+  "retired": false,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "uncited"
+ },
+ {
+  "id": "qa_lista_procurement",
+  "question": "How are LIST-A spares calculated for 10 turnout sets?",
+  "cited_clauses": [],
+  "numbers_checked": [
+   "10"
+  ],
+  "unsupported_numbers": [],
+  "retired": false,
+  "status": "DERIVED",
+  "verdict": "uncited"
+ },
+ {
+  "id": "qa_star_crack_mitigation",
+  "question": "What are the mitigations for bolt hole star cracks?",
+  "cited_clauses": [],
+  "numbers_checked": [
+   "30"
+  ],
+  "unsupported_numbers": [],
+  "retired": false,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "uncited"
+ },
+ {
+  "id": "qa_greasing_provisions",
+  "question": "What are the provisions of greasing of joggled fish plates?",
+  "cited_clauses": [
+   "CLAUSE:IRPWM:CH_03:PARA_307",
+   "CLAUSE:IRPWM:CH_06:PARA_619",
+   "CLAUSE:IRPWM:CH_06:PARA_620",
+   "CLAUSE:USFD:CH_08:PARA_8_10"
+  ],
+  "numbers_checked": [
+   "100",
+   "30",
+   "52",
+   "60",
+   "75"
+  ],
+  "unsupported_numbers": [
+   "30",
+   "52",
+   "60",
+   "75"
+  ],
+  "retired": true,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "unsupported"
+ },
+ {
+  "id": "qa_greasing_mention",
+  "question": "In which clauses is greasing mentioned?",
+  "cited_clauses": [
+   "CLAUSE:IRPWM:CH_01:PARA_116",
+   "CLAUSE:IRPWM:CH_02:PARA_206",
+   "CLAUSE:IRPWM:CH_03:PARA_307",
+   "CLAUSE:IRPWM:CH_03:PARA_349",
+   "CLAUSE:IRPWM:CH_04:PARA_424",
+   "CLAUSE:IRPWM:CH_06:PARA_619",
+   "CLAUSE:IRPWM:CH_06:PARA_620"
+  ],
+  "numbers_checked": [
+   "30",
+   "52",
+   "60",
+   "75"
+  ],
+  "unsupported_numbers": [
+   "30",
+   "52",
+   "60",
+   "75"
+  ],
+  "retired": true,
+  "status": "CURATED_UNREVIEWED",
+  "verdict": "unsupported"
+ }
+]

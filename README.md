@@ -3,6 +3,23 @@
 **Developed for:** Track Analytical Cell, Bhusawal Division, Central Railway, Indian Railways  
 **System Classification:** Offline 3D Engineering Digital Twin, Modular Component Assembly Suite & Continuous Learning Knowledge Graph
 
+> **Current status (read this first).** This README was written for the early 3D digital-twin prototype. The project is now an offline
+> knowledge base and knowledge graph of six railway manuals with search, cited answers, tables, measurements and a drawing registry.
+> The single authoritative record of what exists, how well it works and what is still open is
+> [`docs/PROJECT_MASTER.md`](docs/PROJECT_MASTER.md) (section 37 onward). Statistics and engineering claims in the sections below
+> (for example derailment shares, the drawing catalogue, `analyze_rdso_drawing.py`) are **unverified prototype text**; the catalogue
+> `data/rdso_drawing_catalog.json` is superseded by `data/knowledge-graph/canonical/drawings_registry.jsonl` and should not be cited.
+>
+> ```
+> pip install -r requirements-dev.txt && npm ci
+> python scripts/rebuild_all.py      # rebuild every generated artifact from the source PDFs (about 3 minutes); must leave `git diff data/` empty
+> python scripts/validate_all.py     # publication gates A to U
+> python -m pytest -q                # unit and regression tests
+> python scripts/run_browser_tests.py  # headless browser suites
+> node scripts/search_cli.js "your question"   # offline search from the terminal
+> python scripts/make_review_packet.py --per-kind 10 --seed 1   # offline human-review packet (see master section 37.22)
+> ```
+
 ---
 
 ## 1. Executive Problem Statement: What Problem Does This Project Solve?

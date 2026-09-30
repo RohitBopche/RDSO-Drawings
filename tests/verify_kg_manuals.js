@@ -3,19 +3,10 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const chromeCandidates = [
-    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-    path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe')
-];
-const chromePath = chromeCandidates.find(p => fs.existsSync(p)) || chromeCandidates[0];
+const { chromePath: chromePath, chromeFlags, artifactDir: envArtifactDir } = require('./browser_env');
 const targetUrl = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
-const artifactDir = [
-    "C:\\Users\\LENOVO\\.gemini\\antigravity-ide\\brain\\ea8fa10c-88f4-4a72-b9b0-d40e78abc040",
-    path.join(__dirname, '..', 'artifacts')
-].find(d => fs.existsSync(d)) || path.join(__dirname, '..', 'artifacts');
-if (!fs.existsSync(artifactDir)) { try { fs.mkdirSync(artifactDir, { recursive: true }); } catch (e) {} }
-const tempProfile = path.join(require('os').tmpdir(), 'chrome_kg_manuals_profile');
+const artifactDir = envArtifactDir;
+const tempProfile = require('./browser_env').freshProfile('chrome_kg_manuals_profile');
 
 async function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
@@ -95,6 +86,7 @@ async function run() {
         `--remote-debugging-port=${port}`,
         `--user-data-dir=${tempProfile}`,
         '--no-first-run',
+        ...chromeFlags,
         '--no-default-browser-check',
         '--window-size=1920,1080',
         targetUrl

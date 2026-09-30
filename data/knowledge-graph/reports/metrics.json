@@ -1,0 +1,107 @@
+{
+  "edges": 8042,
+  "edges_with_evidence": 8030,
+  "edges_without_evidence": 12,
+  "evidence": 4815,
+  "evidence_status": {
+    "machine_extracted": 4815
+  },
+  "evidence_with_page": 4778,
+  "evidence_with_region": 4686,
+  "generated_by": "scripts/unify_manual_canonical.py",
+  "manual_clauses": {
+    "DOC:AT_WELD:2022": {
+      "clauses": 73,
+      "clauses_with_text": 73,
+      "non_extractable_pages": 1,
+      "ocr_pages": 1,
+      "ocr_weak_pages": 0,
+      "pages": 49,
+      "raw_detected_clauses": 163,
+      "short_clauses": 0
+    },
+    "DOC:FBW:2022:CS5": {
+      "clauses": 57,
+      "clauses_with_text": 57,
+      "non_extractable_pages": 13,
+      "ocr_pages": 13,
+      "ocr_weak_pages": 0,
+      "pages": 69,
+      "raw_detected_clauses": 204,
+      "short_clauses": 0
+    },
+    "DOC:IRPWM:2024:ACS14": {
+      "clauses": 421,
+      "clauses_with_text": 421,
+      "non_extractable_pages": 14,
+      "ocr_pages": 14,
+      "ocr_weak_pages": 0,
+      "pages": 530,
+      "raw_detected_clauses": 1738,
+      "short_clauses": 0
+    },
+    "DOC:STMM:2024": {
+      "clauses": 258,
+      "clauses_with_text": 258,
+      "non_extractable_pages": 0,
+      "pages": 222,
+      "raw_detected_clauses": 179,
+      "short_clauses": 14
+    },
+    "DOC:TMM:2020:ACS10": {
+      "clauses": 171,
+      "clauses_with_text": 171,
+      "non_extractable_pages": 4,
+      "ocr_pages": 4,
+      "ocr_weak_pages": 0,
+      "pages": 458,
+      "raw_detected_clauses": 1062,
+      "short_clauses": 0
+    },
+    "DOC:USFD:2026:ACS4": {
+      "clauses": 192,
+      "clauses_with_text": 192,
+      "non_extractable_pages": 32,
+      "ocr_pages": 32,
+      "ocr_weak_pages": 6,
+      "pages": 157,
+      "raw_detected_clauses": 353,
+      "short_clauses": 0
+    }
+  },
+  "node_types": {
+    "BOM_ITEM": 2,
+    "CHAPTER": 83,
+    "CLAUSE": 1172,
+    "COMPONENT": 15,
+    "DIMENSION": 6,
+    "DOCUMENT": 6,
+    "DRAWING": 6,
+    "EQUIPMENT": 1,
+    "EVIDENCE": 303,
+    "FAILURE_MODE": 6,
+    "FASTENER": 1,
+    "FIGURE": 162,
+    "HAZARD": 2,
+    "MATERIAL": 6,
+    "NOTE": 10,
+    "PROCEDURE": 1,
+    "REVISION": 5,
+    "ROLE": 1,
+    "SECTION": 1440,
+    "SLEEPER": 3,
+    "SOP": 3,
+    "SPARE_PART": 3,
+    "STANDARD": 2,
+    "SUBSECTION": 1101,
+    "TABLE": 57,
+    "TOLERANCE": 460,
+    "ZONE": 5
+  },
+  "nodes": 4862,
+  "requirements": 1632,
+  "reviews": 0,
+  "verification_status": {
+    "machine_extracted": 4862
+  }
+}

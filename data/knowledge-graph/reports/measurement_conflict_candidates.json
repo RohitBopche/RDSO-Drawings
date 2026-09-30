@@ -1,0 +1,557 @@
+[
+ {
+  "manual": "IRPWM",
+  "quantity": "length",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "subject_words",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_03:PARA_349",
+   "value": 4.0,
+   "raw": "less than 4 m",
+   "subject": "The length of closure rail should not become",
+   "conditions": []
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_06:PARA_614",
+   "value": 11.0,
+   "raw": "less than 11 metre",
+   "subject": "g 500 metre length on both side approaches of all the above, Permanent closure in running lines should not be",
+   "conditions": [
+    [
+     "geometry",
+     "approaches"
+    ],
+    [
+     "geometry",
+     "runninglines"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "length",
+  "unit": "m",
+  "comparator": "min",
+  "basis": "subject_words",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_04:PARA_414",
+   "value": 50.0,
+   "raw": "minimum 50 m",
+   "subject": "In the case of diamond crossings on a straight track located in the approach of a curve, a straight length of",
+   "conditions": [
+    [
+     "geometry",
+     "approach"
+    ],
+    [
+     "geometry",
+     "crossings"
+    ],
+    [
+     "geometry",
+     "curve"
+    ],
+    [
+     "geometry",
+     "straight"
+    ],
+    [
+     "geometry",
+     "straighttrack"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_06:PARA_642",
+   "value": 100.0,
+   "raw": "at least 100 m",
+   "subject": "(b) In case of SEJ, a track length of",
+   "conditions": [
+    [
+     "geometry",
+     "sej"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "subject_words",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_02:PARA_228",
+   "value": 500.0,
+   "raw": "upto 500m",
+   "subject": "(ii) Ballasted Track: Curves with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ],
+    [
+     "geometry",
+     "transition"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "subject_words",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_02:PARA_228",
+   "value": 500.0,
+   "raw": "upto 500m",
+   "subject": "(ii) Ballasted Track: Curves with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ],
+    [
+     "geometry",
+     "transition"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "subject_words",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_02:PARA_228",
+   "value": 500.0,
+   "raw": "upto 500m",
+   "subject": "(ii) Ballasted Track: Curves with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ],
+    [
+     "geometry",
+     "transition"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "subject_words",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_520",
+   "value": 350.0,
+   "raw": "up to 350 m",
+   "subject": "(i) For straight including curves of radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ],
+    [
+     "geometry",
+     "straight"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_520",
+   "value": 350.0,
+   "raw": "less than 350 m",
+   "subject": "(ii) For curves of radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_520",
+   "value": 600.0,
+   "raw": "less than 600 m",
+   "subject": "8 On curves of Radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "(b) Curve with radius 440 m or more - -5 mm to +14 mm mm Curve with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_11:PARA_1112",
+   "value": 450.0,
+   "raw": "less\nthan 450 metres",
+   "subject": "(3) Curvature and Gradients – As far as possible the radius of curve should not be",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "(b) Curve with radius 440 m or more - -7 mm to +17 mm mm Curve with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_11:PARA_1112",
+   "value": 450.0,
+   "raw": "less\nthan 450 metres",
+   "subject": "(3) Curvature and Gradients – As far as possible the radius of curve should not be",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "(b) - -5 mm to +14 mm -7 mm to +17 mm m or more Curve with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_11:PARA_1112",
+   "value": 450.0,
+   "raw": "less\nthan 450 metres",
+   "subject": "(3) Curvature and Gradients – As far as possible the radius of curve should not be",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "(b) - -7 mm to +17 mm -11 mm to +20 mm m or more Curve with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_11:PARA_1112",
+   "value": 450.0,
+   "raw": "less\nthan 450 metres",
+   "subject": "(3) Curvature and Gradients – As far as possible the radius of curve should not be",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 440.0,
+   "raw": "less than\n440 m",
+   "subject": "(b) - -5 mm to +14 mm -7 mm to +17 mm more Curve with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_11:PARA_1112",
+   "value": 450.0,
+   "raw": "less\nthan 450 metres",
+   "subject": "(3) Curvature and Gradients – As far as possible the radius of curve should not be",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 440.0,
+   "raw": "less than\n440 m",
+   "subject": "(b) - -7 mm to +17 mm -11 mm to +20 mm more Curve with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_11:PARA_1112",
+   "value": 450.0,
+   "raw": "less\nthan 450 metres",
+   "subject": "(3) Curvature and Gradients – As far as possible the radius of curve should not be",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "min",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_520",
+   "value": 600.0,
+   "raw": "more than 600 m",
+   "subject": "7 5 mm Alignment On curves of Radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_11:PARA_1112",
+   "value": 225.0,
+   "raw": "not less than 225 metres",
+   "subject": "In difficult terrain it may be necessary to lay curves of radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "speed",
+  "unit": "kmph",
+  "comparator": "max",
+  "basis": "subject_words",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_506",
+   "value": 130.0,
+   "raw": "up to 130 Kmph",
+   "subject": "Slab Frequency i) Routes with speeds above 130 Kmph Once in 2 months ii) Routes with speeds above 110 Kmph &",
+   "conditions": []
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 110.0,
+   "raw": "up to 110 Kmph",
+   "subject": "(2) For Speeds above 100 Kmph and",
+   "conditions": []
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "speed",
+  "unit": "kmph",
+  "comparator": "max",
+  "basis": "subject_words",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_506",
+   "value": 130.0,
+   "raw": "up to 130 Kmph",
+   "subject": "Slab Frequency i) Routes with speeds above 130 Kmph Once in 2 months ii) Routes with speeds above 110 Kmph &",
+   "conditions": []
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 160.0,
+   "raw": "up to 160 Kmph",
+   "subject": "(4) For Speeds above 130 Kmph and",
+   "conditions": []
+  },
+  "status": "candidate_unreviewed"
+ }
+]

@@ -13,15 +13,10 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const chromeCandidates = [
-    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-    path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe')
-];
-const CHROME_PATH = chromeCandidates.find(p => fs.existsSync(p)) || chromeCandidates[0];
+const { chromePath: CHROME_PATH, chromeFlags, artifactDir: envArtifactDir, waitForDevtools } = require('./browser_env');
 const PORT = 9245;
 const URL_TARGET = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
-const ARTIFACTS_DIR = path.join(__dirname, '..', 'artifacts');
+const ARTIFACTS_DIR = envArtifactDir;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -92,14 +87,13 @@ class CDPClient {
   }
 }
 
-const tempProfile = path.join(require('os').tmpdir(), 'chrome_learning_profile');
+const tempProfile = require('./browser_env').freshProfile('chrome_learning_profile');
 
 async function main() {
   console.log("[*] Spawning Chrome headless for Phase 6 Learning System Verification...");
   const chromeProc = spawn(CHROME_PATH, [
     `--remote-debugging-port=${PORT}`,
-    '--headless=new',
-    '--disable-gpu',
+    ...chromeFlags,
     '--window-size=1920,1080',
     '--no-sandbox',
     '--no-first-run',
@@ -107,7 +101,7 @@ async function main() {
     `--user-data-dir=${tempProfile}`
   ]);
 
-  await sleep(2000);
+  await waitForDevtools(PORT);
 
   try {
     const targets = await fetchJson(`http://127.0.0.1:${PORT}/json`);
