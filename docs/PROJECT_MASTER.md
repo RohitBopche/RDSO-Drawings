@@ -1964,6 +1964,18 @@ State: 21 gates, 217 pytest, 13 browser suites, all passing; rebuild determinist
 
 **Still open:** conditions for table cells, the purpose of a limit (needs a model or people), measurement-to-graph edges, drawing notes and parts lists, real engineer questions with two labellers, embeddings decision.
 
+### 37.22 Sprint N results (human review workflow) — 2026-09-30
+
+Every quality number in this document is still the author's own reading; nothing has ever been `reviewed` or `verified` by another person. Sprint N builds the way to change that with little effort from a reviewer.
+
+**`scripts/make_review_packet.py`** writes one self-contained offline HTML file (images embedded, no server, no network): a seeded random sample of extracted items, shuffled, each shown with what was extracted, the exact span highlighted in the clause text, and the source page crop with the region drawn on it (table bounding box for tables). Kinds: clause (boundary and text), cross-reference, measurement, table, drawing link. The reviewer types a name, answers Correct, Wrong or Unsure (with a note), and downloads `decisions_<name>_s<seed>.json`. `--per-kind 10 --seed 1` gives 50 items (about 3 MB); the same seed given to two people lets their agreement be measured. A browser test (14th suite) checks the packet loads, shows images and highlights, and collects decisions.
+
+**`scripts/ingest_reviews.py`** validates decision files (known target, matching kind, a named reviewer, no repeat by the same reviewer) and records them. Clause decisions go to `canonical/reviews.jsonl`, where the existing provenance policy (Gate M) applies: one approval gives `reviewed`, two distinct approvers give `verified`, any rejection gives `disputed`; the next rebuild applies it. Checked end to end with a throwaway decision (status changed to `reviewed`, Gate M passed), then removed. Decisions on other kinds go to `canonical/extractor_reviews.jsonl` and do not change any status. "Unsure" is counted, not recorded. `reports/review_accuracy.json` (rebuilt each time) gives, per kind, reviewed, correct, wrong, error rate with a 95% Wilson interval, and agreement between reviewers on items both saw. Because the sample is random, those error rates are honest estimates of each extractor, which the author-audited figures (measurement labels about 87%, conditions about 83%) are not.
+
+Limits: decisions are trusted as typed (no identity check); a rejection of a clause marks the whole clause disputed without saying why beyond the note; extractor reviews measure accuracy but cannot yet correct data automatically. State: 21 gates, 222 pytest, 14 browser suites, all passing; the review report is empty because no packet has been reviewed yet.
+
+**Action needed from people:** two engineers each complete a packet (50 items is about 30 to 60 minutes) and send back their decision files; `python scripts/ingest_reviews.py decisions_*.json` then `python scripts/rebuild_all.py`. This is the fastest route to independent accuracy numbers and to the first `reviewed` clauses.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

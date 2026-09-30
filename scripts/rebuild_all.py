@@ -27,6 +27,7 @@ STEPS = [
     "drawing_registry.py",         # drawing identity from file names + committed OCR (scripts/ocr_drawings.py)
     "drawing_links.py",            # clause -> drawing citations (needs the registry)
     "build_clause_extras.py",      # browser file: measurements + held drawings per clause
+    "ingest_reviews.py",           # no arguments: only refreshes reports/review_accuracy.json from recorded reviews
     "build_search_index.py",
 ]
 
