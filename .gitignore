@@ -27,3 +27,7 @@ Thumbs.db
 .env
 .venv/
 venv/
+
+# Scratch / throwaway
+scratch/
+*.bak
