@@ -1888,6 +1888,18 @@ Test state: 19 gates, 195 pytest, 13 browser suites, all passing.
 
 **Not done (carried forward):** condition extraction for measurements (speed band, track class, component), measurement-to-graph edges, independent second labeller and real engineer questions, automatic reviewed-synonym loop, drawings (P3/P4).
 
+### 37.16 Sprint H results (intake for real questions, reviewed synonyms) — 2026-09-30
+
+Sprint H builds the two human-in-the-loop pipelines that were missing. **It adds no new data and no measured improvement**: both need people to supply input, and none has been supplied.
+
+**H1. Real engineer questions, double-labelled (P7.1).** `eval/real_questions_template.json` documents the format; `scripts/ingest_real_questions.py` reads `eval/real_questions.json` and accepts a question only when two different labellers each supplied a label. Gold is the clauses both share; both saying "no answer" makes an expected-refusal question (`real_oos`); anything else is a disagreement, reported for adjudication and not used. It reports exact-set agreement and Cohen's kappa on the answerable / no-answer decision (`reports/real_question_agreement.json`), rejects single-labeller items, unknown clause references and duplicates, and ignores `_example` items. `build_eval_set.py` reads the result as categories `real` and `real_oos`. Smoke-tested end to end with two invented items (both passed, then removed). Until a real file exists, the evaluation has no independent questions, and the blind-set numbers of §37.12 (which the author labelled while looking at the engine) remain the best estimate.
+
+**H2. Reviewed synonyms (P7.3).** `scripts/apply_reviewed_synonyms.py` applies `eval/reviewed_synonyms.json` to `data/search/synonyms.json` only when each group has at least two phrases, a named reviewer, an existing evidence clause, at least one phrase found verbatim in the manuals, and is not a duplicate; a failing group blocks the whole batch. Accepted groups are recorded under `reviewed` with reviewer, reason and evidence. The regression check is the existing Gate P (`eval_retrieval.py --check` on the test split): a synonym that lowers retrieval fails the gate after the index is rebuilt. It is not automatic in the sense of learning from queries: `knowledge_gaps.json` still needs a person to propose the groups.
+
+Test state: 19 gates, 199 pytest, 13 browser suites (browser suites not re-run this sprint, no browser code changed). 
+
+**Next, and needs a person:** collect 50 to 100 real questions from engineers, have two people label them, run the intake, and then decide about embeddings (P5.2) from the resulting recall. Not done: condition extraction for measurements, measurement-to-graph edges, drawings (P3/P4).
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

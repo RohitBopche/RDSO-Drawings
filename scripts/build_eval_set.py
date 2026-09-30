@@ -128,6 +128,15 @@ def main() -> int:
             gold = [by_para[tuple(ref.split(" ", 1))] for ref in it["gold"]]
             add(it["question"], gold, "real", "user_confirmed_reviewed")
 
+    # real engineer questions, double-labelled (scripts/ingest_real_questions.py writes eval/reviewed_real.json)
+    rr = ROOT / "eval" / "reviewed_real.json"
+    if rr.exists():
+        for it in json.loads(rr.read_text(encoding="utf-8")):
+            if it["no_answer"]:
+                add(it["question"], [], "real_oos", "human_double_labelled", expect="refuse")
+            else:
+                add(it["question"], [by_para[tuple(ref.split(" ", 1))] for ref in it["gold"]], "real", "human_double_labelled")
+
     seen = set()
     rows = []
     for it in items:

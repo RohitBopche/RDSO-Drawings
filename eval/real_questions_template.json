@@ -1,0 +1,20 @@
+{
+  "_how_to": [
+    "Copy this file to eval/real_questions.json and delete the _example items.",
+    "questions: what an engineer really asked, in their words. Do NOT edit them after reading the manuals.",
+    "Each question needs labels from TWO different people (labeller names). A label lists gold clauses as 'MANUAL PARA' (for example 'IRPWM 429', 'USFD 8.10') or sets no_answer=true when the manuals do not answer it.",
+    "Labellers must not see the search engine's results before labelling.",
+    "Run: python scripts/ingest_real_questions.py   then   python scripts/build_eval_set.py"
+  ],
+  "questions": [
+    {
+      "_example": true,
+      "question": "How often must the track be inspected by the PWI on a route above 130 kmph?",
+      "asked_by": "engineer-1",
+      "labels": [
+        {"labeller": "A", "gold": ["IRPWM 506"], "no_answer": false},
+        {"labeller": "B", "gold": ["IRPWM 506"], "no_answer": false}
+      ]
+    }
+  ]
+}
