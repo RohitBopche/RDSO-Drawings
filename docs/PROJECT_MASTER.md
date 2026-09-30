@@ -1899,3 +1899,11 @@ An engineer can type a natural-language question offline and receive, in under 2
 - The 13 hand-written QA answers and the UI still show hard-coded `VERIFIED`/0.99 badges (`CANONICAL_QA_DATABASE`). They are not canonical data, so Gate M cannot see them; they are replaced by computed confidence and review state in P6.1 and must not be presented as reviewed before then.
 - Drawing-derived nodes (transcribed from crops) were downgraded too: no drawing fact has a human review record either. The review queue should start with safety-relevant numeric limits and the pilot drawings.
 - `scripts/build_canonical_pipeline.py` is deprecated (it would re-stamp everything `verified`); `unify_manual_canonical.py` is the generator until the P0-R.6 extractor rewrite replaces its input.
+
+### 38.7 Revised order after Sprint C
+
+1. **Independent evaluation first (P7.1 completion).** Collect 100+ real questions from engineers (not derived from clause text), have a second reviewer label gold clauses, and report them as a separate `real` category. Decide on the semantic layer (P5.2) only after this set shows where BM25 fails; the informal probe suggests misses come from paraphrase, tables and poor titles.
+2. **Retrieval quality fixes that need no model:** repair clause titles for decimal manuals (first sentence is used today), index table rows as structured records (value queries), add reviewed synonyms from the misses. Re-measure on the independent set.
+3. **Grounded answers (P6.1):** promote the extractive card to the only answer path, retire the 13 curated answers into regression questions (they still show hard-coded `VERIFIED`), add sentence-level extraction of the answering span with per-claim citation, conflict and revision flags, and a refusal rule tuned on the independent set.
+4. **Feedback loop (P7.2, P7.3):** local log of queries, clicks and thumbs; zero-result and low-coverage queries into the review queue; accepted corrections become eval questions.
+5. **Then** P5.2 (embeddings, only if step 1 justifies it), table extraction, P2.3 measurements, and rolling the remaining checks to drawings.
