@@ -34,5 +34,23 @@
    "latest_by_alteration": "drawings/2025-01-28-RDSO_T_6155_ALT_13.pdf",
    "latest_by_sheet_date": "drawings/2025-01-28-RDSO_T_6155_ALT_13.pdf"
   }
+ },
+ "title_block": {
+  "alt_contradicts_table": [
+   "drawings/RDSO_T_6290_ALT_1.pdf"
+  ],
+  "alt_matches_table": 7,
+  "alteration_rows": 28,
+  "catalog_title_vs_sheet": {
+   "close_0.9_plus": 3,
+   "compared": 14,
+   "different_below_0.6": 5,
+   "note": "bigram overlap between the hand-made catalogue title and the title read from the sheet; OCR noise lowers it, so below 0.6 means 'probably a different drawing', not proof",
+   "partial_0.6_to_0.9": 6
+  },
+  "sheets_with_alteration_rows": 23,
+  "sheets_with_scale": 46,
+  "sheets_with_specification": 54,
+  "sheets_with_title": 58
  }
 }

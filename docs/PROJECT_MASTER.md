@@ -1914,6 +1914,22 @@ First drawing work, under the rule that the manuals are now proven enough to sta
 
 **Not done (P3 remainder):** title-block fields (description, scale, rail section) are not extracted, because OCR returns the description block as jumbled fragments in non-reading order; notes, parts lists and dimensions with tolerances; highlighted evidence crops for drawings; revision comparison; turning the registry into graph nodes and linking drawings to manual clauses. Recommended next step for drawings: crop the title block by position and OCR it at higher resolution, then extract the alteration table row by row.
 
+### 37.18 Sprint J results (title block and alteration table, P3.2 and P3.3) — 2026-09-30
+
+`scripts/title_block.py` reads the fixed sheet layout from positioned OCR lines (page fractions, not reading order): the bottom row SPECIFICATION, SCALE, ALT:, DESCRIPTION, DATE and the drawing number; the alteration rows stacked above it (number, description, date); and the drawing description block above the number. It returns None for anything it cannot locate. The result sits in `title_block` of each registry record, all `machine_extracted`.
+
+Measured on the 59 sheets (from `reports/drawing_registry_report.json`): a description was read for 58, a specification for 54, a scale for 46, and alteration rows for 23 sheets (28 rows). The 36 sheets without rows are mostly the older hand-lettered scans, where OCR reads handwriting poorly; that is a limit of the input, not something the code can fix.
+
+**A real cross-check exists for alterations.** The highest alteration number read from the sheet's table must equal the ALT_n in the file name. It could be tested on 8 sheets (a legible number in the top row): 7 agree, 1 disagrees (`RDSO_T_6290_ALT_1`, where OCR read "80" from a hand-lettered scale, listed in the report for review). Small sample; it supports the file-name alteration numbers but does not prove them for the other 50 sheets.
+
+**The hand-made catalogue disagrees with the sheets.** Of the 14 catalogue entries with a real title, the title read from the sheet matches the catalogue title closely (bigram overlap 0.9 or more) for 3, partly for 6 (paraphrase and OCR noise), and is different (below 0.6) for 5, for example a catalogue "Check Rail Arrangement and Chairs for 1 in 12 CMS Crossing" against a sheet reading "TIE PLATE FOR S.S.D FOR USE WITH (Zu-1-60) THICK-WEB SWITCH". Together with §37.17 (45 of 59 titles are file names) the catalogue should be considered unreliable and replaced by the registry.
+
+Known weaknesses: the sheet description text keeps OCR damage (fused words such as "10125mmCURVEDSWITCHWITH", confusions such as 0 for O), so it is searchable evidence, not a clean title; a revision row whose number OCR missed has number None (a row between two read numbers that leave one free is not inferred, on purpose); some stamp text can leak into the description on unusual layouts. Sheets with several drawings (ranges) carry one title block, which describes only one of them.
+
+Gate T now also requires 55 sheets with a description and 6 with a file-name/table alteration match. Tests use synthetic sheets (layout, missing anchors returning None, the alteration check). State: 20 gates, 208 pytest; browser suites not re-run (no browser code changed); rebuild deterministic.
+
+**Not done (P3 remainder):** notes, parts lists and dimensions with tolerances; highlighted crops for drawing evidence; revision comparison (needs two versions of a sheet with legible tables: only T-6155 has them); graph nodes for drawings and links to manual clauses; replacing the hand-made catalogue and the 6 hand-made drawing nodes with registry-derived ones; a human transcription queue for the hand-lettered sheets.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

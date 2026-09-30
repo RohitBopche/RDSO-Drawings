@@ -10,6 +10,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 KG = ROOT / "data" / "knowledge-graph"
 MIN_CONFIRMED = 55
+MIN_TITLES = 55
+MIN_ALT_MATCHES = 6
 
 
 def main() -> int:
@@ -41,6 +43,12 @@ def main() -> int:
     confirmed = sum(r["checks"]["identity_confirmed"] for r in recs)
     if confirmed < MIN_CONFIRMED:
         errors.append(f"only {confirmed} drawings have their file-name number read on the sheet (< {MIN_CONFIRMED})")
+    titles = sum(bool((r.get("title_block") or {}).get("title")) for r in recs)
+    if titles < MIN_TITLES:
+        errors.append(f"only {titles} sheets have a title read (< {MIN_TITLES})")
+    matches = sum(r["checks"].get("alt_matches_table") is True for r in recs)
+    if matches < MIN_ALT_MATCHES:
+        errors.append(f"only {matches} sheets have the file-name alteration matched in the sheet's table (< {MIN_ALT_MATCHES})")
     for e in errors[:30]:
         print("[ERROR]", e)
     print(f"[SUMMARY] drawings: {'FAIL' if errors else 'PASS'}; drawings={len(recs)} identity_confirmed={confirmed} errors={len(errors)}")

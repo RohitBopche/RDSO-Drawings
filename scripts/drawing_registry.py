@@ -21,6 +21,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+import title_block  # noqa: E402
+
 KG = ROOT / "data" / "knowledge-graph"
 OUT = KG / "canonical" / "drawings_registry.jsonl"
 REPORT = KG / "reports" / "drawing_registry_report.json"
@@ -76,6 +79,13 @@ def check(fn: dict, nums: list[dict], dates: list[dict]) -> dict:
     return {"identity_confirmed": confirmed, "identity_partial": partial, "alt_consistent": alt_consistent}
 
 
+def alt_table_check(fn: dict, tb: dict | None) -> dict:
+    """The highest alteration number read in the sheet's table must equal the ALT_n in the file name (when one was read)."""
+    alt = fn["alteration"]
+    nums = [a["number"] for a in (tb or {}).get("alterations", []) if a["number"]]
+    return {"alt_matches_table": (max(nums) == alt) if isinstance(alt, int) and nums else None}
+
+
 def build() -> tuple[list[dict], dict]:
     ocr = {}
     p = KG / "raw" / "drawing_ocr.jsonl"
@@ -89,9 +99,10 @@ def build() -> tuple[list[dict], dict]:
         fn = parse_filename(f.name)
         nums = sheet_numbers(o["lines"]) if o and o["sha256"] == digest else []
         dates = sheet_dates(o["lines"]) if o and o["sha256"] == digest else []
+        tb = title_block.extract(o["lines"]) if o and o["sha256"] == digest else None
         rec = {"drawing_id": "DRG:" + re.sub(r"[^A-Za-z0-9]+", "_", f.stem).strip("_").upper(), "file": f"drawings/{f.name}", "sha256": digest,
                "filename": fn, "sheet_numbers": nums, "sheet_dates": dates, "ocr_present": bool(o and o["sha256"] == digest),
-               "checks": check(fn, nums, dates), "verification_status": "machine_extracted"}
+               "title_block": tb, "checks": {**check(fn, nums, dates), **alt_table_check(fn, tb)}, "verification_status": "machine_extracted"}
         recs.append(rec)
     n = len(recs)
     conf = sum(r["checks"]["identity_confirmed"] for r in recs)
@@ -118,7 +129,27 @@ def build() -> tuple[list[dict], dict]:
     placeholder = sum(c["title"].startswith("RDSO Drawing Specification") for c in catalog)
     range_files = [r for r in recs if r["filename"]["kind"] != "single"]
     cat_single_for_multi = sum(1 for r in range_files if r["file"].split("/")[-1] in by_file)
-    report = {"files": n, "identity_confirmed": conf, "identity_partial": part, "identity_unconfirmed": n - conf - part,
+    tbs = [r["title_block"] for r in recs if r["title_block"]]
+    tb_stats = {"sheets_with_title": sum(bool(t["title"]) for t in tbs), "sheets_with_specification": sum(bool(t["specification"]) for t in tbs),
+                "sheets_with_scale": sum(bool(t["scale"]) for t in tbs), "sheets_with_alteration_rows": sum(bool(t["alterations"]) for t in tbs),
+                "alteration_rows": sum(len(t["alterations"]) for t in tbs),
+                "alt_matches_table": sum(r["checks"]["alt_matches_table"] is True for r in recs),
+                "alt_contradicts_table": [r["file"] for r in recs if r["checks"]["alt_matches_table"] is False]}
+    def grams(t):
+        t = re.sub(r"[^a-z0-9]", "", t.lower())
+        return set(zip(t, t[1:]))
+
+    sim = []
+    for r in recs:
+        c = by_file.get(r["file"].split("/")[-1])
+        t = (r["title_block"] or {}).get("title")
+        if c and t and not c["title"].startswith("RDSO Drawing Specification"):
+            a = grams(c["title"])
+            sim.append(round(len(a & grams(t)) / max(1, len(a)), 2))
+    tb_stats["catalog_title_vs_sheet"] = {"compared": len(sim), "close_0.9_plus": sum(x >= 0.9 for x in sim),
+                                          "partial_0.6_to_0.9": sum(0.6 <= x < 0.9 for x in sim), "different_below_0.6": sum(x < 0.6 for x in sim),
+                                          "note": "bigram overlap between the hand-made catalogue title and the title read from the sheet; OCR noise lowers it, so below 0.6 means 'probably a different drawing', not proof"}
+    report = {"title_block": tb_stats, "files": n, "identity_confirmed": conf, "identity_partial": part, "identity_unconfirmed": n - conf - part,
               "alt_inconsistent": alt_bad, "files_with_several_numbers": len(range_files), "lineage_groups": lineage,
               "catalog": {"entries": len(catalog), "placeholder_titles": placeholder,
                           "multi_drawing_files_described_by_one_number": cat_single_for_multi,
