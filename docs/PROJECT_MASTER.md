@@ -1766,6 +1766,68 @@ Interpretation: the earlier totals were inflated by false positives, not "more c
 
 Verdict: the **structural half of the pilot (PDF to registry to hierarchy to provisions to evidence to source page) is MET for IRPWM**. The **retrieval half (search, questions, cross-references, grounded answers) is NOT met**, and the pilot is therefore not complete. Do not scale to other manuals for retrieval until Sprint C.
 
+### 37.11 Sprint C results (retrieval) — 2026-09-30
+
+**Order followed:** measure first, then build, then tune only on the dev split.
+
+**C1. Evaluation set (P7.1, started).** `eval/questions.jsonl`: 320 questions, built by `scripts/build_eval_set.py` from `eval/handwritten_questions.json`.
+
+| Category | n | What it tests | Gold |
+|---|---:|---|---|
+| `nl` | 100 | natural-language questions written from sampled clauses across all six manuals | the clause that answers it |
+| `ident` | 40 | "Para 429 IRPWM", "clause 710 of small track machines manual", "USFD 8.10" | that clause |
+| `title_auto` | 120 | a unique clause title as the query (a lexical floor) | that clause |
+| `kw_auto` | 40 | the `nl` questions reduced to bare keywords | that clause |
+| `oos` | 20 | questions the manuals cannot answer (cooking, cricket, Python ...) | none: must refuse |
+
+Each item has a deterministic dev/test split (hash of the question): 195 dev, 125 test. `eval/baseline.json` is committed; Gate P fails if Recall@5 or MRR of any category drops by more than 0.01 on either split, or if refusals regress.
+
+**C2. Offline retrieval engine (P5.1).** `lib/rdso_search.js` is one engine for the browser and for Node, with no dependency and no network: BM25F over 3,190 passages (700 to 1,100 characters, cut at line boundaries; clause title and chapter weighted x3), Porter stemmer, unit and "1 in 12 / 1:12" normalisation, a railway abbreviation table (`data/search/synonyms.json`, expansions down-weighted), paragraph-number matching ("Para 429", "IRPWM 2024 225"), manual-name scoping (longest match, so "small track machines manual" does not also select TMM), a small topic prior (flash-butt words favour FBW, thermit words favour AT Weld ...), bigram re-ranking, and an **evidence-coverage score** (share of the question's term weight found in the best passage) used to refuse out-of-scope questions. Index: 10,193 terms, 4.7 MB (`data/search/search_index.js`), built deterministically by `scripts/build_search_index.py` inside `rebuild_all.py`. Speed: 0.7 ms per query warm, 2 ms cold, index load 2 ms in Node.
+
+| Split | Category | n | R@1 | R@5 | R@10 | MRR |
+|---|---|---:|---:|---:|---:|---:|
+| dev | nl | 58 | 0.759 | 0.948 | 0.983 | 0.832 |
+| dev | kw_auto | 23 | 0.652 | 0.913 | 0.957 | 0.772 |
+| dev | ident | 29 | 1.000 | 1.000 | 1.000 | 1.000 |
+| dev | title_auto | 73 | 0.904 | 0.986 | 0.986 | 0.943 |
+| test | nl | 42 | 0.833 | 1.000 | 1.000 | 0.909 |
+| test | kw_auto | 17 | 0.882 | 1.000 | 1.000 | 0.941 |
+| test | ident | 11 | 1.000 | 1.000 | 1.000 | 1.000 |
+| test | title_auto | 47 | 0.957 | 1.000 | 1.000 | 0.975 |
+
+Refusal (threshold chosen on dev, coverage < 0.56 and no paragraph number resolved): dev 12/12 out-of-scope refused, 2 of 183 answerable wrongly refused; **test 6/8 out-of-scope refused**, 2 of 117 answerable wrongly refused. Two tuning steps were made on dev only (a longest-match manual detector that took `ident` from 0.93 to 1.0, and BM25 k1 1.2 to 1.0 with a topic prior and bigram weight 0.5); the test split was read once afterwards.
+
+**How far to trust these numbers (important).**
+1. The `nl` questions were written by the same author who was reading the clause, so they share vocabulary with the gold text; real users will paraphrase more. The numbers above are an upper bound.
+2. An informal probe of 12 unlabelled, engineer-style questions ("what should a gangmate do if he finds a rail fracture", "rail flaw detection frequency for 60kg rails", "tamping cycle for concrete sleepers", "what is the gauge tolerance in track" ...) gave an acceptable first result for about 8, the right paragraph in the top three for one more, and clear misses for three (flaw-detection frequency returned USFD 7.1 rather than 6.6, tamping cycle and gauge tolerance returned neighbouring but wrong clauses). Treat top-1 accuracy on real questions as roughly 60 to 70% until an independent set exists.
+3. `oos` has only 20 questions and the test half is 8, so the refusal figures carry wide error bars. Two test items ("How to repair a smartphone screen?", "speed limit for cars on national highways") share generic words with the manuals and are not refused.
+4. Gold labels are `author_drafted_unreviewed`; a second person should check them (P7.1 completion).
+5. Weak spots seen: USFD (and other decimal-numbered) clauses have poor titles (the label is the first sentence), which weakens the title field; queries about a value that lives in a table rank the surrounding prose.
+
+**C3. Cross-references (P2.1).** `scripts/crossrefs.py` finds paragraph (with lists such as "Paras 619 and 620" and sub-clauses "(3)(a)"), annexure, table, figure, chapter and standard references in every clause, keeps the exact character span, types "(Back to Para N)" editorial back-links separately, follows "of the Indian Railway Code" style scopes to EXTERNAL, and resolves the rest against the canonical store. `canonical/crossrefs.jsonl` (1,572 records) and `reports/crossref_report.json`:
+
+| Kind | Resolved | External | Not found | Notes |
+|---|---:|---:|---:|---|
+| paragraph | 548 | 9 | 9 | the 9 unresolved are listed in the report (e.g. IRPWM "Para 143", AT Weld "4.4.3.1", FBW "10.1.1") |
+| annexure | 333 | 0 | 12 | |
+| table | 79 | 0 | 11 | |
+| figure | 197 | 0 | 107 | figures that were never extracted as nodes |
+| chapter | 38 | 0 | 0 | |
+| standard (IS, IRS, RDSO, RT ...) | 0 | 229 | 0 | external by definition |
+
+1,676 `REFERENCES` edges were added (source clause to target; evidence = the source clause), taking the graph to 8,086 edges, all with evidence except the 12 waived ones. Gate Q recomputes the extraction and fails on stale data, wrong spans, missing targets or edges, and if unresolved paragraph references exceed 9.
+
+**C4. Source highlighting (P2.2, partial).** `scripts/render_evidence.py` draws the stored per-line evidence regions on the PDF page and crops around them (verified visually on Para 429). The viewer modal shows this crop above the PDF when `artifacts/evidence/<id>.png` exists and otherwise behaves as before. Limits: only the first 300 characters of a clause are highlighted (the evidence quote), not the whole paragraph; crops are a git-ignored cache produced on demand (`--doc IRPWM` or `--all`) rather than shipped (about 1,200 images); an in-browser highlight would need pdf.js, which cannot read local PDFs from `file://` pages without browser flags, so it was not attempted.
+
+**UI changes (index.html):**
+- A question that no curated answer matches now gets an **extractive answer**: the best passage quoted (HTML-escaped) with manual, paragraph and page, an "Open source page" button, other relevant provisions, status `MACHINE_EXTRACTED` and confidence equal to evidence coverage. If evidence is thin the card says **"No sufficient evidence"** and lists nothing. The previous fallback substring search that declared any keyword hit "VERIFIED, 94%" was removed.
+- **Bug found and fixed:** the curated-answer matcher returned the "bolt-hole star crack mitigation" card (status VERIFIED, 95%) for "How is casual renewal of a defective or fractured rail carried out?" because one keyword ("fractured") matched. Curated answers now need at least two of their own keywords.
+- Provision cards list **References in this provision** and **Referenced by** as clickable chips coloured by status, and the clause text scrolls instead of stretching the panel.
+
+**Test and gate state:** 17 gates (A to Q), 175 pytest, 13 browser suites, all passing; a rebuild from source is byte-identical (search index and cross-references included). New: `test_search_engine.py` (7), `test_crossrefs.py` (8), `test_render_evidence.py` (3), `verify_retrieval_ui.js` (5 checks). Browser tests now use a fresh Chrome profile per run (a crashed run had left a lock that failed the next one); the CI browser job installs PyMuPDF and Pillow.
+
+**Pilot status after Sprint C (Master §28, IRPWM):** full-text search **MET** (BM25 with identifiers); natural-language retrieval **PARTIAL** (good on the authored set, ~60 to 70% top-1 on informal probes); cross-references **MET** (classified, with 9 unresolved paragraph references reported); citations resolve **MET** for retrieval answers; no answer without retrieved evidence **PARTIAL** (retrieval answers and refusals are evidence-gated; the 13 curated answers remain and still carry hard-coded "VERIFIED"); regression tests for retrieval **MET**.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
@@ -1786,14 +1848,14 @@ Verdict: the **structural half of the pilot (PDF to registry to hierarchy to pro
 | **P0-R.10 (DONE, §37.9)** | Bootstrap | none | `validate_all.py` checks/installs dependencies (or prints exact fix); dependency versions pinned. | Fresh clone: one command yields a green run. |
 | **P1-R.1 (DONE, §37.10)** | Frontend reads canonical only | R.2 | Remove `RDSO_MANUALS_KNOWLEDGE` reads from `index.html`; provision cards use canonical `text`/`page`/`evidence_ids`; drop the derived legacy view once unused. | Test: card text equals canonical node text; grep gate for `RDSO_MANUALS_KNOWLEDGE` = 0. |
 | **P1-R.2 (PARTIAL, §37.10)** | Honest P1 sign-off | R.6 | Tick the pilot checklist (§28) for IRPWM with evidence links; only then scale to other manuals. | Every checklist line has a reproducible command or test. |
-| **P2.1** | Cross-reference extraction and resolution | R.6 | Extract "Para N", "Annexure", "Chapter", "Rule", external IS/IRS/RDSO refs (~640 in IRPWM); classify `RESOLVED / AMBIGUOUS / EXTERNAL / NOT_FOUND`; edges `REFERENCES` with evidence; broken-reference report. | Every reference in the raw text is classified; 0 unclassified; resolved targets exist. |
-| **P2.2** | Source highlighting | R.4 | Render page image with evidence `bbox` highlight (PyMuPDF, offline); UI opens the highlighted region, not just the page. | Test opens a clause and finds the highlighted rect over the quoted words. |
+| **P2.1 (DONE, §37.11)** | Cross-reference extraction and resolution | R.6 | Extract "Para N", "Annexure", "Chapter", "Rule", external IS/IRS/RDSO refs (~640 in IRPWM); classify `RESOLVED / AMBIGUOUS / EXTERNAL / NOT_FOUND`; edges `REFERENCES` with evidence; broken-reference report. | Every reference in the raw text is classified; 0 unclassified; resolved targets exist. |
+| **P2.2 (PARTIAL, §37.11)** | Source highlighting | R.4 | Render page image with evidence `bbox` highlight (PyMuPDF, offline); UI opens the highlighted region, not just the page. | Test opens a clause and finds the highlighted rect over the quoted words. |
 | **P2.3** | Measurement and requirement facts | R.6 | Structured `Measurement {subject, quantity, comparator, value, unit, applies_to, clause_id, evidence}` replacing bare tolerance nodes; requirement priority from modal verbs ("shall/should/may") with reviewed overrides. | Every tolerance has a subject and comparator; sample of 100 reviewed with at least 95% precision. |
-| **P5.1** | Offline retrieval core | R.6 | SQLite FTS5 (BM25) over clause text and headings in a single `.db` served with the app; identifier and para-number exact match; abbreviation/synonym dictionary (SSE/P.Way, CMS, USFD, ...); filters by manual/chapter/type/edition. | Retrieval eval set (below): Recall@5 at least 0.85 on keyword and identifier queries. |
+| **P5.1 (DONE as BM25, §37.11)** | Offline retrieval core | R.6 | SQLite FTS5 (BM25) over clause text and headings in a single `.db` served with the app; identifier and para-number exact match; abbreviation/synonym dictionary (SSE/P.Way, CMS, USFD, ...); filters by manual/chapter/type/edition. | Retrieval eval set (below): Recall@5 at least 0.85 on keyword and identifier queries. |
 | **P5.2** | Semantic layer | P5.1 | Small local embedding model (quantised, CPU) with an ANN index built offline; hybrid score = BM25 + vector + graph proximity; cross-encoder re-rank optional. Model file versioned and hashed. | Recall@5 at least 0.90 on natural-language set; no network calls (test blocks sockets). |
 | **P6.1** | Grounded answers | P5.1 | Extractive answer builder: top evidence spans, quoted with citation (manual, para, page, evidence id); confidence from retrieval scores and agreement; explicit "insufficient evidence" refusal below threshold; conflict/applicability flags. Replace the 13 hand-written answers and their hard-coded confidences; keep them as regression questions. | 0 answers without a citation; refusal correct on the out-of-corpus set; every quoted span verifiable in the source text. |
 | **P6.2** | Optional local LLM | P6.1 | Optional offline small LLM (llama.cpp class) only to rephrase extractive answers; output checked by a citation verifier that rejects any sentence not supported by retrieved spans. | Verifier rejects seeded hallucinations in tests. |
-| **P7.1** | Evaluation harness | P5.1 | `eval/questions.jsonl` (start 150: 60 keyword, 40 natural-language, 20 identifier, 15 conflict/revision, 15 out-of-scope), each with gold clause ids and page; `scripts/eval_retrieval.py` prints Recall@k, MRR, refusal precision; results tracked per commit; regression gate. | Metrics file changes are diffed in CI; drops beyond tolerance fail the build. |
+| **P7.1 (STARTED, §37.11)** | Evaluation harness | P5.1 | `eval/questions.jsonl` (start 150: 60 keyword, 40 natural-language, 20 identifier, 15 conflict/revision, 15 out-of-scope), each with gold clause ids and page; `scripts/eval_retrieval.py` prints Recall@k, MRR, refusal precision; results tracked per commit; regression gate. | Metrics file changes are diffed in CI; drops beyond tolerance fail the build. |
 | **P7.2** | Local feedback capture | P6.1 | Opt-in local log (IndexedDB/JSONL): query, results shown, clicked evidence, thumbs up/down, "wrong page" flag; never leaves the machine; exportable. | Log records round-trip; schema validated. |
 | **P7.3** | Self-improvement loop | P7.1, P7.2 | Nightly/on-demand job: (a) zero-result and low-confidence queries into `review_queue`; (b) suggested synonyms/aliases from co-clicked queries, applied only after reviewer approval; (c) accepted corrections become new eval questions; (d) re-index and re-run eval, refusing to publish if metrics regress. Dashboard of knowledge gaps per manual/chapter. | An accepted correction changes the answer to that query, and the eval gate stays green. |
 | **P7.4** | Learning content from evidence | P6.1 | Flashcards/quizzes generated only from cited clauses, stored with their clause ids; remove hand-authored quiz facts not traceable to a clause. | Every card links to a clause id and page. |

@@ -2500,6 +2500,7 @@
     .manual-pdf-modal-body {
       flex: 1;
       display: flex;
+      flex-direction: column;
       background: #111;
       border-radius: 8px;
       overflow: hidden;
@@ -2509,7 +2510,8 @@
 
     .manual-pdf-modal-iframe {
       width: 100%;
-      height: 100%;
+      flex: 1;
+      min-height: 0;
       border: none;
     }
 
@@ -3418,6 +3420,10 @@
       </div>
     </div>
     <div class="manual-pdf-modal-body">
+      <div id="manual-pdf-evidence-crop" style="display:none; padding:8px 12px; background:#0b1020; border-bottom:1px solid rgba(255,255,255,0.12); max-height:38%; overflow:auto;">
+        <div style="font-size:10px; color:var(--text-muted); margin-bottom:4px;">Cited text, highlighted on the source page (rendered offline from the stored evidence region):</div>
+        <img id="manual-pdf-evidence-img" alt="Highlighted source evidence" style="max-width:100%; border:1px solid rgba(255,255,255,0.15); background:#fff;">
+      </div>
       <iframe id="manual-pdf-modal-iframe" class="manual-pdf-modal-iframe" src="about:blank"></iframe>
     </div>
   </div>
@@ -5401,7 +5407,7 @@
               </div>
             </div>` : ''}
           <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; border-top:1px solid rgba(255,255,255,0.08); padding-top:10px;">
-            <button class="btn btn-primary" id="btn-open-clause-pdf" style="padding:5px 12px; font-size:11px; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" onclick="openManualPdf('${manualName}', ${pageNum || 1}, '${title.replace(/'/g, "\\'")}')">
+            <button class="btn btn-primary" id="btn-open-clause-pdf" style="padding:5px 12px; font-size:11px; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" onclick="openManualPdf('${manualName}', ${pageNum || 1}, '${title.replace(/'/g, "\\'")}', 'ev:clause:${data.id}')">
               <span>📄</span> Open Source PDF (Page ${pageNum || 1}) ↗
             </button>
             <button class="btn" style="padding:5px 10px; font-size:11px;" onclick="switchDrawerTab('manuals'); filterManualsTree('${specs.ClauseNumber || (title.match(/(\\d+)/) || [])[1] || ''}')">
@@ -6233,7 +6239,7 @@
       return MANUAL_PDF_REGISTRY['DOC:IRPWM:2024:ACS14'];
     }
 
-    function openManualPdf(docRef, page, title) {
+    function openManualPdf(docRef, page, title, evidenceId) {
       const pdfPath = resolveManualPdfPath(docRef);
       const pageNum = parseInt(page) || 1;
       const pdfUrl = `${pdfPath}#page=${pageNum}`;
@@ -6252,6 +6258,17 @@
       if (iframe) {
         iframe.src = pdfUrl;
       }
+      // Highlighted crop of the cited text when it has been rendered (python scripts/render_evidence.py).
+      const cropBox = document.getElementById('manual-pdf-evidence-crop');
+      const cropImg = document.getElementById('manual-pdf-evidence-img');
+      if (cropBox && cropImg) {
+        cropBox.style.display = 'none';
+        if (evidenceId) {
+          cropImg.onload = () => { cropBox.style.display = 'block'; };
+          cropImg.onerror = () => { cropBox.style.display = 'none'; };
+          cropImg.src = `artifacts/evidence/${String(evidenceId).replace(/[^A-Za-z0-9_.-]/g, '_')}.png`;
+        }
+      }
       if (modal) {
         modal.style.display = "flex";
       }
@@ -6262,6 +6279,8 @@
       const modal = document.getElementById('manual-pdf-modal');
       const iframe = document.getElementById('manual-pdf-modal-iframe');
       if (iframe) iframe.src = "about:blank";
+      const cropBox = document.getElementById('manual-pdf-evidence-crop');
+      if (cropBox) cropBox.style.display = 'none';
       if (modal) modal.style.display = "none";
     }
 
@@ -8655,7 +8674,7 @@
       const best = res.results[0];
       const excerpt = escHtml(best.text.replace(/\s+\n/g, '\n').slice(0, 700)) + (best.text.length > 700 ? ' …' : '');
       const docId = ALIAS_TO_DOC[best.alias];
-      const open = docId && best.page ? `<button class="btn" style="font-size:10px;padding:2px 8px;margin-left:6px;" onclick="openManualPdf('${docId}', ${best.page}, '${escHtml(citationOf(best))}')">📄 Open source page ↗</button>` : '';
+      const open = docId && best.page ? `<button class="btn" style="font-size:10px;padding:2px 8px;margin-left:6px;" onclick="openManualPdf('${docId}', ${best.page}, '${escHtml(citationOf(best))}', '${best.type === 'CLAUSE' ? 'ev:clause:' + best.clause : ''}')">📄 Open source page ↗</button>` : '';
       const others = res.results.slice(1).map(r => `<li>${citationOf(r)} — ${escHtml(r.title.slice(0, 80))}</li>`).join('');
       const statement = `<div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">Best matching passage (extract, not a summary) — ${citationOf(best)}${open}</div>` +
         `<blockquote style="border-left:3px solid var(--accent-cyan);padding-left:10px;margin:4px 0;white-space:pre-wrap;font-size:12px;line-height:1.5;color:#e0e8f8;">${excerpt}</blockquote>` +

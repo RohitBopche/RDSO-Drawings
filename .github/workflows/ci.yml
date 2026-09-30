@@ -46,8 +46,11 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install node dependencies
-        run: npm ci
+      - name: Install node and python dependencies
+        run: |
+          npm ci
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt   # PyMuPDF + Pillow: the retrieval-UI suite renders an evidence crop
 
       - name: Headless browser suites
         env:

@@ -163,6 +163,22 @@ async function main() {
     console.log(t4);
     if (!t4.hasOut || t4.chips < 2 || !t4.escaped) throw new Error('Test 4 failed ' + JSON.stringify(t4));
 
+    // TEST 5
+    console.log("\n--- TEST 5: source viewer shows the highlighted crop when rendered, plain PDF otherwise ---");
+    require('child_process').execFileSync('python', [path.resolve(__dirname, '..', 'scripts', 'render_evidence.py'), 'CLAUSE:IRPWM:CH_04:PARA_429'], { stdio: 'ignore' });
+    await client.eval(`window.openManualPdf('DOC:IRPWM:2024:ACS14', 195, 'Para 429', 'ev:clause:CLAUSE:IRPWM:CH_04:PARA_429'); 1`);
+    await sleep(1200);
+    const t5 = await client.eval(`
+      (() => { const box = document.getElementById('manual-pdf-evidence-crop'), img = document.getElementById('manual-pdf-evidence-img');
+               return { shown: box.style.display === 'block', w: img.naturalWidth, iframe: document.getElementById('manual-pdf-modal-iframe').src.includes('#page=195') }; })()
+    `);
+    console.log(t5);
+    if (!t5.shown || t5.w < 300 || !t5.iframe) throw new Error('Test 5a failed ' + JSON.stringify(t5));
+    await client.eval(`window.openManualPdf('DOC:IRPWM:2024:ACS14', 195, 'Para 429', 'ev:clause:CLAUSE:DOES_NOT:EXIST'); 1`);
+    await sleep(800);
+    const t5b = await client.eval(`document.getElementById('manual-pdf-evidence-crop').style.display`);
+    if (t5b !== 'none') throw new Error('Test 5b failed: crop box visible without an image');
+
     console.log("\n[SUCCESS] Retrieval UI and cross-reference chips verified!");
     client.close();
   } catch (err) {
