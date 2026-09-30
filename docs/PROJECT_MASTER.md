@@ -1976,6 +1976,12 @@ Limits: decisions are trusted as typed (no identity check); a rejection of a cla
 
 **Action needed from people:** two engineers each complete a packet (50 items is about 30 to 60 minutes) and send back their decision files; `python scripts/ingest_reviews.py decisions_*.json` then `python scripts/rebuild_all.py`. This is the fastest route to independent accuracy numbers and to the first `reviewed` clauses.
 
+### 37.23 Sprint O results (clean-checkout reproducibility and docs) — 2026-09-30
+
+No new features. Checked that the repository stands on its own: a fresh `git clone` of the branch into an empty directory, `python scripts/rebuild_all.py` (2 min 50 s, including table extraction), left `git status` empty (the rebuild reproduces every committed generated file byte for byte), `unify_manual_canonical.py --check-metrics` passed, and `validate_all.py` passed all 21 gates (A to U) there. The clone had the Python dependencies of `requirements-dev.txt` and Node, but not `node_modules`; the browser suites were not re-run in the clone (they need Chrome and `npm ci`, which the CI browser job does). The GitHub Actions workflow could not be run from this environment, so CI itself remains unproven; its gate step is now labelled A to U and it already runs the rebuild, the `git diff --exit-code -- data/` check, the metrics check and the browser job, which covers the 14 suites.
+
+The README was the early prototype text with unverified statistics and a superseded drawing catalogue. It now opens with a status note pointing here, states that those sections are unverified prototype text, and lists the commands to rebuild, validate, test and search. It was not rewritten.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

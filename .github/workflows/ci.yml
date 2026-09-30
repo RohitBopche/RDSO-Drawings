@@ -30,7 +30,7 @@ jobs:
       - name: Metrics are current
         run: python scripts/unify_manual_canonical.py --check-metrics
 
-      - name: Publication gates A-M
+      - name: Publication gates A-U
         run: python scripts/validate_all.py
 
   browser:
