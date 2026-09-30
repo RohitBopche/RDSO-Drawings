@@ -4,15 +4,15 @@
   "min": 183,
   "range": 222,
   "tolerance": 58,
-  "value": 5161
+  "value": 5142
  },
  "by_quantity": {
-  "cant": 28,
+  "cant": 26,
   "clearance": 9,
   "diameter": 39,
   "distance": 155,
   "frequency": 226,
-  "gap": 50,
+  "gap": 49,
   "gauge": 96,
   "gradient": 16,
   "height": 127,
@@ -23,13 +23,13 @@
   "temperature": 37,
   "thickness": 12,
   "time": 110,
-  "unclassified": 4101,
+  "unclassified": 4085,
   "wear": 22,
   "width": 91
  },
  "by_unit": {
   "%": 176,
-  "cm": 66,
+  "cm": 65,
   "day": 74,
   "db": 10,
   "deg": 69,
@@ -43,10 +43,10 @@
   "kmph": 387,
   "kn": 6,
   "litre": 44,
-  "m": 1391,
+  "m": 1382,
   "mhz": 118,
   "minute": 178,
-  "mm": 1970,
+  "mm": 1961,
   "month": 93,
   "second": 14,
   "t": 295,
@@ -55,6 +55,6 @@
  "conflict_candidates": 23,
  "conflict_candidates_note": "pairs of provisions in one manual bounding the same quantity differently about overlapping subject words: candidates for human review, NOT conflicts (see measurement_conflict_candidates.json)",
  "table": 2433,
- "text": 3411,
- "total": 5844
+ "text": 3392,
+ "total": 5825
 }

@@ -107,10 +107,15 @@ def build(per_kind: int, seed: int, only: list[str] | None = None) -> tuple[list
                 p = table_crop(tables[tid], registry, ROOT / "artifacts" / "review" / "crops")
             else:
                 e = ev.get(f"ev:{('clause:' + clause)}")
-                p = RE.render(e, registry, 100, ROOT / "artifacts" / "review" / "crops") if e else None
+                p = None
+                if e and span:     # a crop around the item itself, boxed in red, not the clause start
+                    p = RE.render_span(e, registry, nodes[clause]["text"], span[0], span[1], 100, ROOT / "artifacts" / "review" / "crops",
+                                       name=f"{tid}")
+                if p is None and e:
+                    p = RE.render(e, registry, 100, ROOT / "artifacts" / "review" / "crops")
             item["image"] = png_b64(p) if p else ""
             item["more_images"] = [png_b64(q) for q in RE.render_continuations(e, registry, 100, ROOT / "artifacts" / "review" / "crops")] \
-                if kind != "table" and e else []
+                if kind == "clause" and e else []       # the span crop already shows the page the item is on
             items.append(item)
     rnd.shuffle(items)          # do not review one kind in a row
     meta = {"seed": seed, "per_kind": per_kind, "items": len(items)}

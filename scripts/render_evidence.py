@@ -54,6 +54,59 @@ def render(evidence: dict, registry: dict, dpi: int = 110, out_dir: Path = OUT) 
     return path
 
 
+def _span_words(page, raw: str):
+    """Word index ranges on `page` whose text equals the tokens of `raw` (fused number+title words split like the parser)."""
+    import locate_evidence as L
+    words = L.split_fused(page.get_text("words"))
+    toks = [w[4] for w in words]
+    q = L.split_fused_tokens(raw.split())
+    hits = []
+    for i in range(len(toks) - len(q) + 1):
+        if toks[i:i + len(q)] == q:
+            hits.append(list(range(i, i + len(q))))
+    return words, hits
+
+
+def render_span(evidence: dict, registry: dict, clause_text: str, start: int, end: int, dpi: int = 110,
+                out_dir: Path = OUT, name: str = "") -> Path | None:
+    """Crop around ONE extracted span (a reference, value or drawing number): the clause lightly highlighted, the span boxed in red.
+    The k-th occurrence of the span's words inside the clause region is used, where k = how many times the same words occur earlier in the clause."""
+    raw = " ".join(clause_text[start:end].split())
+    k = " ".join(clause_text[:start].split()).count(raw) if raw else 0
+    segs = [(evidence["page_number"], evidence.get("line_regions") or [], evidence.get("region"))]
+    segs += [(c["page_number"], c["line_regions"], c["region"]) for c in evidence.get("continuation") or []]
+    reg = registry[evidence["document_id"]]
+    doc = pymupdf.open(ROOT / reg["file_path"])
+    found = []
+    for pno, lines, region in segs:
+        page = doc[pno - 1]
+        words, hits = _span_words(page, raw)
+        for h in hits:
+            xs = [words[i] for i in h]
+            y0, y1 = min(w[1] for w in xs), max(w[3] for w in xs)
+            if region and region[1] - 3 <= y0 and y1 <= region[3] + 3:
+                found.append((pno, lines, xs))
+    if not found:
+        return None
+    pno, lines, xs = found[min(k, len(found) - 1)]
+    page = doc[pno - 1]
+    for box in lines:
+        page.draw_rect(pymupdf.Rect(box), color=None, fill=(1, 0.9, 0.4), fill_opacity=0.25, overlay=True)
+    by_line: dict[tuple, list] = {}
+    for w in xs:
+        by_line.setdefault((w[5], w[6]), []).append(w)
+    y0 = y1 = None
+    for ws in by_line.values():
+        r = pymupdf.Rect(min(w[0] for w in ws) - 1.5, min(w[1] for w in ws) - 1.5, max(w[2] for w in ws) + 1.5, max(w[3] for w in ws) + 1.5)
+        page.draw_rect(r, color=(0.9, 0.0, 0.0), width=1.6, overlay=True)
+        y0, y1 = (r.y0, r.y1) if y0 is None else (min(y0, r.y0), max(y1, r.y1))
+    clip = pymupdf.Rect(0, max(0, y0 - 70), page.rect.width, min(page.rect.height, y1 + 70))
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / f"{safe_name(name or evidence['evidence_id'] + f'@{start}')}.png"
+    page.get_pixmap(dpi=dpi, clip=clip).save(path)
+    return path
+
+
 def render_continuations(evidence: dict, registry: dict, dpi: int = 110, out_dir: Path = OUT) -> list[Path]:
     """Crops of the pages a clause continues onto (evidence["continuation"]), highlighted the same way."""
     paths = []

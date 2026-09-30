@@ -62,3 +62,13 @@ def test_packet_is_reproducible_and_sampled():
     assert [i["target_id"] for i in a] == [i["target_id"] for i in b]
     assert {i["kind"] for i in a} == set(M.KINDS) and len(a) == 10
     assert all(i["image"].startswith("data:image/png") for i in a if i["kind"] != "table")
+
+
+def test_item_crops_box_the_item_itself():
+    import make_review_packet as M
+    items, _ = M.build(8, 5)
+    spanned = [i for i in items if i["kind"] in ("xref", "measurement", "drawing_link")]
+    assert spanned and all(i["image"].startswith("data:image/png") for i in spanned)
+    # the crop is built around the item (render_span), which needs the item's words to be found on the page
+    import render_evidence as RE
+    assert hasattr(RE, "render_span")

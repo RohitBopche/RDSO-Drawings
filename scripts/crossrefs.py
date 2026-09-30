@@ -136,7 +136,11 @@ def extract(nodes: list[dict], deleted: dict[str, list[str]]) -> list[dict]:
             for m in rx.finditer(text):
                 spans.append((m.start(), m.end(), kind, {"number": m.group(grp).strip(), "back": in_back(m.start())}))
         for m in STANDARD.finditer(text):
-            spans.append((m.start(), m.end(), "standard", {"number": re.sub(r"\s+", " ", m.group(1)).strip().upper()}))
+            if re.match(r"\s*(?:kg|kgs|/\s*m)\b", text[m.end():m.end() + 6], re.I):
+                continue                      # "IRS-52 kg" is a rail section, not a standard
+            num = re.sub(r"\s+", " ", m.group(1)).strip().upper()
+            kind_ = "drawing" if re.match(r"(?:RDSO\s*/\s*)?(?:R?T)[-\s/]*\d{4,5}\b", num) else "standard"   # RT-4865 is a drawing
+            spans.append((m.start(), m.end(), kind_, {"number": num}))
 
         # drop overlaps (earlier / longer wins)
         spans.sort(key=lambda s: (s[0], -(s[1] - s[0])))
@@ -153,7 +157,7 @@ def extract(nodes: list[dict], deleted: dict[str, list[str]]) -> list[dict]:
                    "scope": alias, "scope_name": None, "status": "NOT_FOUND", "targets": []}
             scope, name = scope_after(text, end, alias) if kind == "para" else (alias, None)
             rec["scope"], rec["scope_name"] = scope, name
-            if kind == "standard" or scope == "EXTERNAL":
+            if kind in ("standard", "drawing") or scope == "EXTERNAL":
                 rec["status"] = "EXTERNAL"
             elif kind == "para":
                 key = (scope, info["number"])

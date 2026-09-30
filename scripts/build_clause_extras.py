@@ -25,8 +25,8 @@ def read(p: Path) -> list[dict]:
 def main() -> int:
     extras: dict[str, dict] = {}
     for m in read(KG / "canonical" / "measurements.jsonl"):
-        if m["source"] != "text":
-            continue                                   # table cells already reach the user as table rows
+        if m["source"] != "text" or m.get("context") != "prose":
+            continue             # table cells reach the user as table rows; values in flattened table/figure text lose their meaning
         e = extras.setdefault(m["clause"], {"v": []})
         if len(e["v"]) < MAX_VALUES:
             e["v"].append([m["comparator"], m["lo"], m["hi"], m["unit"], m["quantity"], " ".join(m["raw"].split()),

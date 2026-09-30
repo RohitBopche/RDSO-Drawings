@@ -120,6 +120,16 @@ CONDITION_RES = [
 ]
 
 
+def context_quality(window: str) -> str:
+    """"prose" if the words around a value read as a sentence, "fragment" if they look like flattened table, figure or
+    drawing labels (many one- or two-letter tokens, codes and numbers): such a value is often real text but its meaning is lost."""
+    toks = window.split()
+    if not toks:
+        return "fragment"
+    words = sum(1 for t in toks if re.fullmatch(r"[A-Za-z][a-z]{2,}[,.;:]?", t) or re.fullmatch(r"[A-Za-z]{3,}", t))
+    return "prose" if words / len(toks) >= 0.5 else "fragment"
+
+
 def conditions_in(sentence: str, own: tuple[int, int]) -> list[dict]:
     """What the sentence says the value applies to, excluding the value's own span (deterministic patterns, not understanding)."""
     out, seen = [], set()
@@ -145,17 +155,18 @@ def extract_from_text(clause_id: str, text: str) -> list[dict]:
         def free(a, b):
             return all(b <= x or a >= y for x, y in used)
 
-        def emit(m, comparator, lo, hi, unit_raw):
+        def emit(m, comparator, lo, hi, unit_raw, ext=0):
             unit = canon_unit(unit_raw)
             if not unit or not _plausible(unit, lo, hi):
                 return
-            a, b = m.start(), m.end()
+            a, b = m.start() - ext, m.end()
             used.append((a, b))
             window = sent[max(0, a - 110):a]
             q = _fix_quantity(quantity_of(window) or quantity_of(sent[:a]), unit, hi, lo)
             conds = conditions_in(sent, (a, b))
+            cq = context_quality(sent[max(0, a - 100):b + 60])
             sent_records.append((len(out), a, b))
-            out.append({"clause": clause_id, "source": "text", "conditions": conds, "start": s0 + a, "end": s0 + b, "raw": text[s0 + a:s0 + b].strip(),
+            out.append({"clause": clause_id, "source": "text", "conditions": conds, "context": cq, "start": s0 + a, "end": s0 + b, "raw": text[s0 + a:s0 + b].strip(),
                         "quantity": q, "comparator": comparator, "lo": lo, "hi": hi, "unit": unit,
                         "subject": " ".join(sent[max(0, a - 110):a].split())[-110:] or " ".join(sent.split())[:80]})
 
@@ -178,19 +189,24 @@ def extract_from_text(clause_id: str, text: str) -> list[dict]:
         for m in SINGLE.finditer(sent):
             if not free(m.start(), m.end()) or _skip(sent, m.start(), m.group(2)):
                 continue
+            if re.match(r"\s?[23\u00b2\u00b3]\b", sent[m.end():m.end() + 3]) and canon_unit(m.group(3)) in ("m", "cm", "mm", "km"):
+                continue              # m2 / m3 / cm2: an area or volume, not a length
             comp = (m.group("comp") or "").lower()
             v = to_num(m.group(2))
+            ns, ext = m.start(2), 0
+            if not comp and ns >= 1 and sent[ns - 1] in "-\u2212\u2013" and (ns < 2 or not (sent[ns - 2].isalnum() or sent[ns - 2] in ")%")):
+                v, ext = -v, 1        # an attached minus sign ("-10 mm"), not a dash between words or "tm - 12.5"; the span includes it
             tail = sent[m.end():m.end() + 16]
             if not comp and re.match(r"\s*(?:or|and)\s+(?:more|above|greater|higher|over)\b", tail, re.I):
                 comp = "minimum"          # "440 m or more" is a lower bound
             elif not comp and re.match(r"\s*(?:or|and)\s+(?:less|below|lower|fewer|under)\b", tail, re.I):
                 comp = "maximum"          # "100 mm or less" is an upper bound
             if re.match(COMP_MAX, comp, re.I):
-                emit(m, "max", None, v, m.group(3))
+                emit(m, "max", None, v, m.group(3), ext)
             elif re.match(COMP_MIN, comp, re.I):
-                emit(m, "min", v, None, m.group(3))
+                emit(m, "min", v, None, m.group(3), ext)
             else:
-                emit(m, "value", v, v, m.group(3))
+                emit(m, "value", v, v, m.group(3), ext)
         # a speed value in the same sentence is the speed band another value applies to
         for i, a, b in sent_records:
             r = out[i]
