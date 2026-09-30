@@ -566,7 +566,11 @@ def build_canonical_knowledge_graph():
     # 14. RAILWAY CODES, MANUALS & EXTENDED REGULATIONS
     # =========================================================================
     manuals_path = os.path.join(REPO_ROOT, "data", "rdso_manuals_knowledge.json")
-    if os.path.exists(manuals_path):
+    # rdso_manuals_knowledge.json is now a *derived view* of the canonical store (written by
+    # unify_manual_canonical.py). Reading it here made the build circular and re-introduced
+    # stale clause nodes with empty text, so manuals are built only from the chapter extraction (section 15).
+    USE_DERIVED_MANUALS_VIEW = False
+    if USE_DERIVED_MANUALS_VIEW and os.path.exists(manuals_path):
         with open(manuals_path, "r", encoding="utf-8") as f:
             man_data = json.load(f)
 

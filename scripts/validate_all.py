@@ -30,6 +30,7 @@ GATES = [
     ("Gate L: Manual Text Integrity & Single Source", [sys.executable, str(ROOT / "scripts" / "validate_manual_text_integrity.py")]),
     ("Gate M: Provenance Policy", [sys.executable, str(ROOT / "scripts" / "validate_provenance_policy.py")]),
     ("Gate N: Evidence Locations & Hashes", [sys.executable, str(ROOT / "scripts" / "validate_evidence_locations.py")]),
+    ("Gate O: OCR Coverage of Image-only Pages", [sys.executable, str(ROOT / "scripts" / "validate_ocr_coverage.py")]),
 ]
 
 

@@ -74,9 +74,14 @@ def sha256_file(path: Path) -> str:
 
 def enrich_evidence(nodes, edges, json_edges, evidence, facts) -> None:
     """Attach page/region/hash locations to evidence and evidence ids to nodes and edges."""
+    evidence[:] = [e for e in evidence if e.get("file_path")]  # keep crops; text evidence is rebuilt
     by_ev = {e["evidence_id"]: e for e in evidence}
     by_node = {n["id"]: n for n in nodes}
-    locs = read_jsonl(LOCATIONS) if LOCATIONS.exists() else []
+    for ed in edges + json_edges:
+        ed.pop("evidence_ids", None)
+    locs = [l for l in (read_jsonl(LOCATIONS) if LOCATIONS.exists() else []) if l["node_id"] in by_node]
+    for l in locs:
+        by_node[l["node_id"]].pop("evidence_ids", None)
     for loc in locs:
         e = by_ev.get(loc["evidence_id"])
         if e is None:
@@ -134,19 +139,17 @@ def enrich_evidence(nodes, edges, json_edges, evidence, facts) -> None:
 def build() -> dict:
     src = json.loads(SRC.read_text(encoding="utf-8"))
     legacy = json.loads(LEGACY_JSON.read_text(encoding="utf-8"))
-    jsonl_nodes = {n["id"]: n for n in read_jsonl(CANON / "nodes.jsonl")}
-    # The two stores diverged: the compact JSON carries provenance/hierarchy fields,
-    # the JSONL carries name/status fields. Merge them into one node record.
+    # Nodes and edges come from the compact core produced by generate_canonical_kg.py; nothing
+    # is read back from earlier canonical outputs, so stale records cannot survive a rebuild.
     nodes = []
     for e in legacy["entities"]:
-        merged = dict(e)
-        for k, v in jsonl_nodes.get(e["id"], {}).items():
-            merged.setdefault(k, v)
-        nodes.append(merged)
-    edges = read_jsonl(CANON / "edges.jsonl")
-    json_edges = list(legacy["edges"])
+        n = dict(e)
+        n.setdefault("name", n.get("label") or n["id"])
+        n.setdefault("status", "active")
+        nodes.append(n)
+    json_edges = [dict(e) for e in legacy["edges"]]
+    edges = [{**e, "rel": RELATION_NORM.get(e["rel"], e["rel"])} for e in json_edges]
     reqs = read_jsonl(CANON / "requirements.jsonl")
-    evidence_ids = {e["evidence_id"] for e in read_jsonl(CANON / "evidence.jsonl")}
     by_id = {n["id"]: n for n in nodes}
     edge_keys = {(e["from"], e["to"], e["rel"]) for e in edges}
 
@@ -181,9 +184,6 @@ def build() -> dict:
                 specs["Paragraph"] = str(cl["para_number"])
                 specs["Page"] = page
                 specs["Manual"] = doc_id
-                ev_id = f"ev:clause:{cid}"
-                if ev_id in evidence_ids:
-                    node["evidence_ids"] = [ev_id]
                 clause_rows[cid] = {
                     "cl": cl, "alias": alias, "doc_id": doc_id, "chapter": ch,
                     "page": page, "text": text,
@@ -214,11 +214,8 @@ def build() -> dict:
                     key = (cid, tid, "SPECIFIES")
                     if key not in edge_keys:
                         edge_keys.add(key)
-                        rec = {"from": cid, "to": tid, "rel": "SPECIFIES",
-                               "rationale": f"Specified by Para {cl['para_number']}", "source": None}
-                        if f"ev:clause:{cid}" in evidence_ids:
-                            rec["evidence_ids"] = [f"ev:clause:{cid}"]
-                        tol_edges.append(rec)
+                        tol_edges.append({"from": cid, "to": tid, "rel": "SPECIFIES",
+                                          "rationale": f"Specified by Para {cl['para_number']}", "source": None})
 
     for tid, tn in tol_nodes.items():
         by_id[tid] = tn
@@ -244,8 +241,6 @@ def build() -> dict:
             "priority": "unknown", "confidence": 0.95, "verification_status": MACHINE,
             "clause": str(cl["para_number"]), "source_document_id": info["doc_id"],
         }
-        if f"ev:clause:{cid}" in evidence_ids:
-            row["evidence_ids"] = [f"ev:clause:{cid}"]
         new_rows.append(row)
     for n in nodes:
         if n["type"] == "TOLERANCE" and n["id"] in by_id:
@@ -255,7 +250,10 @@ def build() -> dict:
             })
     reqs = kept + new_rows
     if quarantined:
-        write_jsonl(QUARANTINE, quarantined)
+        seen_q = {r["id"] for r in quarantined}
+        prior = read_jsonl(QUARANTINE) if QUARANTINE.exists() else []
+        write_jsonl(QUARANTINE, prior + [r for r in quarantined if r["id"] not in {p["id"] for p in prior}]
+                    if prior else quarantined)
 
 
     # --- unified core json (keep facts; add facts for new edges) ---
@@ -275,8 +273,14 @@ def build() -> dict:
             "extraction_method": "deterministic_text_extraction",
             "evidence_text": e["rationale"],
         })
-    evidence = read_jsonl(CANON / "evidence.jsonl")
+    evidence = read_jsonl(CANON / "evidence.jsonl")  # only crop evidence survives enrich_evidence
     enrich_evidence(nodes, edges, json_edges, evidence, facts)
+    ev_ids = {e["evidence_id"] for e in evidence}
+    for r in reqs:
+        if f"ev:clause:{r['id']}" in ev_ids:
+            r["evidence_ids"] = [f"ev:clause:{r['id']}"]
+        else:
+            r.pop("evidence_ids", None)
     reviews_path = CANON / "reviews.jsonl"
     reviews = read_jsonl(reviews_path) if reviews_path.exists() else []
     provenance_policy.apply(nodes, reqs, evidence, facts, reviews)
@@ -340,7 +344,7 @@ def compute_metrics() -> dict:
     reviews = read_jsonl(CANON / "reviews.jsonl") if (CANON / "reviews.jsonl").exists() else []
     per_manual: dict[str, dict] = {}
     for n in nodes:
-        if n["type"] == "SPECIFICATION" and n["id"].startswith("CLAUSE:"):
+        if n["type"] in ("CLAUSE", "SPECIFICATION") and n["id"].startswith("CLAUSE:"):
             m = per_manual.setdefault(n.get("document_id") or n["specs"].get("Manual", "?"),
                                       {"clauses": 0, "clauses_with_text": 0, "short_clauses": 0})
             text = (n.get("text") or "").strip()
@@ -358,6 +362,12 @@ def compute_metrics() -> dict:
                 d["raw_detected_clauses"] += len(p.get("detected_clauses", []))
     for doc, d in pages.items():
         per_manual[doc].update(d)
+    ocr = read_jsonl(KG / "raw" / "ocr_pages.jsonl") if (KG / "raw" / "ocr_pages.jsonl").exists() else []
+    for r in ocr:
+        if r["document_id"] in per_manual:
+            per_manual[r["document_id"]]["ocr_pages"] = per_manual[r["document_id"]].get("ocr_pages", 0) + 1
+            per_manual[r["document_id"]]["ocr_weak_pages"] = per_manual[r["document_id"]].get("ocr_weak_pages", 0) + \
+                (1 if r["line_count"] == 0 or r["mean_confidence"] < 0.80 else 0)
     types: dict[str, int] = {}
     for n in nodes:
         types[n["type"]] = types.get(n["type"], 0) + 1

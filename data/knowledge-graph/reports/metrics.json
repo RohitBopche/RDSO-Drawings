@@ -1,67 +1,78 @@
 {
-  "edges": 9037,
-  "edges_with_evidence": 9025,
+  "edges": 6419,
+  "edges_with_evidence": 6407,
   "edges_without_evidence": 12,
-  "evidence": 6783,
+  "evidence": 4850,
   "evidence_status": {
-    "machine_extracted": 6783
+    "machine_extracted": 4850
   },
-  "evidence_with_page": 6746,
-  "evidence_with_region": 6663,
+  "evidence_with_page": 4813,
+  "evidence_with_region": 4721,
   "generated_by": "scripts/unify_manual_canonical.py",
   "manual_clauses": {
     "DOC:AT_WELD:2022": {
-      "clauses": 115,
-      "clauses_with_text": 115,
+      "clauses": 73,
+      "clauses_with_text": 73,
       "non_extractable_pages": 1,
+      "ocr_pages": 1,
+      "ocr_weak_pages": 0,
       "pages": 49,
       "raw_detected_clauses": 163,
-      "short_clauses": 7
+      "short_clauses": 0
     },
     "DOC:FBW:2022:CS5": {
-      "clauses": 131,
-      "clauses_with_text": 131,
+      "clauses": 57,
+      "clauses_with_text": 57,
       "non_extractable_pages": 13,
+      "ocr_pages": 13,
+      "ocr_weak_pages": 0,
       "pages": 69,
       "raw_detected_clauses": 204,
-      "short_clauses": 15
+      "short_clauses": 0
     },
     "DOC:IRPWM:2024:ACS14": {
-      "clauses": 673,
-      "clauses_with_text": 673,
+      "clauses": 422,
+      "clauses_with_text": 422,
       "non_extractable_pages": 14,
+      "ocr_pages": 14,
+      "ocr_weak_pages": 0,
       "pages": 530,
       "raw_detected_clauses": 1738,
-      "short_clauses": 22
+      "short_clauses": 1
     },
     "DOC:STMM:2024": {
-      "clauses": 396,
-      "clauses_with_text": 396,
+      "clauses": 258,
+      "clauses_with_text": 258,
       "non_extractable_pages": 0,
       "pages": 222,
       "raw_detected_clauses": 179,
-      "short_clauses": 240
+      "short_clauses": 14
     },
     "DOC:TMM:2020:ACS10": {
-      "clauses": 349,
-      "clauses_with_text": 349,
+      "clauses": 171,
+      "clauses_with_text": 171,
       "non_extractable_pages": 4,
+      "ocr_pages": 4,
+      "ocr_weak_pages": 0,
       "pages": 458,
       "raw_detected_clauses": 1062,
-      "short_clauses": 27
+      "short_clauses": 0
     },
     "DOC:USFD:2026:ACS4": {
-      "clauses": 174,
-      "clauses_with_text": 174,
+      "clauses": 192,
+      "clauses_with_text": 192,
       "non_extractable_pages": 32,
+      "ocr_pages": 32,
+      "ocr_weak_pages": 6,
       "pages": 157,
       "raw_detected_clauses": 353,
-      "short_clauses": 14
+      "short_clauses": 0
     }
   },
   "node_types": {
     "BOM_ITEM": 2,
     "CHAPTER": 83,
+    "CLAUSE": 1173,
     "COMPONENT": 15,
     "DIMENSION": 6,
     "DOCUMENT": 6,
@@ -77,21 +88,20 @@
     "PROCEDURE": 1,
     "REVISION": 5,
     "ROLE": 1,
-    "SECTION": 2082,
+    "SECTION": 1427,
     "SLEEPER": 3,
     "SOP": 3,
     "SPARE_PART": 3,
-    "SPECIFICATION": 1838,
     "STANDARD": 2,
-    "SUBSECTION": 1819,
+    "SUBSECTION": 1107,
     "TABLE": 57,
-    "TOLERANCE": 361,
+    "TOLERANCE": 460,
     "ZONE": 5
   },
-  "nodes": 6830,
-  "requirements": 2199,
+  "nodes": 4897,
+  "requirements": 1633,
   "reviews": 0,
   "verification_status": {
-    "machine_extracted": 6830
+    "machine_extracted": 4897
   }
 }

@@ -20,8 +20,10 @@ def test_gate_l_passes():
 
 
 def test_every_clause_has_text_and_page():
-    clauses = [n for n in _jsonl("nodes.jsonl") if n["id"].startswith("CLAUSE:") and n["type"] == "SPECIFICATION"]
-    assert len(clauses) == 1838
+    clauses = [n for n in _jsonl("nodes.jsonl") if n["id"].startswith("CLAUSE:") and n["type"] == "CLAUSE"]
+    extraction = json.loads((ROOT / "data/knowledge-graph/intermediate/all_chapters_extracted.json").read_text(encoding="utf-8"))
+    expected = sum(len(c["clauses"]) for m in extraction["manuals"] for c in m["chapters"])
+    assert len(clauses) == expected > 1000
     assert all(len(n["text"].strip()) >= 3 and n["page"] for n in clauses)
 
 

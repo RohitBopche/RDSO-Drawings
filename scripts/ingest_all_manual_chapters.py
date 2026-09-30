@@ -18,11 +18,15 @@ import os
 import re
 import sys
 import hashlib
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import clause_parser  # noqa: E402
 from datetime import datetime
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 EXTRACTED_PAGES_PATH = 'data/knowledge-graph/raw/extracted_pages.jsonl'
+SOURCE_REGISTRY_PATH = 'data/knowledge-graph/raw/source_registry.jsonl'
 OUTPUT_DIR = 'data/knowledge-graph/intermediate'
 OUTPUT_FILE = os.path.join(OUTPUT_DIR, 'all_chapters_extracted.json')
 
@@ -395,106 +399,76 @@ def normalize_source_heading_candidates(headings):
     return ordered
 
 
-def extract_clauses_from_text(doc_id, page_num, text, chapter_num=None):
-    """
-    Extracts individual statutory clauses from page text based on numbering schemes.
-    """
-    clauses = []
-    reg = MANUAL_CHAPTER_REGISTRY.get(doc_id)
-    alias = reg['alias'] if reg else 'DOC'
-    
-    # Custom regex patterns per manual
-    if doc_id == 'DOC:IRPWM:2024:ACS14':
-        pattern = re.compile(r'(?:^|\n)\s*(\d{3,4})\.?\s+([A-Z][^\n\.\(]{3,80})', re.MULTILINE)
-    elif doc_id == 'DOC:USFD:2026:ACS4':
-        pattern = re.compile(r'(?:^|\n)\s*(\d+\.\d+(?:\.\d+)?)\.?\s+([A-Z][^\n\.\(]{3,80})', re.MULTILINE)
-    elif doc_id in ('DOC:AT_WELD:2022', 'DOC:FBW:2022:CS5'):
-        pattern = re.compile(r'(?:^|\n)\s*(\d+(?:\.\d+)?)\.?\s+([A-Z][^\n\.\(]{3,80})', re.MULTILINE)
-    else: # TMM and STMM
-        pattern = re.compile(r'(?:^|\n)\s*(\d{3,4})\.?\s+([A-Z][^\n\.\(]{3,80})', re.MULTILINE)
-        
-    matches = list(pattern.finditer(text))
-    
-    for i, m in enumerate(matches):
-        para_num = m.group(1).strip()
-        # Filter out false positives (e.g. Figure numbers or page numbers)
-        if any(bad in m.group(2).upper() for bad in ['FIGURE', 'TABLE', 'PAGE', 'ACS -', 'SKETCH']):
-            continue
-            
-        title = m.group(2).strip()
-        start_pos = m.start()
-        end_pos = matches[i+1].start() if i+1 < len(matches) else len(text)
-        clause_body = text[start_pos:end_pos].strip()
-        
-        # Extract tolerances
-        tolerances = []
-        for tr in TOL_RANGE_RE.finditer(clause_body):
-            tolerances.append({
-                'text': tr.group(0),
-                'min': float(tr.group(1)),
-                'max': float(tr.group(2)),
-                'unit': tr.group(3)
-            })
-        for ts in TOL_SINGLE_RE.finditer(clause_body):
-            tolerances.append({
-                'text': ts.group(0),
-                'value': float(ts.group(1)),
-                'unit': ts.group(2)
-            })
-            
-        # Extract requirements
-        reqs = [r.strip() for r in REQUIREMENT_RE.findall(clause_body) if len(r.strip()) > 10][:3]
-        
-        # Roles, Equipment, Failure Modes, Components
-        roles = sorted(list(set(ROLE_RE.findall(clause_body))))
-        equips = sorted(list(set(EQUIP_RE.findall(clause_body))))
-        fails = sorted(list(set(FAIL_RE.findall(clause_body))))
-        comps = sorted(list(set(COMP_RE.findall(clause_body))))
-        
-        # Deterministic Stable ID scoped to the authoritative chapter.
-        clean_para = re.sub(r'[^A-Za-z0-9_]', '_', para_num)
-        if chapter_num is not None:
-            clause_id = f"CLAUSE:{alias}:CH_{int(chapter_num):02d}:PARA_{clean_para}"
-        else:
-            clause_id = f"CLAUSE:{alias}:PARA_{clean_para}"
-        
-        # Summary (first 2 clean sentences)
-        sentences = [s.strip() for s in re.split(r'\. |\n', clause_body) if len(s.strip()) > 15]
-        summary = ". ".join(sentences[:2]) + ("." if sentences else "")
-        if len(summary) > 250:
-            summary = summary[:247] + "..."
-            
-        # Deterministic content hierarchy derived from the clause reference.
-        # This is explicitly marked as derived, not treated as an authoritative
-        # TOC/heading hierarchy until source headings are ingested.
-        section_ref = para_num.split('.')[0].split('(')[0]
-        subsection_match = re.match(r'^([^.(]+(?:\.[^.(]+)?(?:\([^)]*\))?)', para_num)
-        subsection_ref = subsection_match.group(1) if subsection_match else section_ref
-
-        clauses.append({
-            'clause_id': clause_id,
-            'para_number': para_num,
-            'section_ref': section_ref,
-            'subsection_ref': subsection_ref,
-            'title': title,
-            'page_number': page_num,
-            'source_document': doc_id,
-            'source_page': page_num,
-            'source_section': para_num,
-            'source_text': clause_body[:1200],
-            'confidence': 0.95,
-            'extraction_method': 'deterministic_manual_clause_numbering',
-            'summary': summary if summary else title,
-            'verbatim_text': clause_body[:1200],
-            'tolerances': tolerances[:5],
-            'requirements': reqs,
-            'roles': roles,
-            'equipment': equips,
-            'failure_modes': fails,
-            'related_components': comps
+def build_clause_record(doc_id, alias, chapter_num, para_num, title, page_num, page_end, clause_body):
+    """Structured clause record (entities, tolerances, roles ...) from a parsed clause body."""
+    tolerances = []
+    for tr in TOL_RANGE_RE.finditer(clause_body):
+        tolerances.append({
+            'text': tr.group(0),
+            'min': float(tr.group(1)),
+            'max': float(tr.group(2)),
+            'unit': tr.group(3)
         })
-        
-    return clauses
+    for ts in TOL_SINGLE_RE.finditer(clause_body):
+        tolerances.append({
+            'text': ts.group(0),
+            'value': float(ts.group(1)),
+            'unit': ts.group(2)
+        })
+
+    reqs = [r.strip() for r in REQUIREMENT_RE.findall(clause_body) if len(r.strip()) > 10][:3]
+    roles = sorted(list(set(ROLE_RE.findall(clause_body))))
+    equips = sorted(list(set(EQUIP_RE.findall(clause_body))))
+    fails = sorted(list(set(FAIL_RE.findall(clause_body))))
+    comps = sorted(list(set(COMP_RE.findall(clause_body))))
+
+    # Deterministic stable ID scoped to the authoritative chapter.
+    clean_para = re.sub(r'[^A-Za-z0-9_]', '_', para_num)
+    clause_id = f"CLAUSE:{alias}:CH_{int(chapter_num):02d}:PARA_{clean_para}"
+
+    sentences = [s.strip() for s in re.split(r'\. |\n', clause_body) if len(s.strip()) > 15]
+    summary = ". ".join(sentences[:2]) + ("." if sentences else "")
+    if len(summary) > 250:
+        summary = summary[:247] + "..."
+
+    # Deterministic content hierarchy derived from the clause reference. Derived, not an
+    # authoritative TOC: source headings are ingested separately.
+    section_ref = para_num.split('.')[0].split('(')[0]
+    subsection_match = re.match(r'^([^.(]+(?:\.[^.(]+)?(?:\([^)]*\))?)', para_num)
+    subsection_ref = subsection_match.group(1) if subsection_match else section_ref
+
+    return {
+        'clause_id': clause_id,
+        'para_number': para_num,
+        'section_ref': section_ref,
+        'subsection_ref': subsection_ref,
+        'title': title,
+        'page_number': page_num,
+        'page_end': page_end,
+        'source_document': doc_id,
+        'source_page': page_num,
+        'source_section': para_num,
+        'source_text': clause_body[:1200],
+        'confidence': 0.95,
+        'extraction_method': 'layout_numbering_chain_v2',
+        'summary': summary if summary else title,
+        'verbatim_text': clause_body,
+        'tolerances': tolerances[:5],
+        'requirements': reqs,
+        'roles': roles,
+        'equipment': equips,
+        'failure_modes': fails,
+        'related_components': comps
+    }
+
+
+def registry_pdf_path(doc_id):
+    with open(SOURCE_REGISTRY_PATH, 'r', encoding='utf-8') as f:
+        for line in f:
+            rec = json.loads(line)
+            if rec.get('id') == doc_id:
+                return rec['file_path']
+    raise KeyError(f'{doc_id} not in source registry')
 
 
 def main():
@@ -528,6 +502,15 @@ def main():
         } for ch in meta['chapters']}
     } for doc_id, meta in MANUAL_CHAPTER_REGISTRY.items()}
     
+    # Clauses come from the layout-aware document-level parser (clause_parser.py), not page regexes.
+    parsed_by_doc = {}
+    parse_stats = {}
+    for doc_id, meta in MANUAL_CHAPTER_REGISTRY.items():
+        parsed = clause_parser.parse_manual(registry_pdf_path(doc_id), doc_id, meta['chapters'])
+        parsed_by_doc[doc_id] = parsed
+        parse_stats[doc_id] = {**parsed.stats, 'heading_only_paras': parsed.heading_only,
+                               'chapter_head_pages': {str(k): list(v) for k, v in sorted(parsed.chapter_pages.items())}}
+
     total_pages_read = 0
     total_clauses_extracted = 0
     pages_by_doc = {}
@@ -559,13 +542,16 @@ def main():
 
                 headings = extract_source_headings(doc_id, pnum, txt)
                 manual_data[doc_id]['chapters'][ch_num]['headings'].extend(headings)
-                extracted = extract_clauses_from_text(doc_id, pnum, txt, ch_num)
-                if extracted:
-                    manual_data[doc_id]['chapters'][ch_num]['clauses'].extend(extracted)
-                    total_clauses_extracted += len(extracted)
                 structural = extract_structural_content(doc_id, ch_num, pnum, txt)
                 for key in ('tables', 'figures', 'evidence'):
                     manual_data[doc_id]['chapters'][ch_num][key].extend(structural[key])
+
+    for doc_id, parsed in parsed_by_doc.items():
+        alias = MANUAL_CHAPTER_REGISTRY[doc_id]['alias']
+        for c in parsed.clauses:
+            rec = build_clause_record(doc_id, alias, c.chapter_num, c.number, c.title, c.page, c.page_end, c.text)
+            manual_data[doc_id]['chapters'][c.chapter_num]['clauses'].append(rec)
+            total_clauses_extracted += 1
 
     for doc_id, manual in manual_data.items():
         for chapter in manual['chapters'].values():
@@ -630,7 +616,8 @@ def main():
     final_payload = {
         # Deterministic: same inputs must give byte-identical output (CI reproducibility check).
         'extracted_at': os.environ.get('RDSO_EXTRACTED_AT', 'deterministic'),
-        'pipeline_version': '4.1.0-deterministic-structural-artifacts',
+        'pipeline_version': '5.0.0-layout-clause-parser',
+        'clause_parse_stats': parse_stats,
         'total_manuals': len(structured_manuals),
         'total_chapters': total_chapters_count,
         'total_pages_processed': total_pages_read,

@@ -12,6 +12,7 @@ INTERMEDIATE = ROOT / "data" / "knowledge-graph" / "intermediate" / "all_chapter
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from ingest_all_manual_chapters import MANUAL_CHAPTER_REGISTRY  # noqa: E402
+import clause_parser  # noqa: E402
 
 
 def validate_registry_boundaries(registry: dict | None = None) -> tuple[list[str], list[str]]:
@@ -177,9 +178,13 @@ def validate_payload(payload: dict) -> tuple[list[str], list[str]]:
                     errors.append(f"{cid}: page_number must be an integer")
                     continue
                 if page_range and not (page_range[0] <= page <= page_range[1]):
-                    errors.append(
-                        f"{cid}: page {page} falls outside owning chapter {chapter_id} range {page_range}"
-                    )
+                    msg = f"{cid}: page {page} falls outside owning chapter {chapter_id} range {page_range}"
+                    if clause_parser.PROFILES.get(doc_id, {}).get("kind") == "decimal":
+                        # Decimally numbered manuals: the numbering owns the chapter; the hand-written
+                        # registry page range is known to be unreliable there (see PROJECT_MASTER §37.10).
+                        warnings.append(msg + " (registry range disagrees with numbering)")
+                    else:
+                        errors.append(msg)
 
                 if not cid.startswith(f"CLAUSE:{registry['alias']}:"):
                     errors.append(

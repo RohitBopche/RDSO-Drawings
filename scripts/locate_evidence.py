@@ -19,6 +19,7 @@ from __future__ import annotations
 import difflib
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -48,6 +49,23 @@ def evidence_id_for(node: dict) -> str:
     return f"ev:clause:{node['id']}" if node["id"].startswith("CLAUSE:") else f"ev:src:{node['id']}"
 
 
+FUSED_RE = re.compile(r"^(\d{3,4})([A-Z][a-z].*)$")
+
+
+def split_fused(words: list) -> list:
+    """Some manuals set the paragraph number and title without a space ("302Types"); the parser
+    normalises that, so split the PDF word the same way (both halves keep the original box)."""
+    out = []
+    for w in words:
+        m = FUSED_RE.match(w[4])
+        if m:
+            out.append((*w[:4], m.group(1), *w[5:]))
+            out.append((*w[:4], m.group(2), *w[5:]))
+        else:
+            out.append(w)
+    return out
+
+
 def locate(words: list, quote: str):
     """Find `quote` in the page word list; returns (indices, ratio) or None."""
     q = quote.split()
@@ -56,13 +74,20 @@ def locate(words: list, quote: str):
     if not q:
         return None
     toks = [w[4] for w in words]
+    first_anchor = None
     for k in (min(ANCHOR, len(q)), min(3, len(q)), 1):
         for i in range(len(toks) - k + 1):
             if toks[i:i + k] == q[:k]:
+                if first_anchor is None and k >= min(2, len(q)):
+                    first_anchor = i
                 seg = toks[i:i + len(q)]
                 ratio = difflib.SequenceMatcher(None, seg, q, autojunk=False).ratio()
                 if ratio >= MIN_RATIO:
-                    return list(range(i, min(i + len(q), len(toks)))), ratio
+                    return list(range(i, min(i + len(q), len(toks)))), ratio, "word_sequence"
+    if first_anchor is not None:
+        # Reading order of the layout parser differs from the PDF text order (tables, columns):
+        # the full span cannot be matched, but the opening words can be located exactly.
+        return list(range(first_anchor, min(first_anchor + 3 * ANCHOR, len(toks)))), 0.0, "anchor_only"
     return None
 
 
@@ -112,7 +137,7 @@ def main() -> int:
                 continue
             if page_no not in cache:
                 page = pdf[page_no - 1]
-                cache[page_no] = (page.get_text("words"), hashlib.sha256(page.get_text().strip().encode("utf-8")).hexdigest(),
+                cache[page_no] = (split_fused(page.get_text("words")), hashlib.sha256(page.get_text().strip().encode("utf-8")).hexdigest(),
                                   round(page.rect.width, 1), round(page.rect.height, 1))
             words, page_hash, w, h = cache[page_no]
             rec = {"evidence_id": evidence_id_for(n), "node_id": n["id"], "document_id": doc_id,
@@ -121,7 +146,7 @@ def main() -> int:
             hit = locate(words, quote) if n["type"] != "CHAPTER" else None
             if hit:
                 union, lines = rects(words, hit[0])
-                rec.update(region=union, line_regions=lines, locator="word_sequence", match_ratio=round(hit[1], 3))
+                rec.update(region=union, line_regions=lines, locator=hit[2], match_ratio=round(hit[1], 3))
             else:
                 rec.update(region=None, line_regions=[], locator="page_only", match_ratio=0.0)
             records.append(rec)

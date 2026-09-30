@@ -25,7 +25,7 @@ EMPTY = {"", "...", "…"}
 # Ratchet: clauses whose text is barely more than a heading (known extraction gap,
 # tracked under P0-R.6). May only go down.
 SHORT_CLAUSE_CHARS = 60
-SHORT_CLAUSE_BASELINE = 325
+SHORT_CLAUSE_BASELINE = 15
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -46,7 +46,7 @@ def main() -> int:
     edges = read_jsonl(CANON / "edges.jsonl")
     reqs = read_jsonl(CANON / "requirements.jsonl")
     by_id = {n["id"]: n for n in nodes}
-    clauses = [n for n in nodes if n["id"].startswith("CLAUSE:") and n["type"] == "SPECIFICATION"]
+    clauses = [n for n in nodes if n["id"].startswith("CLAUSE:") and n["type"] in ("CLAUSE", "SPECIFICATION")]
 
     # 1. clause text
     short = 0

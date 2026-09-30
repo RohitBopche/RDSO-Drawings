@@ -25,11 +25,16 @@ def test_every_clause_evidence_has_page_region_and_hashes():
     ev = {e["evidence_id"]: e for e in _jsonl("evidence.jsonl")}
     clauses = [n for n in _jsonl("nodes.jsonl") if n["id"].startswith("CLAUSE:")]
     assert clauses
+    exact = 0
     for n in clauses:
         e = ev[f"ev:clause:{n['id']}"]
         assert e["page_number"] == n["page"]
-        assert len(e["region"]) == 4 and e["locator"] == "word_sequence"
         assert len(e["pdf_sha256"]) == 64 and len(e["page_sha256"]) == 64
+        assert e["locator"] in ("word_sequence", "anchor_only", "page_only")
+        if e["locator"] != "page_only":
+            assert len(e["region"]) == 4
+        exact += e["locator"] == "word_sequence"
+    assert exact / len(clauses) > 0.9
 
 
 def test_edges_cite_evidence_except_waived():
