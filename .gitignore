@@ -33,3 +33,4 @@ scratch/
 *.bak
 data/search/passages.jsonl
 artifacts/evidence/
+data/feedback/

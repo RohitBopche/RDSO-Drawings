@@ -8,6 +8,8 @@ Sources, in order:
   title_auto    120 queries that are a unique clause title (a lexical floor, not a quality claim)
   kw_auto       40 handwritten questions reduced to bare keywords
   oos           20 questions the manuals cannot answer; expected behaviour is to refuse
+  blind         35 practitioner questions written before reading any clause (+12 railway-related
+                questions the corpus cannot answer, category blind_oos)
 
 Every item has a deterministic dev/test split (hash of the question); tune on dev, report test.
 Deterministic: same inputs give the same file.
@@ -102,6 +104,26 @@ def main() -> int:
 
     for q in OOS:
         add(q, [], "oos", "author_drafted_unreviewed", expect="refuse")
+
+    # Blind set: practitioner-style questions written BEFORE looking at any clause text, gold-labelled
+    # afterwards by reading the candidates. Far less vocabulary leakage than `nl`.
+    by_para = {(c["id"].split(":")[1], str(c["specs"]["Paragraph"])): c["id"] for c in clauses.values()}
+    blind = json.loads((ROOT / "eval" / "blind_questions.json").read_text(encoding="utf-8"))
+    for b in blind["answerable"]:
+        gold = []
+        for ref in b["gold"]:
+            alias, para = ref.split(" ", 1)
+            gold.append(by_para[(alias, para)])
+        add(b["question"], gold, "blind", "author_blind_drafted")
+    for q in blind["unanswerable"]:
+        add(q, [], "blind_oos", "author_blind_drafted", expect="refuse")
+
+    # reviewed user feedback (scripts/ingest_feedback.py -> a person accepts candidates into this file)
+    rf = ROOT / "eval" / "reviewed_feedback.json"
+    if rf.exists():
+        for it in json.loads(rf.read_text(encoding="utf-8")):
+            gold = [by_para[tuple(ref.split(" ", 1))] for ref in it["gold"]]
+            add(it["question"], gold, "real", "user_confirmed_reviewed")
 
     seen = set()
     rows = []

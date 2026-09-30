@@ -181,7 +181,9 @@ async function main() {
       })()
     `);
     console.log("Test 2 Result:", test2Result);
-    if (!test2Result.hasAnswerCard || test2Result.paramRowCount < 2 || test2Result.traversalNodeCount < 3) {
+    // The tongue-rail wear answer used to be a hand-written card (6.0 mm / 8.0 mm attributed to IRPWM Para 429,
+    // which the manual does not say). It is now retrieved: cited sentences, no invented parameter table.
+    if (!test2Result.hasAnswerCard || !test2Result.statement.includes('sentences copied from') || test2Result.hasParamTable || test2Result.traversalNodeCount < 3) {
       throw new Error(`Test 2 Failed: Full Answer Card incomplete: ${JSON.stringify(test2Result)}`);
     }
     await sleep(500);

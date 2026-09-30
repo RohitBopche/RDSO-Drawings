@@ -15,7 +15,7 @@ if (args[0] === '--batch') {
   const rows = fs.readFileSync(path.resolve(args[1]), 'utf8').split('\n').filter(Boolean).map(JSON.parse);
   const out = rows.map(r => {
     const res = engine.search(r.question, { k: 10 });
-    return { id: r.id, topScore: res.topScore, coverage: res.coverage, coverage3: res.coverage3, identifierHit: res.identifierHit, results: res.results.map(x => ({ clause: x.clause, passage: x.passage, score: x.score })) };
+    return { id: r.id, topScore: res.topScore, coverage: res.coverage, coverage3: res.coverage3, proximity: res.proximity, identifierHit: res.identifierHit, results: res.results.map(x => ({ clause: x.clause, passage: x.passage, score: x.score })) };
   });
   process.stdout.write(JSON.stringify(out));
 } else {

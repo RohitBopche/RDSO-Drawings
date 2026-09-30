@@ -69,6 +69,16 @@ def main() -> int:
     if r.returncode != 0:
         errors.append("retrieval regression vs eval/baseline.json:\n" + "\n".join(r.stdout.splitlines()[-8:]))
 
+    r = subprocess.run([sys.executable, str(ROOT / "scripts" / "audit_curated_answers.py"), "--check"], cwd=ROOT, capture_output=True, text=True)
+    if r.returncode != 0:
+        errors.append("curated answers:\n" + "\n".join(l for l in r.stdout.splitlines() if l.startswith("[ERROR]")))
+
+    # the engine's refusal threshold must equal the one chosen on dev (eval/baseline.json)
+    base = json.loads((ROOT / "eval" / "baseline.json").read_text(encoding="utf-8"))
+    m = re.search(r"opts\.refuseBelow == null \? ([0-9.]+)", (ROOT / "lib" / "rdso_search.js").read_text(encoding="utf-8"))
+    if not m or abs(float(m.group(1)) - base["threshold"]) > 1e-9:
+        errors.append(f"lib/rdso_search.js refuseBelow ({m.group(1) if m else '?'}) differs from eval/baseline.json threshold ({base['threshold']})")
+
     for e in errors[:20]:
         print(f"[ERROR] {e}")
     print(f"[SUMMARY] retrieval: {'FAIL' if errors else 'PASS'}; passages_index_ok={not errors} questions={len(qs)} errors={len(errors)}")

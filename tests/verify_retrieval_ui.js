@@ -179,6 +179,23 @@ async function main() {
     const t5b = await client.eval(`document.getElementById('manual-pdf-evidence-crop').style.display`);
     if (t5b !== 'none') throw new Error('Test 5b failed: crop box visible without an image');
 
+    // TEST 6
+    console.log("\n--- TEST 6: answer card offers feedback; the log stays local and exports as JSONL ---");
+    const t6 = await client.eval(`
+      (() => {
+        window.rdsoFeedback.clear();
+        const a = window.answerEngineeringQuestion("Who has the authority to order a material train?");
+        const mount = document.createElement('div'); mount.id = 'fb-test'; document.body.appendChild(mount);
+        window.renderQuestionAnswerCard(a, mount);
+        const buttons = mount.querySelectorAll('button[onclick^="sendFeedback"]').length;
+        window.sendFeedback(a.question, a.provenance.clause, 'down');
+        const lines = window.rdsoFeedback.exportJsonl().trim().split('\\n').map(JSON.parse);
+        return { buttons, kinds: lines.map(l => l.type + ':' + (l.verdict || l.status)), clause: a.provenance.clause, hasCitedSentences: a.statement.includes('sentences copied from IRPWM Para 847') };
+      })()
+    `);
+    console.log(t6);
+    if (t6.buttons !== 2 || t6.kinds.join() !== 'query:answer,feedback:down' || !t6.hasCitedSentences) throw new Error('Test 6 failed ' + JSON.stringify(t6));
+
     console.log("\n[SUCCESS] Retrieval UI and cross-reference chips verified!");
     client.close();
   } catch (err) {

@@ -1,0 +1,248 @@
+{
+ "answerable": [
+  {
+   "question": "What is the permissible variation in gauge on straight track?",
+   "gold": [
+    "IRPWM 525"
+   ]
+  },
+  {
+   "question": "How often must the SSE/P.Way inspect his section on foot?",
+   "gold": [
+    "IRPWM 109"
+   ]
+  },
+  {
+   "question": "What speed restriction applies after a rail fracture is found?",
+   "gold": [
+    "IRPWM 618",
+    "IRPWM 349"
+   ]
+  },
+  {
+   "question": "How to do a temporary repair of a broken rail?",
+   "gold": [
+    "IRPWM 349"
+   ]
+  },
+  {
+   "question": "What is the maximum permissible vertical wear on a 52 kg rail?",
+   "gold": [
+    "IRPWM 702",
+    "IRPWM 303"
+   ]
+  },
+  {
+   "question": "How is versine measured on a curve?",
+   "gold": [
+    "IRPWM 401"
+   ]
+  },
+  {
+   "question": "What is the shortest rail piece allowed as a closure rail?",
+   "gold": [
+    "IRPWM 614",
+    "IRPWM 349"
+   ]
+  },
+  {
+   "question": "Within what rail temperature range can LWR be laid?",
+   "gold": [
+    "IRPWM 335",
+    "IRPWM 337"
+   ]
+  },
+  {
+   "question": "Who is responsible for patrolling the line during monsoon?",
+   "gold": [
+    "IRPWM 1003",
+    "IRPWM 1004"
+   ]
+  },
+  {
+   "question": "What is the stress free temperature of LWR and how is it maintained?",
+   "gold": [
+    "IRPWM 335",
+    "IRPWM 347"
+   ]
+  },
+  {
+   "question": "What is the alignment tolerance of a finished weld after grinding?",
+   "gold": [
+    "IRPWM 308",
+    "AT_WELD 5.4.2"
+   ]
+  },
+  {
+   "question": "How is an ultrasonic rail flaw detector calibrated before testing?",
+   "gold": [
+    "USFD 4.1.1",
+    "USFD 11.4.3"
+   ]
+  },
+  {
+   "question": "How is a defective rail classified as OBS or IMR?",
+   "gold": [
+    "USFD 6.2",
+    "USFD 6.3.1",
+    "USFD 6.3.2",
+    "USFD 4.1.2"
+   ]
+  },
+  {
+   "question": "What is the interval between through tamping cycles?",
+   "gold": [
+    "TMM 608"
+   ]
+  },
+  {
+   "question": "What safety precautions apply when track machines work in a block?",
+   "gold": [
+    "TMM 707"
+   ]
+  },
+  {
+   "question": "What daily maintenance is needed for an abrasive rail cutter?",
+   "gold": [
+    "STMM 206"
+   ]
+  },
+  {
+   "question": "How is the toe load of an ERC measured?",
+   "gold": [
+    "STMM 1001",
+    "STMM 1002"
+   ]
+  },
+  {
+   "question": "Who can grant permission for a push trolley on the line?",
+   "gold": [
+    "IRPWM 823",
+    "IRPWM 832"
+   ]
+  },
+  {
+   "question": "At what distance is the warning board placed before a level crossing?",
+   "gold": [
+    "IRPWM 915"
+   ]
+  },
+  {
+   "question": "How is gauge checked in points and crossings?",
+   "gold": [
+    "IRPWM 429"
+   ]
+  },
+  {
+   "question": "What are the duties of a patrolman?",
+   "gold": [
+    "IRPWM 117",
+    "IRPWM 1004"
+   ]
+  },
+  {
+   "question": "How should fog signals be used?",
+   "gold": [
+    "IRPWM 816"
+   ]
+  },
+  {
+   "question": "What must a keyman do on finding a broken rail?",
+   "gold": [
+    "IRPWM 116"
+   ]
+  },
+  {
+   "question": "How is creep of rails measured and corrected?",
+   "gold": [
+    "IRPWM 321"
+   ]
+  },
+  {
+   "question": "What length should a switch expansion joint be?",
+   "gold": [
+    "IRPWM 225",
+    "IRPWM 338"
+   ]
+  },
+  {
+   "question": "What is the maximum permissible speed on a turnout in a curve?",
+   "gold": [
+    "IRPWM 409",
+    "IRPWM 414"
+   ]
+  },
+  {
+   "question": "How are welded rail joints marked and recorded?",
+   "gold": [
+    "IRPWM 309"
+   ]
+  },
+  {
+   "question": "What is the procedure for gauging a track with a gauge cum level?",
+   "gold": [
+    "STMM 1401",
+    "STMM 1402"
+   ]
+  },
+  {
+   "question": "When is a rail considered due for renewal?",
+   "gold": [
+    "IRPWM 702"
+   ]
+  },
+  {
+   "question": "What is the maximum depth of ballast cleaning done by the machine?",
+   "gold": [
+    "TMM 305"
+   ]
+  },
+  {
+   "question": "How does the rail tensor help in destressing?",
+   "gold": [
+    "IRPWM 341",
+    "STMM 901"
+   ]
+  },
+  {
+   "question": "What are the responsibilities of the ADEN for track machines?",
+   "gold": [
+    "TMM 111"
+   ]
+  },
+  {
+   "question": "What is the recommended sleeper spacing?",
+   "gold": [
+    "IRPWM 227",
+    "IRPWM 705"
+   ]
+  },
+  {
+   "question": "What test is done on welded joints to check quality?",
+   "gold": [
+    "IRPWM 311",
+    "FBW 8.3"
+   ]
+  },
+  {
+   "question": "What are the lubrication requirements for points and crossings?",
+   "gold": [
+    "IRPWM 429"
+   ]
+  }
+ ],
+ "unanswerable": [
+  "How many thermit welds can one welding team complete in a shift?",
+  "What is the hourly output of a tamping machine?",
+  "What is the axle load limit on dedicated freight corridors?",
+  "How do I examine a wagon for defects before dispatch?",
+  "How is passenger fare calculated for a journey?",
+  "What is the color aspect sequence of a multiple aspect signal?",
+  "Which locomotive is used for hauling Rajdhani trains?",
+  "What is the procedure for coach cleaning?",
+  "How to calculate the depreciation of railway assets?",
+  "What is the procedure for changing a signal lamp?",
+  "How are goods train crew rosters prepared?",
+  "What is the ticket checking procedure in a moving train?"
+ ]
+}
