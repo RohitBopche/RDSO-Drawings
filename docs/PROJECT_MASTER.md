@@ -1868,6 +1868,16 @@ A candidate report (`reports/measurements_report.json`) counts 20 groups where o
 
 **Not done this sprint (carried forward):** title repair for decimal-manual clauses (E3), registry page-range corrections for AT_WELD/FBW/USFD (E4, 85 warnings), row-aware answer rendering, measurement-to-graph edges, per-claim revision/conflict flags, independent second labeller and real engineer questions, automatic synonym loop. Test state: 19 gates (A to S), 191 pytest, 13 browser suites, all passing; rebuild is deterministic.
 
+### 37.14 Sprint F results (titles, registry ranges, table answers) — 2026-09-30
+
+**F1. Clause titles for numbered paragraphs without a heading (E3).** In the decimally numbered manuals a paragraph with no heading was given its first printed line as title, a wrapped fragment ("On Indian Railways Alumino-Thermic welding with short pre-heating process by using"). `clause_parser._repair_title` now replaces a fragment (55+ characters, no closing punctuation) with the first sentence of the paragraph, cut at a word boundary with an ellipsis at 100 characters. Real headings ("Shelf life of portion") are untouched. Limit: it cannot tell a heading from a first line by typography (bold is not carried through), so it works from length and punctuation; a few fragments under 55 characters remain (for example "Conventional A.T", cut at an abbreviation). The evaluation set is partly generated from titles, so it was regenerated and the baseline re-written deliberately: dev keyword and title recall@5 moved by one question each (0.913 to 0.88, 0.986 to 0.971), test unchanged in kind. Treat that as noise from a changed question set, not as a measured regression, but it is also not proof of no regression.
+
+**F2. Registry page ranges (E4).** The hand-typed chapter page ranges for the alumino-thermic welding and flash-butt welding manuals disagreed with where the numbered paragraphs are (85 warnings, for example FBW chapter 5 registered at pages 9 to 13, paragraphs on pages 11 to 18). The ranges are now corrected from the parsed paragraph pages (USFD already agreed). The 85 warnings are gone; remaining warnings are the honest ones: chapters share boundary pages, and USFD chapters 12 and 15 have no numbered paragraph. The test that pinned the old FBW page was updated. Not independently checked against the printed manuals beyond the parser's own page assignment.
+
+**F3. Table answers.** A question whose best passage is a table now answers with the matching whole rows (each cell prefixed with its column header) instead of sentence fragments, and merged cells that repeat their text are said once. The tongue-rail wear question of Sprint E (jumbled "Switch 4; Outer; Outer ...") is better but that particular table (IRPWM Para 433, a nested inspection proforma) is a poor data table and is still not a good answer; the fix for such tables is to exclude proformas from indexing, not done. Test state: 19 gates, 194 pytest, 13 browser suites, all passing.
+
+**Not done (carried forward):** proforma tables excluded from the table index, measurement-to-graph edges, per-claim revision/conflict flags, independent second labeller and real engineer questions, automatic reviewed-synonym loop, drawings (P3/P4).
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
@@ -1943,7 +1953,7 @@ An engineer can type a natural-language question offline and receive, in under 2
 ### 38.7 Revised order after Sprint C
 
 1. **Independent evaluation first (P7.1 completion).** Collect 100+ real questions from engineers (not derived from clause text), have a second reviewer label gold clauses, and report them as a separate `real` category. Decide on the semantic layer (P5.2) only after this set shows where BM25 fails; the informal probe suggests misses come from paraphrase, tables and poor titles.
-2. **Retrieval quality fixes that need no model:** repair clause titles for decimal manuals (first sentence is used today; open), ~~index table rows as structured records~~ (done, Sprint E1; row-aware answer rendering still open), add reviewed synonyms from the misses. Re-measure on the independent set.
+2. **Retrieval quality fixes that need no model:** repair clause titles for decimal manuals (done, Sprint F1), ~~index table rows as structured records~~ (done, Sprint E1; row-aware answers Sprint F3, proforma tables still indexed), add reviewed synonyms from the misses. Re-measure on the independent set.
 3. **Grounded answers (P6.1):** promote the extractive card to the only answer path, retire the 13 curated answers into regression questions (they still show hard-coded `VERIFIED`), add sentence-level extraction of the answering span with per-claim citation, conflict and revision flags, and a refusal rule tuned on the independent set.
 4. **Feedback loop (P7.2, P7.3):** local log of queries, clicks and thumbs; zero-result and low-coverage queries into the review queue; accepted corrections become eval questions.
 5. **Then** P5.2 (embeddings, only if step 1 justifies it), ~~table extraction, P2.3 measurements~~ (done, Sprint E), and rolling the remaining checks to drawings.

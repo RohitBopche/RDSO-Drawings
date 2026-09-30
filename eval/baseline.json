@@ -4,18 +4,18 @@
    "categories": {
     "ALL": {
      "mrr": 0.892,
-     "n": 212,
-     "recall@1": 0.835,
+     "n": 210,
+     "recall@1": 0.838,
      "recall@10": 0.986,
-     "recall@3": 0.958,
-     "recall@5": 0.972
+     "recall@3": 0.952,
+     "recall@5": 0.962
     },
     "blind": {
-     "mrr": 0.838,
+     "mrr": 0.842,
      "n": 20,
      "recall@1": 0.75,
      "recall@10": 1.0,
-     "recall@3": 0.95,
+     "recall@3": 1.0,
      "recall@5": 1.0
     },
     "blind_table": {
@@ -35,43 +35,43 @@
      "recall@5": 1.0
     },
     "kw_auto": {
-     "mrr": 0.772,
-     "n": 23,
-     "recall@1": 0.652,
-     "recall@10": 0.957,
-     "recall@3": 0.913,
-     "recall@5": 0.913
+     "mrr": 0.782,
+     "n": 25,
+     "recall@1": 0.68,
+     "recall@10": 0.96,
+     "recall@3": 0.88,
+     "recall@5": 0.88
     },
     "nl": {
-     "mrr": 0.836,
+     "mrr": 0.845,
      "n": 58,
-     "recall@1": 0.759,
+     "recall@1": 0.776,
      "recall@10": 0.983,
      "recall@3": 0.914,
      "recall@5": 0.948
     },
     "title_auto": {
-     "mrr": 0.943,
-     "n": 73,
-     "recall@1": 0.904,
+     "mrr": 0.937,
+     "n": 69,
+     "recall@1": 0.899,
      "recall@10": 0.986,
-     "recall@3": 0.986,
-     "recall@5": 0.986
+     "recall@3": 0.971,
+     "recall@5": 0.971
     }
    },
    "refusal": {
-    "answerable": 212,
+    "answerable": 210,
     "correctly_refused": 20,
     "out_of_scope": 20,
-    "wrongly_refused": 7
+    "wrongly_refused": 4
    }
   },
   "test": {
    "categories": {
     "ALL": {
-     "mrr": 0.928,
-     "n": 135,
-     "recall@1": 0.874,
+     "mrr": 0.938,
+     "n": 137,
+     "recall@1": 0.891,
      "recall@10": 0.993,
      "recall@3": 0.993,
      "recall@5": 0.993
@@ -101,35 +101,35 @@
      "recall@5": 1.0
     },
     "kw_auto": {
-     "mrr": 0.971,
-     "n": 17,
-     "recall@1": 0.941,
+     "mrr": 0.967,
+     "n": 15,
+     "recall@1": 0.933,
      "recall@10": 1.0,
      "recall@3": 1.0,
      "recall@5": 1.0
     },
     "nl": {
-     "mrr": 0.909,
+     "mrr": 0.925,
      "n": 42,
-     "recall@1": 0.833,
+     "recall@1": 0.857,
      "recall@10": 1.0,
      "recall@3": 1.0,
      "recall@5": 1.0
     },
     "title_auto": {
-     "mrr": 0.975,
-     "n": 47,
-     "recall@1": 0.957,
+     "mrr": 0.987,
+     "n": 51,
+     "recall@1": 0.98,
      "recall@10": 1.0,
      "recall@3": 1.0,
      "recall@5": 1.0
     }
    },
    "refusal": {
-    "answerable": 135,
+    "answerable": 137,
     "correctly_refused": 10,
     "out_of_scope": 12,
-    "wrongly_refused": 6
+    "wrongly_refused": 7
    }
   }
  },

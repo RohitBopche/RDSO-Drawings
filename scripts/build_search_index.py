@@ -68,7 +68,14 @@ def table_passages(by_id: dict, chapters: dict) -> list[dict]:
         heads = column_headers(t)
         lines = []
         for r in t["rows"][t["header_rows"]:]:
-            cells = [f"{heads[j]}: {c}" if heads[j] else c for j, c in enumerate(r) if c.strip()]
+            seen_cells: set[str] = set()
+            cells = []
+            for j, c in enumerate(r):
+                c = " ".join(c.split())
+                if not c or c in seen_cells:      # merged cells repeat their text; say it once
+                    continue
+                seen_cells.add(c)
+                cells.append(f"{heads[j]}: {c}" if heads[j] and heads[j] != c else c)
             if len(cells) >= 2:
                 lines.append("; ".join(cells))
         if not lines:

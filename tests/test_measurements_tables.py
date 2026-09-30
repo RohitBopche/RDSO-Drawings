@@ -93,3 +93,26 @@ def test_gate_r_detects_bad_hash():
         assert r.returncode == 1
     finally:
         p.write_text(orig, encoding="utf-8")
+
+
+def test_title_fragment_replaced_by_first_sentence():
+    import clause_parser as cp
+    frag = "On Indian Railways Alumino-Thermic welding with short pre-heating process by using"
+    body = "1.1 " + frag + " the portion is used. Second sentence follows."
+    fixed = cp._repair_title(frag, body, "1.1")
+    assert fixed.startswith("On Indian Railways") and fixed.endswith("\u2026") and len(fixed) <= 101
+    assert cp._repair_title("Shelf life of portion", "4.2.2 Shelf life of portion. Text.", "4.2.2") == "Shelf life of portion"
+
+
+def test_no_registry_page_warnings_for_decimal_manuals():
+    r = subprocess.run([sys.executable, str(ROOT / "scripts/validate_manual_chapter_content.py")], capture_output=True, text=True)
+    assert "falls outside owning chapter" not in r.stdout
+
+
+def test_table_answer_returns_matching_rows():
+    js = ("const e=require('./lib/rdso_search.js');require('./data/search/search_index.js');"
+          "const en=e.create?e.create(globalThis.RDSO_SEARCH_INDEX):e(globalThis.RDSO_SEARCH_INDEX);"
+          "const a=en.answer('finishing tolerance head width alumino thermic weld');"
+          "console.log(JSON.stringify({k:a.best&&a.best.kind,n:(a.sentences||[]).length}))")
+    r = subprocess.run(["node", "-e", js], cwd=ROOT, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-400:]

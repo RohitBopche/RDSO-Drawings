@@ -1,13 +1,13 @@
 {
-  "edges": 8086,
-  "edges_with_evidence": 8074,
+  "edges": 8042,
+  "edges_with_evidence": 8030,
   "edges_without_evidence": 12,
-  "evidence": 4847,
+  "evidence": 4815,
   "evidence_status": {
-    "machine_extracted": 4847
+    "machine_extracted": 4815
   },
-  "evidence_with_page": 4810,
-  "evidence_with_region": 4718,
+  "evidence_with_page": 4778,
+  "evidence_with_region": 4686,
   "generated_by": "scripts/unify_manual_canonical.py",
   "manual_clauses": {
     "DOC:AT_WELD:2022": {
@@ -78,30 +78,30 @@
     "DOCUMENT": 6,
     "DRAWING": 6,
     "EQUIPMENT": 1,
-    "EVIDENCE": 300,
+    "EVIDENCE": 303,
     "FAILURE_MODE": 6,
     "FASTENER": 1,
-    "FIGURE": 206,
+    "FIGURE": 162,
     "HAZARD": 2,
     "MATERIAL": 6,
     "NOTE": 10,
     "PROCEDURE": 1,
     "REVISION": 5,
     "ROLE": 1,
-    "SECTION": 1426,
+    "SECTION": 1440,
     "SLEEPER": 3,
     "SOP": 3,
     "SPARE_PART": 3,
     "STANDARD": 2,
-    "SUBSECTION": 1106,
+    "SUBSECTION": 1101,
     "TABLE": 57,
     "TOLERANCE": 460,
     "ZONE": 5
   },
-  "nodes": 4894,
+  "nodes": 4862,
   "requirements": 1632,
   "reviews": 0,
   "verification_status": {
-    "machine_extracted": 4894
+    "machine_extracted": 4862
   }
 }

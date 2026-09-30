@@ -3,8 +3,8 @@
   "total": 1572,
   "by_status": {
    "EXTERNAL": 238,
-   "NOT_FOUND": 139,
-   "RESOLVED": 1195
+   "NOT_FOUND": 145,
+   "RESOLVED": 1189
   },
   "by_kind": {
    "annexure": {
@@ -15,8 +15,8 @@
     "RESOLVED": 38
    },
    "figure": {
-    "NOT_FOUND": 107,
-    "RESOLVED": 197
+    "NOT_FOUND": 113,
+    "RESOLVED": 191
    },
    "para": {
     "EXTERNAL": 9,
@@ -514,8 +514,44 @@
    "scope": "AT_WELD"
   },
   {
+   "source": "CLAUSE:FBW:CH_03:PARA_3_2",
+   "raw": "Fig.3.2",
+   "kind": "figure",
+   "scope": "FBW"
+  },
+  {
+   "source": "CLAUSE:FBW:CH_03:PARA_3_4",
+   "raw": "Fig. 3.4 (a)",
+   "kind": "figure",
+   "scope": "FBW"
+  },
+  {
+   "source": "CLAUSE:FBW:CH_03:PARA_3_4",
+   "raw": "Figs. 3.4 (b)",
+   "kind": "figure",
+   "scope": "FBW"
+  },
+  {
+   "source": "CLAUSE:FBW:CH_03:PARA_3_4",
+   "raw": "Fig. 3.4 (d)",
+   "kind": "figure",
+   "scope": "FBW"
+  },
+  {
+   "source": "CLAUSE:FBW:CH_04:PARA_4_2",
+   "raw": "Fig. 4.2 (a)",
+   "kind": "figure",
+   "scope": "FBW"
+  },
+  {
    "source": "CLAUSE:FBW:CH_08:PARA_8_3",
    "raw": "figure 9.0",
+   "kind": "figure",
+   "scope": "FBW"
+  },
+  {
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "figure 8 (a)",
    "kind": "figure",
    "scope": "FBW"
   },

@@ -55,7 +55,7 @@ def main() -> int:
     r = subprocess.run(["node", "-e", probe], cwd=ROOT, capture_output=True, text=True)
     indexed = set(json.loads(r.stdout)) if r.returncode == 0 else set()
     missing = [t["table_id"] for t in tables if t["clause"] and t["table_id"] not in indexed
-               and any(sum(1 for c in row if c.strip()) >= 2 for row in t["rows"][t["header_rows"]:])]
+               and any(len({" ".join(c.split()) for c in row if c.strip()}) >= 2 for row in t["rows"][t["header_rows"]:])]
     if missing:
         errors.append(f"{len(missing)} tables are not in the search index (e.g. {missing[0]}); run scripts/build_search_index.py")
     for e in errors[:20]:

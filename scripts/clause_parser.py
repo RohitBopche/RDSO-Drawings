@@ -253,6 +253,21 @@ def _title(raw: str) -> str:
     return (t or raw)[:120]
 
 
+def _repair_title(title: str, body_text: str, number: str) -> str:
+    """A numbered paragraph without a heading gets its first printed line as "title": a wrapped fragment
+    ("... process by using"). Replace a fragment by the first sentence of the paragraph, cut at a word boundary."""
+    if len(title) < 55 or re.search(r"[.:;,)\]]$", title):
+        return title
+    flat = " ".join(body_text.split())
+    flat = re.sub(rf"^{re.escape(number)}\s*", "", flat)
+    sent = re.split(r"(?<=[.;:])\s", flat, maxsplit=1)[0].strip()
+    if len(sent) < 15:
+        return title
+    if len(sent) <= 100:
+        return sent.rstrip(" .:;")
+    return sent[:100].rsplit(" ", 1)[0].rstrip(" ,;:-") + "\u2026"
+
+
 def parse_manual(pdf_path: str, doc_id: str, chapters: list[dict]) -> ParseResult:
     """`chapters`: registry entries {num, page_start, page_end} for the manual."""
     profile = PROFILES[doc_id]
@@ -298,7 +313,7 @@ def parse_manual(pdf_path: str, doc_id: str, chapters: list[dict]) -> ParseResul
         if not after_head and len(h.title) < 60:
             res.heading_only.append(h.number)
             continue  # a bare heading is a section, not a provision
-        res.clauses.append(Clause(h.number, _title(h.title), h.page, body[-1].page if body else h.page, text,
+        res.clauses.append(Clause(h.number, _repair_title(_title(h.title), text, h.number), h.page, body[-1].page if body else h.page, text,
                                   chapter["num"], deleted, (h.row, end_row)))
         assigned_chars += len(text)
     for r in rows:
