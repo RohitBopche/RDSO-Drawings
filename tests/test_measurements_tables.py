@@ -158,3 +158,20 @@ def test_or_more_or_less_suffix_sets_the_comparator():
 def test_english_word_is_does_not_hide_a_value():
     r = ex("The variation is 5 mm on this track. As per IS 10 mm of nothing.")
     assert [x["raw"] for x in r] == ["5 mm"]
+
+
+def test_wrapped_table_records_are_merged_into_logical_rows():
+    import extract_tables as T
+    rows = [["SN", "Name", "Speed in kmph", "Speed in kmph"], ["", "", "Self-", ""], ["", "", "propelled", ""],
+            ["24", "Tamper", "65", ""], ["", "sub item ii", "", ""], ["25", "Cleaner", "60", ""], ["26", "Grinder", "50", ""]]
+    out, hdr = T.merge_wrapped(rows, 3)
+    assert hdr == 1 and out[0][2] == "Speed in kmph Self- propelled"
+    assert [r[0] for r in out[1:]] == ["24", "25", "26"]
+    assert out[1][1] == "Tamper\nsub item ii"
+
+
+def test_tables_without_an_index_column_are_not_merged():
+    import extract_tables as T
+    rows = [["Parameter", "Value"], ["Gauge", "1676"], ["", "note"], ["Cant", "165"]]
+    out, hdr = T.merge_wrapped(rows, 1)
+    assert len(out) == 4

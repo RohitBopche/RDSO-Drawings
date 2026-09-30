@@ -72,3 +72,32 @@ def test_item_crops_box_the_item_itself():
     # the crop is built around the item (render_span), which needs the item's words to be found on the page
     import render_evidence as RE
     assert hasattr(RE, "render_span")
+
+
+def test_voided_items_and_packets_do_not_count_towards_accuracy():
+    recs = [{"kind": "xref", "target_ids": ["X1"], "decision": "rejected", "reviewer": "A", "packet_seed": 1},
+            {"kind": "xref", "target_ids": ["X2"], "decision": "approved", "reviewer": "A", "packet_seed": 11},
+            {"kind": "xref", "target_ids": ["X3"], "decision": "rejected", "reviewer": "A", "packet_seed": 11},
+            {"kind": "table", "target_ids": ["T1"], "decision": "approved", "reviewer": "A", "packet_seed": 1}]
+    void = {"X3@11": "crop did not show the item", "_packets": {"1": {"reason": "old packet", "kinds": ["xref"]}}}
+    a = R.accuracy(recs, 0, void)
+    assert a["by_kind"]["xref"]["reviewed"] == 1 and a["by_kind"]["table"]["reviewed"] == 1 and a["voided_decisions"] == 2
+
+
+def test_span_matching_tolerates_spaces_case_and_word_suffixes():
+    import render_evidence as RE
+
+    class P:
+        def get_text(self, kind):
+            return [(0, 0, 1, 1, "Fig.12(b)", 0, 0, 0), (0, 0, 1, 1, "RDSO/T-", 0, 0, 1), (0, 0, 1, 1, "5855/1", 0, 0, 2), (0, 0, 1, 1, "60Kg", 0, 0, 3)]
+    for raw, n in (("Fig.12", 1), ("RDSO/T- 5855/1", 1), ("60 kg", 1), ("nothing here", 0)):
+        _, hits = RE._span_words(P(), raw)
+        assert len(hits) == n, raw
+
+
+def test_clause_extras_list_subparagraphs_of_decimal_manual_leadins():
+    import re
+    raw = (ROOT / "data/search/clause_extras.js").read_text(encoding="utf-8")
+    extras = __import__("json").loads(re.match(r"globalThis\.RDSO_CLAUSE_EXTRAS=(.*);\s*$", raw, re.S).group(1))
+    subs = extras["CLAUSE:USFD:CH_13:PARA_13_1"]["s"]
+    assert [s[0] for s in subs][:1] == ["13.1.1"] and all(s[1].startswith("CLAUSE:USFD:") for s in subs)

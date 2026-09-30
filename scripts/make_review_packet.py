@@ -75,13 +75,17 @@ def build(per_kind: int, seed: int, only: list[str] | None = None) -> tuple[list
     tables = {t["table_id"]: t for t in read(KG / "raw" / "tables.jsonl")}
     dlinks = {d["link_id"]: d for d in read(KG / "canonical" / "drawing_links.jsonl")}
     items = []
+    skipped: list[str] = []
     kind_of = {"CLAUSE:": "clause", "XREF:": "xref", "MEAS:": "measurement", "TBL:": "table", "DLINK:": "drawing_link"}
     for kind in KINDS:
         if only is not None:          # explicit targets (a re-review of given items) instead of a random sample
             chosen = [t for t in only if kind_of.get(next((p for p in kind_of if t.startswith(p)), "")) == kind and t in pools[kind]]
         else:
-            chosen = rnd.sample(pools[kind], min(per_kind, len(pools[kind])))
+            chosen = rnd.sample(pools[kind], min(per_kind * 6, len(pools[kind])))   # spare candidates: items without a usable crop are skipped
+        taken = 0
         for tid in chosen:
+            if only is None and taken >= per_kind:
+                break
             item = {"kind": kind, "target_id": tid}
             if kind == "clause":
                 clause, span, shown = tid, None, tid
@@ -110,15 +114,19 @@ def build(per_kind: int, seed: int, only: list[str] | None = None) -> tuple[list
                 p = None
                 if e and span:     # a crop around the item itself, boxed in red, not the clause start
                     p = RE.render_span(e, registry, nodes[clause]["text"], span[0], span[1], 100, ROOT / "artifacts" / "review" / "crops",
-                                       name=f"{tid}")
-                if p is None and e:
+                                       name=f"{tid}", page_end=int(nodes[clause].get("page_end") or 0) or None)
+                    if p is None:
+                        skipped.append(tid)      # never show a crop that does not contain the item: the reviewer cannot judge it
+                        continue
+                elif e:
                     p = RE.render(e, registry, 100, ROOT / "artifacts" / "review" / "crops")
+            taken += 1
             item["image"] = png_b64(p) if p else ""
             item["more_images"] = [png_b64(q) for q in RE.render_continuations(e, registry, 100, ROOT / "artifacts" / "review" / "crops")] \
                 if kind == "clause" and e else []       # the span crop already shows the page the item is on
             items.append(item)
     rnd.shuffle(items)          # do not review one kind in a row
-    meta = {"seed": seed, "per_kind": per_kind, "items": len(items)}
+    meta = {"seed": seed, "per_kind": per_kind, "items": len(items), "skipped_no_crop": len(skipped)}
     return items, meta
 
 
