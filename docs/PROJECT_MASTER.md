@@ -1982,6 +1982,18 @@ No new features. Checked that the repository stands on its own: a fresh `git clo
 
 The README was the early prototype text with unverified statistics and a superseded drawing catalogue. It now opens with a status note pointing here, states that those sections are unverified prototype text, and lists the commands to rebuild, validate, test and search. It was not rewritten.
 
+### 37.24 Sprint P results (speed and start-up) — 2026-09-30
+
+Measured what an engineer's machine would feel, because nothing so far had timed it.
+
+**Search is fast.** Node, all 379 evaluation questions through `engine.answer()`: median 3.2 ms, 95th percentile 17 ms, worst 107 ms; index parse about 1 s in Node (6.3 MB file), engine construction 29 ms, about 180 MB resident. In the browser, the first question after load took 33 to 47 ms.
+
+**Start-up was slow, and the search data was not the cause.** In headless Chrome on this container (software WebGL, so a real machine with a GPU should do better, but the ratio should hold) the page took 6.5 to 8.8 s to load. All data scripts (22 MB knowledge-graph bundle, 6.3 MB search index, cross-references, extras) were done by 0.44 s. A CPU profile showed the time in the page's own start-up code: two quadratic lookups (a linear `rawNodes.find` inside the child-ordering sort comparator, and two linear `find` calls over 17k entities for each of about 8k edges) and the 3D scene. **Fixed the two lookups with id maps** (`rawNodeById`, `entityById`, the latter rebuilt if the entity list changes length): load fell to about 4.5 to 5.0 s, about 1.5 to 2 s saved. All 14 browser suites still pass.
+
+**Not fixed:** the remaining 4.5 s is mostly Three.js: the graph scene holds 14,695 objects (one per node) and updates the matrices of all of them, which costs at start-up and on every frame (214 draw calls, 27k triangles). A real fix is architectural: build the manual universe's objects only when it is opened, and freeze the matrices of static nodes. Both change UI behaviour that 14 browser suites depend on, so it is left as a separate piece of work. Consequence today: the tool works fully offline but takes a few seconds to open on modest hardware; searching itself is instant.
+
+State: 21 gates, 222 pytest, 14 browser suites, all passing. The timing figures come from one headless run in a container and were not repeated on user hardware.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
