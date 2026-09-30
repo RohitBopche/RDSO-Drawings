@@ -1878,6 +1878,16 @@ A candidate report (`reports/measurements_report.json`) counts 20 groups where o
 
 **Not done (carried forward):** proforma tables excluded from the table index, measurement-to-graph edges, per-claim revision/conflict flags, independent second labeller and real engineer questions, automatic reviewed-synonym loop, drawings (P3/P4).
 
+### 37.15 Sprint G results (form tables, conflict candidates) — 2026-09-30
+
+**G1. Form-like tables demoted.** 142 table passages come from label-heavy tables (fewer than 35% of body cells contain a digit: inspection proformas, nested check-lists). They stay searchable but carry `form: true` and score at 0.7 of a data table (times the 0.9 table factor). Effect on the evaluation: none measurable (dev and test metrics identical with and without it); the visible effect is that "tongue rail wear limit" now answers from prose Para 429 instead of the Para 433 proforma. That is one probe, not a tested improvement; there is no form-specific evaluation question. The 0.35 cut-off was chosen by looking at the distribution, not tuned.
+
+**G2. Conflict candidates from measurements.** `extract_measurements.py` now pairs bounds of the same manual, quantity, unit and comparator from different clauses with at least three shared subject words (`reports/measurement_conflict_candidates.json`). Result: 8 pairs, and on reading them none is a real contradiction (different speed bands, different components such as closure rail versus permanent closure, curve radius thresholds for different track classes). Without the earlier looser rule the list had 210 pairs of unrelated values. **Conclusion: regex measurements are good for value lookup, not for detecting conflicts between provisions; a conflict needs the condition each limit applies under (speed band, track class, component), which the extractor does not capture.** The list is kept as a review aid and no conflict flag is shown to users. Per-claim revision and conflict flags remain open, and need condition extraction first.
+
+Test state: 19 gates, 195 pytest, 13 browser suites, all passing.
+
+**Not done (carried forward):** condition extraction for measurements (speed band, track class, component), measurement-to-graph edges, independent second labeller and real engineer questions, automatic reviewed-synonym loop, drawings (P3/P4).
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

@@ -116,3 +116,12 @@ def test_table_answer_returns_matching_rows():
           "console.log(JSON.stringify({k:a.best&&a.best.kind,n:(a.sentences||[]).length}))")
     r = subprocess.run(["node", "-e", js], cwd=ROOT, capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-400:]
+
+
+def test_form_like_tables_are_flagged_and_demoted():
+    passages = [json.loads(l) for l in (ROOT / "data/search/passages.jsonl").read_text(encoding="utf-8").splitlines()]
+    tables = [p for p in passages if p.get("kind") == "table"]
+    forms = [p for p in tables if p.get("form")]
+    assert forms and len(forms) < len(tables)
+    idx = (ROOT / "data/search/search_index.js").read_text(encoding="utf-8")
+    assert '"form":1' in idx

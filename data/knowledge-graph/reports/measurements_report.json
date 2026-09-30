@@ -52,8 +52,8 @@
   "t": 294,
   "year": 150
  },
- "conflict_candidates": 20,
- "conflict_candidates_note": "same manual+quantity+unit+comparator with different values: candidates for human review, NOT conflicts",
+ "conflict_candidates": 8,
+ "conflict_candidates_note": "pairs of provisions in one manual bounding the same quantity differently about overlapping subject words: candidates for human review, NOT conflicts (see measurement_conflict_candidates.json)",
  "table": 2433,
  "text": 3345,
  "total": 5778

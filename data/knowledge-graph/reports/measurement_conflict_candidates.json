@@ -1,0 +1,154 @@
+[
+ {
+  "manual": "IRPWM",
+  "quantity": "length",
+  "unit": "m",
+  "comparator": "max",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_03:PARA_349",
+   "value": 4.0,
+   "raw": "less than 4 m",
+   "subject": "The length of closure rail should not become"
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_06:PARA_614",
+   "value": 11.0,
+   "raw": "less than 11 metre",
+   "subject": "g 500 metre length on both side approaches of all the above, Permanent closure in running lines should not be"
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "length",
+  "unit": "m",
+  "comparator": "min",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_04:PARA_414",
+   "value": 50.0,
+   "raw": "minimum 50 m",
+   "subject": "In the case of diamond crossings on a straight track located in the approach of a curve, a straight length of"
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_06:PARA_642",
+   "value": 100.0,
+   "raw": "at least 100 m",
+   "subject": "(b) In case of SEJ, a track length of"
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_02:PARA_228",
+   "value": 500.0,
+   "raw": "upto 500m",
+   "subject": "(ii) Ballasted Track: Curves with radius"
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius"
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_02:PARA_228",
+   "value": 500.0,
+   "raw": "upto 500m",
+   "subject": "(ii) Ballasted Track: Curves with radius"
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius"
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_02:PARA_228",
+   "value": 500.0,
+   "raw": "upto 500m",
+   "subject": "(ii) Ballasted Track: Curves with radius"
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius"
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_520",
+   "value": 350.0,
+   "raw": "up to 350 m",
+   "subject": "(i) For straight including curves of radius"
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius"
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "speed",
+  "unit": "kmph",
+  "comparator": "max",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_506",
+   "value": 130.0,
+   "raw": "up to 130 Kmph",
+   "subject": "Slab Frequency i) Routes with speeds above 130 Kmph Once in 2 months ii) Routes with speeds above 110 Kmph &"
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 110.0,
+   "raw": "up to 110 Kmph",
+   "subject": "(2) For Speeds above 100 Kmph and"
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "speed",
+  "unit": "kmph",
+  "comparator": "max",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_506",
+   "value": 130.0,
+   "raw": "up to 130 Kmph",
+   "subject": "Slab Frequency i) Routes with speeds above 130 Kmph Once in 2 months ii) Routes with speeds above 110 Kmph &"
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 160.0,
+   "raw": "up to 160 Kmph",
+   "subject": "(4) For Speeds above 130 Kmph and"
+  },
+  "status": "candidate_unreviewed"
+ }
+]

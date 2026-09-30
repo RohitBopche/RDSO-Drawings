@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -38,6 +39,9 @@ def chunks(text: str) -> list[str]:
         else:
             out.append(cur)
     return out or [text]
+
+
+FORM_NUMERIC_RATIO = 0.35
 
 
 def column_headers(t: dict) -> list[str]:
@@ -80,6 +84,9 @@ def table_passages(by_id: dict, chapters: dict) -> list[dict]:
                 lines.append("; ".join(cells))
         if not lines:
             continue
+        body_cells = [c.strip() for r in t["rows"][t["header_rows"]:] for c in r if c.strip()]
+        # label-heavy tables (inspection proformas, nested check-lists) are forms, not data: kept, but demoted at query time
+        form = bool(body_cells) and sum(bool(re.search(r"\d", c)) for c in body_cells) / len(body_cells) < FORM_NUMERIC_RATIO
         caption = t.get("caption") or "Table"
         title = f"{caption} {owner['label']} table {ch['label'] if ch else ''}"
         groups, cur = [], ""
@@ -92,7 +99,7 @@ def table_passages(by_id: dict, chapters: dict) -> list[dict]:
         for k, g in enumerate(groups):
             out.append({"id": f"{t['table_id']}#{k}", "clause": owner["id"], "alias": alias, "doc": owner.get("document_id", alias),
                         "chapter": ch["label"] if ch else "", "para": str(owner["specs"]["Paragraph"]), "title": title,
-                        "page": t["page"], "type": "CLAUSE", "kind": "table", "table_id": t["table_id"], "text": g})
+                        "page": t["page"], "type": "CLAUSE", "kind": "table", "table_id": t["table_id"], "form": form, "text": g})
     return out
 
 

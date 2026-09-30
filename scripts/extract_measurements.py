@@ -6,6 +6,7 @@ Reads clause text from canonical/nodes.jsonl and raw/tables.jsonl. Deterministic
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -16,7 +17,14 @@ import measurements as M  # noqa: E402
 
 CAN = ROOT / "data" / "knowledge-graph" / "canonical"
 OUT = CAN / "measurements.jsonl"
+CAND = ROOT / "data" / "knowledge-graph" / "reports" / "measurement_conflict_candidates.json"
 REPORT = ROOT / "data" / "knowledge-graph" / "reports" / "measurements_report.json"
+
+
+def _overlap(a: str, b: str) -> float:
+    ta = {w for w in re.findall(r"[a-z]{4,}", a.lower())}
+    tb = {w for w in re.findall(r"[a-z]{4,}", b.lower())}
+    return len(ta & tb) / max(1, min(len(ta), len(tb))) if len(ta & tb) >= 3 else 0.0
 
 
 def main() -> int:
@@ -44,13 +52,24 @@ def main() -> int:
             groups[(r["clause"].split(":")[1], r["quantity"], r["unit"], r["comparator"])].append(r)
     cands = []
     for k, v in sorted(groups.items()):
-        vals = sorted({(x["hi"] if x["comparator"] == "max" else x["lo"]) for x in v})
-        if len(vals) > 1:
-            cands.append({"manual": k[0], "quantity": k[1], "unit": k[2], "comparator": k[3], "values": vals,
-                          "clauses": sorted({x["clause"] for x in v})[:8]})
+        # two provisions of one manual bounding the same quantity differently, about similar subject words
+        for i in range(len(v)):
+            for j in range(i + 1, len(v)):
+                x, y = v[i], v[j]
+                bx = x["hi"] if x["comparator"] == "max" else x["lo"]
+                by = y["hi"] if y["comparator"] == "max" else y["lo"]
+                if x["clause"] == y["clause"] or bx == by:
+                    continue
+                if _overlap(x["subject"], y["subject"]) < 0.5:
+                    continue
+                cands.append({"manual": k[0], "quantity": k[1], "unit": k[2], "comparator": k[3],
+                              "a": {"clause": x["clause"], "value": bx, "raw": x["raw"], "subject": x["subject"]},
+                              "b": {"clause": y["clause"], "value": by, "raw": y["raw"], "subject": y["subject"]},
+                              "status": "candidate_unreviewed"})
+    CAND.write_text(json.dumps(cands, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     rep = {"total": len(recs), "text": sum(r["source"] == "text" for r in recs), "table": sum(r["source"] == "table" for r in recs),
            "by_quantity": dict(sorted(by_q.items())), "by_comparator": dict(sorted(by_c.items())), "by_unit": dict(sorted(by_u.items())),
-           "conflict_candidates_note": "same manual+quantity+unit+comparator with different values: candidates for human review, NOT conflicts",
+           "conflict_candidates_note": "pairs of provisions in one manual bounding the same quantity differently about overlapping subject words: candidates for human review, NOT conflicts (see measurement_conflict_candidates.json)",
            "conflict_candidates": len(cands)}
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(rep, indent=1, sort_keys=True) + "\n", encoding="utf-8")
