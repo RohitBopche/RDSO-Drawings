@@ -8710,7 +8710,7 @@
         const [cmp, lo, hi, unit, quantity] = v, u = UNIT_LABEL[unit] || unit;
         const text = cmp === 'max' ? `at most ${hi} ${u}` : cmp === 'min' ? `at least ${lo} ${u}` : cmp === 'range' ? `${lo} to ${hi} ${u}`
           : cmp === 'tolerance' ? `${lo} / +${hi} ${u}` : `${lo} ${u}`;
-        return `<li>${quantity ? `<b>${escHtml(quantity)}</b>: ` : ''}${escHtml(text)} <span style="color:var(--text-muted);">— “${escHtml(v[5])}”</span></li>`;
+        return `<li>${quantity ? `<b>${escHtml(quantity)}</b>: ` : ''}${escHtml(text)} <span style="color:var(--text-muted);">— “${escHtml(v[5])}”${v[6] && v[6].length ? ` · near: ${escHtml(v[6].join(', '))}` : ''}</span></li>`;
       };
       const valuesBlock = extras.v && extras.v.length
         ? `<details style="margin-top:4px;"><summary style="cursor:pointer;font-size:10px;color:var(--accent-cyan);">Values found in this provision (${extras.v.length}, machine-extracted)</summary>` +

@@ -52,7 +52,7 @@
   "t": 294,
   "year": 150
  },
- "conflict_candidates": 8,
+ "conflict_candidates": 17,
  "conflict_candidates_note": "pairs of provisions in one manual bounding the same quantity differently about overlapping subject words: candidates for human review, NOT conflicts (see measurement_conflict_candidates.json)",
  "table": 2433,
  "text": 3345,

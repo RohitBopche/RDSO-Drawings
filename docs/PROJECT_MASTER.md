@@ -1952,6 +1952,18 @@ Checks: browser Test 7 (Para 522 shows values with the machine-extracted label; 
 
 **Still open:** condition extraction for measurements (so a value can say which speed band or component it applies to), measurement-to-graph edges, drawing notes and parts lists, registry-derived drawing nodes in the graph, real engineer questions with two labellers, embeddings decision.
 
+### 37.21 Sprint M results (conditions attached to measurements) — 2026-09-30
+
+`measurements.py` now records, for each value taken from clause text, the conditions named in the words around it (100 characters before, 60 after, never the value itself): rail section (52 kg, 60 kg, 60E1, 90/110 UTS), sleeper type, track geometry (straight, curve, turnout, crossing, switch, SEJ, bridge, tunnel, level crossing, running line ...), gauge, route class or zone, traffic, and, for a non-speed value, a speed value in the same sentence as `speed_band`. Fixed regular expressions, not understanding. 905 of 3,345 text values (27%) carry at least one condition; 2,440 carry none. Table cells carry no conditions yet (their row and column text would have to be parsed). Gate S checks the shape of the field; the browser card shows up to three of them as "near: ...".
+
+Precision, by reading 30 random conditioned values (author-audited, not independent): about 25 of 30 carried conditions that are relevant to the value (for example "Curve" for a curve tolerance, "52 kg" and "PSC sleepers" for a formation depth, "bridges" for a refuge distance); errors are a verb read as a noun ("trains may approach" taken as track approach), a rail size taken as a condition when it was part of a table row unrelated to the value, and window spill in flattened tables. Missing conditions are more common than wrong ones: the qualifier often sits in a table column or an earlier sentence.
+
+**Conflict candidates again, now with conditions:** pairs with the same manual, quantity, unit and comparator, and either the same non-empty condition set or overlapping subject words: 17 (9 by conditions, 8 by subject). Reading all 17: none is a real contradiction. The nine by conditions are curve-radius thresholds that belong to different purposes (track-recording tolerance bands in Para 520 to 525 versus pre-monsoon patrolling in Para 1112). **Conditions were not enough: what separates two limits is their purpose (what is being limited), which the extractor does not capture.** Consequence: no conflict flag is shown or planned from this data; a conflict feature needs a person reviewing pairs, and the candidate file is the queue for that.
+
+State: 21 gates, 217 pytest, 13 browser suites, all passing; rebuild deterministic.
+
+**Still open:** conditions for table cells, the purpose of a limit (needs a model or people), measurement-to-graph edges, drawing notes and parts lists, real engineer questions with two labellers, embeddings decision.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

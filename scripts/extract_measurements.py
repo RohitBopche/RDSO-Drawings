@@ -52,7 +52,6 @@ def main() -> int:
             groups[(r["clause"].split(":")[1], r["quantity"], r["unit"], r["comparator"])].append(r)
     cands = []
     for k, v in sorted(groups.items()):
-        # two provisions of one manual bounding the same quantity differently, about similar subject words
         for i in range(len(v)):
             for j in range(i + 1, len(v)):
                 x, y = v[i], v[j]
@@ -60,11 +59,16 @@ def main() -> int:
                 by = y["hi"] if y["comparator"] == "max" else y["lo"]
                 if x["clause"] == y["clause"] or bx == by:
                     continue
-                if _overlap(x["subject"], y["subject"]) < 0.5:
+                cx = {(c["type"], c["raw"].lower().replace(" ", "")) for c in x.get("conditions", [])}
+                cy = {(c["type"], c["raw"].lower().replace(" ", "")) for c in y.get("conditions", [])}
+                # comparable = same quantity, unit, comparator, manual AND the same stated conditions (both non-empty), or overlapping subject words
+                same_conditions = bool(cx) and cx == cy
+                if not (same_conditions or _overlap(x["subject"], y["subject"]) >= 0.5):
                     continue
                 cands.append({"manual": k[0], "quantity": k[1], "unit": k[2], "comparator": k[3],
-                              "a": {"clause": x["clause"], "value": bx, "raw": x["raw"], "subject": x["subject"]},
-                              "b": {"clause": y["clause"], "value": by, "raw": y["raw"], "subject": y["subject"]},
+                              "basis": "same_conditions" if same_conditions else "subject_words",
+                              "a": {"clause": x["clause"], "value": bx, "raw": x["raw"], "subject": x["subject"], "conditions": sorted(cx)},
+                              "b": {"clause": y["clause"], "value": by, "raw": y["raw"], "subject": y["subject"], "conditions": sorted(cy)},
                               "status": "candidate_unreviewed"})
     CAND.write_text(json.dumps(cands, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     rep = {"total": len(recs), "text": sum(r["source"] == "text" for r in recs), "table": sum(r["source"] == "table" for r in recs),

@@ -108,11 +108,39 @@ def _plausible(unit, lo, hi):
     return lim is None or max(abs(x) for x in (lo, hi) if x is not None) <= lim
 
 
+CONDITION_RES = [
+    ("rail_section", re.compile(r"\b(?:52|60|90)\s?kg\b(?!\s*/\s*m)|\b60\s?E1\b|\bUIC\s?60\b|\b(?:90|110)\s?UTS\b", re.I)),
+    ("sleeper", re.compile(r"\b(?:PSC|wooden|steel\s+trough|concrete|CST-?9|ST)\s+sleepers?\b", re.I)),
+    ("geometry", re.compile(r"\b(?:straight\s+track|straight|curves?|curved|turnouts?|points\s+and\s+crossings?|crossings?|switch(?:es)?|SEJ|"
+                            r"bridges?|tunnels?|level\s+crossings?|station\s+yards?|running\s+lines?|loop\s+lines?|main\s+lines?|"
+                            r"transition|approach(?:es)?)\b", re.I)),
+    ("gauge", re.compile(r"\b(?:BG|MG|NG|broad\s+gauge|metre\s+gauge|narrow\s+gauge)\b")),
+    ("route_class", re.compile(r"\bGroup\s+[A-E]\b|\bZone[\s-]*(?:I{1,3}|IV|V)\b|\b[A-E]\s+class\s+routes?\b|\bQ\s+routes?\b|\brunning\s+track\b", re.I)),
+    ("traffic", re.compile(r"\b(?:passenger|goods|freight|mixed)\s+(?:traffic|trains?|lines?)\b", re.I)),
+]
+
+
+def conditions_in(sentence: str, own: tuple[int, int]) -> list[dict]:
+    """What the sentence says the value applies to, excluding the value's own span (deterministic patterns, not understanding)."""
+    out, seen = [], set()
+    lo, hi = max(0, own[0] - 100), min(len(sentence), own[1] + 60)     # nearby words only: long flattened table text is noise
+    for kind, rx in CONDITION_RES:
+        for m in rx.finditer(sentence, lo, hi):
+            if m.start() < own[1] and m.end() > own[0]:
+                continue
+            key = (kind, re.sub(r"s?\W*$", "", re.sub(r"\s+", "", m.group(0).lower())))
+            if key not in seen:
+                seen.add(key)
+                out.append({"type": kind, "raw": " ".join(m.group(0).split())})
+    return out
+
+
 def extract_from_text(clause_id: str, text: str) -> list[dict]:
     out = []
     for s0, s1 in split_sentences(text):
         sent = text[s0:s1]
         used: list[tuple[int, int]] = []
+        sent_records: list[tuple[int, int, int]] = []
 
         def free(a, b):
             return all(b <= x or a >= y for x, y in used)
@@ -125,7 +153,9 @@ def extract_from_text(clause_id: str, text: str) -> list[dict]:
             used.append((a, b))
             window = sent[max(0, a - 110):a]
             q = _fix_quantity(quantity_of(window) or quantity_of(sent[:a]), unit, hi, lo)
-            out.append({"clause": clause_id, "source": "text", "start": s0 + a, "end": s0 + b, "raw": text[s0 + a:s0 + b].strip(),
+            conds = conditions_in(sent, (a, b))
+            sent_records.append((len(out), a, b))
+            out.append({"clause": clause_id, "source": "text", "conditions": conds, "start": s0 + a, "end": s0 + b, "raw": text[s0 + a:s0 + b].strip(),
                         "quantity": q, "comparator": comparator, "lo": lo, "hi": hi, "unit": unit,
                         "subject": " ".join(sent[max(0, a - 110):a].split())[-110:] or " ".join(sent.split())[:80]})
 
@@ -156,6 +186,15 @@ def extract_from_text(clause_id: str, text: str) -> list[dict]:
                 emit(m, "min", v, None, m.group(3))
             else:
                 emit(m, "value", v, v, m.group(3))
+        # a speed value in the same sentence is the speed band another value applies to
+        for i, a, b in sent_records:
+            r = out[i]
+            if r["quantity"] == "speed":
+                continue
+            for j, a2, b2 in sent_records:
+                o = out[j]
+                if j != i and o["quantity"] == "speed" and o["unit"] == "kmph":
+                    r["conditions"].append({"type": "speed_band", "raw": o["raw"]})
     out.sort(key=lambda r: r["start"])
     return out
 

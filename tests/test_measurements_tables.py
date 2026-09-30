@@ -125,3 +125,24 @@ def test_form_like_tables_are_flagged_and_demoted():
     assert forms and len(forms) < len(tables)
     idx = (ROOT / "data/search/search_index.js").read_text(encoding="utf-8")
     assert '"form":1' in idx
+
+
+def test_conditions_come_from_nearby_words_not_the_whole_sentence():
+    r = ex("On curves of PSC sleepers with 52 kg rails the alignment variation shall be not more than 10 mm.")
+    kinds = {c["type"] for c in r[-1]["conditions"]}
+    assert {"geometry", "sleeper"} <= kinds
+    far = ex("Note: bridges are covered in Chapter 9. " + "x " * 80 + "The gap shall be not more than 30 mm.")
+    assert all(c["type"] != "geometry" for c in far[-1]["conditions"])
+
+
+def test_speed_in_same_sentence_becomes_speed_band_condition():
+    r = ex("On routes with speed above 110 kmph the gap shall not exceed 5 mm.")
+    gap = [x for x in r if x["unit"] == "mm"][0]
+    assert ("speed_band", "above 110 kmph") in [(c["type"], c["raw"].lower()) for c in gap["conditions"]]
+    speed = [x for x in r if x["unit"] == "kmph"][0]
+    assert all(c["type"] != "speed_band" for c in speed["conditions"])
+
+
+def test_own_span_is_not_its_own_condition():
+    r = ex("Rail of 52 kg is used here.")
+    assert all(c["raw"].lower() != "52 kg" for c in r[0]["conditions"])

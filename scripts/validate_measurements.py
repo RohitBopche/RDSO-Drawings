@@ -12,6 +12,7 @@ import measurements as M  # noqa: E402
 
 MIN_MEASUREMENTS = 5500
 CANON_UNITS = set(M.UNIT_MAP.values())
+COND_TYPES = {k for k, _ in M.CONDITION_RES} | {"speed_band"}
 
 
 def main() -> int:
@@ -41,6 +42,8 @@ def main() -> int:
         if r["verification_status"] != "machine_extracted":
             errors.append(f"{mid}: unexpected status {r['verification_status']}")
         if r["source"] == "text":
+            if not isinstance(r.get("conditions"), list) or any(c.get("type") not in COND_TYPES or not c.get("raw") for c in r["conditions"]):
+                errors.append(f"{mid}: malformed conditions")
             t = texts.get(r["clause"])
             if t is None or t[r["start"]:r["end"]].strip() != r["raw"]:
                 errors.append(f"{mid}: span does not reproduce clause text")

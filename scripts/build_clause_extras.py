@@ -29,7 +29,8 @@ def main() -> int:
             continue                                   # table cells already reach the user as table rows
         e = extras.setdefault(m["clause"], {"v": []})
         if len(e["v"]) < MAX_VALUES:
-            e["v"].append([m["comparator"], m["lo"], m["hi"], m["unit"], m["quantity"], " ".join(m["raw"].split())])
+            e["v"].append([m["comparator"], m["lo"], m["hi"], m["unit"], m["quantity"], " ".join(m["raw"].split()),
+                           [f"{c['raw']}" for c in m.get("conditions", [])[:3]]])
     files = {r["drawing_id"]: r["file"] for r in read(KG / "canonical" / "drawings_registry.jsonl")}
     for l in read(KG / "canonical" / "drawing_links.jsonl"):
         if l["status"] != "SHEET_HELD":
