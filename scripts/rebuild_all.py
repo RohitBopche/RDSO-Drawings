@@ -25,6 +25,7 @@ STEPS = [
     "extract_tables.py",           # ~2 min: PyMuPDF table finder over the manuals
     "extract_measurements.py",     # structured values from clause text and table cells
     "drawing_registry.py",         # drawing identity from file names + committed OCR (scripts/ocr_drawings.py)
+    "drawing_links.py",            # clause -> drawing citations (needs the registry)
     "build_search_index.py",
 ]
 

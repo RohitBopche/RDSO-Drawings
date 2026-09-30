@@ -1930,6 +1930,18 @@ Gate T now also requires 55 sheets with a description and 6 with a file-name/tab
 
 **Not done (P3 remainder):** notes, parts lists and dimensions with tolerances; highlighted crops for drawing evidence; revision comparison (needs two versions of a sheet with legible tables: only T-6155 has them); graph nodes for drawings and links to manual clauses; replacing the hand-made catalogue and the 6 hand-made drawing nodes with registry-derived ones; a human transcription queue for the hand-lettered sheets.
 
+### 37.19 Sprint K results (linking manual clauses to drawings, P3.6) — 2026-09-30
+
+`scripts/drawing_links.py` finds drawing numbers cited in clause text (`RT-6154`, `RDSO/T-6155`, "drawing No. RDSO/T-1899") and marks each citation `SHEET_HELD` when a sheet in `drawings/` covers that number (a "6171 To 6173" file also covers 6172) or `NO_SHEET`. Output: `canonical/drawing_links.jsonl` (exact span per citation) and `reports/drawing_links_report.json`. Gate U checks every span against the clause text, every sheet against the registry, and status against coverage.
+
+**Finding: the drawing collection barely overlaps what the manuals cite.** The manuals cite 103 distinct drawing numbers in 155 places; sheets exist for only 4 of them (6154, 6155, 6279, 6280, cited in IRPWM Paras 229 and 427), which involves 8 of the 59 sheet files. The other 51 sheets are cited by no manual clause, and 99 cited drawings are not in the collection (`cited_numbers_without_sheet`, a ready acquisition list). So a question that mixes a manual rule and a drawing can be answered for four drawings only; better drawing extraction will not change that, more drawings would.
+
+Caveats: matching is by number only, and treating the `RT-` and `T-` prefixes as one series is an assumption not checked against an RDSO index; the citation pattern is tuned on this corpus (bare `T-nnnn` is accepted only outside reference-like contexts) and was not evaluated for recall; where several versions of a sheet exist (T-6155 has three) the link lists all of them and does not choose. The hand-made `data/rdso_drawing_catalog.json` is not used by the application (only by `scripts/analyze_rdso_drawing.py`, which produced it) and is superseded by the registry; it is kept for history and should not be cited. I did not replace the 6 hand-made drawing nodes in the graph: they feed the browser tests and the demo turnout scenes, and replacing them is a UI change of its own.
+
+State: 21 gates (A to U), 213 pytest; browser suites not re-run (no browser code changed); rebuild deterministic.
+
+**Next for drawings:** acquire the missing sheets (list above), notes and parts lists with dimensions, evidence crops on sheets, and registry-derived graph nodes once the UI can take them.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
