@@ -35,6 +35,7 @@ GATES = [
     ("Gate Q: Cross-references", [sys.executable, str(ROOT / "scripts" / "validate_crossrefs.py")]),
     ("Gate R: Tables", [sys.executable, str(ROOT / "scripts" / "validate_tables.py")]),
     ("Gate S: Measurements", [sys.executable, str(ROOT / "scripts" / "validate_measurements.py")]),
+    ("Gate T: Drawing registry", [sys.executable, str(ROOT / "scripts" / "validate_drawings.py")]),
 ]
 
 

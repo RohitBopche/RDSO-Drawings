@@ -1900,6 +1900,20 @@ Test state: 19 gates, 199 pytest, 13 browser suites (browser suites not re-run t
 
 **Next, and needs a person:** collect 50 to 100 real questions from engineers, have two people label them, run the intake, and then decide about embeddings (P5.2) from the resulting recall. Not done: condition extraction for measurements, measurement-to-graph edges, drawings (P3/P4).
 
+### 37.17 Sprint I results (drawing identity and revision evidence, P3 start) — 2026-09-30
+
+First drawing work, under the rule that the manuals are now proven enough to start. The 59 drawing PDFs are single-page raster scans with no text layer, so everything below rests on file names and OCR.
+
+**I1. OCR of the sheets.** `scripts/ocr_drawings.py` (RapidOCR, page scaled to at most 3,000 pixels on the long side) writes `raw/drawing_ocr.jsonl` with every line, its confidence and its position (0 to 1 of the page), bound to the PDF hash. Like the manual OCR it is a committed artifact, not part of the byte-identical rebuild.
+
+**I2. Registry.** `scripts/drawing_registry.py` writes `canonical/drawings_registry.jsonl`: per file, the drawing numbers stated in the file name (single, list or range endpoints, sub-sheets such as 6155/1, alteration marker ALT_n or ALT_NIL), the drawing numbers and dates read on the sheet, and checks that compare the two. Everything is `machine_extracted`. Results: 58 of 59 sheets show the number(s) stated in the file name (base number compared, so a wrong sub-sheet suffix would pass). The one that does not (`RDSO_T_3911 TO 3918`, a small sheet with a partial text layer) reads a different number (T-3002) and is left unconfirmed rather than forced. No file named ALT_NIL shows several dated revisions. Revision lineage: only T-6155 has several versions on disk (ALT_10, 12, 13); the newest by alteration number is also the one with the latest date read from the sheet (27-01-2025), so the two sources agree. Nothing else has more than one version, so the lineage feature is barely exercised.
+
+**I3. Audit of the hand-made drawing catalogue (`data/rdso_drawing_catalog.json`).** 45 of 59 entries have a title that is just the file name ("RDSO Drawing Specification (file.pdf)"), so they carry no drawing information; 28 files cover several drawings (ranges or lists) but the catalogue gives each one number; the `key_highlights` free text has no source location and cannot be checked. The knowledge graph holds only 6 drawing nodes against 59 files. The catalogue should not be treated as evidence.
+
+**I4. Gate T.** Every PDF has exactly one registry entry with the current hash, a parseable number, an OCR record for that hash, no ALT_NIL contradiction, and at least 55 sheets identity-confirmed. Tests: filename forms (ranges, lists, sub-sheets, the "RDSOT" typo, lower-case Alt), OCR zero-for-O tolerance, impossible dates, the two checks, and a negative test that removing an entry fails the gate. Test state: 20 gates (A to T), 205 pytest; browser suites not re-run (no browser code changed); rebuild deterministic.
+
+**Not done (P3 remainder):** title-block fields (description, scale, rail section) are not extracted, because OCR returns the description block as jumbled fragments in non-reading order; notes, parts lists and dimensions with tolerances; highlighted evidence crops for drawings; revision comparison; turning the registry into graph nodes and linking drawings to manual clauses. Recommended next step for drawings: crop the title block by position and OCR it at higher resolution, then extract the alteration table row by row.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

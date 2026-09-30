@@ -24,6 +24,7 @@ STEPS = [
     "export_kg_bundle.py",
     "extract_tables.py",           # ~2 min: PyMuPDF table finder over the manuals
     "extract_measurements.py",     # structured values from clause text and table cells
+    "drawing_registry.py",         # drawing identity from file names + committed OCR (scripts/ocr_drawings.py)
     "build_search_index.py",
 ]
 
