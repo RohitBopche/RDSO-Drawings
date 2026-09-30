@@ -1,4 +1,7 @@
 """
+DEPRECATED (P0-R.1): do not run. It rebuilds canonical from stale intermediates and stamps
+everything `verified`, which Gate L/M reject. Use scripts/unify_manual_canonical.py.
+
 build_canonical_pipeline.py
 ============================
 Synthesizes all drawing entities, candidates, and deep chapter-by-chapter

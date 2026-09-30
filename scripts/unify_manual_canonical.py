@@ -25,6 +25,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import provenance_policy  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 KG = ROOT / "data" / "knowledge-graph"
 CANON = KG / "canonical"
@@ -182,9 +185,6 @@ def build() -> dict:
     if quarantined:
         write_jsonl(QUARANTINE, quarantined)
 
-    write_jsonl(CANON / "nodes.jsonl", nodes)
-    write_jsonl(CANON / "edges.jsonl", edges)
-    write_jsonl(CANON / "requirements.jsonl", reqs)
 
     # --- unified core json (keep facts; add facts for new edges) ---
     facts = legacy.get("facts", [])
@@ -201,6 +201,15 @@ def build() -> dict:
             "extraction_method": "deterministic_text_extraction",
             "evidence_text": e["rationale"],
         })
+    evidence = read_jsonl(CANON / "evidence.jsonl")
+    reviews_path = CANON / "reviews.jsonl"
+    reviews = read_jsonl(reviews_path) if reviews_path.exists() else []
+    provenance_policy.apply(nodes, reqs, evidence, facts, reviews)
+    write_jsonl(CANON / "nodes.jsonl", nodes)
+    write_jsonl(CANON / "edges.jsonl", edges)
+    write_jsonl(CANON / "requirements.jsonl", reqs)
+    write_jsonl(CANON / "evidence.jsonl", evidence)
+
     meta = legacy.get("metadata", {})
     meta.update(total_entities=len(nodes), total_edges=len(edges), total_facts=len(facts))
     legacy = {"metadata": meta, "entities": nodes, "edges": json_edges, "facts": facts}

@@ -61,7 +61,6 @@
   "nodes": 6830,
   "requirements": 2199,
   "verification_status": {
-    "machine_extracted": 2199,
-    "verified": 4631
+    "machine_extracted": 6830
   }
 }

@@ -1672,9 +1672,11 @@ The Gemini agent kept this document read-only and recorded status separately. Pe
 |---|---|---|
 | P0-R.1 single canonical source | **DONE (partial, see limits)** | `scripts/unify_manual_canonical.py` merges the two diverged stores (JSONL had name/status, compact JSON had provenance/hierarchy) into one node record; `rdso_manuals_knowledge.json` is now a *derived view* (content identical to the previous file); exports and `metrics.json` regenerate from it. |
 | P0-R.2 full clause text | **DONE** | 1,838/1,838 clauses carry `text`, `page`, `document_id`, evidence id; requirements regenerated (2,199 rows, 0 empty, 0 dangling); 1,573 legacy dangling rows moved to `intermediate/quarantine_dangling_requirements.jsonl` (nothing deleted); 361 tolerance nodes and 667 evidence-linked `SPECIFIES` edges now in canonical. |
-| Honest status | **DONE for new/rewritten content** | Extracted clauses/tolerances are `machine_extracted`; invented `mandatory/recommended` priority replaced by `unknown`. Older nodes still say `verified` until P0-R.3. |
+| Honest status | **DONE** | Extracted clauses/tolerances are `machine_extracted`; invented `mandatory/recommended` priority replaced by `unknown`. |
+| P0-R.3 provenance re-baseline | **DONE** | `scripts/provenance_policy.py` (applied by `unify_manual_canonical.py`): all 6,830 nodes, 2,199 requirements and 1,875 evidence records were `verified` with no human review; they are now `machine_extracted` with confidence capped at 0.95. 8,270 facts stamped `raster_blueprint_crop_and_transcription`/`VERIFIED`/1.0 that were actually text-derived were relabelled `deterministic_text_extraction`/`MACHINE_EXTRACTED`. The only route to `reviewed` (1 reviewer) or `verified` (2 independent reviewers) is a record in `canonical/reviews.jsonl` (starts empty). |
+| Gate M | **DONE** | `scripts/validate_provenance_policy.py`: statuses must equal what review records imply, no unreviewed confidence above 0.95, no text fact labelled raster transcription, review records well-formed and pointing at real ids. 5 tests incl. a negative test. |
 | Gate L | **DONE** | `scripts/validate_manual_text_integrity.py` (in `validate_all.py`): empty text, dangling/duplicate/empty requirements, JSONL vs core divergence, derived-view and browser-bundle drift, stale metrics, short-clause ratchet. Negative test proves it fails on empty clause text. |
-| Regression | **PASS** | 12/12 gates, 131 pytest (126 + 5 new), `verify_kg_manuals.js` 11/11 and `verify_knowledge_universes.js` pass in headless Chromium after the change. |
+| Regression | **PASS** | 13/13 gates, 136 pytest (126 + 10 new), `verify_kg_manuals.js` 11/11 and `verify_knowledge_universes.js` pass in headless Chromium after the change. |
 
 **Limits found while doing this (carry into the plan):**
 1. **325 of 1,838 clauses (18%) have under 60 characters of text**: the extractor kept the heading, not the body (e.g. USFD 8.2 "Apparatus required:"). Gate L ratchets this at 325; it may only fall. Root cause: paragraph-boundary logic; fix in P0-R.6.
@@ -1694,7 +1696,7 @@ The Gemini agent kept this document read-only and recorded status separately. Pe
 
 | WP | Title | Depends | Deliverable | Acceptance test (must fail today) |
 |---|---|---|---|---|
-| **P0-R.3** | Provenance re-baseline | R.2 | Every non-drawing node/edge/evidence/requirement is `machine_extracted` unless a review record exists; remove false `raster_blueprint_crop_and_transcription`/confidence 1.0 stamps on text-derived facts; add `reviews.jsonl` (reviewer, date, decision) as the only path to `reviewed`/`verified`. | Gate M: no `verified` without a review record; no fact whose `extraction_method` contradicts its source type. |
+| **P0-R.3 (DONE, §37.8)** | Provenance re-baseline | R.2 | Every non-drawing node/edge/evidence/requirement is `machine_extracted` unless a review record exists; remove false `raster_blueprint_crop_and_transcription`/confidence 1.0 stamps on text-derived facts; add `reviews.jsonl` (reviewer, date, decision) as the only path to `reviewed`/`verified`. | Gate M: no `verified` without a review record; no fact whose `extraction_method` contradicts its source type. |
 | **P0-R.4** | Evidence on every edge and clause | R.3 | Evidence record carries `page_number`, `bbox` (PyMuPDF word boxes), `page_sha256`, `source_pdf_sha256`; every edge lists `evidence_ids`. | Gate D extended: 0 edges without evidence (structural HAS_SECTION edges cite the heading evidence); every evidence page hash matches the PDF on disk. |
 | **P0-R.5** | Metrics as single truth | R.2 | `metrics.json` extended (short clauses, non-extractable pages, per-manual coverage); docs/UI read only it; a CI step diffs regenerated vs committed. | CI fails if committed metrics differ from regenerated. |
 | **P0-R.6** | Clause-boundary repair | R.2 | Extractor rewrite for paragraph bodies: numbering monotonic per chapter, reject values outside manual range (`PARA_5300`), drop header/annexure pseudo-clauses, join body until next valid paragraph; per-manual detected-vs-kept reconciliation report. Target: short clauses under 5%, IRPWM kept/detected above 90%. Benchmark against Docling result in `research/` before choosing the parser. | Gate L ratchet tightened stepwise; new gate for para-number monotonicity and range. |
@@ -1748,3 +1750,10 @@ The Gemini agent kept this document read-only and recorded status separately. Pe
 ### 38.5 Definition of done for the product goal
 
 An engineer can type a natural-language question offline and receive, in under 2 seconds on a modest laptop, an answer composed of quoted source spans with manual/paragraph/page citations that open on a highlighted region; weak or conflicting evidence is stated, not hidden; every wrong or missing answer reported by users becomes a reviewed correction and a permanent regression question; and all published metrics come from one generated file that CI recomputes.
+
+
+### 38.6 Notes from P0-R.3
+
+- The 13 hand-written QA answers and the UI still show hard-coded `VERIFIED`/0.99 badges (`CANONICAL_QA_DATABASE`). They are not canonical data, so Gate M cannot see them; they are replaced by computed confidence and review state in P6.1 and must not be presented as reviewed before then.
+- Drawing-derived nodes (transcribed from crops) were downgraded too: no drawing fact has a human review record either. The review queue should start with safety-relevant numeric limits and the pilot drawings.
+- `scripts/build_canonical_pipeline.py` is deprecated (it would re-stamp everything `verified`); `unify_manual_canonical.py` is the generator until the P0-R.6 extractor rewrite replaces its input.
