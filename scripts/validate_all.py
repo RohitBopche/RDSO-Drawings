@@ -31,6 +31,8 @@ GATES = [
     ("Gate M: Provenance Policy", [sys.executable, str(ROOT / "scripts" / "validate_provenance_policy.py")]),
     ("Gate N: Evidence Locations & Hashes", [sys.executable, str(ROOT / "scripts" / "validate_evidence_locations.py")]),
     ("Gate O: OCR Coverage of Image-only Pages", [sys.executable, str(ROOT / "scripts" / "validate_ocr_coverage.py")]),
+    ("Gate P: Retrieval Index, Eval Set & Regression", [sys.executable, str(ROOT / "scripts" / "validate_retrieval.py")]),
+    ("Gate Q: Cross-references", [sys.executable, str(ROOT / "scripts" / "validate_crossrefs.py")]),
 ]
 
 

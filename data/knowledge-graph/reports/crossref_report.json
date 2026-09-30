@@ -1,0 +1,871 @@
+{
+ "summary": {
+  "total": 1572,
+  "by_status": {
+   "EXTERNAL": 238,
+   "NOT_FOUND": 139,
+   "RESOLVED": 1195
+  },
+  "by_kind": {
+   "annexure": {
+    "NOT_FOUND": 12,
+    "RESOLVED": 333
+   },
+   "chapter": {
+    "RESOLVED": 38
+   },
+   "figure": {
+    "NOT_FOUND": 107,
+    "RESOLVED": 197
+   },
+   "para": {
+    "EXTERNAL": 9,
+    "NOT_FOUND": 9,
+    "RESOLVED": 548
+   },
+   "standard": {
+    "EXTERNAL": 229
+   },
+   "table": {
+    "NOT_FOUND": 11,
+    "RESOLVED": 79
+   }
+  }
+ },
+ "not_found": [
+  {
+   "source": "CLAUSE:IRPWM:CH_01:PARA_103",
+   "raw": "143",
+   "kind": "para",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_01:PARA_103",
+   "raw": "Annexure 4/3A",
+   "kind": "annexure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_01:PARA_106",
+   "raw": "143",
+   "kind": "para",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_02:PARA_212",
+   "raw": "Annexure - 2/2A",
+   "kind": "annexure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_02:PARA_212",
+   "raw": "Annexure - 2/2A",
+   "kind": "annexure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_02:PARA_212",
+   "raw": "Annexure - 2/2A",
+   "kind": "annexure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_303",
+   "raw": "Fig. 3.1(a)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_303",
+   "raw": "Fig 3.2",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_308",
+   "raw": "Fig. 3.3",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_314",
+   "raw": "Annexure - X",
+   "kind": "annexure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_316",
+   "raw": "Annexure - IV",
+   "kind": "annexure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_328",
+   "raw": "Fig. 3.20.1(a)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_328",
+   "raw": "Fig 3.20.1(b)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_331",
+   "raw": "Fig. 3.6(b)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_331",
+   "raw": "Fig. 3.6 (a)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_336",
+   "raw": "Fig. 3.8",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_336",
+   "raw": "Fig 3.8",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig No 3.17",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.16",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.16 (b)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.17",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.18",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.19",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.20",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (a)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (b)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (c)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (d)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (e)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (f)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig 3.21",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_342",
+   "raw": "Fig. 3.22 (a)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_342",
+   "raw": "Fig. 3.22 (b)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_342",
+   "raw": "Fig. 3.22 (e)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_342",
+   "raw": "Fig. 3.22 (f)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_342",
+   "raw": "Fig 3.22",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_349",
+   "raw": "Fig. 3.23",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_349",
+   "raw": "Fig. 3.23",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_349",
+   "raw": "Fig. 3.24",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_351",
+   "raw": "Fig 3.24 (b)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_351",
+   "raw": "Fig 3.24 (c)",
+   "kind": "figure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_06:PARA_645",
+   "raw": "1048",
+   "kind": "para",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_07:PARA_708",
+   "raw": "annexure 2",
+   "kind": "annexure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_07:PARA_708",
+   "raw": "annexure 2",
+   "kind": "annexure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_08:PARA_842",
+   "raw": "Appendix IX",
+   "kind": "annexure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_14:PARA_1407",
+   "raw": "Annexure - 1",
+   "kind": "annexure",
+   "scope": "IRPWM"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_1",
+   "raw": "Fig. 2(I)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_2",
+   "raw": "Annexure-IIB",
+   "kind": "annexure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_2",
+   "raw": "Fig. 2(I)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_2",
+   "raw": "Fig. 2(I)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_2",
+   "raw": "Fig. 2(I)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_2",
+   "raw": "Fig. 2(I)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_04:PARA_4_5",
+   "raw": "Fig. 5",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_07:PARA_7_1",
+   "raw": "Fig. 8",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_08:PARA_8_6_4",
+   "raw": "Fig. 22 (a)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_08:PARA_8_7_1_2",
+   "raw": "Fig. 22 (a)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_08:PARA_8_8_2",
+   "raw": "Fig. 22 (a)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_08:PARA_8_15_2",
+   "raw": "23",
+   "kind": "para",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_08:PARA_8_16",
+   "raw": "Fig.21",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.5",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.14",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.11",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.9",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.10",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.12",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.13",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_3_4",
+   "raw": "Fig. 26 (b)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_3_4",
+   "raw": "Fig. 26 (c)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_3_4",
+   "raw": "Fig. 26 (b)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_3_4",
+   "raw": "Fig. 26 (c)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_4_2",
+   "raw": "Fig.26 (b)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_4_2",
+   "raw": "Fig. 26(c)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_4_2",
+   "raw": "Fig. 26(b)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_4_2",
+   "raw": "Fig. 26(c)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_5_2",
+   "raw": "Fig. 26(b)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_5_2",
+   "raw": "Fig. 26(c)",
+   "kind": "figure",
+   "scope": "USFD"
+  },
+  {
+   "source": "CLAUSE:AT_WELD:CH_03:PARA_3_1",
+   "raw": "Fig. 3.1(a)",
+   "kind": "figure",
+   "scope": "AT_WELD"
+  },
+  {
+   "source": "CLAUSE:AT_WELD:CH_04:PARA_4_2_2",
+   "raw": "4.4.3.1",
+   "kind": "para",
+   "scope": "AT_WELD"
+  },
+  {
+   "source": "CLAUSE:AT_WELD:CH_07:PARA_7_1",
+   "raw": "4.4.2",
+   "kind": "para",
+   "scope": "AT_WELD"
+  },
+  {
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "figure 9.0",
+   "kind": "figure",
+   "scope": "FBW"
+  },
+  {
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "10.1.1",
+   "kind": "para",
+   "scope": "FBW"
+  },
+  {
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "10.2.3",
+   "kind": "para",
+   "scope": "FBW"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_209",
+   "raw": "Fig 2.9",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_222",
+   "raw": "Fig. 2.36 (a)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_222",
+   "raw": "Fig. 2.38 (a)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_222",
+   "raw": "Fig. 2.39 (c)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_224",
+   "raw": "Fig. 2.40 (e)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_03:PARA_305",
+   "raw": "Fig 3.10 (a)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_03:PARA_305",
+   "raw": "Fig. 3.9 (b)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_04:PARA_410",
+   "raw": "table II",
+   "kind": "table",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_04:PARA_420",
+   "raw": "Fig.4.12 (e)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_04:PARA_420",
+   "raw": "Fig. 4.14 (c)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_502",
+   "raw": "Fig.5.4",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_506",
+   "raw": "table 5.3",
+   "kind": "table",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_508",
+   "raw": "Fig.5.6 (a)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.9 (a)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.11",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.11",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.12",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.12",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.13",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.14",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.15",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.15 (b)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.16",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.16 (c)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.17",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.18",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.19",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.20",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig. 5.21",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.21 (d)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.7",
+   "kind": "table",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.6",
+   "kind": "table",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.7",
+   "kind": "table",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.6",
+   "kind": "table",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.6",
+   "kind": "table",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.7",
+   "kind": "table",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.8",
+   "kind": "table",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.22",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_518",
+   "raw": "Fig 5.23",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_518",
+   "raw": "Fig 5.23",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_518",
+   "raw": "Fig 5.24",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_518",
+   "raw": "Fig 5.24 (c)",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1204",
+   "raw": "Fig 12.1",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1204",
+   "raw": "Fig 12.1",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1205",
+   "raw": "Fig 12.2",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1205",
+   "raw": "Fig 12.2",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1206",
+   "raw": "Fig 12.3",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1206",
+   "raw": "Fig. 12.4",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1206",
+   "raw": "Fig 12.4",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1206",
+   "raw": "Fig 12.5",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1208",
+   "raw": "Fig 12.6",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1208",
+   "raw": "Fig 12.6",
+   "kind": "figure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1214",
+   "raw": "Annexures 1",
+   "kind": "annexure",
+   "scope": "TMM"
+  },
+  {
+   "source": "CLAUSE:STMM:CH_01:PARA_106",
+   "raw": "Table 1A",
+   "kind": "table",
+   "scope": "STMM"
+  },
+  {
+   "source": "CLAUSE:STMM:CH_01:PARA_106",
+   "raw": "Table 1B",
+   "kind": "table",
+   "scope": "STMM"
+  },
+  {
+   "source": "CLAUSE:STMM:CH_22:PARA_2202",
+   "raw": "113",
+   "kind": "para",
+   "scope": "STMM"
+  }
+ ]
+}

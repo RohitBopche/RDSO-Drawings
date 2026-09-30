@@ -1,0 +1,602 @@
+[
+ {
+  "question": "Where should complete particulars of level crossings be maintained in a register?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_09:PARA_914"
+  ]
+ },
+ {
+  "question": "Who has the authority to order a material train?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_08:PARA_847"
+  ]
+ },
+ {
+  "question": "How is casual renewal of a defective or fractured rail carried out?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_06:PARA_616"
+  ]
+ },
+ {
+  "question": "How should track renewals be planned: continuous lengths or short isolated stretches?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_07:PARA_703"
+  ]
+ },
+ {
+  "question": "How should labour be arranged for restoration after a breach or serious derailment?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_11:PARA_1111"
+  ]
+ },
+ {
+  "question": "What must the driver of a material train do at facing catch or spring points not protected by signals?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_08:PARA_856"
+  ]
+ },
+ {
+  "question": "What are the standard rail sections in use on Indian Railways and their weight per metre?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_02:PARA_203"
+  ]
+ },
+ {
+  "question": "What data is collected during site investigation of a weak formation?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_02:PARA_220"
+  ]
+ },
+ {
+  "question": "Which promotional training courses are required when a track maintainer is promoted to keyman or gang mate?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_14:PARA_1403"
+  ]
+ },
+ {
+  "question": "What action is taken after a derailment when the track is distorted and cannot pass traffic?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_06:PARA_652"
+  ]
+ },
+ {
+  "question": "How often is the census of traffic at level crossings taken?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_09:PARA_917"
+  ]
+ },
+ {
+  "question": "What is an in-sleeper point machine and why is it used?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_15:PARA_1504"
+  ]
+ },
+ {
+  "question": "What is the difference between a working trip and a running trip?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_08:PARA_863"
+  ]
+ },
+ {
+  "question": "Which rail section is recommended for main line track renewals?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_02:PARA_205"
+  ]
+ },
+ {
+  "question": "How is ballast collected and trained out?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_02:PARA_214"
+  ]
+ },
+ {
+  "question": "Why is data recorded at the site of an accident?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_11:PARA_1109"
+  ]
+ },
+ {
+  "question": "On which curves can SWR on PSC sleepers not be laid?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_03:PARA_318"
+  ]
+ },
+ {
+  "question": "How frequently should track geometry recording by TRC be done on routes above 130 Kmph?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_05:PARA_506"
+  ]
+ },
+ {
+  "question": "Which Acts and Rules govern the safety of the travelling public?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_12:PARA_1201"
+  ]
+ },
+ {
+  "question": "How far from an obstruction should a danger signal be planted in an emergency?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_08:PARA_812"
+  ]
+ },
+ {
+  "question": "What is the principle of flash butt welding of rails?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_03:PARA_312"
+  ]
+ },
+ {
+  "question": "Can persons other than railway officials be carried on trolleys?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_08:PARA_831"
+  ]
+ },
+ {
+  "question": "What expansion gap should be provided while laying free rails at different rail temperatures?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_07:PARA_715"
+  ]
+ },
+ {
+  "question": "What traffic block duration is needed for thermit welding of a joint?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_03:PARA_306"
+  ]
+ },
+ {
+  "question": "Is a brake-van required in a material train?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_08:PARA_846"
+  ]
+ },
+ {
+  "question": "How is weak formation identified?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_02:PARA_218"
+  ]
+ },
+ {
+  "question": "What is the purpose of sand humps and dead ends?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_06:PARA_633"
+  ]
+ },
+ {
+  "question": "Which codes and manuals must the SSE/P.Way keep with correction slips up to date?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_01:PARA_105"
+  ]
+ },
+ {
+  "question": "Who decides whether transhipment is to be done after an accident?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_11:PARA_1113"
+  ]
+ },
+ {
+  "question": "What diary does each artisan or workman maintain?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_06:PARA_654"
+  ]
+ },
+ {
+  "question": "How are level crossings classified into special, A, B, C and D class?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_09:PARA_902"
+  ]
+ },
+ {
+  "question": "What precautions are needed when the track is submerged in flood water?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_11:PARA_1117"
+  ]
+ },
+ {
+  "question": "How are railway officials notified before opening new works?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_12:PARA_1208"
+  ]
+ },
+ {
+  "question": "How is the thermal force in LWR or CWR calculated?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_03:PARA_335"
+  ]
+ },
+ {
+  "question": "What track parameter limits apply for low speeds at worksites and yard lines?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_05:PARA_526"
+  ]
+ },
+ {
+  "question": "What is robotic reconditioning welding of crossings?",
+  "gold": [
+   "CLAUSE:IRPWM:CH_04:PARA_432"
+  ]
+ },
+ {
+  "question": "How does a ballast regulating machine transfer ballast using the shoulder plough?",
+  "gold": [
+   "CLAUSE:TMM:CH_03:PARA_315"
+  ]
+ },
+ {
+  "question": "What is the working mechanism of the track relaying train TRT?",
+  "gold": [
+   "CLAUSE:TMM:CH_04:PARA_413"
+  ]
+ },
+ {
+  "question": "What facilities are provided in the camping coach for track machine staff?",
+  "gold": [
+   "CLAUSE:TMM:CH_08:PARA_808"
+  ]
+ },
+ {
+  "question": "How many grinding stones do the RGM-72 and RGM-96 rail grinding machines have?",
+  "gold": [
+   "CLAUSE:TMM:CH_05:PARA_504"
+  ]
+ },
+ {
+  "question": "What does the manual say about maintenance schedule and infrastructure for track machines in general?",
+  "gold": [
+   "CLAUSE:TMM:CH_08:PARA_801"
+  ]
+ },
+ {
+  "question": "Which mechanised track relaying systems are available on Indian Railways?",
+  "gold": [
+   "CLAUSE:TMM:CH_04:PARA_401"
+  ]
+ },
+ {
+  "question": "How does the levelling and lifting system of a tamping machine work with chord wires?",
+  "gold": [
+   "CLAUSE:TMM:CH_02:PARA_218"
+  ]
+ },
+ {
+  "question": "How does the dynamic track stabiliser consolidate the ballast?",
+  "gold": [
+   "CLAUSE:TMM:CH_02:PARA_226"
+  ]
+ },
+ {
+  "question": "What are the duties of a machine assistant on a track machine?",
+  "gold": [
+   "CLAUSE:TMM:CH_01:PARA_110"
+  ]
+ },
+ {
+  "question": "What operations are carried out during the block when changing a turnout with the T-28 machine?",
+  "gold": [
+   "CLAUSE:TMM:CH_04:PARA_422"
+  ]
+ },
+ {
+  "question": "What are the duties of the ADEN regarding track machines in his section?",
+  "gold": [
+   "CLAUSE:TMM:CH_01:PARA_111"
+  ]
+ },
+ {
+  "question": "What is the difference between through tamping and spot attention?",
+  "gold": [
+   "CLAUSE:TMM:CH_06:PARA_608"
+  ]
+ },
+ {
+  "question": "What are the four strokes of a diesel engine cycle?",
+  "gold": [
+   "CLAUSE:TMM:CH_12:PARA_1203"
+  ]
+ },
+ {
+  "question": "What is the engine of a track machine and what fuel does it use?",
+  "gold": [
+   "CLAUSE:TMM:CH_12:PARA_1201"
+  ]
+ },
+ {
+  "question": "What are maintenance schedules I to V for small track machines and where is intermediate overhauling carried out?",
+  "gold": [
+   "CLAUSE:STMM:CH_22:PARA_2202"
+  ]
+ },
+ {
+  "question": "Track based lubricator troubleshooting when the pump motor does not operate",
+  "gold": [
+   "CLAUSE:STMM:CH_19:PARA_1906"
+  ]
+ },
+ {
+  "question": "What are the technical requirements of the hydraulic rail tensor such as maximum pulling force and ram stroke?",
+  "gold": [
+   "CLAUSE:STMM:CH_09:PARA_904"
+  ]
+ },
+ {
+  "question": "What manpower is required for operation and maintenance of small track machines?",
+  "gold": [
+   "CLAUSE:STMM:CH_01:PARA_105"
+  ]
+ },
+ {
+  "question": "What daily and weekly checks are needed on the track based lubricator applicator and grease?",
+  "gold": [
+   "CLAUSE:STMM:CH_19:PARA_1905"
+  ]
+ },
+ {
+  "question": "What guidelines apply for using, handling, transporting and storing the light weight trolley?",
+  "gold": [
+   "CLAUSE:STMM:CH_11:PARA_1105"
+  ]
+ },
+ {
+  "question": "On what principle does a portable AC generator work?",
+  "gold": [
+   "CLAUSE:STMM:CH_07:PARA_703"
+  ]
+ },
+ {
+  "question": "What speed limit and lighting are required for the self-propelled light weight trolley?",
+  "gold": [
+   "CLAUSE:STMM:CH_12:PARA_1204"
+  ]
+ },
+ {
+  "question": "What is the use of portable AC generators on the track?",
+  "gold": [
+   "CLAUSE:STMM:CH_07:PARA_702"
+  ]
+ },
+ {
+  "question": "What are the technical requirements of abrasive rail cutting wheels: diameter, thickness, bore and speed?",
+  "gold": [
+   "CLAUSE:STMM:CH_02:PARA_213"
+  ]
+ },
+ {
+  "question": "What are the technical requirements of the compressed air petrol preheating machine: preheating time and temperature range?",
+  "gold": [
+   "CLAUSE:STMM:CH_04:PARA_404"
+  ]
+ },
+ {
+  "question": "What are the functional requirements of the powered material trolley?",
+  "gold": [
+   "CLAUSE:STMM:CH_13:PARA_1303"
+  ]
+ },
+ {
+  "question": "What is the codal life of small track machines such as rail drilling machine and abrasive rail cutter?",
+  "gold": [
+   "CLAUSE:STMM:CH_23:PARA_2311"
+  ]
+ },
+ {
+  "question": "What is a rail tensor used for?",
+  "gold": [
+   "CLAUSE:STMM:CH_09:PARA_901"
+  ]
+ },
+ {
+  "question": "Where is the 450/2MHz probe placed to test the bottom of an AT weld in the central zone?",
+  "gold": [
+   "CLAUSE:USFD:CH_08:PARA_8_7_1_3"
+  ]
+ },
+ {
+  "question": "What report should the chemist and metallurgist submit after investigating rail failures?",
+  "gold": [
+   "CLAUSE:USFD:CH_13:PARA_13_1_2"
+  ]
+ },
+ {
+  "question": "At what percentage of full screen height is a flaw signal classified as DFWN or DFWR in AT weld web testing?",
+  "gold": [
+   "CLAUSE:USFD:CH_08:PARA_8_7_2_4"
+  ]
+ },
+ {
+  "question": "How is sensitivity set with the 70 degree 2 MHz probe on the tongue rail using the artificial defect?",
+  "gold": [
+   "CLAUSE:USFD:CH_11:PARA_11_9_4_3"
+  ]
+ },
+ {
+  "question": "What guiding principles must be understood before ultrasonic flaw detection examination of rails?",
+  "gold": [
+   "CLAUSE:USFD:CH_07:PARA_7_0"
+  ]
+ },
+ {
+  "question": "Within what period must defective AT weld joints DFWN be removed and how are they protected?",
+  "gold": [
+   "CLAUSE:USFD:CH_08:PARA_8_10_1"
+  ]
+ },
+ {
+  "question": "What is the test procedure with side looking probes for half moon defects in AT welds?",
+  "gold": [
+   "CLAUSE:USFD:CH_08:PARA_8_8_3"
+  ]
+ },
+ {
+  "question": "How are rails tested manually with a double crystal 4 MHz probe before fabrication of points and crossings?",
+  "gold": [
+   "CLAUSE:USFD:CH_10:PARA_10_4_4"
+  ]
+ },
+ {
+  "question": "What defects occur in alumino-thermic welds, such as transverse cracks in head and foot?",
+  "gold": [
+   "CLAUSE:USFD:CH_01:PARA_1_2_2_2"
+  ]
+ },
+ {
+  "question": "How are the two 45 degree angle probes moved along the rail head when testing flash butt welds?",
+  "gold": [
+   "CLAUSE:USFD:CH_09:PARA_9_5_1_1"
+  ]
+ },
+ {
+  "question": "What types of testing are prescribed for alumino thermic welds?",
+  "gold": [
+   "CLAUSE:USFD:CH_08:PARA_8_1"
+  ]
+ },
+ {
+  "question": "What is the testing frequency of rails and welds in terms of GMT?",
+  "gold": [
+   "CLAUSE:USFD:CH_06:PARA_6_6"
+  ]
+ },
+ {
+  "question": "How is sensitivity checked with the 0 degree and 70 degree probes on the standard test rail?",
+  "gold": [
+   "CLAUSE:USFD:CH_11:PARA_11_5"
+  ]
+ },
+ {
+  "question": "Which equipment and probes are used for ultrasonic examination of SEJ and ISEJ?",
+  "gold": [
+   "CLAUSE:USFD:CH_11:PARA_11_8_3_1"
+  ]
+ },
+ {
+  "question": "How are welded joints with an extended guarantee period marked?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_07:PARA_7_4"
+  ]
+ },
+ {
+  "question": "How should slag be cleaned from a multiple use crucible?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_04:PARA_4_10_2"
+  ]
+ },
+ {
+  "question": "Is the conventional green sand mould thermit welding process allowed on Indian Railways?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_01:PARA_1_5"
+  ]
+ },
+ {
+  "question": "What gap is required between rail ends before aluminothermic welding?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_04:PARA_4_5"
+  ]
+ },
+ {
+  "question": "Can thermit welding be carried out while it is raining?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_04:PARA_4_10_7"
+  ]
+ },
+ {
+  "question": "How should rail ends be prepared and cleaned before thermit welding?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_04:PARA_4_4"
+  ]
+ },
+ {
+  "question": "How are prefabricated moulds examined before they are mounted on the rail ends?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_04:PARA_4_8_2"
+  ]
+ },
+ {
+  "question": "How should the moulds be aligned with the rail gap to avoid a cross joint?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_04:PARA_4_8_3"
+  ]
+ },
+ {
+  "question": "How long is the guarantee for joints made by upgraded alumino thermic welding techniques?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_07:PARA_7_3_1_1"
+  ]
+ },
+ {
+  "question": "What are the ultrasonic flaw detection requirements for fusion welded joints after AT welding?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_06:PARA_6_3"
+  ]
+ },
+ {
+  "question": "What percentage of welded joints are selected at random for hardness and transverse load tests?",
+  "gold": [
+   "CLAUSE:AT_WELD:CH_07:PARA_7_1"
+  ]
+ },
+ {
+  "question": "Should welded panels for long welded rails be provided with fishbolt holes?",
+  "gold": [
+   "CLAUSE:FBW:CH_02:PARA_2_3"
+  ]
+ },
+ {
+  "question": "Which areas of the rail foot are ground smooth after flash butt welding?",
+  "gold": [
+   "CLAUSE:FBW:CH_08:PARA_8_2"
+  ]
+ },
+ {
+  "question": "What happens during forging or upsetting in flash butt welding?",
+  "gold": [
+   "CLAUSE:FBW:CH_05:PARA_5_3_4"
+  ]
+ },
+ {
+  "question": "How is the hot upset metal stripped after flash butt welding?",
+  "gold": [
+   "CLAUSE:FBW:CH_05:PARA_5_3_5"
+  ]
+ },
+ {
+  "question": "What does the manual for flash butt welding of rails cover?",
+  "gold": [
+   "CLAUSE:FBW:CH_01:PARA_1_1"
+  ]
+ },
+ {
+  "question": "Can rails of different section and metallurgy be flash butt welded together?",
+  "gold": [
+   "CLAUSE:FBW:CH_02:PARA_2_1"
+  ]
+ },
+ {
+  "question": "What end bend tolerance is allowed on a 1.5 metre straight edge for rail ends to be flash butt welded?",
+  "gold": [
+   "CLAUSE:FBW:CH_03:PARA_3_4"
+  ]
+ },
+ {
+  "question": "How is macro examination carried out on flash butt welds during procedure approval?",
+  "gold": [
+   "CLAUSE:FBW:CH_05:PARA_5_6_4_8"
+  ]
+ },
+ {
+  "question": "What is required for field approval of a mobile flash butt welding plant?",
+  "gold": [
+   "CLAUSE:FBW:CH_05:PARA_5_7"
+  ]
+ },
+ {
+  "question": "How is the rail head ground flush after flash butt welding?",
+  "gold": [
+   "CLAUSE:FBW:CH_08:PARA_8_1"
+  ]
+ },
+ {
+  "question": "What is the transverse test requirement for flash butt welds during procedure approval?",
+  "gold": [
+   "CLAUSE:FBW:CH_05:PARA_5_6_4_7"
+  ]
+ }
+]

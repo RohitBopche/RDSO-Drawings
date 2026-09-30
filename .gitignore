@@ -31,3 +31,4 @@ venv/
 # Scratch / throwaway
 scratch/
 *.bak
+data/search/passages.jsonl

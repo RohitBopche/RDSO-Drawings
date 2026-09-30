@@ -2883,6 +2883,9 @@
   <script src="./data/rdso_kg_data.js"></script>
   <script src="./data/manual_structure.js"></script>
   <script src="./data/manual_content_index.js"></script>
+  <script src="./lib/rdso_search.js"></script>
+  <script src="./data/search/search_index.js"></script>
+  <script src="./data/search/crossrefs.js"></script>
   <style>
     #kg-hover-hud {
       position: absolute;
@@ -5367,7 +5370,8 @@
             <span style="font-size:11px; color:var(--accent-pink); background:rgba(247,37,133,0.15); padding:2px 6px; border-radius:4px; border:1px solid rgba(247,37,133,0.3); margin-left:6px;">${manualName} ${pageNum ? '· Page ' + pageNum : ''}</span>
           </div>
           ${chapterName ? `<div style="font-size:11px; color:var(--accent-purple); font-weight:600; margin-bottom:6px;">📖 ${chapterName}</div>` : ''}
-          <blockquote style="border-left:3px solid var(--accent-cyan); padding-left:10px; margin:8px 0; font-style:italic; color:#e0e8f8; font-size:12px; line-height:1.5;">"${verbatim}"</blockquote>
+          <blockquote style="border-left:3px solid var(--accent-cyan); padding-left:10px; margin:8px 0; color:#e0e8f8; font-size:12px; line-height:1.5; max-height:280px; overflow:auto; white-space:pre-wrap;">${escHtml(verbatim)}</blockquote>
+          ${renderCrossRefs(data.id)}
           ${(tols.length > 0) ? `
             <div style="margin-top:8px;">
               <div style="font-size:10px; font-weight:600; color:var(--accent-yellow); text-transform:uppercase; margin-bottom:4px;">Statutory Tolerances & Bounds:</div>
@@ -8604,6 +8608,65 @@
       return { isQuestion: true, intent: "COMPONENT_LOOKUP", confidence: 0.85 };
     }
 
+    // ---- Offline retrieval answers (P5.1): extractive, cited, refuses when evidence is thin ----------------
+    const RETRIEVAL_REFUSE_BELOW = 0.56;   // evidence coverage threshold chosen on the dev split (eval/baseline.json)
+    const ALIAS_TO_DOC = { IRPWM: 'DOC:IRPWM:2024:ACS14', USFD: 'DOC:USFD:2026:ACS4', AT_WELD: 'DOC:AT_WELD:2022',
+                           FBW: 'DOC:FBW:2022:CS5', TMM: 'DOC:TMM:2020:ACS10', STMM: 'DOC:STMM:2024' };
+    let __searchEngine = null;
+    function escHtml(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    function getSearchEngine() {
+      if (!__searchEngine && window.RDSOSearch && window.RDSO_SEARCH_INDEX) __searchEngine = window.RDSOSearch.create(window.RDSO_SEARCH_INDEX);
+      return __searchEngine;
+    }
+    function renderCrossRefs(id) {
+      const X = window.RDSO_CROSSREFS;
+      if (!X) return '';
+      const out = (X.out[id] || []).filter(r => r[1] !== 'chapter');
+      const incoming = X.in[id] || [];
+      if (!out.length && !incoming.length) return '';
+      const color = { RESOLVED: 'var(--accent-green)', EXTERNAL: 'var(--text-muted)', DELETED: 'var(--accent-yellow)', NOT_FOUND: 'var(--accent-red)', AMBIGUOUS: 'var(--accent-yellow)' };
+      const chip = (label, status, target) => `<span ${target ? `onclick="selectGraphNode('${escHtml(target)}')" style="cursor:pointer;` : 'style="'}font-size:10px;border:1px solid ${color[status] || '#888'};color:${color[status] || '#888'};border-radius:4px;padding:2px 6px;" title="${status}">${escHtml(label)}${status === 'RESOLVED' ? '' : ' · ' + status.toLowerCase().replace('_', ' ')}</span>`;
+      const seen = new Set();
+      const outChips = out.filter(r => { const k = r[0] + r[2]; if (seen.has(k)) return false; seen.add(k); return true; })
+        .slice(0, 24).map(r => chip(r[0], r[2], r[3][0])).join('');
+      const inChips = incoming.slice(0, 24).map(s => chip(s.split(':').slice(1, 2)[0] + ' ¶' + s.split('PARA_')[1], 'RESOLVED', s)).join('');
+      return `<div style="margin-top:8px;">` +
+        (outChips ? `<div style="font-size:10px;font-weight:600;color:var(--accent-purple);text-transform:uppercase;margin-bottom:4px;">References in this provision:</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${outChips}</div>` : '') +
+        (inChips ? `<div style="font-size:10px;font-weight:600;color:var(--accent-purple);text-transform:uppercase;margin:6px 0 4px;">Referenced by:</div><div style="display:flex;gap:6px;flex-wrap:wrap;">${inChips}</div>` : '') + `</div>`;
+    }
+    function citationOf(r) {
+      return r.alias === 'DRAWINGS' ? `${escHtml(r.title)}` : `${escHtml(r.alias)} ${escHtml(r.type === 'TABLE' ? r.para : 'Para ' + r.para)} · p.${r.page}`;
+    }
+    function retrievalAnswer(query, intent) {
+      const engine = getSearchEngine();
+      if (!engine) return null;
+      const res = engine.search(query, { k: 5 });
+      const meta = INTENT_METADATA[intent] || INTENT_METADATA.COMPONENT_LOOKUP || { label: 'Retrieval', color: 'var(--accent-cyan)', icon: '🔎' };
+      const base = { question: query, intent: intent, intentLabel: meta.label, intentColor: meta.color, intentIcon: meta.icon, params: [], conflictNote: null };
+      const covered = res.coverage >= RETRIEVAL_REFUSE_BELOW || res.identifierHit;
+      if (!res.results.length || !covered) {
+        return { ...base, id: 'qa_retrieval_none', statement: 'No sufficient evidence for this question in the loaded manuals and drawings. ' +
+                 `Only ${Math.round(res.coverage * 100)}% of its key terms occur together in any one passage. Try naming the manual, a paragraph number, or a component.`,
+                 traversal: [], primaryNodeId: '', confidence: Math.min(res.coverage, 0.55),
+                 provenance: { doc: 'Offline manual index', edition: 'no supporting passage', chapter: '', clause: '—', status: 'NO_EVIDENCE', confidence: res.coverage }, workflow: null };
+      }
+      const best = res.results[0];
+      const excerpt = escHtml(best.text.replace(/\s+\n/g, '\n').slice(0, 700)) + (best.text.length > 700 ? ' …' : '');
+      const docId = ALIAS_TO_DOC[best.alias];
+      const open = docId && best.page ? `<button class="btn" style="font-size:10px;padding:2px 8px;margin-left:6px;" onclick="openManualPdf('${docId}', ${best.page}, '${escHtml(citationOf(best))}')">📄 Open source page ↗</button>` : '';
+      const others = res.results.slice(1).map(r => `<li>${citationOf(r)} — ${escHtml(r.title.slice(0, 80))}</li>`).join('');
+      const statement = `<div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">Best matching passage (extract, not a summary) — ${citationOf(best)}${open}</div>` +
+        `<blockquote style="border-left:3px solid var(--accent-cyan);padding-left:10px;margin:4px 0;white-space:pre-wrap;font-size:12px;line-height:1.5;color:#e0e8f8;">${excerpt}</blockquote>` +
+        (others ? `<div style="font-size:10px;color:var(--text-muted);margin-top:6px;">Other relevant provisions:</div><ul style="margin:2px 0 0 16px;font-size:11px;">${others}</ul>` : '');
+      return { ...base, id: 'qa_retrieval_' + best.clause, statement, primaryNodeId: best.clause, confidence: Math.min(0.95, res.coverage),
+               traversal: res.results.filter(r => r.type === 'CLAUSE').map(r => ({ id: r.clause, label: `${r.alias} ¶${r.para}`, universe: 'manuals' })),
+               provenance: { doc: best.doc, edition: 'machine-extracted, unreviewed', chapter: best.chapter, clause: best.clause, status: 'MACHINE_EXTRACTED', confidence: res.coverage },
+               workflow: best.alias === 'DRAWINGS' ? null : { label: 'Open Codes & Manuals', tab: 'manuals' } };
+    }
+    window.retrievalAnswer = retrievalAnswer;
+
     function answerEngineeringQuestion(query) {
       if (!query || typeof query !== "string") return null;
       const { isQuestion, intent, confidence } = detectQuestionIntent(query);
@@ -8615,12 +8678,14 @@
       let bestMatch = null;
       let bestScore = 0;
 
+      let bestHits = 0;
       CANONICAL_QA_DATABASE.forEach(item => {
-        let score = 0;
+        let score = 0, hits = 0;
         if (item.intent === intent) score += 40;
         item.keywords.forEach(kw => {
           if (qLower.includes(kw)) {
             score += 35;
+            hits++;
           } else if (tokens.some(t => kw.includes(t))) {
             score += 12;
           }
@@ -8628,10 +8693,13 @@
         if (score > bestScore) {
           bestScore = score;
           bestMatch = item;
+          bestHits = hits;
         }
       });
 
-      if (bestMatch && bestScore >= 35) {
+      // A curated answer needs at least two of its own keywords in the question. One shared word
+      // ("fractured") once returned a star-crack mitigation card for a casual-renewal question.
+      if (bestMatch && bestScore >= 35 && bestHits >= 2) {
         const intentMeta = INTENT_METADATA[bestMatch.intent] || { label: bestMatch.intent, color: "var(--accent-cyan)", icon: "ℹ️" };
         return {
           ...bestMatch,
@@ -8643,49 +8711,11 @@
         };
       }
 
-      // Dynamic Corpus Search & Open-Ended Knowledge Synthesis:
-      // Searches canonical manual clauses and entities for mentions, provisions, or components
-      const allEntities = (window.RDSO_CANONICAL_KG && window.RDSO_CANONICAL_KG.entities) || (kgPhysicsNodes ? kgPhysicsNodes.map(n => n.data) : []);
-      const matchedClauses = allEntities.filter(e => {
-        if (e.domain !== 'manual' && e.universe !== 'manuals') return false;
-        const text = `${e.label || ''} ${e.desc || ''} ${e.statement || ''} ${JSON.stringify(e.specs || {})}`.toLowerCase();
-        return tokens.some(t => t.length > 3 && text.includes(t));
-      });
-
-      if (matchedClauses.length > 0) {
-        const primary = matchedClauses[0];
-        const topClauses = matchedClauses.slice(0, 6);
-        const clauseList = topClauses.map(c => `• ${c.label}: ${(c.desc || c.statement || '').slice(0, 140)}...`).join('\n');
-        const primaryNodeId = primary.id;
-
-        return {
-          id: `qa_dyn_mention_${tokens.join('_')}`,
-          intent: intent !== "UNKNOWN" ? intent : "INSPECTION_PROCEDURE",
-          intentLabel: (INTENT_METADATA[intent] || INTENT_METADATA.INSPECTION_PROCEDURE).label,
-          intentColor: (INTENT_METADATA[intent] || INTENT_METADATA.INSPECTION_PROCEDURE).color,
-          intentIcon: (INTENT_METADATA[intent] || INTENT_METADATA.INSPECTION_PROCEDURE).icon,
-          question: query,
-          statement: `Found ${matchedClauses.length} statutory clause(s) mentioning "${tokens.slice(0, 4).join(' ')}" across Indian Railways manuals:\n\n${clauseList}`,
-          params: [
-            { name: "Total Matched Clauses", nominal: `${matchedClauses.length} Clauses`, limit: "Statutory Reference", unit: "Nos", risk: "Non-adherence to regulatory provisions risks track safety penalties", remedy: "Review governing manual clauses" },
-            { name: "Primary Governing Entity", nominal: primary.label, limit: primary.type || "Clause", unit: "-", risk: "Operational failure", remedy: "Adhere to IRS/IRPWM directives" }
-          ],
-          traversal: [
-            ...topClauses.map(c => ({ id: c.id, label: c.label, universe: "manuals" }))
-          ],
-          primaryNodeId: primaryNodeId,
-          provenance: {
-            doc: "Indian Railways Regulatory Manuals",
-            edition: "2024-2026 Canonical Core",
-            chapter: primary.specs?.Chapter || "Track Standards",
-            clause: primary.id,
-            status: "VERIFIED",
-            confidence: 0.94
-          },
-          conflictNote: null,
-          workflow: { label: "Open Codes & Manuals", tab: "manuals" }
-        };
-      }
+      // Offline retrieval over the whole corpus (lib/rdso_search.js). Answers are extractive: the best
+      // passage is quoted with its manual, paragraph and page. If too little of the question is
+      // covered by any passage the answer is an explicit "no sufficient evidence", never a guess.
+      const retrieved = retrievalAnswer(query, intent);
+      if (retrieved) return retrieved;
 
       // Dynamic Fallback: Search kgPhysicsNodes for asset
       const matchedNode = kgPhysicsNodes.find(n => {

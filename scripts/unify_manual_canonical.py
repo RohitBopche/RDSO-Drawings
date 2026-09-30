@@ -26,6 +26,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import provenance_policy  # noqa: E402
+import crossrefs  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 KG = ROOT / "data" / "knowledge-graph"
@@ -122,7 +123,7 @@ def enrich_evidence(nodes, edges, json_edges, evidence, facts) -> None:
             if crop and crop in crop_ev:
                 ids = [crop_ev[crop]]
             else:
-                for end in ("to", "from"):
+                for end in (("from", "to") if ed["rel"] == "REFERENCES" else ("to", "from")):
                     n = by_node.get(ed[end])
                     if n and n.get("evidence_ids"):
                         ids = [n["evidence_ids"][0]]
@@ -229,6 +230,29 @@ def build() -> dict:
     norm = lambda e: (e["from"], e["to"], RELATION_NORM.get(e["rel"], e["rel"]))
     have = {norm(e) for e in json_edges}
     json_edges.extend(e for e in edges if norm(e) not in have)
+
+    # --- cross-references (P2.1): typed records + REFERENCES edges for the resolved ones ---
+    deleted = {m["alias"]: src.get("clause_parse_stats", {}).get(m["document_id"], {}).get("deleted_paras", []) for m in src["manuals"]}
+    refs = crossrefs.extract(nodes, deleted)
+    write_jsonl(CANON / "crossrefs.jsonl", refs)
+    REPORTS.mkdir(parents=True, exist_ok=True)
+    (REPORTS / "crossref_report.json").write_text(json.dumps({
+        "summary": crossrefs.summarize(refs),
+        "not_found": [{"source": r["source"], "raw": " ".join(r["raw"].split()), "kind": r["target_kind"], "scope": r["scope"]}
+                      for r in refs if r["status"] == "NOT_FOUND"],
+    }, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    ref_edges = {}
+    for r in refs:
+        for t in r["targets"]:
+            if t != r["source"] and (r["source"], t) not in ref_edges:
+                ref_edges[(r["source"], t)] = f"{r['raw'].strip()[:80]}".replace("\n", " ")
+    existing = {(e["from"], e["to"], e["rel"]) for e in edges}
+    for (a, b), raw in sorted(ref_edges.items()):
+        if (a, b, "REFERENCES") in existing:
+            continue
+        rec = {"from": a, "to": b, "rel": "REFERENCES", "rationale": f"Text reference: {raw}", "source": None}
+        edges.append(dict(rec))
+        json_edges.append(dict(rec))
 
     # --- requirements: regenerate manual rows, quarantine dangling rows ---
     kept, quarantined = [], []

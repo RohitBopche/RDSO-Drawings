@@ -87,7 +87,7 @@ class CDPClient {
   }
 }
 
-const tempProfile = path.join(require('os').tmpdir(), 'chrome_learning_profile');
+const tempProfile = require('./browser_env').freshProfile('chrome_learning_profile');
 
 async function main() {
   console.log("[*] Spawning Chrome headless for Phase 6 Learning System Verification...");

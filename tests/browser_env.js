@@ -56,4 +56,9 @@ async function waitForDevtools(port, timeoutMs = 30000) {
     throw new Error(`Chrome DevTools not reachable on port ${port} after ${timeoutMs} ms`);
 }
 
-module.exports = { waitForDevtools, chromePath: findChrome(), chromeFlags, artifactDir, headless };
+// A fresh profile directory per run: a crashed earlier run must not leave a lock that stops Chrome starting.
+function freshProfile(name) {
+    return fs.mkdtempSync(path.join(os.tmpdir(), `${name}-`));
+}
+
+module.exports = { freshProfile, waitForDevtools, chromePath: findChrome(), chromeFlags, artifactDir, headless };

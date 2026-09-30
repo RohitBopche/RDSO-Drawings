@@ -87,7 +87,7 @@ class CDPClient {
   }
 }
 
-const tempProfile = path.join(require('os').tmpdir(), 'chrome_qa_profile');
+const tempProfile = require('./browser_env').freshProfile('chrome_qa_profile');
 
 async function main() {
   console.log("[*] Spawning Chrome headless for Phase 5 Question Interface Verification...");

@@ -7,7 +7,7 @@ const { chromePath: chromePath, chromeFlags, artifactDir: envArtifactDir, waitFo
 const targetUrl = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
 const artifactDir = envArtifactDir;
 if (!fs.existsSync(artifactDir)) { try { fs.mkdirSync(artifactDir, { recursive: true }); } catch (e) {} }
-const tempProfile = path.join(require('os').tmpdir(), 'chrome_kg_phase2_profile');
+const tempProfile = require('./browser_env').freshProfile('chrome_kg_phase2_profile');
 
 async function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));

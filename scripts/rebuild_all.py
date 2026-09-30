@@ -22,6 +22,7 @@ STEPS = [
     "locate_evidence.py",
     "unify_manual_canonical.py",   # 2nd pass: attach evidence locations, edge evidence, metrics
     "export_kg_bundle.py",
+    "build_search_index.py",
 ]
 
 
