@@ -38,7 +38,7 @@ RANGE = re.compile(rf"{NUM}\s*(?:to|and|-|–)\s*{NUM}\s*{UNIT_RE}(?![A-Za-z/²]
 PM = re.compile(rf"(?:±|\+/-|\+\s?-)\s*{NUM}\s*{UNIT_RE}(?![A-Za-z/²])", re.I)
 PLUS_MINUS_PAIR = re.compile(rf"\+\s*{NUM}\s*{UNIT_RE}?\s*,?\s*[-−–]\s*{NUM}\s*{UNIT_RE}(?![A-Za-z/²])", re.I)
 SINGLE = re.compile(rf"(?P<comp>{COMP_MAX}|{COMP_MIN})?\s*{NUM}\s*{UNIT_RE}(?![A-Za-z/²])", re.I)
-SKIP_BEFORE = re.compile(r"(para(?:graph)?s?|annexure|appendix|fig(?:ure)?s?|table|clause|chapter|irs|is|rt|no|sl|sr|item|drg|drawing|acs|"
+SKIP_BEFORE = re.compile(r"(para(?:graph)?s?|annexure|appendix|fig(?:ure)?s?|table|clause|chapter|irs|(?-i:IS)|rt|no|sl|sr|item|drg|drawing|acs|"
                          r"note|section|rule)\W{0,4}$", re.I)
 QUANTITIES = [
     ("wear", r"\bwear\b|\bworn\b"), ("gap", r"\bgap\b|\bopening\b"), ("clearance", r"clearance|flangeway"),
@@ -180,6 +180,11 @@ def extract_from_text(clause_id: str, text: str) -> list[dict]:
                 continue
             comp = (m.group("comp") or "").lower()
             v = to_num(m.group(2))
+            tail = sent[m.end():m.end() + 16]
+            if not comp and re.match(r"\s*(?:or|and)\s+(?:more|above|greater|higher|over)\b", tail, re.I):
+                comp = "minimum"          # "440 m or more" is a lower bound
+            elif not comp and re.match(r"\s*(?:or|and)\s+(?:less|below|lower|fewer|under)\b", tail, re.I):
+                comp = "maximum"          # "100 mm or less" is an upper bound
             if re.match(COMP_MAX, comp, re.I):
                 emit(m, "max", None, v, m.group(3))
             elif re.match(COMP_MIN, comp, re.I):

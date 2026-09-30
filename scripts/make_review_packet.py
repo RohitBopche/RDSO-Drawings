@@ -58,7 +58,7 @@ def table_crop(t: dict, registry: dict, out_dir: Path) -> Path:
     return p
 
 
-def build(per_kind: int, seed: int) -> tuple[list[dict], dict]:
+def build(per_kind: int, seed: int, only: list[str] | None = None) -> tuple[list[dict], dict]:
     rnd = random.Random(seed)
     nodes = {n["id"]: n for n in read(KG / "canonical" / "nodes.jsonl") if n["id"].startswith("CLAUSE:")}
     ev = {e["evidence_id"]: e for e in read(KG / "canonical" / "evidence.jsonl") if e["evidence_id"].startswith("ev:clause:")}
@@ -75,8 +75,13 @@ def build(per_kind: int, seed: int) -> tuple[list[dict], dict]:
     tables = {t["table_id"]: t for t in read(KG / "raw" / "tables.jsonl")}
     dlinks = {d["link_id"]: d for d in read(KG / "canonical" / "drawing_links.jsonl")}
     items = []
+    kind_of = {"CLAUSE:": "clause", "XREF:": "xref", "MEAS:": "measurement", "TBL:": "table", "DLINK:": "drawing_link"}
     for kind in KINDS:
-        for tid in rnd.sample(pools[kind], min(per_kind, len(pools[kind]))):
+        if only is not None:          # explicit targets (a re-review of given items) instead of a random sample
+            chosen = [t for t in only if kind_of.get(next((p for p in kind_of if t.startswith(p)), "")) == kind and t in pools[kind]]
+        else:
+            chosen = rnd.sample(pools[kind], min(per_kind, len(pools[kind])))
+        for tid in chosen:
             item = {"kind": kind, "target_id": tid}
             if kind == "clause":
                 clause, span, shown = tid, None, tid
@@ -104,6 +109,8 @@ def build(per_kind: int, seed: int) -> tuple[list[dict], dict]:
                 e = ev.get(f"ev:{('clause:' + clause)}")
                 p = RE.render(e, registry, 100, ROOT / "artifacts" / "review" / "crops") if e else None
             item["image"] = png_b64(p) if p else ""
+            item["more_images"] = [png_b64(q) for q in RE.render_continuations(e, registry, 100, ROOT / "artifacts" / "review" / "crops")] \
+                if kind != "table" and e else []
             items.append(item)
     rnd.shuffle(items)          # do not review one kind in a row
     meta = {"seed": seed, "per_kind": per_kind, "items": len(items)}
@@ -131,7 +138,7 @@ ITEMS.forEach((it,i)=>{
   const c=document.createElement('div');c.className='card';
   const ctx=it.context?`<div class="ctx">${esc(it.context[0])}<mark>${esc(it.context[1])}</mark>${esc(it.context[2])}</div>`:'';
   c.innerHTML=`<div class="kind">${i+1}. ${it.kind} · ${esc(it.target_id)}</div><div class="shown">${esc(it.shown)}</div>
-  <div class="q">${esc(it.question)}</div>${ctx}${it.image?`<img src="${it.image}" alt="source page crop">`:'<p>(no image for this item)</p>'}
+  <div class="q">${esc(it.question)}</div>${ctx}${it.image?`<img src="${it.image}" alt="source page crop">`:'<p>(no image for this item)</p>'}${(it.more_images||[]).map(m=>`<div class="kind">continues on the next page</div><img src="${m}" alt="continuation crop">`).join('')}
   <div><label><input type="radio" name="d${i}" value="approved"> Correct</label><label><input type="radio" name="d${i}" value="rejected"> Wrong</label>
   <label><input type="radio" name="d${i}" value="unsure"> Unsure</label><input type="text" name="n${i}" placeholder="note (what is wrong?)"></div>`;
   root.appendChild(c);
@@ -156,12 +163,14 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--per-kind", type=int, default=10)
     ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--targets", help="JSON file with a list of target ids to review again (not a random sample; error rates from such a packet are NOT unbiased)")
+    ap.add_argument("--name", help="output name (default packet_s<seed>)")
     a = ap.parse_args()
-    items, meta = build(a.per_kind, a.seed)
+    items, meta = build(a.per_kind, a.seed, json.loads(Path(a.targets).read_text(encoding="utf-8")) if a.targets else None)
     OUT.mkdir(parents=True, exist_ok=True)
     body = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
     page = PAGE.replace("__ITEMS__", body).replace("__SEED__", str(a.seed)).replace("__N__", str(len(items)))
-    p = OUT / f"packet_s{a.seed}.html"
+    p = OUT / f"{a.name or 'packet_s' + str(a.seed)}.html"
     p.write_text(page, encoding="utf-8")
     print(f"{len(items)} items -> {p.relative_to(ROOT)} ({p.stat().st_size // 1024} KB)")
     return 0

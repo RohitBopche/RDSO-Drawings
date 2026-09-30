@@ -2,9 +2,10 @@
  "summary": {
   "total": 1572,
   "by_status": {
+   "AMBIGUOUS": 19,
    "EXTERNAL": 238,
    "NOT_FOUND": 145,
-   "RESOLVED": 1189
+   "RESOLVED": 1170
   },
   "by_kind": {
    "annexure": {
@@ -15,8 +16,9 @@
     "RESOLVED": 38
    },
    "figure": {
+    "AMBIGUOUS": 8,
     "NOT_FOUND": 113,
-    "RESOLVED": 191
+    "RESOLVED": 183
    },
    "para": {
     "EXTERNAL": 9,
@@ -27,8 +29,9 @@
     "EXTERNAL": 229
    },
    "table": {
+    "AMBIGUOUS": 11,
     "NOT_FOUND": 11,
-    "RESOLVED": 79
+    "RESOLVED": 68
    }
   }
  },
@@ -293,13 +296,13 @@
   },
   {
    "source": "CLAUSE:IRPWM:CH_07:PARA_708",
-   "raw": "annexure 2",
+   "raw": "annexure 2.16",
    "kind": "annexure",
    "scope": "IRPWM"
   },
   {
    "source": "CLAUSE:IRPWM:CH_07:PARA_708",
-   "raw": "annexure 2",
+   "raw": "annexure 2.16",
    "kind": "annexure",
    "scope": "IRPWM"
   },

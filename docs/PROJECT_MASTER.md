@@ -1994,6 +1994,31 @@ Measured what an engineer's machine would feel, because nothing so far had timed
 
 State: 21 gates, 222 pytest, 14 browser suites, all passing. The timing figures come from one headless run in a container and were not repeated on user hardware.
 
+### 37.25 First human review (reviewer "rohit", packet seed 1, 50 random items) — 2026-09-30
+
+The first independent check of the extractors. Decision file kept at `eval/reviews/decisions_rohit_s1.json`; recorded in `canonical/reviews.jsonl` (clauses) and `canonical/extractor_reviews.jsonl` (other kinds); summary in `reports/review_accuracy.json`.
+
+| Kind | Reviewed | Marked Correct | Marked Wrong | Wrong rate (95% interval) |
+|---|---:|---:|---:|---|
+| table | 10 | 10 | 0 | 0% (0 to 28%) |
+| cross-reference | 10 | 2 | 8 | 80% (49 to 94%) |
+| measurement | 10 | 1 | 9 | 90% (60 to 98%) |
+| drawing link | 10 | 1 | 9 | 90% (60 to 98%) |
+| clause | 10 | 0 | 10 | 100% (72 to 100%) |
+
+One reviewer, 10 items per kind, so the intervals are wide and there is no agreement figure. The ten rejected clauses are now `disputed` (policy: any rejection disputes), which is the correct state until they are re-reviewed.
+
+**What I found when I checked the rejected items myself.** Not all are extractor errors in the sense the packet question implied, and the review exposed real defects I had not found in any earlier audit:
+
+1. **Clauses (10 of 10 rejected): the evidence highlight stopped after about 300 characters.** The clause text itself was complete, but the source-page highlight (used in the packet, in "Open source page" crops and in Gate N) covered only the first 300 characters (`QUOTE_CHARS`), so every clause longer than that looked cut off (for example Para 410 highlighted "...However, in exceptional" and nothing after). Gate N passed throughout because it only checked that the quoted prefix occurs on the page. **Fixed:** `locate_evidence.py` now locates the whole clause word for word, page by page, skipping page furniture, and records `coverage` (`full_clause` for 1,107 of 1,172 clauses, `prefix` for 65 whose words could not be matched in order, typically table-heavy) and, for clauses running onto later pages, `continuation` segments. Gate N now requires at least 1,100 full-coverage clauses; crops and review packets show continuation pages. A second, separate remark on clause 13.1 (it is only the opening of a paragraph whose sub-paragraphs 13.1.1 and following are separate clauses) is a design choice of the parser (sub-paragraphs are clauses) that the packet question did not explain; unchanged.
+2. **Cross-references (8 of 10 rejected), real defects:** dotted annexure numbers were cut ("Annexure 2.17" read as "Annexure 2", "5.8" as "5"), and an annexure, table or figure counted as "found" if any node merely mentioned its name in a sentence, with duplicates and, for repeated table numbers, several targets all listed as resolved. **Fixed:** the number regex keeps decimals; a target must be a node whose label starts with the annexure, table or figure name; one target per node; several targets are narrowed by chapter and then page distance, and if still tied the reference is `AMBIGUOUS` (19 today, with `candidates`, no edge). Resolved annexure, table and figure references now mean "a heading of that name exists", not "the name appears somewhere".
+3. **Measurements (9 of 10 rejected):** two real defects: a value preceded by the ordinary English word "is" was silently dropped (the standards filter for "IS 1367" matched case-insensitively; 66 values recovered), and "440 m or more" was recorded as an exact value instead of a minimum (fixed for "or more / above / less / below" directly after a value; cases where the words are split across flattened table lines are not fixable this way). The other rejected items, for example "up to 50 Kmph", "3 Kmph" (a patrolman's walking speed), "7.5 m", "250 hrs", "100 metres", look correct to me.
+4. **Drawing links (9 of 10 rejected) and several cross-references ("Para 1103 of the Indian Railway Code", "Para 143 to 147 of the Indian Railways Code", "Appendix-III" for guidance):** I cannot find a defect. The cited drawing numbers are real drawing numbers in drawing lists. Either the packet question was misread (the drawing-link question asked whether the highlighted text is a drawing number, and the crop showed the whole clause, not the number), or the reviewer applied a stricter rule such as rejecting links whose drawing is not in the collection. **This needs the reviewer's own criteria; until then those rejections are recorded as given and not acted on.** The packet also did not highlight the individual reference or value inside the clause crop, only in the text above it, which may have made these items hard to judge.
+
+**Consequence for earlier claims:** the author-audited accuracy figures (measurement label about 87%, conditions about 83%, cross-references "resolved" counts) were too optimistic or measured the wrong thing; the reviewer's measurement and link rates are the better evidence until re-reviewed, and the table extractor (10 of 10 correct) is the only one they support. Every "resolved" number quoted in earlier sections for annexures, tables and figures over-stated what was found.
+
+**Next:** a re-review packet (`rereview_s1.html`, 36 items: every rejected item as it now stands, with full-clause highlights) so the reviewer can re-judge after the fixes and say what "Wrong" meant for links and references. It is not a random sample, so its results must not be quoted as error rates. State: 21 gates, 229 pytest, 14 browser suites, all passing.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

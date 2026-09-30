@@ -191,6 +191,70 @@
   "quantity": "radius",
   "unit": "m",
   "comparator": "max",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_04:PARA_425",
+   "value": 600.0,
+   "raw": "600 m",
+   "subject": "425 Measurement of Rail Wear on Sharp Curves: -The wear of rails of curves having radius of",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_520",
+   "value": 350.0,
+   "raw": "less than 350 m",
+   "subject": "(ii) For curves of radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_04:PARA_425",
+   "value": 600.0,
+   "raw": "600 m",
+   "subject": "425 Measurement of Rail Wear on Sharp Curves: -The wear of rails of curves having radius of",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "value": 440.0,
+   "raw": "less than 440 m",
+   "subject": "straight Track -6 mm to +6 mm b) On curves with radius 440 m or more -6 mm to +15 mm c) On curves with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curves"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "max",
   "basis": "subject_words",
   "a": {
    "clause": "CLAUSE:IRPWM:CH_05:PARA_520",
@@ -469,6 +533,158 @@
    "value": 450.0,
    "raw": "less\nthan 450 metres",
    "subject": "(3) Curvature and Gradients – As far as possible the radius of curve should not be",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "min",
+  "basis": "subject_words",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_04:PARA_408",
+   "value": 290.0,
+   "raw": "not less than 290m",
+   "subject": "with curved switch may be allowed from inside of curved main line so that the resultant lead curve radius is",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ],
+    [
+     "geometry",
+     "curved"
+    ],
+    [
+     "geometry",
+     "mainline"
+    ],
+    [
+     "geometry",
+     "switch"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 440.0,
+   "raw": "440 m",
+   "subject": "(b) Curve with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "min",
+  "basis": "subject_words",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_04:PARA_408",
+   "value": 290.0,
+   "raw": "not less than 290m",
+   "subject": "with curved switch may be allowed from inside of curved main line so that the resultant lead curve radius is",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ],
+    [
+     "geometry",
+     "curved"
+    ],
+    [
+     "geometry",
+     "mainline"
+    ],
+    [
+     "geometry",
+     "switch"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 440.0,
+   "raw": "440 m",
+   "subject": "(b) Curve with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "min",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_04:PARA_408",
+   "value": 350.0,
+   "raw": "not less than 350 metre",
+   "subject": "(f) Radius of turn-in-curve should generally be",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 440.0,
+   "raw": "440 m",
+   "subject": "(b) Curve with radius",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "status": "candidate_unreviewed"
+ },
+ {
+  "manual": "IRPWM",
+  "quantity": "radius",
+  "unit": "m",
+  "comparator": "min",
+  "basis": "same_conditions",
+  "a": {
+   "clause": "CLAUSE:IRPWM:CH_04:PARA_408",
+   "value": 350.0,
+   "raw": "not less than 350 metre",
+   "subject": "(f) Radius of turn-in-curve should generally be",
+   "conditions": [
+    [
+     "geometry",
+     "curve"
+    ]
+   ]
+  },
+  "b": {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "value": 440.0,
+   "raw": "440 m",
+   "subject": "(b) Curve with radius",
    "conditions": [
     [
      "geometry",

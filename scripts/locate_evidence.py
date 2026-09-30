@@ -66,6 +66,14 @@ def split_fused(words: list) -> list:
     return out
 
 
+def split_fused_tokens(tokens: list) -> list:
+    out = []
+    for t in tokens:
+        m = FUSED_RE.match(t)
+        out.extend(m.groups() if m else [t])
+    return out
+
+
 def locate(words: list, quote: str):
     """Find `quote` in the page word list; returns (indices, ratio) or None."""
     q = quote.split()
@@ -89,6 +97,49 @@ def locate(words: list, quote: str):
         # the full span cannot be matched, but the opening words can be located exactly.
         return list(range(first_anchor, min(first_anchor + 3 * ANCHOR, len(toks)))), 0.0, "anchor_only"
     return None
+
+
+def _anchor(toks: list, q: list) -> int | None:
+    for k in (min(ANCHOR, len(q)), min(3, len(q)), 1):
+        for i in range(len(toks) - k + 1):
+            if toks[i:i + k] == q[:k]:
+                return i
+    return None
+
+
+MIN_BLOCK = 2
+FULL_RATIO = 0.8
+
+
+def locate_full(get_words, start_page: int, end_page: int, q: list):
+    """Locate the WHOLE clause (all its words), page by page, from its first page to `end_page`.
+
+    Returns (segments [(page_no, word indices)], coverage) where coverage = matched clause words / clause words.
+    Words of the clause are matched in order with difflib blocks of at least MIN_BLOCK words, so page furniture
+    (headers, footers, margin notes) between clause lines is skipped rather than highlighted."""
+    segments, remaining, matched_total = [], q, 0
+    for page_no in range(start_page, end_page + 1):
+        if len(remaining) < 2:
+            break
+        words = get_words(page_no)
+        if words is None:
+            break
+        toks = [w[4] for w in words]
+        i = _anchor(toks, remaining)
+        if i is None:
+            break
+        sm = difflib.SequenceMatcher(None, toks[i:], remaining, autojunk=False)
+        idx, q_end = [], 0
+        for a, b, size in sm.get_matching_blocks():
+            if size >= MIN_BLOCK or (size and not idx):
+                idx.extend(range(i + a, i + a + size))
+                q_end = max(q_end, b + size)
+                matched_total += size
+        if not idx:
+            break
+        segments.append((page_no, idx))
+        remaining = remaining[q_end:]
+    return segments, (matched_total / len(q) if q else 0.0)
 
 
 def rects(words: list, idx: list[int]):
@@ -131,24 +182,49 @@ def main() -> int:
         pdf = pymupdf.open(ROOT / reg["file_path"])
         pdf_hash = reg["sha256"]
         cache: dict[int, tuple] = {}
-        for n, _, page_no, quote in by_doc[doc_id]:
+
+        def page_info(page_no):
             if not 1 <= page_no <= len(pdf):
-                misses += 1
-                continue
+                return None
             if page_no not in cache:
                 page = pdf[page_no - 1]
                 cache[page_no] = (split_fused(page.get_text("words")), hashlib.sha256(page.get_text().strip().encode("utf-8")).hexdigest(),
                                   round(page.rect.width, 1), round(page.rect.height, 1))
-            words, page_hash, w, h = cache[page_no]
+            return cache[page_no]
+
+        for n, _, page_no, quote in by_doc[doc_id]:
+            info = page_info(page_no)
+            if info is None:
+                misses += 1
+                continue
+            words, page_hash, w, h = info
             rec = {"evidence_id": evidence_id_for(n), "node_id": n["id"], "document_id": doc_id,
                    "page_number": page_no, "page_width": w, "page_height": h,
                    "pdf_sha256": pdf_hash, "page_sha256": page_hash, "quote": quote}
+            full = None
+            if n["type"] == "CLAUSE" and n.get("text"):
+                q = split_fused_tokens(n["text"].split())
+                end_page = max(page_no, int(n.get("page_end") or page_no))
+                segs, cov = locate_full(lambda p: (page_info(p) or (None,))[0], page_no, min(end_page, page_no + 6), q)
+                if segs and segs[0][0] == page_no and cov >= FULL_RATIO:
+                    full = (segs, cov)
             hit = locate(words, quote) if n["type"] != "CHAPTER" else None
-            if hit:
+            if full:
+                segs, cov = full
+                union, lines = rects(words, segs[0][1])
+                rec.update(region=union, line_regions=lines, locator="word_sequence", match_ratio=round(cov, 3), coverage="full_clause")
+                cont = []
+                for pn, idx in segs[1:]:
+                    u, ls = rects(page_info(pn)[0], idx)
+                    cont.append({"page_number": pn, "region": u, "line_regions": ls})
+                if cont:
+                    rec["continuation"] = cont
+            elif hit:
                 union, lines = rects(words, hit[0])
-                rec.update(region=union, line_regions=lines, locator=hit[2], match_ratio=round(hit[1], 3))
+                rec.update(region=union, line_regions=lines, locator=hit[2], match_ratio=round(hit[1], 3),
+                           coverage="prefix" if n["type"] == "CLAUSE" else "quote")
             else:
-                rec.update(region=None, line_regions=[], locator="page_only", match_ratio=0.0)
+                rec.update(region=None, line_regions=[], locator="page_only", match_ratio=0.0, coverage="none")
             records.append(rec)
     OUT.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in records), encoding="utf-8")
     located = sum(1 for r in records if r["region"])

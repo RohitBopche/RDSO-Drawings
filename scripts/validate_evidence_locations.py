@@ -23,6 +23,8 @@ FUSED_RE = re.compile(r"^(\d{3,4})([A-Z][a-z].*)$")
 # Non-chapter evidence that could only be located to its page (text not found in PDF word order).
 # Ratchet: may only go down.
 MAX_PAGE_ONLY_NON_CHAPTER = 9
+# Clause evidence must highlight the whole clause (not just its first ~300 characters; found by the first human review).
+MIN_FULL_CLAUSE_COVERAGE = 1100
 
 
 def read_jsonl(p: Path) -> list[dict]:
@@ -127,6 +129,16 @@ def main() -> int:
             if not e["evidence_id"].startswith("ev:src:CHAPTER:"):
                 page_only_other += 1
 
+    full = sum(1 for e in evidence if e["evidence_id"].startswith("ev:clause:") and e.get("coverage") == "full_clause")
+    if full < MIN_FULL_CLAUSE_COVERAGE:
+        errors.append(f"only {full} clauses have evidence covering the whole clause (< {MIN_FULL_CLAUSE_COVERAGE})")
+    for e in evidence:
+        if e.get("coverage") == "full_clause" and not e.get("line_regions"):
+            errors.append(f"{e['evidence_id']}: full_clause coverage without line regions")
+        for seg in e.get("continuation") or []:
+            r = registry.get(e["document_id"])
+            if r and not 1 <= seg["page_number"] <= r["page_count"]:
+                errors.append(f"{e['evidence_id']}: continuation page {seg['page_number']} outside the document")
     if page_only_other > MAX_PAGE_ONLY_NON_CHAPTER:
         errors.append(f"non-chapter page-level evidence ratchet exceeded: {page_only_other} > {MAX_PAGE_ONLY_NON_CHAPTER}")
     for m in errors[:40]:

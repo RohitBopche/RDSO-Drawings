@@ -65,3 +65,28 @@ def test_canonical_crossrefs_have_no_unclassified_records():
     refs = [json.loads(l) for l in (ROOT / "data/knowledge-graph/canonical/crossrefs.jsonl").read_text(encoding="utf-8").splitlines()]
     assert len(refs) > 1000
     assert {r["status"] for r in refs} <= {"RESOLVED", "DELETED", "EXTERNAL", "AMBIGUOUS", "NOT_FOUND"}
+
+
+def test_dotted_annexure_number_is_kept_whole():
+    refs = crossrefs.extract([node("CLAUSE:TMM:CH_02:PARA_229", "See Annexure 2.17 for the sequence.", "229"),
+                              {"id": "EVIDENCE:TMM:CH_02:P1:01_a", "type": "EVIDENCE", "label": "Annexure 2.17 Sequence of Tamping", "domain": "manual",
+                               "source_page": 5, "specs": {}},
+                              {"id": "EVIDENCE:TMM:CH_02:P2:01_b", "type": "EVIDENCE", "label": "Annexure 2.4 Other", "domain": "manual",
+                               "source_page": 6, "specs": {}}], {})
+    ann = [r for r in refs if r["target_kind"] == "annexure"][0]
+    assert ann["number"] == "2.17" and ann["status"] == "RESOLVED" and ann["targets"] == ["EVIDENCE:TMM:CH_02:P1:01_a"]
+
+
+def test_a_sentence_that_merely_mentions_an_annexure_is_not_its_target():
+    nodes = [node("CLAUSE:TMM:CH_02:PARA_229", "See Annexure 5 for the proforma.", "229"),
+             {"id": "EVIDENCE:TMM:CH_05:P1:01_a", "type": "EVIDENCE", "label": "proforma enclosed at Annexure 5 of this chapter", "domain": "manual",
+              "source_page": 5, "specs": {}}]
+    ann = [r for r in crossrefs.extract(nodes, {}) if r["target_kind"] == "annexure"][0]
+    assert ann["status"] == "NOT_FOUND"
+
+
+def test_two_equally_near_targets_are_ambiguous_not_resolved():
+    nodes = [node("CLAUSE:IRPWM:CH_01:PARA_101", "Values are given in Table 1 below.", "101", page=10)] + [
+        {"id": f"TABLE:IRPWM:CH_01:P10:0{i}_x", "type": "TABLE", "label": "Table 1", "domain": "manual", "source_page": 10, "specs": {}} for i in (1, 2)]
+    t = [r for r in crossrefs.extract(nodes, {}) if r["target_kind"] == "table"][0]
+    assert t["status"] == "AMBIGUOUS" and t["targets"] == [] and len(t["candidates"]) == 2

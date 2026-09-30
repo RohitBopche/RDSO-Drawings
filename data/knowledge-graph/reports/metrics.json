@@ -1,13 +1,13 @@
 {
-  "edges": 8042,
-  "edges_with_evidence": 8030,
+  "edges": 7341,
+  "edges_with_evidence": 7329,
   "edges_without_evidence": 12,
   "evidence": 4815,
   "evidence_status": {
     "machine_extracted": 4815
   },
   "evidence_with_page": 4778,
-  "evidence_with_region": 4686,
+  "evidence_with_region": 4690,
   "generated_by": "scripts/unify_manual_canonical.py",
   "manual_clauses": {
     "DOC:AT_WELD:2022": {
@@ -100,8 +100,9 @@
   },
   "nodes": 4862,
   "requirements": 1632,
-  "reviews": 0,
+  "reviews": 10,
   "verification_status": {
-    "machine_extracted": 4862
+    "disputed": 10,
+    "machine_extracted": 4852
   }
 }

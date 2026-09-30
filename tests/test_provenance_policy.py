@@ -48,10 +48,13 @@ def test_apply_downgrades_unreviewed_and_relabels_text_facts():
 
 
 def test_no_verified_without_review_in_canonical():
-    for name in ("nodes.jsonl", "requirements.jsonl", "evidence.jsonl"):
-        for line in (ROOT / "data/knowledge-graph/canonical" / name).read_text(encoding="utf-8").splitlines():
+    canon = ROOT / "data/knowledge-graph/canonical"
+    reviews = [json.loads(l) for l in (canon / "reviews.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
+    status = pp.review_status(reviews)
+    for name, key in (("nodes.jsonl", "id"), ("requirements.jsonl", "id"), ("evidence.jsonl", "evidence_id")):
+        for line in (canon / name).read_text(encoding="utf-8").splitlines():
             rec = json.loads(line)
-            assert rec["verification_status"] == "machine_extracted"
+            assert rec["verification_status"] == status.get(rec[key], "machine_extracted"), rec[key]
 
 
 def test_gate_m_detects_unreviewed_verified(tmp_path, monkeypatch):

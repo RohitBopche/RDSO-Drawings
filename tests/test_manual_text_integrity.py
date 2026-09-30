@@ -35,9 +35,13 @@ def test_no_dangling_or_empty_requirements():
 
 
 def test_machine_extraction_is_not_labelled_verified():
+    # a status other than machine_extracted must be backed by a human review record
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import provenance_policy as pp
+    status = pp.review_status(_jsonl("reviews.jsonl"))
     for n in _jsonl("nodes.jsonl"):
         if n["id"].startswith(("CLAUSE:", "TOL:")):
-            assert n["verification_status"] == "machine_extracted", n["id"]
+            assert n["verification_status"] == status.get(n["id"], "machine_extracted"), n["id"]
 
 
 def test_gate_l_detects_empty_clause_text(tmp_path, monkeypatch):

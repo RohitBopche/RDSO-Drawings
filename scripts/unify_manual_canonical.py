@@ -92,11 +92,15 @@ def enrich_evidence(nodes, edges, json_edges, evidence, facts) -> None:
         e.update(page_number=loc["page_number"], page_width=loc["page_width"], page_height=loc["page_height"],
                  pdf_sha256=loc["pdf_sha256"], page_sha256=loc["page_sha256"], locator=loc["locator"],
                  match_ratio=loc["match_ratio"], source_node_id=loc["node_id"])
-        for k in ("region", "line_regions"):
+        for k in ("region", "line_regions", "coverage", "continuation"):
             e.pop(k, None)
         if loc["region"]:
             e["region"] = loc["region"]
             e["line_regions"] = loc["line_regions"]
+        if loc.get("coverage"):
+            e["coverage"] = loc["coverage"]
+        if loc.get("continuation"):
+            e["continuation"] = loc["continuation"]
         node = by_node.get(loc["node_id"])
         if node is not None:
             ids = node.setdefault("evidence_ids", [])

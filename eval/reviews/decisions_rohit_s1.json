@@ -1,0 +1,306 @@
+{
+ "packet_seed": 1,
+ "reviewer": "rohit",
+ "decisions": [
+  {
+   "target_id": "CLAUSE:USFD:CH_13:PARA_13_1",
+   "kind": "clause",
+   "decision": "rejected",
+   "note": "this is the starting of the para, it also contains other para which complete it like 13.1.1 "
+  },
+  {
+   "target_id": "TBL:TMM:P0308:01",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:000126",
+   "kind": "measurement",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:FBW:P0054:01",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:IRPWM:CH_04:PARA_410",
+   "kind": "clause",
+   "decision": "rejected",
+   "note": "No its not. "
+  },
+  {
+   "target_id": "MEAS:001825",
+   "kind": "measurement",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:TMM:P0425:02",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:IRPWM:CH_08:PARA_846",
+   "kind": "clause",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:00193",
+   "kind": "xref",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:IRPWM:CH_05:PARA_511",
+   "kind": "clause",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00075",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:USFD:P0074:01",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:TMM:CH_06:PARA_608",
+   "kind": "clause",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00089",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:STMM:CH_19:PARA_1912",
+   "kind": "clause",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:000092",
+   "kind": "measurement",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:IRPWM:CH_13:PARA_1304",
+   "kind": "clause",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:01562",
+   "kind": "xref",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:00887",
+   "kind": "xref",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:IRPWM:P0500:02",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:000938",
+   "kind": "measurement",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:000419",
+   "kind": "measurement",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:002956",
+   "kind": "measurement",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:01572",
+   "kind": "xref",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00026",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:USFD:CH_04:PARA_4_1",
+   "kind": "clause",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00118",
+   "kind": "drawing_link",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:00799",
+   "kind": "xref",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00143",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:TMM:P0263:01",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:003285",
+   "kind": "measurement",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:01245",
+   "kind": "xref",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:FBW:P0023:01",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:FBW:CH_09:PARA_9",
+   "kind": "clause",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:002422",
+   "kind": "measurement",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00060",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:AT_WELD:P0033:01",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:IRPWM:P0501:05",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00107",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:01426",
+   "kind": "xref",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:00059",
+   "kind": "xref",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00057",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:001301",
+   "kind": "measurement",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "TBL:TMM:P0092:02",
+   "kind": "table",
+   "decision": "approved",
+   "note": ""
+  },
+  {
+   "target_id": "MEAS:001091",
+   "kind": "measurement",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "CLAUSE:TMM:CH_12:PARA_1204",
+   "kind": "clause",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:00005",
+   "kind": "xref",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00006",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "DLINK:00142",
+   "kind": "drawing_link",
+   "decision": "rejected",
+   "note": ""
+  },
+  {
+   "target_id": "XREF:01000",
+   "kind": "xref",
+   "decision": "rejected",
+   "note": ""
+  }
+ ]
+}

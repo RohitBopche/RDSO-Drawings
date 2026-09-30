@@ -54,6 +54,18 @@ def render(evidence: dict, registry: dict, dpi: int = 110, out_dir: Path = OUT) 
     return path
 
 
+def render_continuations(evidence: dict, registry: dict, dpi: int = 110, out_dir: Path = OUT) -> list[Path]:
+    """Crops of the pages a clause continues onto (evidence["continuation"]), highlighted the same way."""
+    paths = []
+    for seg in evidence.get("continuation") or []:
+        sub = {"evidence_id": f"{evidence['evidence_id']}@p{seg['page_number']}", "document_id": evidence["document_id"],
+               "page_number": seg["page_number"], "line_regions": seg["line_regions"], "region": seg["region"]}
+        p = render(sub, registry, dpi, out_dir)
+        if p:
+            paths.append(p)
+    return paths
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("target", nargs="?", help="clause id or evidence id")
@@ -73,6 +85,7 @@ def main() -> int:
     done = 0
     for e in evidence:
         p = render(e, registry, a.dpi)
+        render_continuations(e, registry, a.dpi)
         if p:
             done += 1
             if len(evidence) == 1:

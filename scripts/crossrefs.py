@@ -33,7 +33,7 @@ ITEM = r"(\d+(?:\.\d+)*[A-Z]?)((?:\s?\([0-9A-Za-z]{1,4}\))*)"
 PARA_TRIGGER = re.compile(r"\b(paras?|paragraphs?|clauses?|sub-?paras?)\b\.?\s*(?:no\.?s?)?\s*(?=\d)", re.I)
 ITEM_RE = re.compile(ITEM)
 LIST_SEP = re.compile(r"\s*(?:,|and|&|or|to)\s*", re.I)
-ANNEXURE = re.compile(r"\b(annexures?|appendix)\b\s*[-–:.]?\s*(?:no\.?\s*)?([0-9]+(?:\s*/\s*[0-9]+[A-Za-z]?(?:\([A-Za-z0-9]\))?)?[A-Za-z]?\b|[IVX]{1,5}[A-Z]?\b)", re.I)
+ANNEXURE = re.compile(r"\b(annexures?|appendix)\b\s*[-–:.]?\s*(?:no\.?\s*)?([0-9]+(?:\.[0-9]+)?(?:\s*/\s*[0-9]+[A-Za-z]?(?:\([A-Za-z0-9]\))?)?[A-Za-z]?\b|[IVX]{1,5}[A-Z]?\b)", re.I)
 TABLE = re.compile(r"\btables?\b\s*[-–:.]?\s*(?:no\.?\s*)?([0-9]+(?:\.[0-9]+)?[A-Za-z]?(?:[-–][A-Za-z0-9]+)?|[IVX]{1,4}\b)", re.I)
 FIGURE = re.compile(r"\b(?:fig(?:ure)?s?)\b\.?\s*(?:no\.?\s*)?([0-9]+(?:\.[0-9]+)*(?:\s?\([a-z]\))?)", re.I)
 CHAPTER = re.compile(r"\bchapters?\b\s*[-–:.]?\s*(?:no\.?\s*)?(\d{1,2})\b", re.I)
@@ -85,12 +85,13 @@ def build_targets(nodes: list[dict], deleted: dict[str, list[str]]):
         if n.get("domain") == "manual" and n["type"] in ("TABLE", "FIGURE", "EVIDENCE"):
             alias = i.split(":")[1]
             label = n.get("label", "") + " " + n.get("source_section", "")
-            for m in ANNEXURE.finditer(label):
-                annex_by.setdefault((alias, norm_key(m.group(2))), []).append((n.get("source_page") or 0, i))
-            for m in TABLE.finditer(label):
-                table_by.setdefault((alias, norm_key(m.group(1))), []).append((n.get("source_page") or 0, i))
-            for m in FIGURE.finditer(label):
-                figure_by.setdefault((alias, norm_key(m.group(1))), []).append((n.get("source_page") or 0, i))
+            # a target is a node whose label STARTS with the annexure / table / figure name (its heading or caption);
+            # a node that merely mentions "see Annexure 5.3" in a sentence is a reference, not the thing referred to
+            head = n.get("label", "").strip()
+            for rx, store, grp in ((ANNEXURE, annex_by, 2), (TABLE, table_by, 1), (FIGURE, figure_by, 1)):
+                m = rx.match(head)
+                if m:
+                    store.setdefault((alias, norm_key(m.group(grp))), []).append((n.get("source_page") or 0, i))
     return {"clause": clause_by, "section": section_by, "annex": annex_by, "table": table_by, "figure": figure_by,
             "chapters": chapters, "deleted": {a: {d.upper() for d in v} for a, v in deleted.items()}}
 
@@ -164,8 +165,19 @@ def extract(nodes: list[dict], deleted: dict[str, list[str]]) -> list[dict]:
                     rec["status"], rec["targets"] = "RESOLVED", [T["section"][key]]
             elif kind in ("annexure", "table", "figure"):
                 hits = T[{"annexure": "annex", "table": "table", "figure": "figure"}[kind]].get((alias, norm_key(info["number"])), [])
-                if hits:
-                    rec["status"], rec["targets"] = "RESOLVED", [i for _, i in sorted(hits)]
+                hits = sorted({i: pg for pg, i in hits}.items(), key=lambda t: (t[1], t[0]))   # one entry per target node
+                if len(hits) > 1:
+                    chapter = cid.split(":")[2]
+                    same = [h for h in hits if f":{chapter}:" in h[0]]
+                    hits = same or hits
+                if len(hits) > 1:
+                    near = min(abs(pg - n["page"]) for _, pg in hits)
+                    closest = [h for h in hits if abs(h[1] - n["page"]) == near]
+                    hits = closest if len(closest) == 1 else hits
+                if len(hits) == 1:
+                    rec["status"], rec["targets"] = "RESOLVED", [hits[0][0]]
+                elif hits:
+                    rec["status"], rec["candidates"] = "AMBIGUOUS", [h[0] for h in hits]
             elif kind == "chapter":
                 cid_ch = f"CHAPTER:{alias}:CH_{int(info['number']):02d}"
                 if cid_ch in T["chapters"]:

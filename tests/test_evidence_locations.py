@@ -71,3 +71,28 @@ def test_gate_n_detects_edge_without_evidence(tmp_path, monkeypatch):
         rows[0].pop("evidence_ids", None)
         (canon / "edges.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
     assert _run_gate_on(tmp_path, monkeypatch, mutate) == 1
+
+
+def test_clause_evidence_covers_the_whole_clause_not_its_first_300_characters():
+    import json
+    ev = {}
+    for l in (ROOT / "data/knowledge-graph/canonical/evidence.jsonl").read_text(encoding="utf-8").splitlines():
+        e = json.loads(l)
+        ev[e["evidence_id"]] = e
+    e = ev["ev:clause:CLAUSE:IRPWM:CH_04:PARA_410"]      # 469 characters; the old highlight stopped after about 300
+    assert e["coverage"] == "full_clause" and len(e["line_regions"]) >= 6 and e["match_ratio"] >= 0.9
+
+
+def test_locate_full_skips_page_furniture_and_follows_the_clause_onto_the_next_page():
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import locate_evidence as L
+
+    def w(t, y):
+        return (0, y, 10, y + 5, t, 0, int(y), 0)
+    p1 = [w(t, 10 + i) for i, t in enumerate("410 Title one two three four five six HEADER seven eight".split())]
+    p2 = [w(t, 10 + i) for i, t in enumerate("nine ten FOOTER eleven twelve".split())]
+    pages = {1: p1, 2: p2}
+    q = "410 Title one two three four five six seven eight nine ten eleven twelve".split()
+    segs, cov = L.locate_full(lambda n: pages.get(n), 1, 2, q)
+    assert [s[0] for s in segs] == [1, 2] and cov >= 0.95
+    assert all(p1[i][4] != "HEADER" for i in segs[0][1])

@@ -146,3 +146,15 @@ def test_speed_in_same_sentence_becomes_speed_band_condition():
 def test_own_span_is_not_its_own_condition():
     r = ex("Rail of 52 kg is used here.")
     assert all(c["raw"].lower() != "52 kg" for c in r[0]["conditions"])
+
+
+def test_or_more_or_less_suffix_sets_the_comparator():
+    a = ex("Curve with radius 440 m or more is treated alike.")[0]
+    assert (a["comparator"], a["lo"], a["hi"]) == ("min", 440.0, None)
+    b = ex("A gap of 100 mm or less is allowed.")[0]
+    assert (b["comparator"], b["hi"]) == ("max", 100.0)
+
+
+def test_english_word_is_does_not_hide_a_value():
+    r = ex("The variation is 5 mm on this track. As per IS 10 mm of nothing.")
+    assert [x["raw"] for x in r] == ["5 mm"]
