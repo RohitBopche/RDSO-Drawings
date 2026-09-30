@@ -1982,6 +1982,18 @@ No new features. Checked that the repository stands on its own: a fresh `git clo
 
 The README was the early prototype text with unverified statistics and a superseded drawing catalogue. It now opens with a status note pointing here, states that those sections are unverified prototype text, and lists the commands to rebuild, validate, test and search. It was not rewritten.
 
+### 37.24 Sprint P results (speed and start-up) — 2026-09-30
+
+Measured what an engineer's machine would feel, because nothing so far had timed it.
+
+**Search is fast.** Node, all 379 evaluation questions through `engine.answer()`: median 3.2 ms, 95th percentile 17 ms, worst 107 ms; index parse about 1 s in Node (6.3 MB file), engine construction 29 ms, about 180 MB resident. In the browser, the first question after load took 33 to 47 ms.
+
+**Start-up was slow, and the search data was not the cause.** In headless Chrome on this container (software WebGL, so a real machine with a GPU should do better, but the ratio should hold) the page took 6.5 to 8.8 s to load. All data scripts (22 MB knowledge-graph bundle, 6.3 MB search index, cross-references, extras) were done by 0.44 s. A CPU profile showed the time in the page's own start-up code: two quadratic lookups (a linear `rawNodes.find` inside the child-ordering sort comparator, and two linear `find` calls over 17k entities for each of about 8k edges) and the 3D scene. **Fixed the two lookups with id maps** (`rawNodeById`, `entityById`, the latter rebuilt if the entity list changes length): load fell to about 4.5 to 5.0 s, about 1.5 to 2 s saved. All 14 browser suites still pass.
+
+**Correction after profiling further (Sprint Q, no code change).** The paragraph first written here blamed the 14,695 scene objects for the remaining 4.5 s and called a lazy-scene rewrite the real fix. Further measurement does not support that. (a) About 2.5 s of the remaining start-up is WebGL shader compilation on the first render (`acquireProgram`, 1.1 s for one call chain alone); it runs in software GL in this container and is normally far faster on a real GPU driver. (b) Steady-state frames are cheap: over 3 s, JavaScript used about 170 ms in total (roughly 6.5 ms per frame, about 4.5 ms of it matrix updates for the 14.7k objects) and the thread was 93% idle; the low frame count in this container (about 8 per second) comes from software compositing, not from the page code. So the per-object cost is real but small, and a lazy-scene rewrite would risk 14 browser suites for a gain that cannot be shown here. Not done, and not recommended unless someone measures slow start-up on real hardware. Expected start-up on a laptop with a GPU is therefore probably 1 to 2 s, but that is an inference, not a measurement.
+
+State: 21 gates, 222 pytest, 14 browser suites, all passing. The timing figures come from one headless run in a container and were not repeated on user hardware.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
