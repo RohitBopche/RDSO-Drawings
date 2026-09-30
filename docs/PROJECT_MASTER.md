@@ -1942,6 +1942,16 @@ State: 21 gates (A to U), 213 pytest; browser suites not re-run (no browser code
 
 **Next for drawings:** acquire the missing sheets (list above), notes and parts lists with dimensions, evidence crops on sheets, and registry-derived graph nodes once the UI can take them.
 
+### 37.20 Sprint L results (surfacing the new data in the answer card) — 2026-09-30
+
+Until now measurements (§37.13) and drawing links (§37.19) existed only as files. `scripts/build_clause_extras.py` writes a compact browser file `data/search/clause_extras.js` (490 clauses, 109 KB): up to 12 text-derived values per clause and the held drawing sheets cited by the clause. The answer card for a retrieved clause now shows, under the cited sentences, a collapsed "Values found in this provision (n, machine-extracted)" list (quantity label if one was assigned, comparator in words, value and unit, with the original wording quoted) and, when the provision cites a drawing we hold, links to the sheet PDF in `drawings/`. Table-derived values are not repeated there because their rows already reach the user as table rows.
+
+What this does and does not give: only 490 of 1,172 clauses have any text value, and only 2 clauses (IRPWM Paras 229 and 427) link to drawings; the quantity label is right about 87% of the time (§37.13 audit) and 70% of values have none; the values are a reading aid next to the quoted sentences, not a replacement for them, which is why the original wording is always shown. Nothing in the answer text itself is generated from these values.
+
+Checks: browser Test 7 (Para 522 shows values with the machine-extracted label; Para 229 shows working sheet links), and a pytest that every value in the browser file exists in `measurements.jsonl` with the same wording and unit and every linked file exists. `build_clause_extras.py` is in the rebuild chain. State: 21 gates, 214 pytest, 13 browser suites, all passing; rebuild deterministic.
+
+**Still open:** condition extraction for measurements (so a value can say which speed band or component it applies to), measurement-to-graph edges, drawing notes and parts lists, registry-derived drawing nodes in the graph, real engineer questions with two labellers, embeddings decision.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

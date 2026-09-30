@@ -52,3 +52,21 @@ def test_known_held_sheets():
     rep = json.loads((ROOT / "data/knowledge-graph/reports/drawing_links_report.json").read_text(encoding="utf-8"))
     assert rep["distinct_numbers_with_sheet"] >= 4
     assert "CLAUSE:IRPWM:CH_02:PARA_229" in rep["clauses_citing_held_sheets"]
+
+
+def test_clause_extras_match_canonical_records():
+    import re
+    raw = (ROOT / "data/search/clause_extras.js").read_text(encoding="utf-8")
+    extras = json.loads(re.match(r"globalThis\.RDSO_CLAUSE_EXTRAS=(.*);\s*$", raw, re.S).group(1))
+    meas = {}
+    for l in (ROOT / "data/knowledge-graph/canonical/measurements.jsonl").read_text(encoding="utf-8").splitlines():
+        m = json.loads(l)
+        if m["source"] == "text":
+            meas.setdefault(m["clause"], []).append(m)
+    for clause, e in extras.items():
+        for v in e.get("v", []):
+            assert any(" ".join(m["raw"].split()) == v[5] and m["unit"] == v[3] for m in meas[clause])
+        for _, f in e.get("d", []):
+            assert (ROOT / f).exists()
+    assert "CLAUSE:IRPWM:CH_02:PARA_229" in extras and extras["CLAUSE:IRPWM:CH_02:PARA_229"]["d"]
+    assert len(raw) < 400_000

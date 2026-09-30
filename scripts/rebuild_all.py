@@ -26,6 +26,7 @@ STEPS = [
     "extract_measurements.py",     # structured values from clause text and table cells
     "drawing_registry.py",         # drawing identity from file names + committed OCR (scripts/ocr_drawings.py)
     "drawing_links.py",            # clause -> drawing citations (needs the registry)
+    "build_clause_extras.py",      # browser file: measurements + held drawings per clause
     "build_search_index.py",
 ]
 

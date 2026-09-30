@@ -196,6 +196,20 @@ async function main() {
     console.log(t6);
     if (t6.buttons !== 2 || t6.kinds.join() !== 'query:answer,feedback:down' || !t6.hasCitedSentences) throw new Error('Test 6 failed ' + JSON.stringify(t6));
 
+    // TEST 7
+    console.log("\n--- TEST 7: answer card lists extracted values and held drawing sheets ---");
+    const t7 = await client.eval(`
+      (() => {
+        const v = window.answerEngineeringQuestion("What does Para 522 of IRPWM say?");
+        const d = window.answerEngineeringQuestion("What does Para 229 of IRPWM say?");
+        return { valuesClause: v && v.provenance.clause, hasValues: !!v && v.statement.includes('Values found in this provision') && v.statement.includes('machine-extracted'),
+                 drawingClause: d && d.provenance.clause,
+                 hasDrawings: !!d && d.statement.includes('Drawings cited here that are in this collection') && /href="drawings\\/[^"]+\\.pdf"/.test(d.statement) };
+      })()
+    `);
+    console.log(t7);
+    if (t7.valuesClause !== 'CLAUSE:IRPWM:CH_05:PARA_522' || !t7.hasValues || t7.drawingClause !== 'CLAUSE:IRPWM:CH_02:PARA_229' || !t7.hasDrawings) throw new Error('Test 7 failed ' + JSON.stringify(t7));
+
     console.log("\n[SUCCESS] Retrieval UI and cross-reference chips verified!");
     client.close();
   } catch (err) {
