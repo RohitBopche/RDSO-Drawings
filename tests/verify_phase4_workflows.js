@@ -3,14 +3,9 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const chromeCandidates = [
-    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-    path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe')
-];
-const chromePath = chromeCandidates.find(p => fs.existsSync(p)) || chromeCandidates[0];
+const { chromePath: chromePath, chromeFlags, artifactDir: envArtifactDir, waitForDevtools } = require('./browser_env');
 const targetUrl = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
-const artifactDir = path.join(__dirname, '..', 'artifacts');
+const artifactDir = envArtifactDir;
 if (!fs.existsSync(artifactDir)) { try { fs.mkdirSync(artifactDir, { recursive: true }); } catch (e) {} }
 const tempProfile = path.join(require('os').tmpdir(), 'chrome_kg_phase4_profile');
 
@@ -86,17 +81,15 @@ class CDPClient {
 async function run() {
     console.log('[*] Spawning Chrome headless for Phase 4 Verification...');
     const chrome = spawn(chromePath, [
-        '--headless=new',
         '--remote-debugging-port=9234',
         '--window-size=1920,1080',
-        '--disable-gpu',
         '--no-first-run',
-        '--allow-file-access-from-files',
+        ...chromeFlags,
         `--user-data-dir=${tempProfile}`
     ], { stdio: 'ignore' });
 
     try {
-        await sleep(2000);
+        await waitForDevtools(9234);
         const tabs = await fetchJson('http://127.0.0.1:9234/json');
         const pageTab = tabs.find(t => t.type === 'page') || tabs[0];
         if (!pageTab) throw new Error('No page tab found in Chrome CDP');

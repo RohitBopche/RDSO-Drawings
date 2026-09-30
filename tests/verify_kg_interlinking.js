@@ -3,18 +3,9 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const chromeCandidates = [
-    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-    path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe')
-];
-const chromePath = chromeCandidates.find(p => fs.existsSync(p)) || chromeCandidates[0];
+const { chromePath: chromePath, chromeFlags, artifactDir: envArtifactDir, waitForDevtools } = require('./browser_env');
 const targetUrl = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
-const artifactDir = [
-    "C:\\Users\\LENOVO\\.gemini\\antigravity-ide\\brain\\ea8fa10c-88f4-4a72-b9b0-d40e78abc040",
-    path.join(__dirname, '..', 'artifacts')
-].find(d => fs.existsSync(d)) || path.join(__dirname, '..', 'artifacts');
-if (!fs.existsSync(artifactDir)) { try { fs.mkdirSync(artifactDir, { recursive: true }); } catch (e) {} }
+const artifactDir = envArtifactDir;
 const tempProfile = path.join(require('os').tmpdir(), 'chrome_kg_interlink_profile');
 
 async function sleep(ms) {
@@ -89,16 +80,14 @@ class CDPClient {
 async function run() {
     console.log('[*] Spawning Chrome headless...');
     const chrome = spawn(chromePath, [
-        '--headless=new',
         '--remote-debugging-port=9222',
         '--window-size=1920,1080',
-        '--disable-gpu',
         '--no-first-run',
-        '--allow-file-access-from-files',
+        ...chromeFlags,
         `--user-data-dir=${tempProfile}`
     ], { stdio: 'ignore' });
 
-    await sleep(2000);
+    await waitForDevtools(9222);
 
     try {
         console.log('[*] Connecting to Chrome DevTools Protocol...');
@@ -285,6 +274,7 @@ async function run() {
         console.log('\n[SUCCESS] All Canonical Interlinking & Graph Intelligence tests passed flawlessly!');
     } catch (err) {
         console.error('[ERROR]', err);
+        process.exitCode = 1;
     } finally {
         console.log('[*] Terminating Chrome...');
         chrome.kill();
