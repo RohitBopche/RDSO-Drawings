@@ -2,7 +2,7 @@ name: Manuals KG Continuous Improvement Loop
 
 on:
   push:
-    branches: [ main, feat/manual-kg-separation-v2 ]
+    branches: [ main ]
     paths:
       - "scripts/**"
       - "data/knowledge-graph/**"
@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   issues: write
 
 jobs:
@@ -40,39 +40,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Rebuild authoritative manual structure
-        run: python scripts/ingest_all_manual_chapters.py
+      - name: Rebuild generated artifacts from source manuals
+        run: python scripts/rebuild_all.py
 
-      - name: Rebuild canonical knowledge graph
-        run: python scripts/generate_canonical_kg.py
-
-      - name: Validate manuals structure and isolation
-        run: python scripts/validate_manual_knowledge_graph.py
+      - name: Reproducibility check (no automatic commits to main)
+        run: git diff --exit-code -- data/
 
       - name: Run full validation suite
         run: python scripts/validate_all.py
-
-      - name: Check for generated drift
-        id: drift
-        shell: bash
-        run: |
-          if ! git diff --quiet -- data/knowledge-graph/intermediate/all_chapters_extracted.json data/rdso_canonical_kg.json; then
-            echo "drift=true" >> "$GITHUB_OUTPUT"
-            echo "Generated KG artifacts changed during the loop."
-            git diff --stat -- data/knowledge-graph/intermediate/all_chapters_extracted.json data/rdso_canonical_kg.json
-          else
-            echo "drift=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Publish deterministic generated artifacts on main
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.drift.outputs.drift == 'true'
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/knowledge-graph/intermediate/all_chapters_extracted.json data/rdso_canonical_kg.json
-          git commit -m "chore: refresh manuals knowledge graph artifacts"
-          git push
 
       - name: Open failure issue
         if: failure() && github.event_name == 'schedule'

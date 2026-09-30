@@ -1,20 +1,16 @@
-name: Knowledge Graph Publication Validation (Gates A-K)
+name: Knowledge Graph Validation
 
 on:
   push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: "pip"
@@ -25,6 +21,45 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Run Unified Knowledge Graph Validation (Gates A-K)
+      - name: Rebuild generated artifacts from source manuals
+        run: python scripts/rebuild_all.py
+
+      - name: Reproducibility check (rebuild must not change committed data)
+        run: git diff --exit-code -- data/
+
+      - name: Metrics are current
+        run: python scripts/unify_manual_canonical.py --check-metrics
+
+      - name: Publication gates A-M
+        run: python scripts/validate_all.py
+
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: Headless browser suites
+        env:
+          RDSO_ARTIFACT_DIR: ${{ runner.temp }}/rdso-artifacts
         run: |
-          python scripts/validate_all.py
+          export CHROME_PATH="$(which google-chrome || which chromium || which chromium-browser)"
+          python scripts/run_browser_tests.py
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-screenshots
+          path: ${{ runner.temp }}/rdso-artifacts
+          if-no-files-found: ignore

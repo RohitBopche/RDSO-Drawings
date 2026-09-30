@@ -46,7 +46,24 @@ def run_gate(name: str, cmd: list[str]) -> tuple[bool, str]:
     return passed, output
 
 
+def check_dependencies() -> bool:
+    """Fail fast with the exact fix instead of five confusing gate failures."""
+    import importlib.util
+    missing = [m for m in ("jsonschema", "pytest") if importlib.util.find_spec(m) is None]
+    if not missing:
+        return True
+    cmd = [sys.executable, "-m", "pip", "install", "-r", str(ROOT / "requirements-dev.txt")]
+    if "--install" in sys.argv:
+        print(f"Installing missing dependencies: {', '.join(missing)}")
+        return subprocess.run(cmd).returncode == 0
+    print(f"Missing Python packages: {', '.join(missing)}")
+    print(f"Fix: {' '.join(cmd)}   (or rerun with --install)")
+    return False
+
+
 def main() -> int:
+    if not check_dependencies():
+        return 2
     print("=" * 80)
     print("RDSO KNOWLEDGE GRAPH — UNIFIED PUBLICATION VALIDATION PIPELINE")
     print("=" * 80)

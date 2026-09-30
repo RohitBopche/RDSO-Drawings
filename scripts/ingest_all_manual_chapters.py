@@ -628,7 +628,8 @@ def main():
         })
 
     final_payload = {
-        'extracted_at': datetime.now().isoformat(),
+        # Deterministic: same inputs must give byte-identical output (CI reproducibility check).
+        'extracted_at': os.environ.get('RDSO_EXTRACTED_AT', 'deterministic'),
         'pipeline_version': '4.1.0-deterministic-structural-artifacts',
         'total_manuals': len(structured_manuals),
         'total_chapters': total_chapters_count,

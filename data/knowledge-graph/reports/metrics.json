@@ -2,31 +2,60 @@
   "edges": 9037,
   "edges_with_evidence": 667,
   "evidence": 1875,
+  "evidence_status": {
+    "machine_extracted": 1875
+  },
+  "evidence_with_bbox": 0,
+  "evidence_with_page": 0,
   "generated_by": "scripts/unify_manual_canonical.py",
   "manual_clauses": {
     "DOC:AT_WELD:2022": {
       "clauses": 115,
-      "clauses_with_text": 115
+      "clauses_with_text": 115,
+      "non_extractable_pages": 1,
+      "pages": 49,
+      "raw_detected_clauses": 163,
+      "short_clauses": 7
     },
     "DOC:FBW:2022:CS5": {
       "clauses": 131,
-      "clauses_with_text": 131
+      "clauses_with_text": 131,
+      "non_extractable_pages": 13,
+      "pages": 69,
+      "raw_detected_clauses": 204,
+      "short_clauses": 15
     },
     "DOC:IRPWM:2024:ACS14": {
       "clauses": 673,
-      "clauses_with_text": 673
+      "clauses_with_text": 673,
+      "non_extractable_pages": 14,
+      "pages": 530,
+      "raw_detected_clauses": 1738,
+      "short_clauses": 22
     },
     "DOC:STMM:2024": {
       "clauses": 396,
-      "clauses_with_text": 396
+      "clauses_with_text": 396,
+      "non_extractable_pages": 0,
+      "pages": 222,
+      "raw_detected_clauses": 179,
+      "short_clauses": 240
     },
     "DOC:TMM:2020:ACS10": {
       "clauses": 349,
-      "clauses_with_text": 349
+      "clauses_with_text": 349,
+      "non_extractable_pages": 4,
+      "pages": 458,
+      "raw_detected_clauses": 1062,
+      "short_clauses": 27
     },
     "DOC:USFD:2026:ACS4": {
       "clauses": 174,
-      "clauses_with_text": 174
+      "clauses_with_text": 174,
+      "non_extractable_pages": 32,
+      "pages": 157,
+      "raw_detected_clauses": 353,
+      "short_clauses": 14
     }
   },
   "node_types": {
@@ -60,6 +89,7 @@
   },
   "nodes": 6830,
   "requirements": 2199,
+  "reviews": 0,
   "verification_status": {
     "machine_extracted": 6830
   }

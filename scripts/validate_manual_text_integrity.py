@@ -109,8 +109,9 @@ def main() -> int:
         errors.append("canonical clause ids differ from deterministic extraction")
 
     # 6. metrics freshness
-    m = json.loads(METRICS.read_text(encoding="utf-8"))
-    if (m["nodes"], m["edges"], m["requirements"]) != (len(nodes), len(edges), len(reqs)):
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import unify_manual_canonical as unify
+    if json.loads(METRICS.read_text(encoding="utf-8")) != unify.compute_metrics():
         errors.append("reports/metrics.json is stale; run scripts/unify_manual_canonical.py")
 
     # 7. browser bundle

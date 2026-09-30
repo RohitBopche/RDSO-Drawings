@@ -41,6 +41,7 @@ QUARANTINE = INTER / "quarantine_dangling_requirements.jsonl"
 METRICS = REPORTS / "metrics.json"
 
 MACHINE = "machine_extracted"
+RELATION_NORM = {"CONTAINS_CHAPTER": "HAS_SECTION", "CONTAINS_CLAUSE": "HAS_CLAUSE"}
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -155,7 +156,10 @@ def build() -> dict:
         by_id[tid] = tn
         nodes.append(tn)
     edges.extend(tol_edges)
-    json_edges.extend(tol_edges)
+    # Rebuild-safe: make sure the compact core carries every canonical edge (vocabulary-normalised).
+    norm = lambda e: (e["from"], e["to"], RELATION_NORM.get(e["rel"], e["rel"]))
+    have = {norm(e) for e in json_edges}
+    json_edges.extend(e for e in edges if norm(e) not in have)
 
     # --- requirements: regenerate manual rows, quarantine dangling rows ---
     kept, quarantined = [], []
@@ -189,7 +193,9 @@ def build() -> dict:
     # --- unified core json (keep facts; add facts for new edges) ---
     facts = legacy.get("facts", [])
     have = {(f["subject_id"], f["object_id"], f["predicate"]) for f in facts}
-    for e in tol_edges:
+    for e in json_edges:
+        if e["rel"] != "SPECIFIES" or e["from"] not in clause_rows:
+            continue
         if (e["from"], e["to"], e["rel"]) in have:
             continue
         facts.append({
@@ -251,35 +257,76 @@ def build() -> dict:
     return write_metrics()
 
 
-def write_metrics() -> dict:
+SHORT_CLAUSE_CHARS = 60
+RAW_PAGES = KG / "raw" / "extracted_pages.jsonl"
+
+
+def compute_metrics() -> dict:
+    """Deterministic metrics from committed files only; the single quotable source."""
     nodes = read_jsonl(CANON / "nodes.jsonl")
     edges = read_jsonl(CANON / "edges.jsonl")
     reqs = read_jsonl(CANON / "requirements.jsonl")
     evid = read_jsonl(CANON / "evidence.jsonl")
+    reviews = read_jsonl(CANON / "reviews.jsonl") if (CANON / "reviews.jsonl").exists() else []
     per_manual: dict[str, dict] = {}
     for n in nodes:
         if n["type"] == "SPECIFICATION" and n["id"].startswith("CLAUSE:"):
-            m = per_manual.setdefault(n.get("document_id") or n["specs"].get("Manual", "?"), {"clauses": 0, "clauses_with_text": 0})
+            m = per_manual.setdefault(n.get("document_id") or n["specs"].get("Manual", "?"),
+                                      {"clauses": 0, "clauses_with_text": 0, "short_clauses": 0})
+            text = (n.get("text") or "").strip()
             m["clauses"] += 1
-            m["clauses_with_text"] += 1 if len((n.get("text") or "").strip()) > 3 else 0
+            m["clauses_with_text"] += 1 if len(text) > 3 else 0
+            m["short_clauses"] += 1 if len(text) < SHORT_CLAUSE_CHARS else 0
+    pages: dict[str, dict] = {}
+    if RAW_PAGES.exists():
+        for p in read_jsonl(RAW_PAGES):
+            doc = p["document_id"]
+            if doc in per_manual:
+                d = pages.setdefault(doc, {"pages": 0, "non_extractable_pages": 0, "raw_detected_clauses": 0})
+                d["pages"] += 1
+                d["non_extractable_pages"] += 0 if p.get("is_extractable") else 1
+                d["raw_detected_clauses"] += len(p.get("detected_clauses", []))
+    for doc, d in pages.items():
+        per_manual[doc].update(d)
     types: dict[str, int] = {}
     for n in nodes:
         types[n["type"]] = types.get(n["type"], 0) + 1
-    metrics = {
+
+    def statuses(rows):
+        out: dict[str, int] = {}
+        for r in rows:
+            out[r.get("verification_status", "?")] = out.get(r.get("verification_status", "?"), 0) + 1
+        return dict(sorted(out.items()))
+
+    return {
         "generated_by": "scripts/unify_manual_canonical.py",
         "nodes": len(nodes), "edges": len(edges), "requirements": len(reqs), "evidence": len(evid),
+        "reviews": len(reviews),
         "edges_with_evidence": sum(1 for e in edges if e.get("evidence_ids")),
+        "evidence_with_page": sum(1 for e in evid if e.get("page_number")),
+        "evidence_with_bbox": sum(1 for e in evid if e.get("bbox")),
         "node_types": dict(sorted(types.items())),
-        "verification_status": {s: sum(1 for n in nodes if n.get("verification_status") == s)
-                                for s in sorted({n.get("verification_status") for n in nodes if n.get("verification_status")})},
-        "manual_clauses": per_manual,
+        "verification_status": statuses(nodes),
+        "evidence_status": statuses(evid),
+        "manual_clauses": dict(sorted(per_manual.items())),
     }
+
+
+def write_metrics() -> dict:
+    metrics = compute_metrics()
     REPORTS.mkdir(parents=True, exist_ok=True)
-    METRICS.write_text(json.dumps(metrics, indent=2, sort_keys=True), encoding="utf-8")
+    METRICS.write_text(json.dumps(metrics, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return metrics
 
 
 def main() -> int:
+    if "--check-metrics" in sys.argv:
+        stored = json.loads(METRICS.read_text(encoding="utf-8"))
+        if stored != compute_metrics():
+            print("reports/metrics.json is stale; run scripts/unify_manual_canonical.py")
+            return 1
+        print("metrics.json is current")
+        return 0
     metrics = build()
     print(json.dumps({k: metrics[k] for k in ("nodes", "edges", "requirements", "evidence")}, indent=2))
     print(f"wrote {METRICS.relative_to(ROOT)}")
