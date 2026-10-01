@@ -14,7 +14,7 @@ def run():
 
 
 def test_no_real_question_is_refused():
-    assert [r["id"] for r in run() if r["kind"] != "answer"] == ["R19"]    # R19 asks about two manuals at once and clarifies
+    assert [r["id"] for r in run() if r["kind"] != "answer"] == []
 
 
 def test_right_paragraph_is_cited_for_the_questions_that_had_it():
