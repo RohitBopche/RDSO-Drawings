@@ -2139,6 +2139,13 @@ Checks: a dialogue test for the utility vehicle question, a sweep over the table
 - Consequence, stated plainly: three questions the hand-written answers used to cover are now answered by retrieval or refused in the expert page. "Which IRS specification governs sleeper rubber pads?" and "What was changed in Alt 11 for T-6155?" are refused (the facts live in drawing and component nodes that the paragraph index does not hold), and the switch-throw question loses its conflict box. These are the real gaps; the earlier answers hid them. The browser suite `verify_question_interface` now asserts "retrieved or explicitly refused" for them instead of the old figures.
 - Gate P (`audit_curated_answers.py --check`) passes with zero curated answers; `test_no_hand_written_answers_remain_in_the_application` guards it.
 
+### 37.37 Tables inside a cited paragraph — 2026-10-01
+
+- A paragraph often carries its numbers in a table of its own, while the chat showed only prose sentences. When the answer is a prose passage and one of that paragraph's stored tables matches at least two of the question's words, its matching rows are now shown under their column headers ("Table in this paragraph, page N") in the chat and on the home page. Cells come from the stored table (`RDSO_TABLES`, owner clause), and the grounding check was extended to them.
+- Effect on the 20 real questions: key numbers shown 30 to 35 of 59; R4 (minimum height and head width of old 60 kg and 52 kg rails) now fully answered (grade raised from partial to correct), R13 numbers complete. Known noise: for R18 the table shown (gauge limits) is not the acceleration limits asked for, because its header words match; for R8 the headers repeat.
+- Tried and dropped: answering a multi-part question part by part (each part searched on its own and its sentences added). On the 20 questions only 3 had an explicit split, and the added parts cited unrelated paragraphs (Para 721, Para 405), so it added noise and was reverted rather than shipped.
+- Graded state of the 20 (my reading): 9 fully answered, 9 partial, 2 wrong.
+
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
 
 **Ordering principle:** data truth first, then retrieval, then answers, then learning. Each work package (WP) is one small validated increment: it ends with a gate or test that fails before the change and passes after, a conventional commit, and an updated metrics file. Do not start a WP whose dependency is open.

@@ -51,7 +51,7 @@ out.probe = JSON.parse(fs.readFileSync(path.join(root, 'eval/chat_probe.json'), 
   out.table = r.table ? { columns: r.table.columns, rows: r.table.rows.map(w => w.cells), hit: r.table.rows.map(w => w.hit), page: r.table.page } : null; }
 { // every cell shown comes from the stored table
   const bad = []; let n = 0;
-  qs.filter(q => q.category === 'blind_table').concat(pick.slice(0, 60), [{ question: 'what is the speed of utility track vehicle' }, { question: 'standard height of new 60 kg rail' }]).forEach(q => { const r = mk().ask(q.question); if (r.kind !== 'answer' || !r.table) return; n++;
+  qs.filter(q => q.category === 'blind_table').concat(pick.slice(0, 60), [{ question: 'what is the speed of utility track vehicle' }, { question: 'standard height of new 60 kg rail' }]).forEach(q => { const r0 = mk().ask(q.question); const r = r0.table ? r0 : (r0.ownedTable ? Object.assign({}, r0, { table: r0.ownedTable }) : r0); if (r.kind !== 'answer' || !r.table) return; n++;
     const T = globalThis.RDSO_TABLES[r.table.id], flat = T.r.map(row => row.map(c => (c || '').replace(/\n/g, '; ')));
     r.table.rows.forEach(w => { if (!flat.some(row => w.cells.every(c => row.includes(c)))) bad.push({ q: q.question, cells: w.cells.slice(0, 3) }); }); });
   out.tablecheck = { tables_shown: n, bad };
