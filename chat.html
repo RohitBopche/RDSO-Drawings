@@ -137,6 +137,7 @@
       <nav class="tabs" aria-label="Pages"><a href="chat.html" aria-current="page">Ask</a><a href="browse.html">Browse manuals</a><a href="learn.html">Learn</a><a href="index.html">Explore graph</a></nav>
       <label class="muted" for="scope" style="display:none">Search in</label>
       <select id="scope" aria-label="Search in"><option value="">All manuals</option></select>
+      <select id="chapter" aria-label="Chapter" hidden><option value="">All chapters</option></select>
       <button class="iconbtn" id="newchat" title="Start a new conversation">New</button>
       <button class="iconbtn" id="paletteBtn" title="Command palette (Ctrl+K)" aria-label="Command palette">⌘K</button>
       <button class="iconbtn" id="settingsBtn" title="Appearance" aria-label="Appearance and reading settings" aria-expanded="false">Aa</button>
@@ -374,7 +375,21 @@
   function closePalette() { $('paletteModal').hidden = true; input.focus(); }
   function runCommand(i) { var c = cmds[i]; var typed = $('paletteInput').value; closePalette(); if (c) c.run(); else if (typed.trim()) ask(typed); }
 
-  function setScope(a) { $('scope').value = a; chat.setScope(a); toast(a ? 'Searching only in ' + a : 'Searching all manuals'); }
+  function fillChapters(a) {
+    var sel = $('chapter'), seen = {}, rows = [];
+    window.RDSO_SEARCH_INDEX.docs.forEach(function (d) {
+      var m = /^CLAUSE:([^:]+):CH_(\d+):/.exec(d.clause || ''); if (!m || m[1] !== a || d.kind || seen[m[2]]) return; seen[m[2]] = 1;
+      rows.push([parseInt(m[2], 10), String(d.chapter || '').replace(/^Chapter\s+\d+\s*[—-]\s*/, '')]);
+    });
+    rows.sort(function (x, y) { return x[0] - y[0]; });
+    sel.innerHTML = '<option value="">All chapters</option>' + rows.map(function (r) { return '<option value="' + r[0] + '">Ch. ' + r[0] + ' ' + esc(r[1].slice(0, 40)) + '</option>'; }).join('');
+    sel.hidden = !a || !rows.length;
+  }
+  function setScope(a, chapter) {
+    $('scope').value = a; fillChapters(a); $('chapter').value = chapter || '';
+    chat.setScope(a, chapter);
+    toast(a ? 'Searching only in ' + a + (chapter ? ', chapter ' + chapter : '') : 'Searching all manuals');
+  }
   function newChat() { chat.reset(); showEmpty(); input.focus(); }
   function toggleSide(force) { var s = $('side'), open = force == null ? !s.classList.contains('open') : force; s.classList.toggle('open', open); $('sideBtn').setAttribute('aria-expanded', String(open)); }
 
@@ -418,6 +433,7 @@
   $('viewerClose').addEventListener('click', closeViewer);
   $('resetUi').addEventListener('click', function () { window.RDSOTheme.reset(); drawSettings(); });
   $('scope').addEventListener('change', function () { setScope(this.value); });
+  $('chapter').addEventListener('change', function () { setScope($('scope').value, this.value); });
   $('clearHistory').addEventListener('click', function () { save(KEY_HIST, []); drawSide(); });
   $('export').addEventListener('click', function () {
     var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([feedback.exportJsonl()], { type: 'application/x-ndjson' })); a.download = 'rdso_feedback.jsonl'; a.click();
@@ -447,7 +463,7 @@
     input.disabled = go.disabled = false; input.focus();
     drawSide(); showEmpty();
     var qs = new URLSearchParams(location.search), qm = qs.get('manual'), qq = qs.get('q');
-    if (qm && window.RDSOChat.MANUALS[qm]) setScope(qm);
+    if (qm && window.RDSOChat.MANUALS[qm]) setScope(qm, qs.get('chapter'));
     if (qq) ask(qq);
   }
   start();

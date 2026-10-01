@@ -132,6 +132,14 @@ async function main() {
       return { card: !document.getElementById('card').hidden, title: document.querySelector('#card h2').innerText, expert: document.querySelector('a[href="expert.html"]') !== null, read: document.querySelector('#card a[href^="browse.html#"]') !== null }; })()`);
     console.log(t3);
     if (!t3.card || !/616/.test(t3.title) || !t3.expert || !t3.read) throw new Error('Test 3 failed ' + JSON.stringify(t3));
+    console.log("\n--- TEST 3b: a chapter card can restrict the questions to that chapter ---");
+    const t3b = await ev(`(async () => { const w = ms => new Promise(r => setTimeout(r, ms)); window.rdsoGraph.select('H:IRPWM:7'); await w(150);
+      const b = document.querySelector('#card [data-chapter]'); if (!b) return { fail: 'no chapter button' }; b.click(); await w(100);
+      const i = document.getElementById('q'); i.value = 'rail renewal'; document.getElementById('f').dispatchEvent(new Event('submit', { cancelable: true })); await w(500);
+      return { status: document.getElementById('status').innerText, cite: (document.querySelector('#ans [data-focus]') || {}).innerText || '' }; })()`);
+    console.log(t3b);
+    if (!/chapter 7/.test(t3b.status || '') || !/Para 7\d\d/.test(t3b.cite)) throw new Error('Test 3b failed ' + JSON.stringify(t3b));
+
     console.log("\n--- TEST 4: theme change repaints (dark) ---");
     const t4 = await ev(`(async () => { document.getElementById('settingsBtn').click(); await new Promise(r => setTimeout(r, 100)); document.querySelector('#settings [data-theme="dark"]').click(); await new Promise(r => setTimeout(r, 300)); return getComputedStyle(document.body).backgroundColor; })()`);
     console.log(t4);

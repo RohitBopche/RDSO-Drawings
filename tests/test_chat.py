@@ -75,3 +75,9 @@ def test_table_answers_show_the_matching_row_under_its_headers(run):
 def test_every_table_cell_shown_exists_in_the_stored_table(run):
     assert run["tablecheck"]["tables_shown"] >= 5
     assert run["tablecheck"]["bad"] == [], run["tablecheck"]["bad"][:2]
+
+
+def test_chapter_filter_restricts_the_search_to_that_chapter(run):
+    c = run["chapter"]
+    assert c["6"].startswith("6") and c["7"].startswith("7") and c["6"] != c["7"]
+    assert c["bad"] == "no_evidence"             # a chapter that does not exist leaves nothing to answer from

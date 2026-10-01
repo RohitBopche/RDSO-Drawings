@@ -193,6 +193,16 @@ async function main() {
     console.log(t7);
     if (!/^📄 USFD/.test(t7.USFD) || !/^📄 TMM/.test(t7.TMM)) throw new Error('Test 7 failed ' + JSON.stringify(t7));
 
+    console.log("\n--- TEST 7b: restricting to one chapter of a manual (metadata filter) ---");
+    const t7b = await ev(`(async () => { const w = ms => new Promise(r => setTimeout(r, ms)); const sc = document.getElementById('scope'), ch = document.getElementById('chapter'); const res = {};
+      res.hiddenAll = ch.hidden; sc.value = 'IRPWM'; sc.dispatchEvent(new Event('change')); await w(80); res.shown = !ch.hidden; res.options = ch.options.length;
+      for (const n of ['6', '7']) { ch.value = n; ch.dispatchEvent(new Event('change')); await w(50);
+        const i = document.getElementById('q'); i.value = 'rail renewal'; document.getElementById('f').dispatchEvent(new Event('submit', { cancelable: true })); await w(350);
+        const bots = document.querySelectorAll('.msg.bot'); res['ch' + n] = (bots[bots.length - 1].querySelector('.cite') || {}).innerText || ''; }
+      sc.value = ''; sc.dispatchEvent(new Event('change')); await w(50); res.hiddenAfter = ch.hidden; return res; })()`);
+    console.log(t7b);
+    if (!t7b.hiddenAll || !t7b.shown || t7b.options < 10 || !/Para 6\d\d/.test(t7b.ch6) || !/Para 7\d\d/.test(t7b.ch7) || !t7b.hiddenAfter) throw new Error('Test 7b failed ' + JSON.stringify(t7b));
+
     console.log("\n--- TEST 8: history, saved answers, copy, keyboard ---");
     const t8 = await ev(`(async () => { const w = ms => new Promise(r => setTimeout(r, ms)); const out = {};
       document.querySelector('[data-act="save"]').click(); await w(100);

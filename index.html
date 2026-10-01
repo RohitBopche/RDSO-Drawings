@@ -216,7 +216,7 @@
       if (zoom) focusOn([n.id].concat((xr.out[n.id] || []).reduce(function (a, e) { return e[2] === 'RESOLVED' ? a.concat(e[3]) : a; }, [])).concat(xr.in[n.id] || []).filter(function (i) { return byId[i]; }).slice(0, 12));
     } else if (n.kind === 'chapter') {
       var m = model.manuals.filter(function (x) { return x.alias === n.alias; })[0], ch = m.chapters.filter(function (x) { return 'H:' + n.alias + ':' + x.num === n.id; })[0];
-      h += '<h2>' + esc(n.alias.replace('_', ' ')) + ' · ' + esc(n.label) + '</h2><div class="sub">' + esc(n.sub) + ' · ' + ch.clauses.length + ' paragraphs</div><div class="acts"><button class="iconbtn" data-ask="' + esc('What does ' + n.alias.replace('_', ' ') + ' ' + n.label + ' cover?') + '">Ask about this chapter</button><a class="iconbtn" href="browse.html#' + encodeURIComponent(ch.clauses[0].id) + '">Read</a></div>';
+      h += '<h2>' + esc(n.alias.replace('_', ' ')) + ' · ' + esc(n.label) + '</h2><div class="sub">' + esc(n.sub) + ' · ' + ch.clauses.length + ' paragraphs</div><div class="acts"><button class="iconbtn" data-scope="' + n.alias + '" data-chapter="' + parseInt(n.id.split(':')[2], 10) + '">Ask only this chapter</button><button class="iconbtn" data-ask="' + esc('What does ' + n.alias.replace('_', ' ') + ' ' + n.label + ' cover?') + '">Ask about this chapter</button><a class="iconbtn" href="browse.html#' + encodeURIComponent(ch.clauses[0].id) + '">Read</a></div>';
       if (zoom) focusOn(['H:' + n.alias + ':' + ch.num].concat(ch.clauses.map(function (c) { return c.id; })));
     } else {
       var mm = model.manuals.filter(function (x) { return x.alias === n.alias; })[0];
@@ -261,11 +261,11 @@
     sel = null; $('card').hidden = true;
     if (ids.length) focusOn(ids.filter(function (i) { return byId[i]; })); dirty = true;
   }
-  function setScope(a) { scope = a || ''; chat.setScope(scope); $('q').placeholder = scope ? 'Ask a question about ' + scope.replace('_', ' ') + ' only…' : 'Ask a question about the manuals…'; $('status').textContent = scope ? 'Searching only in ' + scope.replace('_', ' ') + ' (click empty space then “Ask only this manual” again to change)' : 'Nothing leaves this computer. Click a dot to read it; drag to rotate, scroll to zoom, Shift+drag to move.'; }
+  function setScope(a, chapter) { scope = a || ''; chat.setScope(scope, chapter); var where = scope.replace('_', ' ') + (chapter ? ', chapter ' + chapter : ''); $('q').placeholder = scope ? 'Ask a question about ' + where + ' only…' : 'Ask a question about the manuals…'; $('status').textContent = scope ? 'Searching only in ' + where + ' (Reset view clears this)' : 'Nothing leaves this computer. Click a dot to read it; drag to rotate, scroll to zoom, Shift+drag to move.'; }
   $('f').addEventListener('submit', function (e) { e.preventDefault(); ask($('q').value); });
   document.addEventListener('click', function (e) {
     var a = e.target.closest('[data-ask]'); if (a) { ask(a.dataset.ask); return; }
-    var s = e.target.closest('[data-scope]'); if (s) { setScope(s.dataset.scope); $('q').focus(); return; }
+    var s = e.target.closest('[data-scope]'); if (s) { setScope(s.dataset.scope, s.dataset.chapter); $('q').focus(); return; }
     var f = e.target.closest('[data-focus]'); if (f && !(e.ctrlKey || e.metaKey)) { e.preventDefault(); var n = byId[f.dataset.focus]; if (n) select(n, true); return; }
     if (e.target.id === 'ansX') { $('ans').hidden = true; hot = {}; dirty = true; }
     if (e.target.id === 'cardX') { $('card').hidden = true; sel = null; dirty = true; }

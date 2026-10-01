@@ -19,6 +19,10 @@ run('fresh_after_other_manual', ['What does Para 13.1 of USFD say?', 'what is th
 run('reset', ['What does Para 429 of IRPWM say?', 'start over', 'more']);
 run('no_context', ['more']);
 
+// Chapter filter (metadata filter): the same words answer from different chapters when the chapter is fixed
+{ const c = mk(), res = {}; ['6', '7', null].forEach(ch => { c.setScope('IRPWM', ch); const r = c.ask('rail renewal'); res[ch || 'all'] = r.primary ? r.primary.para : r.kind; });
+  c.setScope('IRPWM', '99'); res.bad = c.ask('rail renewal').kind; c.setScope(null); out.chapter = res; }
+
 // Grounding: every sentence the assistant shows must be a piece of the cited passage (or of the second passage for "also relevant").
 const fs = require('fs');
 const qs = fs.readFileSync(path.join(root, 'eval/questions.jsonl'), 'utf8').trim().split('\n').map(l => JSON.parse(l)).filter(q => q.category !== 'oos' && q.category !== 'blind_oos');
