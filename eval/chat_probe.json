@@ -8,6 +8,7 @@
     {"q": "what is the tolerance in gauge", "kind": "answer", "alias": "IRPWM", "text_regex": "gauge"},
     {"q": "what is the maximum speed for a patrolman walking", "kind": "answer", "primary": "IRPWM Para 1004", "text_regex": "3 Kmph"},
     {"q": "What does Para 13.1 of USFD say?", "kind": "answer", "primary": "USFD Para 13.1"},
+    {"q": "What is the preheating time for aluminothermic welding?", "kind": "answer", "primary": "AT_WELD Para 4.9.3", "text_regex": "10 to 12 minutes"},
     {"q": "What is the recipe for butter chicken?", "kind": "no_evidence"},
     {"q": "Who won the cricket world cup in 2011?", "kind": "no_evidence"}
   ]
