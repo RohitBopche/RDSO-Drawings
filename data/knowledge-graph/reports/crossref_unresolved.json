@@ -1,0 +1,1829 @@
+{
+ "summary": {
+  "total": 161,
+  "by_reason": {
+   "ANNEXURE_HEADING_ON_PAGE": 1,
+   "ANNEXURE_NOT_IN_TEXT": 8,
+   "FIGURE_CAPTION_ON_PAGE": 103,
+   "FIGURE_NOT_IN_TEXT": 10,
+   "PARA_NOT_IN_MANUAL": 9,
+   "SAME_LABEL_MANY_TARGETS": 20,
+   "TABLE_CAPTION_ON_PAGE": 8,
+   "TABLE_NOT_IN_TEXT": 2
+  }
+ },
+ "items": [
+  {
+   "ref_id": "XREF:00004",
+   "source": "CLAUSE:IRPWM:CH_01:PARA_103",
+   "raw": "143",
+   "kind": "para",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "PARA_NOT_IN_MANUAL"
+  },
+  {
+   "ref_id": "XREF:00009",
+   "source": "CLAUSE:IRPWM:CH_01:PARA_103",
+   "raw": "Annexure 4/3A",
+   "kind": "annexure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "ANNEXURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00021",
+   "source": "CLAUSE:IRPWM:CH_01:PARA_106",
+   "raw": "143",
+   "kind": "para",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "PARA_NOT_IN_MANUAL"
+  },
+  {
+   "ref_id": "XREF:00074",
+   "source": "CLAUSE:IRPWM:CH_02:PARA_212",
+   "raw": "Annexure - 2/2A",
+   "kind": "annexure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "ANNEXURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00075",
+   "source": "CLAUSE:IRPWM:CH_02:PARA_212",
+   "raw": "Annexure - 2/2A",
+   "kind": "annexure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "ANNEXURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00076",
+   "source": "CLAUSE:IRPWM:CH_02:PARA_212",
+   "raw": "Annexure - 2/2A",
+   "kind": "annexure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "ANNEXURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00171",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_303",
+   "raw": "Fig. 3.1(a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "FIGURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00174",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_303",
+   "raw": "Fig 3.2",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "FIGURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00179",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_308",
+   "raw": "Fig. 3.3",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "FIGURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00187",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_316",
+   "raw": "Annexure - IV",
+   "kind": "annexure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "ANNEXURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00248",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_328",
+   "raw": "Fig. 3.20.1(a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "FIGURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00249",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_328",
+   "raw": "Fig 3.20.1(b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "FIGURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00266",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_331",
+   "raw": "Fig. 3.6(b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    118,
+    120
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00270",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_331",
+   "raw": "Fig. 3.6 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    118,
+    120
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00282",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_336",
+   "raw": "Fig. 3.8",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    122
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00291",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_336",
+   "raw": "Fig 3.8",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    122
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00340",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig No 3.17",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    132
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00341",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.16",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    131
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00342",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.16 (b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    131
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00345",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.17",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    132
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00354",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.18",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    133,
+    164
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00358",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.19",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    134
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00362",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_338",
+   "raw": "Fig 3.20",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    135
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00373",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    139
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00374",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    139
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00375",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    139
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00378",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    139
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00379",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (d)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    139
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00380",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (e)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    139
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00381",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig. 3.21 (f)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    139
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00383",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_341",
+   "raw": "Fig 3.21",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    139
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00386",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_342",
+   "raw": "Fig. 3.22 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    141
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00387",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_342",
+   "raw": "Fig. 3.22 (b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    141
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00389",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_342",
+   "raw": "Fig. 3.22 (e)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    141
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00390",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_342",
+   "raw": "Fig. 3.22 (f)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    141
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00391",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_342",
+   "raw": "Fig 3.22",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    141
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00427",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_349",
+   "raw": "Fig. 3.23",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "FIGURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00428",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_349",
+   "raw": "Fig. 3.23",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "FIGURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00429",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_349",
+   "raw": "Fig. 3.24",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    149,
+    150
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00439",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_351",
+   "raw": "Fig 3.24 (b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    149,
+    150
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00441",
+   "source": "CLAUSE:IRPWM:CH_03:PARA_351",
+   "raw": "Fig 3.24 (c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    149,
+    150
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00646",
+   "source": "CLAUSE:IRPWM:CH_06:PARA_637",
+   "raw": "Table II",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:IRPWM:CH_06:P0339:01_472ed90d",
+    "TABLE:IRPWM:CH_06:P0339:03_c20828b1"
+   ]
+  },
+  {
+   "ref_id": "XREF:00648",
+   "source": "CLAUSE:IRPWM:CH_06:PARA_637",
+   "raw": "Table – II",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:IRPWM:CH_06:P0339:01_472ed90d",
+    "TABLE:IRPWM:CH_06:P0339:03_c20828b1"
+   ]
+  },
+  {
+   "ref_id": "XREF:00654",
+   "source": "CLAUSE:IRPWM:CH_06:PARA_645",
+   "raw": "1048",
+   "kind": "para",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "PARA_NOT_IN_MANUAL"
+  },
+  {
+   "ref_id": "XREF:00671",
+   "source": "CLAUSE:IRPWM:CH_07:PARA_708",
+   "raw": "Table-II",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:IRPWM:CH_07:P0377:02_bad401cc",
+    "TABLE:IRPWM:CH_07:P0377:03_ca74ea87",
+    "TABLE:IRPWM:CH_07:P0378:01_9278fe6d"
+   ]
+  },
+  {
+   "ref_id": "XREF:00672",
+   "source": "CLAUSE:IRPWM:CH_07:PARA_708",
+   "raw": "Table-II",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:IRPWM:CH_07:P0377:02_bad401cc",
+    "TABLE:IRPWM:CH_07:P0377:03_ca74ea87",
+    "TABLE:IRPWM:CH_07:P0378:01_9278fe6d"
+   ]
+  },
+  {
+   "ref_id": "XREF:00673",
+   "source": "CLAUSE:IRPWM:CH_07:PARA_708",
+   "raw": "Table-II",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:IRPWM:CH_07:P0377:02_bad401cc",
+    "TABLE:IRPWM:CH_07:P0377:03_ca74ea87",
+    "TABLE:IRPWM:CH_07:P0378:01_9278fe6d"
+   ]
+  },
+  {
+   "ref_id": "XREF:00675",
+   "source": "CLAUSE:IRPWM:CH_07:PARA_708",
+   "raw": "annexure 2.16",
+   "kind": "annexure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "ANNEXURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00678",
+   "source": "CLAUSE:IRPWM:CH_07:PARA_708",
+   "raw": "annexure 2.16",
+   "kind": "annexure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "ANNEXURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:00840",
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_1",
+   "raw": "Fig. 2(I)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11,
+    98,
+    99,
+    100
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00845",
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_2",
+   "raw": "Annexure-IIB",
+   "kind": "annexure",
+   "status": "NOT_FOUND",
+   "pages": [
+    10,
+    78
+   ],
+   "reason": "ANNEXURE_HEADING_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00850",
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_2",
+   "raw": "Fig. 2(I)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11,
+    98,
+    99,
+    100
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00851",
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_2",
+   "raw": "Fig. 2(I)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11,
+    98,
+    99,
+    100
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00852",
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_2",
+   "raw": "Fig. 2(I)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11,
+    98,
+    99,
+    100
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00853",
+   "source": "CLAUSE:USFD:CH_04:PARA_4_1_2",
+   "raw": "Fig. 2(I)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11,
+    98,
+    99,
+    100
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00861",
+   "source": "CLAUSE:USFD:CH_04:PARA_4_5",
+   "raw": "Fig. 5",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00876",
+   "source": "CLAUSE:USFD:CH_07:PARA_7_1",
+   "raw": "Fig. 8",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00889",
+   "source": "CLAUSE:USFD:CH_08:PARA_8_6_4",
+   "raw": "Fig. 22 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11,
+    130
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00890",
+   "source": "CLAUSE:USFD:CH_08:PARA_8_7_1_2",
+   "raw": "Fig. 22 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11,
+    130
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00897",
+   "source": "CLAUSE:USFD:CH_08:PARA_8_8_2",
+   "raw": "Fig. 22 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11,
+    130
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00904",
+   "source": "CLAUSE:USFD:CH_08:PARA_8_12_1",
+   "raw": "Fig.20 (b)",
+   "kind": "figure",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "FIGURE:USFD:CH_08:P0048:01_3b2fe2f4",
+    "FIGURE:USFD:CH_08:P0048:02_a2aea0ad"
+   ]
+  },
+  {
+   "ref_id": "XREF:00905",
+   "source": "CLAUSE:USFD:CH_08:PARA_8_12_2",
+   "raw": "Fig. 20(b)",
+   "kind": "figure",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "FIGURE:USFD:CH_08:P0048:01_3b2fe2f4",
+    "FIGURE:USFD:CH_08:P0048:02_a2aea0ad"
+   ]
+  },
+  {
+   "ref_id": "XREF:00927",
+   "source": "CLAUSE:USFD:CH_08:PARA_8_15_2",
+   "raw": "23",
+   "kind": "para",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "PARA_NOT_IN_MANUAL"
+  },
+  {
+   "ref_id": "XREF:00929",
+   "source": "CLAUSE:USFD:CH_08:PARA_8_16",
+   "raw": "Fig.21",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11,
+    127,
+    128
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00949",
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.5",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00950",
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.14",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00951",
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.11",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00952",
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.9",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00953",
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.10",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00954",
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.12",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00955",
+   "source": "CLAUSE:USFD:CH_10:PARA_10_4_4",
+   "raw": "Fig.13",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    11
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00966",
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_3_4",
+   "raw": "Fig. 26 (b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    12,
+    135,
+    138
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00967",
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_3_4",
+   "raw": "Fig. 26 (c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    12,
+    135,
+    138
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00968",
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_3_4",
+   "raw": "Fig. 26 (b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    12,
+    135,
+    138
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00969",
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_3_4",
+   "raw": "Fig. 26 (c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    12,
+    135,
+    138
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00970",
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_4_2",
+   "raw": "Fig.26 (b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    12,
+    135,
+    138
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00971",
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_4_2",
+   "raw": "Fig. 26(c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    12,
+    135,
+    138
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00972",
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_4_2",
+   "raw": "Fig. 26(b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    12,
+    135,
+    138
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00973",
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_4_2",
+   "raw": "Fig. 26(c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    12,
+    135,
+    138
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00975",
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_5_2",
+   "raw": "Fig. 26(b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    12,
+    135,
+    138
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00976",
+   "source": "CLAUSE:USFD:CH_11:PARA_11_8_5_2",
+   "raw": "Fig. 26(c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    12,
+    135,
+    138
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:00989",
+   "source": "CLAUSE:AT_WELD:CH_03:PARA_3_1",
+   "raw": "Fig. 3.1(a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    5
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01007",
+   "source": "CLAUSE:AT_WELD:CH_04:PARA_4_2_2",
+   "raw": "4.4.3.1",
+   "kind": "para",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "PARA_NOT_IN_MANUAL"
+  },
+  {
+   "ref_id": "XREF:01037",
+   "source": "CLAUSE:AT_WELD:CH_07:PARA_7_1",
+   "raw": "4.4.2",
+   "kind": "para",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "PARA_NOT_IN_MANUAL"
+  },
+  {
+   "ref_id": "XREF:01060",
+   "source": "CLAUSE:FBW:CH_03:PARA_3_2",
+   "raw": "Fig.3.2",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    4
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01062",
+   "source": "CLAUSE:FBW:CH_03:PARA_3_4",
+   "raw": "Fig. 3.4 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    4
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01063",
+   "source": "CLAUSE:FBW:CH_03:PARA_3_4",
+   "raw": "Figs. 3.4 (b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    4
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01064",
+   "source": "CLAUSE:FBW:CH_03:PARA_3_4",
+   "raw": "Fig. 3.4 (d)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    4
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01068",
+   "source": "CLAUSE:FBW:CH_04:PARA_4_2",
+   "raw": "Fig. 4.2 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    4
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01078",
+   "source": "CLAUSE:FBW:CH_05:PARA_5_6_4_7",
+   "raw": "table 1",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:FBW:CH_08:P0022:01_267c40c7",
+    "TABLE:FBW:CH_08:P0022:02_efc4ca7d",
+    "TABLE:FBW:CH_08:P0022:03_c99682e9"
+   ]
+  },
+  {
+   "ref_id": "XREF:01083",
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "figure 9.0",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "FIGURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:01085",
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "figure 8 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    4
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01091",
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "table 1",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:FBW:CH_08:P0022:01_267c40c7",
+    "TABLE:FBW:CH_08:P0022:02_efc4ca7d",
+    "TABLE:FBW:CH_08:P0022:03_c99682e9"
+   ]
+  },
+  {
+   "ref_id": "XREF:01093",
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "Table 1",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:FBW:CH_08:P0022:01_267c40c7",
+    "TABLE:FBW:CH_08:P0022:02_efc4ca7d",
+    "TABLE:FBW:CH_08:P0022:03_c99682e9"
+   ]
+  },
+  {
+   "ref_id": "XREF:01095",
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "table 1",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:FBW:CH_08:P0022:01_267c40c7",
+    "TABLE:FBW:CH_08:P0022:02_efc4ca7d",
+    "TABLE:FBW:CH_08:P0022:03_c99682e9"
+   ]
+  },
+  {
+   "ref_id": "XREF:01096",
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "table 1",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:FBW:CH_08:P0022:01_267c40c7",
+    "TABLE:FBW:CH_08:P0022:02_efc4ca7d",
+    "TABLE:FBW:CH_08:P0022:03_c99682e9"
+   ]
+  },
+  {
+   "ref_id": "XREF:01097",
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "Table 1",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:FBW:CH_08:P0022:01_267c40c7",
+    "TABLE:FBW:CH_08:P0022:02_efc4ca7d",
+    "TABLE:FBW:CH_08:P0022:03_c99682e9"
+   ]
+  },
+  {
+   "ref_id": "XREF:01103",
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "10.1.1",
+   "kind": "para",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "PARA_NOT_IN_MANUAL"
+  },
+  {
+   "ref_id": "XREF:01108",
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "raw": "10.2.3",
+   "kind": "para",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "PARA_NOT_IN_MANUAL"
+  },
+  {
+   "ref_id": "XREF:01147",
+   "source": "CLAUSE:TMM:CH_02:PARA_209",
+   "raw": "Fig 2.9",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    54
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01196",
+   "source": "CLAUSE:TMM:CH_02:PARA_222",
+   "raw": "Fig. 2.36 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    77
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01199",
+   "source": "CLAUSE:TMM:CH_02:PARA_222",
+   "raw": "Fig. 2.38 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    79
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01202",
+   "source": "CLAUSE:TMM:CH_02:PARA_222",
+   "raw": "Fig. 2.39 (c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    79
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01208",
+   "source": "CLAUSE:TMM:CH_02:PARA_224",
+   "raw": "Fig. 2.40 (e)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    82
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01256",
+   "source": "CLAUSE:TMM:CH_03:PARA_305",
+   "raw": "Fig 3.10 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    130
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01257",
+   "source": "CLAUSE:TMM:CH_03:PARA_305",
+   "raw": "Fig. 3.9 (b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    129
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01296",
+   "source": "CLAUSE:TMM:CH_04:PARA_410",
+   "raw": "table II",
+   "kind": "table",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "TABLE:IRPWM:CH_06:P0339:01_472ed90d",
+    "TABLE:IRPWM:CH_06:P0339:03_c20828b1",
+    "TABLE:IRPWM:CH_07:P0377:02_bad401cc",
+    "TABLE:IRPWM:CH_07:P0377:03_ca74ea87",
+    "TABLE:IRPWM:CH_07:P0378:01_9278fe6d"
+   ]
+  },
+  {
+   "ref_id": "XREF:01313",
+   "source": "CLAUSE:TMM:CH_04:PARA_420",
+   "raw": "Fig.4.12 (e)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    174
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01317",
+   "source": "CLAUSE:TMM:CH_04:PARA_420",
+   "raw": "Fig. 4.14 (c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    175
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01326",
+   "source": "CLAUSE:TMM:CH_05:PARA_502",
+   "raw": "Fig 5.2",
+   "kind": "figure",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "FIGURE:TMM:CH_05:P0184:02_7cc5cf6a",
+    "FIGURE:TMM:CH_05:P0184:03_07dfb29a"
+   ]
+  },
+  {
+   "ref_id": "XREF:01327",
+   "source": "CLAUSE:TMM:CH_05:PARA_502",
+   "raw": "Fig. 5.2",
+   "kind": "figure",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "FIGURE:TMM:CH_05:P0184:02_7cc5cf6a",
+    "FIGURE:TMM:CH_05:P0184:03_07dfb29a"
+   ]
+  },
+  {
+   "ref_id": "XREF:01328",
+   "source": "CLAUSE:TMM:CH_05:PARA_502",
+   "raw": "Fig.5.2",
+   "kind": "figure",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "FIGURE:TMM:CH_05:P0184:02_7cc5cf6a",
+    "FIGURE:TMM:CH_05:P0184:03_07dfb29a"
+   ]
+  },
+  {
+   "ref_id": "XREF:01329",
+   "source": "CLAUSE:TMM:CH_05:PARA_502",
+   "raw": "Fig 5.3",
+   "kind": "figure",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "FIGURE:TMM:CH_05:P0185:01_40283e20",
+    "FIGURE:TMM:CH_05:P0185:02_9d906ace"
+   ]
+  },
+  {
+   "ref_id": "XREF:01331",
+   "source": "CLAUSE:TMM:CH_05:PARA_502",
+   "raw": "Fig.5.3",
+   "kind": "figure",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "FIGURE:TMM:CH_05:P0185:01_40283e20",
+    "FIGURE:TMM:CH_05:P0185:02_9d906ace"
+   ]
+  },
+  {
+   "ref_id": "XREF:01332",
+   "source": "CLAUSE:TMM:CH_05:PARA_502",
+   "raw": "Fig.5.3",
+   "kind": "figure",
+   "status": "AMBIGUOUS",
+   "pages": [],
+   "reason": "SAME_LABEL_MANY_TARGETS",
+   "candidates": [
+    "FIGURE:TMM:CH_05:P0185:01_40283e20",
+    "FIGURE:TMM:CH_05:P0185:02_9d906ace"
+   ]
+  },
+  {
+   "ref_id": "XREF:01333",
+   "source": "CLAUSE:TMM:CH_05:PARA_502",
+   "raw": "Fig.5.4",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    186
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01340",
+   "source": "CLAUSE:TMM:CH_05:PARA_506",
+   "raw": "table 5.3",
+   "kind": "table",
+   "status": "NOT_FOUND",
+   "pages": [
+    194
+   ],
+   "reason": "TABLE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01343",
+   "source": "CLAUSE:TMM:CH_05:PARA_508",
+   "raw": "Fig.5.6 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    196
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01353",
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.9 (a)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    206
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01358",
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.11",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    207
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01359",
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.11",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    207
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01368",
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.12",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "FIGURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:01370",
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.12",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "FIGURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:01374",
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.13",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    212
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01375",
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "raw": "Fig 5.14",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    214
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01380",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.15",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    218
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01381",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.15 (b)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    218
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01382",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.16",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    218
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01383",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.16 (c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    218
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01385",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.17",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    223
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01386",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.18",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    224
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01387",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.19",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    224
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01388",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.20",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    225
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01390",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig. 5.21",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    226
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01392",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.21 (d)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    226
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01393",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.7",
+   "kind": "table",
+   "status": "NOT_FOUND",
+   "pages": [
+    226
+   ],
+   "reason": "TABLE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01394",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.6",
+   "kind": "table",
+   "status": "NOT_FOUND",
+   "pages": [
+    226
+   ],
+   "reason": "TABLE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01395",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.7",
+   "kind": "table",
+   "status": "NOT_FOUND",
+   "pages": [
+    226
+   ],
+   "reason": "TABLE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01396",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.6",
+   "kind": "table",
+   "status": "NOT_FOUND",
+   "pages": [
+    226
+   ],
+   "reason": "TABLE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01397",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.6",
+   "kind": "table",
+   "status": "NOT_FOUND",
+   "pages": [
+    226
+   ],
+   "reason": "TABLE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01398",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.7",
+   "kind": "table",
+   "status": "NOT_FOUND",
+   "pages": [
+    226
+   ],
+   "reason": "TABLE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01399",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Table 5.8",
+   "kind": "table",
+   "status": "NOT_FOUND",
+   "pages": [
+    227
+   ],
+   "reason": "TABLE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01401",
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "raw": "Fig 5.22",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    228
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01402",
+   "source": "CLAUSE:TMM:CH_05:PARA_518",
+   "raw": "Fig 5.23",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    229
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01403",
+   "source": "CLAUSE:TMM:CH_05:PARA_518",
+   "raw": "Fig 5.23",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    229
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01406",
+   "source": "CLAUSE:TMM:CH_05:PARA_518",
+   "raw": "Fig 5.24",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    232
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01407",
+   "source": "CLAUSE:TMM:CH_05:PARA_518",
+   "raw": "Fig 5.24 (c)",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    232
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01480",
+   "source": "CLAUSE:TMM:CH_12:PARA_1204",
+   "raw": "Fig 12.1",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    403
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01481",
+   "source": "CLAUSE:TMM:CH_12:PARA_1204",
+   "raw": "Fig 12.1",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    403
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01482",
+   "source": "CLAUSE:TMM:CH_12:PARA_1205",
+   "raw": "Fig 12.2",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    403
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01483",
+   "source": "CLAUSE:TMM:CH_12:PARA_1205",
+   "raw": "Fig 12.2",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    403
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01484",
+   "source": "CLAUSE:TMM:CH_12:PARA_1206",
+   "raw": "Fig 12.3",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    407
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01485",
+   "source": "CLAUSE:TMM:CH_12:PARA_1206",
+   "raw": "Fig. 12.4",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    408
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01486",
+   "source": "CLAUSE:TMM:CH_12:PARA_1206",
+   "raw": "Fig 12.4",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    408
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01487",
+   "source": "CLAUSE:TMM:CH_12:PARA_1206",
+   "raw": "Fig 12.5",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    409
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01488",
+   "source": "CLAUSE:TMM:CH_12:PARA_1208",
+   "raw": "Fig 12.6",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    410
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01489",
+   "source": "CLAUSE:TMM:CH_12:PARA_1208",
+   "raw": "Fig 12.6",
+   "kind": "figure",
+   "status": "NOT_FOUND",
+   "pages": [
+    410
+   ],
+   "reason": "FIGURE_CAPTION_ON_PAGE"
+  },
+  {
+   "ref_id": "XREF:01490",
+   "source": "CLAUSE:TMM:CH_12:PARA_1214",
+   "raw": "Annexures 1",
+   "kind": "annexure",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "ANNEXURE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:01495",
+   "source": "CLAUSE:STMM:CH_01:PARA_106",
+   "raw": "Table 1A",
+   "kind": "table",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "TABLE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:01497",
+   "source": "CLAUSE:STMM:CH_01:PARA_106",
+   "raw": "Table 1B",
+   "kind": "table",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "TABLE_NOT_IN_TEXT"
+  },
+  {
+   "ref_id": "XREF:01555",
+   "source": "CLAUSE:STMM:CH_22:PARA_2202",
+   "raw": "113",
+   "kind": "para",
+   "status": "NOT_FOUND",
+   "pages": [],
+   "reason": "PARA_NOT_IN_MANUAL"
+  }
+ ]
+}

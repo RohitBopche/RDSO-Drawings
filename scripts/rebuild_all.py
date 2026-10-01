@@ -29,6 +29,8 @@ STEPS = [
     "build_table_data.py",         # browser file: tables with headers for the chat
     "build_clause_extras.py",      # browser file: measurements + held drawings per clause
     "ingest_reviews.py",           # no arguments: only refreshes reports/review_accuracy.json from recorded reviews
+    "evidence_coverage_report.py", # which paragraphs have a full-paragraph crop, which only the opening, and why
+    "crossref_diagnose.py",        # reason and page for every unresolved reference (reports/crossref_unresolved.json)
     "build_search_index.py",
 ]
 

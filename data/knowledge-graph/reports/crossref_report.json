@@ -2,15 +2,16 @@
  "summary": {
   "total": 1567,
   "by_status": {
-   "AMBIGUOUS": 19,
-   "EXTERNAL": 233,
-   "NOT_FOUND": 145,
-   "RESOLVED": 1170
+   "AMBIGUOUS": 20,
+   "EXTERNAL": 234,
+   "NOT_FOUND": 141,
+   "RESOLVED": 1172
   },
   "by_kind": {
    "annexure": {
-    "NOT_FOUND": 12,
-    "RESOLVED": 333
+    "EXTERNAL": 1,
+    "NOT_FOUND": 9,
+    "RESOLVED": 335
    },
    "chapter": {
     "RESOLVED": 38
@@ -32,8 +33,8 @@
     "EXTERNAL": 93
    },
    "table": {
-    "AMBIGUOUS": 11,
-    "NOT_FOUND": 11,
+    "AMBIGUOUS": 12,
+    "NOT_FOUND": 10,
     "RESOLVED": 68
    }
   }
@@ -91,12 +92,6 @@
    "source": "CLAUSE:IRPWM:CH_03:PARA_308",
    "raw": "Fig. 3.3",
    "kind": "figure",
-   "scope": "IRPWM"
-  },
-  {
-   "source": "CLAUSE:IRPWM:CH_03:PARA_314",
-   "raw": "Annexure - X",
-   "kind": "annexure",
    "scope": "IRPWM"
   },
   {
@@ -306,18 +301,6 @@
   {
    "source": "CLAUSE:IRPWM:CH_07:PARA_708",
    "raw": "annexure 2.16",
-   "kind": "annexure",
-   "scope": "IRPWM"
-  },
-  {
-   "source": "CLAUSE:IRPWM:CH_08:PARA_842",
-   "raw": "Appendix IX",
-   "kind": "annexure",
-   "scope": "IRPWM"
-  },
-  {
-   "source": "CLAUSE:IRPWM:CH_14:PARA_1407",
-   "raw": "Annexure - 1",
    "kind": "annexure",
    "scope": "IRPWM"
   },
@@ -613,12 +596,6 @@
    "source": "CLAUSE:TMM:CH_03:PARA_305",
    "raw": "Fig. 3.9 (b)",
    "kind": "figure",
-   "scope": "TMM"
-  },
-  {
-   "source": "CLAUSE:TMM:CH_04:PARA_410",
-   "raw": "table II",
-   "kind": "table",
    "scope": "TMM"
   },
   {

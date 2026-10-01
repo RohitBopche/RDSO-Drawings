@@ -5,7 +5,7 @@
     "standard_specification": "IRS: T 10 & IRS: T 29",
     "blueprint_reference": "docs/RDSO_Knowledge_Graph_Improvement_Blueprint.md",
     "total_entities": 4862,
-    "total_edges": 7341,
+    "total_edges": 7343,
     "total_facts": 6383,
     "total_nodes": 4862
   },
@@ -306080,6 +306080,16 @@
       ]
     },
     {
+      "from": "CLAUSE:IRPWM:CH_03:PARA_314",
+      "to": "EVIDENCE:FBW:CH_09:P0049:01_c4baf24a",
+      "rel": "REFERENCES",
+      "rationale": "Text reference: Annexure - X",
+      "source": null,
+      "evidence_ids": [
+        "ev:clause:CLAUSE:IRPWM:CH_03:PARA_314"
+      ]
+    },
+    {
       "from": "CLAUSE:IRPWM:CH_03:PARA_316",
       "to": "CLAUSE:IRPWM:CH_03:PARA_303",
       "rel": "REFERENCES",
@@ -310167,6 +310177,16 @@
       "source": null,
       "evidence_ids": [
         "ev:clause:CLAUSE:IRPWM:CH_14:PARA_1406"
+      ]
+    },
+    {
+      "from": "CLAUSE:IRPWM:CH_14:PARA_1407",
+      "to": "EVIDENCE:AT_WELD:CH_09:P0026:01_e90760bd",
+      "rel": "REFERENCES",
+      "rationale": "Text reference: Annexure - 1",
+      "source": null,
+      "evidence_ids": [
+        "ev:clause:CLAUSE:IRPWM:CH_14:PARA_1407"
       ]
     },
     {

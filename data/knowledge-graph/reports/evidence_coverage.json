@@ -1,0 +1,438 @@
+{
+ "summary": {
+  "clauses": 1172,
+  "without_region": 0,
+  "prefix_only": 65,
+  "per_manual": {
+   "AT_WELD": {
+    "clauses": 73,
+    "full_clause": 72,
+    "prefix": 1
+   },
+   "FBW": {
+    "clauses": 57,
+    "full_clause": 56,
+    "prefix": 1
+   },
+   "IRPWM": {
+    "clauses": 421,
+    "full_clause": 417,
+    "prefix": 4
+   },
+   "STMM": {
+    "clauses": 258,
+    "full_clause": 236,
+    "prefix": 22
+   },
+   "TMM": {
+    "clauses": 171,
+    "full_clause": 139,
+    "prefix": 32
+   },
+   "USFD": {
+    "clauses": 192,
+    "full_clause": 187,
+    "prefix": 5
+   }
+  },
+  "prefix_by_reason": {
+   "HAS_TABLE": 41,
+   "SPANS_PAGES": 23,
+   "WAIVED": 1
+  }
+ },
+ "prefix_only": [
+  {
+   "clause": "CLAUSE:AT_WELD:CH_06:PARA_6_3_2",
+   "page": 21,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "page": 19,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:IRPWM:CH_03:PARA_336",
+   "page": 119,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:IRPWM:CH_04:PARA_427",
+   "page": 195,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:IRPWM:CH_05:PARA_522",
+   "page": 300,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:IRPWM:CH_09:PARA_921",
+   "page": 435,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_02:PARA_207",
+   "page": 37,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_03:PARA_305",
+   "page": 44,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_03:PARA_307",
+   "page": 47,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_03:PARA_308",
+   "page": 51,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_03:PARA_317",
+   "page": 56,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_04:PARA_406",
+   "page": 60,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_04:PARA_407",
+   "page": 64,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_05:PARA_506",
+   "page": 70,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_05:PARA_507",
+   "page": 74,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_06:PARA_607",
+   "page": 81,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_07:PARA_707",
+   "page": 85,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_07:PARA_716",
+   "page": 93,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_07:PARA_717",
+   "page": 96,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_08:PARA_806",
+   "page": 103,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_08:PARA_807",
+   "page": 104,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_09:PARA_906",
+   "page": 109,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_09:PARA_907",
+   "page": 110,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_10:PARA_1016",
+   "page": 118,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_11:PARA_1107",
+   "page": 123,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_12:PARA_1208",
+   "page": 129,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_13:PARA_1307",
+   "page": 134,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:STMM:CH_16:PARA_1616",
+   "page": 152,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_203",
+   "page": 42,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_206",
+   "page": 48,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_209",
+   "page": 53,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_210",
+   "page": 55,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_213",
+   "page": 64,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_214",
+   "page": 65,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_216",
+   "page": 70,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_219",
+   "page": 73,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_221",
+   "page": 75,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_222",
+   "page": 77,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_224",
+   "page": 80,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_225",
+   "page": 85,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_228",
+   "page": 88,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_02:PARA_229",
+   "page": 90,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_03:PARA_305",
+   "page": 125,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_03:PARA_315",
+   "page": 140,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_03:PARA_316",
+   "page": 144,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_04:PARA_407",
+   "page": 159,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_04:PARA_413",
+   "page": 167,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_04:PARA_424",
+   "page": 178,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_05:PARA_514",
+   "page": 202,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_05:PARA_516",
+   "page": 205,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_05:PARA_517",
+   "page": 216,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_05:PARA_519",
+   "page": 233,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_07:PARA_712",
+   "page": 284,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_08:PARA_810",
+   "page": 327,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_09:PARA_904",
+   "page": 365,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_10:PARA_1008",
+   "page": 381,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_10:PARA_1009",
+   "page": 381,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_11:PARA_1108",
+   "page": 393,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_12:PARA_1211",
+   "page": 417,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:TMM:CH_12:PARA_1216",
+   "page": 423,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": true
+  },
+  {
+   "clause": "CLAUSE:USFD:CH_02:PARA_2_1",
+   "page": 20,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:USFD:CH_05:PARA_5_1_3",
+   "page": 33,
+   "reason": "WAIVED",
+   "also_spans_pages": false,
+   "note": "its sentence continues into a proforma format whose lines are not matched in reading order (crop checked 2026-10-01)"
+  },
+  {
+   "clause": "CLAUSE:USFD:CH_06:PARA_6_4",
+   "page": 35,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:USFD:CH_06:PARA_6_6_1_2",
+   "page": 37,
+   "reason": "HAS_TABLE",
+   "also_spans_pages": false
+  },
+  {
+   "clause": "CLAUSE:USFD:CH_11:PARA_11_6",
+   "page": 61,
+   "reason": "SPANS_PAGES",
+   "also_spans_pages": true
+  }
+ ],
+ "without_region": []
+}

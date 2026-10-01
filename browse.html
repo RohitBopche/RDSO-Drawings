@@ -109,6 +109,8 @@
     var ex = extras[id] || {}, subs = (ex.s || []).map(function (s) { var sid = s[1]; return model.byId[sid] ? chip(sid) : ''; }).filter(Boolean);
     var outs = [], seen = {};
     (xr.out[id] || []).forEach(function (e) { if (e[2] === 'RESOLVED') e[3].forEach(function (t) { if (model.byId[t] && !seen[t] && t !== id) { seen[t] = 1; outs.push(t); } }); });
+    var seenFig = {}, located = [];
+    (xr.out[id] || []).forEach(function (e) { if (e[5] && e[5].length && !seenFig[e[0]]) { seenFig[e[0]] = 1; located.push(e); } });
     var ins = (xr.in[id] || []).filter(function (t) { return model.byId[t]; });
     var url = encodeURI(PDF[c.alias] || '') + '#page=' + (c.page || 1);
     $('main').innerHTML = '<article class="read"><div class="crumb">' + esc(c.alias.replace('_', ' ')) + ' › Chapter ' + c.chapterNum + ' ' + esc(c.chapter.replace(/^Chapter\s+\d+\s*[—-]\s*/, '')) + '</div>' +
@@ -119,6 +121,8 @@
       (subs.length ? '<div class="box"><h3>Sub-paragraphs</h3><ul>' + subs.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ul></div>' : '') +
       (tablesByClause[id] || []).map(tableHtml).join('') +
       (outs.length ? '<div class="box" id="xout"><h3>This paragraph refers to</h3><ul>' + outs.map(function (t) { return '<li>' + chip(t) + '</li>'; }).join('') + '</ul></div>' : '') +
+      (located.length ? '<div class="box" id="xloc"><h3>Figures, tables and annexures mentioned (shown only on the page)</h3><ul>' + located.map(function (e) {
+        return '<li>' + esc(e[0]) + ' — <a target="_blank" rel="noopener" href="' + esc(encodeURI(PDF[c.alias] || '') + '#page=' + e[5][0]) + '">page ' + e[5][0] + (e[5].length > 1 ? ' (also ' + e[5].slice(1).join(', ') + ')' : '') + ' ↗</a></li>'; }).join('') + '</ul></div>' : '') +
       (ins.length ? '<div class="box" id="xin"><h3>Referred to by</h3><ul>' + ins.slice(0, 30).map(function (t) { return '<li>' + chip(t) + '</li>'; }).join('') + '</ul></div>' : '') +
       '<div class="pn"><button class="iconbtn" id="prev"' + (c.prev ? ' data-id="' + esc(c.prev) + '"' : ' disabled') + '>← Previous</button><button class="iconbtn" id="next"' + (c.next ? ' data-id="' + esc(c.next) + '"' : ' disabled') + '>Next →</button></div></article>';
     $('main').scrollTop = 0;

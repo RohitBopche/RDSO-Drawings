@@ -152,8 +152,12 @@ def main() -> int:
     refs = [json.loads(l) for l in (KG / "canonical" / "crossrefs.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
     out_refs: dict[str, list] = {}
     in_refs: dict[str, list] = {}
+    located = {i["ref_id"]: i["pages"] for i in json.loads((KG / "reports" / "crossref_unresolved.json").read_text(encoding="utf-8"))["items"] if i["pages"]}
     for x in refs:
-        out_refs.setdefault(x["source"], []).append([" ".join(x["raw"].split()), x["target_kind"], x["status"], x["targets"], x["scope_name"] or ""])
+        row = [" ".join(x["raw"].split()), x["target_kind"], x["status"], x["targets"], x["scope_name"] or ""]
+        if x["ref_id"] in located:
+            row.append(located[x["ref_id"]][:4])     # unresolved figure / table / annexure: the page(s) where its caption is
+        out_refs.setdefault(x["source"], []).append(row)
         for t in x["targets"]:
             if t != x["source"] and x["source"] not in in_refs.setdefault(t, []):
                 in_refs[t].append(x["source"])
