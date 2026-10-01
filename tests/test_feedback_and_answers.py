@@ -44,12 +44,12 @@ def test_paragraph_number_query_is_always_answered():
     assert a["status"] == "answer" and a["best"] == "CLAUSE:IRPWM:CH_02:PARA_225" and a["conf"] == "high"
 
 
-def test_no_active_curated_answer_claims_verified():
+def test_no_hand_written_answers_remain_in_the_application():
     html = (ROOT / "expert.html").read_text(encoding="utf-8")
-    a = html.index("const CANONICAL_QA_DATABASE = [")
-    b = html.index("function detectQuestionIntent")
-    assert 'status: "VERIFIED"' not in html[a:b]
-    assert html[a:b].count("retired: true") == 6                # manual-cited hand answers were retired
+    assert "const CANONICAL_QA_DATABASE = [];" in html            # every answer is retrieved from the manuals
+    assert 'status: "VERIFIED"' not in html
+    for page in ("index.html", "chat.html", "browse.html"):
+        assert "CANONICAL_QA_DATABASE" not in (ROOT / page).read_text(encoding="utf-8")
 
 
 def test_feedback_ingest_builds_queue_gaps_and_candidates(tmp_path):

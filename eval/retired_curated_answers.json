@@ -1,0 +1,223 @@
+{
+ "_note": "The hand-written answers that used to be embedded in the expert page (CANONICAL_QA_DATABASE). Removed 2026-10-01: nothing in the application answers from hand-written text any more. Kept only as a record and as a source of candidate regression questions; not data.",
+ "items": [
+  {
+   "id": "qa_destressing_temperature",
+   "question": "What is the destressing temperature range (td) for LWR/CWR track?",
+   "retired_before": true,
+   "keywords": [
+    "destressing temperature",
+    "destressing temp",
+    "de-stressing temperature",
+    "destressing",
+    "td temperature",
+    "range of destressing temperature",
+    "destressing of lwr",
+    "thermal forces in lwr",
+    "destressing without rail tensors",
+    "destressing with rail tensors",
+    "mean rail temperature tm",
+    "lwr destressing",
+    "stress-free temperature",
+    "sft"
+   ],
+   "statement": "Destressing temperature (**td**) and thermal forces in Continuous / Long Welded Rails (LWR/CWR) are mandated by **IRPWM 2024 Chapter 3 (Paras 333, 335, 338, 339, 340, 341 & 347)**:\n\n1. **Standard Destressing Temperature Window (td) per Zone (Para 335)**:\n   The range of destressing temperature (**td** or **t0**) shall be within statutory limits based on Mean Annual Rail Temperature (**tm**):\n   • **Temperature Zones I, II, and III (All rail sections 52 kg / 60 kg)**:\n     **tm to (tm + 5°C)**\n   • **Temperature Zone IV (52 kg/m & heavier sections)**:\n     **(tm + 5°C) to (tm + 10°C)**\n\n2. **Permitted Reduced Destressing Range (Para 335)**:\n   Laying of LWR on wider base sleepers with 60 kg rail and sleeper density of 1660 nos./km permits a reduced de-stressing temperature range for superior track buckling resistance.\n\n3. **Supervision & Traffic Block Protocol (Para 339)**:\n   • The work of de-stressing must strictly be executed during a **traffic block** under the personal supervision of **JE / SSE / P.Way**.\n   • Mobile temperature thermometers must be positioned along the rail during the entire operation.\n\n4. **Destressing With vs. Without Rail Tensors (Paras 340 & 341)**:\n   • **Without Rail Tensors (Natural td)**: Allowed only when ambient rail temperature falls naturally within the specified **td** range during the work window.\n   • **With Rail Tensors (Hydraulic Tensor)**: Compulsory when rail temperature is below **td**. The tensor pulls the rail to the calculated extension: **L = α · L0 · (td - tp)**, where α = 1.152 × 10⁻⁵ / °C.\n\n5. **Stress-Free Temperature (SFT) & Maintenance Limits (Para 347)**:\n   In ideal conditions, stress-free temperature equals destressing temperature. Abnormal SEJ gaps (exceeding Annexure 3/9) or rail creep > 20 mm mandate immediate investigation by ADEN and re-destressing.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_keyman_duties_greasing",
+   "question": "What are the duties of Keyman regarding track inspection, joggled fish plates, and greasing?",
+   "retired_before": true,
+   "keywords": [
+    "duties of keyman and greasing",
+    "keyman and greasing",
+    "duties of keyman",
+    "keyman duties",
+    "keyman greasing",
+    "keyman joggled fish plate",
+    "keyman joggled",
+    "keyman fish bolts",
+    "keyman lubrication",
+    "keyman inspection of joggled fish plates",
+    "greasing by keyman"
+   ],
+   "statement": "Keyman duties and track greasing provisions are governed by **IRPWM 2024 (ACS 1-14) Para 116, 619, and 620**, alongside **USFD Manual Para 8.10**:\n\n1. **Daily Beat Inspection (Para 116)**:\n   While walking the beat daily, the Keyman must examine all track fittings and specifically look for defects such as:\n   • **Loose fish bolts** and **loose bolts on joggled fish plates**\n   • **Switch Expansion Joints (SEJ)** fittings and slide chairs\n   • Fittings in switches & crossings, girder bridges, and open top culverts\n   • Broken or notched sleepers, broken plates or tie bars.\n\n2. **Immediate Tightening & Defect Reporting (Para 116)**:\n   • The Keyman must tighten any loose fish bolts or joggled fish plate bolts found during the inspection.\n   • If fittings repeatedly work loose even after repeated attention, he must immediately report the matter to the **Gang Mate** and **JE/SSE/P.Way**.\n   • For severe defects (broken rail, cracked weld, or missing fittings), he must protect the line at once as per rules and report to the Station Master.\n\n3. **Special Watch on USFD-Marked Welds & Joggled Joints (Para 116(2) & USFD 8.10)**:\n   • The Keyman must keep a special daily watch on rails and welds marked for observation by the USFD testing team.\n   • Where joggled fish plates are clamped over defective welds (DFWR/DFWO) with 2 clamps, ensure clamps and bolts remain fully tightened and lubricated.\n\n4. **Periodic Joint Greasing & Lubrication Protocol (Para 619 & 620)**:\n   • All fish-plated joints and joggled fish plates must undergo systematic **annual dismantling and lubrication**.\n   • **Surface Preparation**: Fishing surfaces of rails and fishplates must be thoroughly scraped with wire brushes to remove rust, scale, and caked grease, cleaned with kerosene oil, and wiped dry.\n   • **Approved Lubricant**: Plumbago / Graphite grease conforming strictly to **IS:408** must be uniformly applied to fishing contact angles. Fish bolts and nuts must be oiled with black oil.\n   • **Fastener Care**: Fishplates must NEVER be hammered onto rails; bolts must be tightened uniformly from inside to outside.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_tongue_wear",
+   "question": "What is the permissible wear for 60kg tongue rails?",
+   "retired_before": true,
+   "keywords": [
+    "wear",
+    "tongue rail",
+    "permissible",
+    "vertical wear",
+    "lateral wear",
+    "limit"
+   ],
+   "statement": "Maximum permissible vertical wear on 60kg tongue rails is 6.0 mm; maximum lateral wear is 8.0 mm per IRPWM 2024 Para 429 and IRS:T-10.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_switch_throw",
+   "question": "What is the standard switch throw at the toe of curved switch?",
+   "retired_before": false,
+   "keywords": [
+    "throw",
+    "toe",
+    "switch opening",
+    "stroke",
+    "opening at toe",
+    "clearance at toe"
+   ],
+   "statement": "Standard switch opening at the toe of switch is 160 mm (-0 mm, +3 mm), giving an operating tolerance window of 160.0 to 163.0 mm per RDSO/T-6155 Note 12.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_check_rail",
+   "question": "What is the check rail clearance limit for 1:12 BG turnouts?",
+   "retired_before": true,
+   "keywords": [
+    "check rail",
+    "clearance",
+    "crossing clearance",
+    "41",
+    "45",
+    "flange clearance"
+   ],
+   "statement": "Check rail clearance at the crossing nose must be maintained between 41.0 mm and 45.0 mm per IRPWM Para 429 and IRS:T-10.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_rubber_pad_spec",
+   "question": "Which IRS specification governs sleeper rubber pads?",
+   "retired_before": false,
+   "keywords": [
+    "rubber pad",
+    "grsp",
+    "composite",
+    "specification",
+    "governs",
+    "standard",
+    "pad"
+   ],
+   "statement": "Grooved Rubber Sole Pads (GRSP 6mm & 10mm composite) are governed by IRS:T-46:2020 and layout standard RDSO/T-6154.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_erc_mkv_toe_load",
+   "question": "What is the toe load standard for ERC Mk-V fasteners?",
+   "retired_before": false,
+   "keywords": [
+    "erc",
+    "toe load",
+    "elastic rail clip",
+    "clip",
+    "fastener",
+    "kg",
+    "mkv",
+    "mk-v"
+   ],
+   "statement": "ERC Mk-V High-Toe-Load Elastic Rail Clips require a nominal toe clamping load of 1200 to 1500 kg (minimum 1200 kg in service) governed by IRS:T-12:2009 / RDSO/T-5919.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_usfd_testing",
+   "question": "What is the USFD testing protocol for curved switches?",
+   "retired_before": false,
+   "keywords": [
+    "usfd",
+    "ultrasonic",
+    "scan",
+    "testing",
+    "flaw",
+    "inspection",
+    "probe",
+    "frequency"
+   ],
+   "statement": "USFD testing mandates 3-Zone ultrasonic scanning of machined tongue rails (Zone 1: head, Zone 2: web, Zone 3: foot) using 70° and 0° normal probes every 3 months or 10 GMT per USFD Manual 2026 Chapter 10.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_alt11_changes",
+   "question": "What was changed in Alt 11 for T-6155?",
+   "retired_before": false,
+   "keywords": [
+    "alt 11",
+    "alteration 11",
+    "changed in alt 11",
+    "revision 11",
+    "alt11",
+    "difference"
+   ],
+   "statement": "Alteration 11 (2018) introduced 222 mm drop for Detail 'B' Flat Tie Bars, standardized HTS 25x310 mm fishbolts with split pins, and mandated 10% LIST-A depot spares buffer under Note 28.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_lista_procurement",
+   "question": "How are LIST-A spares calculated for 10 turnout sets?",
+   "retired_before": false,
+   "keywords": [
+    "buffer",
+    "list-a",
+    "procurement",
+    "spares buffer",
+    "sets",
+    "how many spares",
+    "order"
+   ],
+   "statement": "Under Note 28 mandate, 10% wear buffer is added to LIST-A components: 10 sets require 20 base Detail 'B' bars + ceil(20 * 0.10) = 2 buffer, totaling 22 units.",
+   "status": "DERIVED"
+  },
+  {
+   "id": "qa_star_crack_mitigation",
+   "question": "What are the mitigations for bolt hole star cracks?",
+   "retired_before": false,
+   "keywords": [
+    "star crack",
+    "bolt hole",
+    "mitigation",
+    "fracture",
+    "failure mode",
+    "crack",
+    "bolt"
+   ],
+   "statement": "Immediate remedial action requires clamping joggled fishplates over the affected bolt hole, imposing 30 km/h speed restriction, and scheduling rail renewal within 48 hours per USFD Chapter 10.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_greasing_provisions",
+   "question": "What are the provisions of greasing of joggled fish plates?",
+   "retired_before": true,
+   "keywords": [
+    "provisions",
+    "greasing",
+    "joggled",
+    "fish plates",
+    "fish plate",
+    "lubrication",
+    "greasing of joggled fish plates",
+    "joggled fishplate greasing"
+   ],
+   "statement": "Provisions for greasing and maintenance of joggled fish plates & rail joints (governed by IRPWM Paras 619, 620, 206, 2243, 307, 349 and USFD Para 8.10) mandate:\n\n1. Surface Cleaning (Para 619): All fishing surfaces of rails and joggled fishplates must be thoroughly scraped with wire brushes to remove rust, scale, and caked grease, cleaned with kerosene oil, and wiped dry before greasing.\n2. Approved Lubricant (Para 619): Plumbago / Graphite grease conforming strictly to IS:408 must be uniformly applied to fishing contact angles and fishbolt threads.\n3. Annual Schedule (Para 619): Mandatory annual joint dismantling and lubrication schedule. In temperature-extreme sections, work must be completed before summer/winter extremes.\n4. Fastener Torque & Care (Para 620): Fishplates must NEVER be hammered onto rail fishing surfaces. Fish bolts must be tightened uniformly from inside pairs to outside pairs with specified box spanners.\n5. Clamping & Speed Restrictions (Paras 307, 349, 618 & USFD 8.10): Joggled fishplates (RDSO/T-5849 for 60kg, T-5848 for 52kg, EDO/T-2246 for 75mm gap) with a minimum of 2 tight clamps must be maintained over un-tested/defective AT welds (DFWR/DFWO) and rail fractures allowing 30 km/h restricted speed until permanent renewal.",
+   "status": "CURATED_UNREVIEWED"
+  },
+  {
+   "id": "qa_greasing_mention",
+   "question": "In which clauses is greasing mentioned?",
+   "retired_before": true,
+   "keywords": [
+    "in which",
+    "greasing is mentioned",
+    "where is greasing",
+    "which clauses",
+    "greasing mentioned",
+    "lubrication mentioned",
+    "in which greasing"
+   ],
+   "statement": "Greasing and lubrication provisions are specified across 70 clauses in 6 statutory Indian Railways manuals, governing 5 key track subsystems:\n\n1. Rail Joints & Fishplates (IRPWM Ch 6):\n   • Para 619: Lubrication of Rail Joints — Annual wire brushing, kerosene cleaning, graphite grease to IS:408.\n   • Para 620: Maintenance of Rail Joints — Oiling of fishbolts, uniform tightening, prohibition of hammering fishplates.\n   • Para 116: Duties of Keyman — Daily beat patrol inspection and oiling/greasing of joints.\n\n2. Joggled Fish Plates & Weld Protection (IRPWM & USFD):\n   • Para 206 & 2243: Standard Joggled Fishplates (RDSO/T-5849 60kg, T-5848 52kg, EDO/T-2246 75mm gap).\n   • Para 307 & USFD Para 8.10: Mandatory joggled fishplate clamping with 2 clamps over un-tested/defective AT welds.\n   • Para 349 & 618: Emergency clamping of fractured rails allowing 30 km/h restricted train movement.\n\n3. Curves & Gauge Face (IRPWM Ch 4):\n   • Para 424: Lubrication of Outer Rail on Curves — Side-wear mitigation using track-mounted lubricators.\n\n4. Switches & Slide Chairs (IRPWM Ch 4 & STMM):\n   • Para 429(2): Lubrication of slide chairs under switch tongue rails for friction-free point motor operation.\n\n5. Switch Expansion Joints (SEJ) & Ultrasonic Testing (IRPWM Ch 3 & USFD):\n   • Para 322: SEJ slide chair greasing for free thermal expansion of LWR.\n   • USFD Para 8.2.4 & 9.3: Grease/oil couplants for ultrasonic rail flaw detection probes.",
+   "status": "CURATED_UNREVIEWED"
+  }
+ ]
+}
