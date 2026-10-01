@@ -2287,3 +2287,20 @@ Before and after for any phase: (a) five people from the target group each ask f
 ### 39.6 Needed from you
 
 Pick three ideas from 39.4; name three to five people who can try the assistant for twenty minutes and what devices they use (phone, tablet, office PC), which decides whether Phase 5 comes before Phase 2; say whether Hindi support matters now.
+
+## 40. Phase-by-phase completion plan (2026-10-01)
+
+Rule: a phase is closed only when its exit criterion in §26 has a reproducible command or test and the master records it. One phase at a time; "Next sprint" continues the open phase. Status figures are estimates from §26, §37 and §38, not measurements.
+
+| Order | Phase | Now | Work to close it | Done when (test) | Needs from the owner |
+|---|---|---|---|---|---|
+| 1 | **P1** browsing | ~90% | Tick every IRPWM pilot line in §28 with a command or test; run the same checklist for the other five manuals; fix gaps the checklist finds. | `scripts/pilot_checklist.py` (new) prints PASS for all six manuals; Gate in `validate_all`. | None. |
+| 2 | **P2** evidence and references | ~85% | Broken and ambiguous reference report in the UI (145 not found, 19 ambiguous); fix extractable ones; keep the rest as listed, honest gaps; page crops for every clause. | Gate: every unresolved reference listed with a reason; crop exists or is explained for 1,172 clauses. | Optional: decide the 19 ambiguous references. |
+| 3 | **P7** reliability, learning | ~45% | Flashcards and quiz generated only from cited paragraphs, replacing the hand-authored quiz and its made-up certificate id; review queue in the app; zero-result queries feed the queue; weekly metrics file. | Every card links to a clause id and page (test); training view has no hand-written facts. | Review answers: 50 to 100 real questions from engineers across all six manuals, two people labelling. |
+| 4 | **P6** grounded answers | ~55% | Answer each part of a multi-part question; revision and applicability notes per answer; conflict flags; citation verifier test over all shown text; optional offline rephrase (P6.2) only if the verifier rejects seeded hallucinations. | Real-question set: at least 75% fully answered, none refused wrongly; verifier test passes. | The real questions above; approval of synonym additions (PWI to JE/SSE/P.Way and similar). |
+| 5 | **P5** hybrid retrieval | ~60% | Metadata filters in the UI; graph proximity as a ranking signal; semantic layer only if the real-question set shows ranking misses that words cannot fix (decision rule recorded). | Recall at 5 of at least 0.90 on the real set. | None beyond the real questions. |
+| 6 | **P3** drawings | ~45% | Notes, BOM and dimension extraction from drawing sheets; revision comparison; replace the six hand-made drawing nodes; gallery page only if wanted. Cited drawings without a sheet stay listed as missing. | Every drawing node has evidence on a sheet or is marked missing; revision diff test. | The missing drawing sheets (99 of 103 cited numbers have none); decision on the gallery. |
+| 7 | **P4** engineering graph | ~5% | Typed relationship filters, dependency trace, failure analysis, path finding and why-connected on the canonical graph, in the simple home page's graph. | Questions such as "what depends on X" answered with a path and evidence (tests). | Which relationship questions engineers actually ask. |
+| 8 | **P8** optional | 0% | Only after phases 1 to 7 and only the parts that the verifier can check. | n/a | Go or no-go. |
+
+Cross-cutting, runs alongside every phase: human review of paragraphs through packets (only 12 of 1,171 reviewed), reported in `reports/review_accuracy.json`; the interface plan in §39 (Phases 2, 4 to 7) follows the data phases, and the three out-of-the-box ideas stay undecided until the owner picks.
