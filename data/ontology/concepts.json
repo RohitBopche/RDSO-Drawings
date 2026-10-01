@@ -1,0 +1,1703 @@
+{
+ "about": "Curated concept lexicon for the track manuals. A concept is a name for something the manuals talk about; the taxonomy links (is_a, part_of) are curated here, while every mention of a concept is found in the manual text with exact offsets by scripts/build_entities.py. Aliases are matched as whole words, case-insensitively unless written in capitals (acronyms), with an optional plural s. Add a concept by adding a row; rebuild.",
+ "classes": [
+  "Component",
+  "Material",
+  "Track structure",
+  "Geometry",
+  "Parameter",
+  "Defect",
+  "Test method",
+  "Welding",
+  "Maintenance activity",
+  "Machine",
+  "Role",
+  "Location",
+  "Safety"
+ ],
+ "concepts": [
+  {
+   "id": "rail",
+   "label": "Rail",
+   "class": "Component",
+   "aliases": [
+    "rail",
+    "rails"
+   ]
+  },
+  {
+   "id": "rail_head",
+   "label": "Rail head",
+   "class": "Component",
+   "part_of": "rail",
+   "aliases": [
+    "rail head",
+    "head of rail",
+    "head of the rail"
+   ]
+  },
+  {
+   "id": "rail_web",
+   "label": "Rail web",
+   "class": "Component",
+   "part_of": "rail",
+   "aliases": [
+    "rail web",
+    "web of rail",
+    "web of the rail"
+   ]
+  },
+  {
+   "id": "rail_foot",
+   "label": "Rail foot",
+   "class": "Component",
+   "part_of": "rail",
+   "aliases": [
+    "rail foot",
+    "foot of rail",
+    "foot of the rail"
+   ]
+  },
+  {
+   "id": "rail_end",
+   "label": "Rail end",
+   "class": "Component",
+   "part_of": "rail",
+   "aliases": [
+    "rail end",
+    "rail ends",
+    "end of rail"
+   ]
+  },
+  {
+   "id": "rail_profile",
+   "label": "Rail section / profile",
+   "class": "Component",
+   "is_a": "rail",
+   "aliases": [
+    "rail section",
+    "rail profile",
+    "rail sections",
+    "60 kg rail",
+    "52 kg rail",
+    "90 R rail",
+    "90 UTS rail",
+    "880 grade rail",
+    "1080 grade rail"
+   ]
+  },
+  {
+   "id": "tongue_rail",
+   "label": "Tongue rail",
+   "class": "Component",
+   "is_a": "rail",
+   "part_of": "switch",
+   "aliases": [
+    "tongue rail",
+    "switch rail"
+   ]
+  },
+  {
+   "id": "stock_rail",
+   "label": "Stock rail",
+   "class": "Component",
+   "is_a": "rail",
+   "part_of": "switch",
+   "aliases": [
+    "stock rail"
+   ]
+  },
+  {
+   "id": "check_rail",
+   "label": "Check rail",
+   "class": "Component",
+   "is_a": "rail",
+   "aliases": [
+    "check rail"
+   ]
+  },
+  {
+   "id": "wing_rail",
+   "label": "Wing rail",
+   "class": "Component",
+   "is_a": "rail",
+   "part_of": "crossing",
+   "aliases": [
+    "wing rail"
+   ]
+  },
+  {
+   "id": "lwr",
+   "label": "Long welded rail (LWR)",
+   "class": "Track structure",
+   "is_a": "welded_track",
+   "aliases": [
+    "LWR",
+    "long welded rail",
+    "long welded rails"
+   ]
+  },
+  {
+   "id": "cwr",
+   "label": "Continuous welded rail (CWR)",
+   "class": "Track structure",
+   "is_a": "welded_track",
+   "aliases": [
+    "CWR",
+    "continuous welded rail"
+   ]
+  },
+  {
+   "id": "swr",
+   "label": "Short welded rail (SWR)",
+   "class": "Track structure",
+   "is_a": "welded_track",
+   "aliases": [
+    "SWR",
+    "short welded rail"
+   ]
+  },
+  {
+   "id": "welded_track",
+   "label": "Welded track",
+   "class": "Track structure",
+   "aliases": [
+    "welded track",
+    "welded rail",
+    "welded rails",
+    "welded rail panel",
+    "welded panel"
+   ]
+  },
+  {
+   "id": "track",
+   "label": "Track",
+   "class": "Track structure",
+   "aliases": [
+    "track"
+   ]
+  },
+  {
+   "id": "permanent_way",
+   "label": "Permanent way",
+   "class": "Track structure",
+   "aliases": [
+    "permanent way",
+    "P.Way",
+    "P-Way"
+   ]
+  },
+  {
+   "id": "plain_track",
+   "label": "Plain track",
+   "class": "Track structure",
+   "is_a": "track",
+   "aliases": [
+    "plain track"
+   ]
+  },
+  {
+   "id": "curve",
+   "label": "Curve",
+   "class": "Geometry",
+   "aliases": [
+    "curve",
+    "curves",
+    "curved track"
+   ]
+  },
+  {
+   "id": "transition",
+   "label": "Transition curve",
+   "class": "Geometry",
+   "part_of": "curve",
+   "aliases": [
+    "transition curve"
+   ]
+  },
+  {
+   "id": "turnout",
+   "label": "Turnout",
+   "class": "Track structure",
+   "aliases": [
+    "turnout",
+    "turnouts",
+    "turn-out",
+    "turn-outs"
+   ]
+  },
+  {
+   "id": "points_crossings",
+   "label": "Points and crossings",
+   "class": "Track structure",
+   "aliases": [
+    "points and crossings",
+    "points and crossing",
+    "point and crossing",
+    "P&C",
+    "points & crossings"
+   ]
+  },
+  {
+   "id": "switch",
+   "label": "Switch",
+   "class": "Component",
+   "part_of": "turnout",
+   "aliases": [
+    "switch",
+    "switches"
+   ]
+  },
+  {
+   "id": "crossing",
+   "label": "Crossing (frog)",
+   "class": "Component",
+   "part_of": "turnout",
+   "aliases": [
+    "crossing",
+    "crossings",
+    "frog",
+    "frogs",
+    "nose of crossing"
+   ]
+  },
+  {
+   "id": "level_crossing",
+   "label": "Level crossing",
+   "class": "Location",
+   "aliases": [
+    "level crossing",
+    "level crossings",
+    "LC gate",
+    "LC gates"
+   ]
+  },
+  {
+   "id": "sej",
+   "label": "Switch expansion joint (SEJ)",
+   "class": "Component",
+   "part_of": "welded_track",
+   "aliases": [
+    "SEJ",
+    "switch expansion joint",
+    "switch expansion joints"
+   ]
+  },
+  {
+   "id": "sleeper",
+   "label": "Sleeper",
+   "class": "Component",
+   "aliases": [
+    "sleeper",
+    "sleepers"
+   ]
+  },
+  {
+   "id": "psc_sleeper",
+   "label": "PSC sleeper",
+   "class": "Component",
+   "is_a": "sleeper",
+   "aliases": [
+    "PSC sleeper",
+    "PSC sleepers",
+    "prestressed concrete sleeper",
+    "pre-stressed concrete sleeper",
+    "concrete sleeper",
+    "concrete sleepers"
+   ]
+  },
+  {
+   "id": "steel_sleeper",
+   "label": "Steel sleeper",
+   "class": "Component",
+   "is_a": "sleeper",
+   "aliases": [
+    "steel sleeper",
+    "steel sleepers",
+    "steel trough sleeper",
+    "ST sleeper"
+   ]
+  },
+  {
+   "id": "wooden_sleeper",
+   "label": "Wooden sleeper",
+   "class": "Component",
+   "is_a": "sleeper",
+   "aliases": [
+    "wooden sleeper",
+    "wooden sleepers",
+    "timber sleeper",
+    "timber sleepers"
+   ]
+  },
+  {
+   "id": "cast_iron_sleeper",
+   "label": "Cast iron sleeper",
+   "class": "Component",
+   "is_a": "sleeper",
+   "aliases": [
+    "CST-9 sleeper",
+    "cast iron sleeper",
+    "cast iron sleepers"
+   ]
+  },
+  {
+   "id": "fastening",
+   "label": "Rail fastening",
+   "class": "Component",
+   "aliases": [
+    "rail fastening",
+    "rail fastenings",
+    "fastening",
+    "fastenings",
+    "fittings and fastenings",
+    "fastenings and fittings"
+   ]
+  },
+  {
+   "id": "elastic_clip",
+   "label": "Elastic rail clip",
+   "class": "Component",
+   "is_a": "fastening",
+   "aliases": [
+    "elastic rail clip",
+    "elastic rail clips",
+    "elastic clip",
+    "elastic clips",
+    "ERC",
+    "ERCs",
+    "rail clip",
+    "rail clips",
+    "e-clip"
+   ]
+  },
+  {
+   "id": "rail_pad",
+   "label": "Rail pad",
+   "class": "Component",
+   "part_of": "fastening",
+   "aliases": [
+    "rail pad",
+    "rail pads",
+    "grooved rubber sole plate",
+    "GRSP",
+    "rubber pad",
+    "rubber pads"
+   ]
+  },
+  {
+   "id": "liner",
+   "label": "Liner",
+   "class": "Component",
+   "part_of": "fastening",
+   "aliases": [
+    "liner",
+    "liners"
+   ]
+  },
+  {
+   "id": "fish_plate",
+   "label": "Fish plate",
+   "class": "Component",
+   "part_of": "rail_joint",
+   "aliases": [
+    "fish plate",
+    "fish plates",
+    "fishplate",
+    "fishplates",
+    "fish-plate",
+    "fish-plates",
+    "fish plated"
+   ]
+  },
+  {
+   "id": "fish_bolt",
+   "label": "Fish bolt",
+   "class": "Component",
+   "part_of": "rail_joint",
+   "aliases": [
+    "fish bolt",
+    "fish bolts"
+   ]
+  },
+  {
+   "id": "rail_joint",
+   "label": "Rail joint",
+   "class": "Component",
+   "aliases": [
+    "rail joint",
+    "rail joints",
+    "fish plated joint",
+    "fish plated joints",
+    "insulated joint",
+    "insulated rail joint",
+    "glued joint",
+    "glued joints"
+   ]
+  },
+  {
+   "id": "sole_plate",
+   "label": "Bearing plate / sole plate",
+   "class": "Component",
+   "part_of": "fastening",
+   "aliases": [
+    "bearing plate",
+    "bearing plates",
+    "sole plate",
+    "sole plates",
+    "canted plate",
+    "slide chair",
+    "slide chairs"
+   ]
+  },
+  {
+   "id": "ballast",
+   "label": "Ballast",
+   "class": "Material",
+   "part_of": "track",
+   "aliases": [
+    "ballast",
+    "ballast cushion",
+    "ballast section"
+   ]
+  },
+  {
+   "id": "shoulder_ballast",
+   "label": "Shoulder ballast",
+   "class": "Material",
+   "part_of": "ballast",
+   "aliases": [
+    "shoulder ballast",
+    "ballast shoulder"
+   ]
+  },
+  {
+   "id": "formation",
+   "label": "Formation / subgrade",
+   "class": "Track structure",
+   "part_of": "track",
+   "aliases": [
+    "subgrade",
+    "sub-grade",
+    "embankment",
+    "embankments",
+    "formation level",
+    "formation levels",
+    "formation width",
+    "formation of the track",
+    "track formation"
+   ]
+  },
+  {
+   "id": "drainage",
+   "label": "Drainage",
+   "class": "Track structure",
+   "aliases": [
+    "drainage",
+    "water logging",
+    "waterlogging"
+   ]
+  },
+  {
+   "id": "bridge",
+   "label": "Bridge",
+   "class": "Track structure",
+   "aliases": [
+    "bridge",
+    "bridges",
+    "girder bridge",
+    "girder bridges",
+    "bridge approaches"
+   ]
+  },
+  {
+   "id": "gauge",
+   "label": "Gauge",
+   "class": "Geometry",
+   "aliases": [
+    "gauge",
+    "gauges",
+    "track gauge"
+   ]
+  },
+  {
+   "id": "cant",
+   "label": "Cant (superelevation)",
+   "class": "Geometry",
+   "aliases": [
+    "cant",
+    "cants",
+    "superelevation",
+    "super-elevation",
+    "super elevation",
+    "cant deficiency",
+    "cant excess"
+   ]
+  },
+  {
+   "id": "alignment",
+   "label": "Alignment",
+   "class": "Geometry",
+   "aliases": [
+    "alignment",
+    "versine",
+    "versines"
+   ]
+  },
+  {
+   "id": "twist",
+   "label": "Twist",
+   "class": "Geometry",
+   "aliases": [
+    "twist",
+    "twists"
+   ]
+  },
+  {
+   "id": "unevenness",
+   "label": "Unevenness / surface",
+   "class": "Geometry",
+   "aliases": [
+    "unevenness",
+    "track surface",
+    "cross level",
+    "cross-level",
+    "longitudinal level"
+   ]
+  },
+  {
+   "id": "track_geometry",
+   "label": "Track geometry",
+   "class": "Geometry",
+   "aliases": [
+    "track geometry",
+    "geometry of track",
+    "geometric parameters"
+   ]
+  },
+  {
+   "id": "gradient",
+   "label": "Gradient",
+   "class": "Geometry",
+   "aliases": [
+    "gradient",
+    "gradients"
+   ]
+  },
+  {
+   "id": "radius",
+   "label": "Radius of curvature",
+   "class": "Parameter",
+   "aliases": [
+    "radius",
+    "radii",
+    "degree of curve"
+   ]
+  },
+  {
+   "id": "speed",
+   "label": "Speed",
+   "class": "Parameter",
+   "aliases": [
+    "speed",
+    "speeds",
+    "permissible speed",
+    "maximum permissible speed",
+    "kmph"
+   ]
+  },
+  {
+   "id": "speed_restriction",
+   "label": "Speed restriction",
+   "class": "Safety",
+   "aliases": [
+    "speed restriction",
+    "speed restrictions",
+    "caution order",
+    "caution orders",
+    "temporary speed restriction",
+    "TSR"
+   ]
+  },
+  {
+   "id": "rail_temperature",
+   "label": "Rail temperature",
+   "class": "Parameter",
+   "aliases": [
+    "rail temperature",
+    "rail temperatures",
+    "temperature of rail",
+    "stress free temperature",
+    "stress-free temperature",
+    "destressing temperature"
+   ]
+  },
+  {
+   "id": "creep",
+   "label": "Creep",
+   "class": "Defect",
+   "aliases": [
+    "creep",
+    "creepage"
+   ]
+  },
+  {
+   "id": "buckling",
+   "label": "Buckling",
+   "class": "Defect",
+   "aliases": [
+    "buckling",
+    "buckle",
+    "buckled track",
+    "sun kink",
+    "sun kinks"
+   ]
+  },
+  {
+   "id": "rail_fracture",
+   "label": "Rail fracture / broken rail",
+   "class": "Defect",
+   "aliases": [
+    "rail fracture",
+    "rail fractures",
+    "fracture",
+    "fractures",
+    "fractured rail",
+    "broken rail",
+    "broken rails",
+    "rail failure",
+    "rail failures",
+    "rail breakage"
+   ]
+  },
+  {
+   "id": "weld_failure",
+   "label": "Weld failure",
+   "class": "Defect",
+   "aliases": [
+    "weld failure",
+    "weld failures",
+    "failed weld",
+    "failed welds",
+    "broken weld",
+    "weld fracture"
+   ]
+  },
+  {
+   "id": "rail_wear",
+   "label": "Rail wear",
+   "class": "Defect",
+   "aliases": [
+    "rail wear",
+    "wear of rail",
+    "head wear",
+    "side wear",
+    "vertical wear",
+    "lateral wear"
+   ]
+  },
+  {
+   "id": "corrugation",
+   "label": "Corrugation",
+   "class": "Defect",
+   "aliases": [
+    "corrugation",
+    "corrugations"
+   ]
+  },
+  {
+   "id": "squat",
+   "label": "Squats / surface defects",
+   "class": "Defect",
+   "aliases": [
+    "squat",
+    "squats",
+    "shelling",
+    "spalling",
+    "flaking",
+    "head check",
+    "head checks",
+    "gauge corner cracking"
+   ]
+  },
+  {
+   "id": "flaw",
+   "label": "Flaw / internal defect",
+   "class": "Defect",
+   "aliases": [
+    "flaw",
+    "flaws",
+    "internal defect",
+    "internal defects",
+    "transverse defect",
+    "transverse defects",
+    "detail fracture",
+    "defective rail",
+    "defective rails",
+    "defective weld",
+    "defective welds"
+   ]
+  },
+  {
+   "id": "corrosion",
+   "label": "Corrosion",
+   "class": "Defect",
+   "aliases": [
+    "corrosion",
+    "corroded",
+    "rusting",
+    "rust"
+   ]
+  },
+  {
+   "id": "scabbing",
+   "label": "Scabbing / burns",
+   "class": "Defect",
+   "aliases": [
+    "wheel burn",
+    "wheel burns",
+    "engine burn",
+    "engine burns",
+    "scabbing",
+    "scab"
+   ]
+  },
+  {
+   "id": "skid",
+   "label": "Hunting / derailment",
+   "class": "Safety",
+   "aliases": [
+    "derailment",
+    "derailments",
+    "derail",
+    "accident",
+    "accidents"
+   ]
+  },
+  {
+   "id": "usfd",
+   "label": "Ultrasonic flaw detection (USFD)",
+   "class": "Test method",
+   "aliases": [
+    "USFD",
+    "ultrasonic flaw detection",
+    "ultrasonic testing",
+    "ultrasonic test",
+    "ultrasonic flaw detector",
+    "ultrasonic flaw detectors",
+    "flaw detector",
+    "flaw detectors"
+   ]
+  },
+  {
+   "id": "probe",
+   "label": "Ultrasonic probe",
+   "class": "Test method",
+   "part_of": "usfd",
+   "aliases": [
+    "probe",
+    "probes",
+    "single crystal probe",
+    "double crystal probe",
+    "angle probe",
+    "0 degree probe",
+    "70 degree probe",
+    "37 degree probe",
+    "transducer"
+   ]
+  },
+  {
+   "id": "dpt",
+   "label": "Dye penetrant / magnetic particle test",
+   "class": "Test method",
+   "aliases": [
+    "dye penetrant",
+    "dye penetrant test",
+    "DPT",
+    "magnetic particle",
+    "magnetic particle test",
+    "MPT"
+   ]
+  },
+  {
+   "id": "visual_inspection",
+   "label": "Visual inspection",
+   "class": "Test method",
+   "aliases": [
+    "visual inspection",
+    "visual examination",
+    "visually inspected"
+   ]
+  },
+  {
+   "id": "inspection",
+   "label": "Inspection",
+   "class": "Maintenance activity",
+   "aliases": [
+    "inspection",
+    "inspections",
+    "inspect",
+    "inspected",
+    "patrolling",
+    "patrol",
+    "trolley inspection",
+    "foot plate inspection"
+   ]
+  },
+  {
+   "id": "tamping",
+   "label": "Tamping",
+   "class": "Maintenance activity",
+   "aliases": [
+    "tamping",
+    "tamped",
+    "packing",
+    "measured shovel packing",
+    "MSP",
+    "through packing",
+    "spot packing"
+   ]
+  },
+  {
+   "id": "deep_screening",
+   "label": "Deep screening / ballast cleaning",
+   "class": "Maintenance activity",
+   "aliases": [
+    "deep screening",
+    "ballast cleaning",
+    "screening",
+    "screened ballast"
+   ]
+  },
+  {
+   "id": "rail_grinding",
+   "label": "Rail grinding",
+   "class": "Maintenance activity",
+   "aliases": [
+    "rail grinding",
+    "grinding",
+    "ground rail",
+    "profile grinding",
+    "re-profiling"
+   ]
+  },
+  {
+   "id": "track_renewal",
+   "label": "Track renewal",
+   "class": "Maintenance activity",
+   "aliases": [
+    "track renewal",
+    "track renewals",
+    "renewal",
+    "renewals",
+    "relaying",
+    "re-laying",
+    "complete track renewal",
+    "through sleeper renewal",
+    "through rail renewal"
+   ]
+  },
+  {
+   "id": "destressing",
+   "label": "Destressing",
+   "class": "Maintenance activity",
+   "aliases": [
+    "destressing",
+    "de-stressing",
+    "destressed",
+    "stress relieving",
+    "stress-relieving"
+   ]
+  },
+  {
+   "id": "lubrication",
+   "label": "Lubrication",
+   "class": "Maintenance activity",
+   "aliases": [
+    "lubrication",
+    "lubricant",
+    "lubricants",
+    "lubricate",
+    "greasing",
+    "grease"
+   ]
+  },
+  {
+   "id": "gauging",
+   "label": "Gauging and measurement",
+   "class": "Maintenance activity",
+   "aliases": [
+    "gauging",
+    "track recording",
+    "track recording car",
+    "oscillograph",
+    "OMS",
+    "oscillation monitoring system",
+    "TRC"
+   ]
+  },
+  {
+   "id": "lifting",
+   "label": "Lifting and lining",
+   "class": "Maintenance activity",
+   "aliases": [
+    "lifting",
+    "general lift",
+    "slewing",
+    "point lining",
+    "track lining"
+   ]
+  },
+  {
+   "id": "weld",
+   "label": "Weld",
+   "class": "Welding",
+   "aliases": [
+    "weld",
+    "welds",
+    "welded joint",
+    "welded joints",
+    "joint weld"
+   ]
+  },
+  {
+   "id": "welding",
+   "label": "Rail welding",
+   "class": "Welding",
+   "aliases": [
+    "welding",
+    "welding of rails",
+    "rail welding"
+   ]
+  },
+  {
+   "id": "fb_welding",
+   "label": "Flash butt welding",
+   "class": "Welding",
+   "is_a": "welding",
+   "aliases": [
+    "flash butt welding",
+    "flash butt weld",
+    "flash butt welds",
+    "flash-butt welding",
+    "flash-butt",
+    "FBW",
+    "FBW plant",
+    "flash butt"
+   ]
+  },
+  {
+   "id": "at_welding",
+   "label": "Aluminothermic welding",
+   "class": "Welding",
+   "is_a": "welding",
+   "aliases": [
+    "aluminothermic welding",
+    "alumino-thermic welding",
+    "alumino thermic welding",
+    "aluminothermic weld",
+    "aluminothermic welds",
+    "AT welding",
+    "AT weld",
+    "AT welds",
+    "thermit welding",
+    "thermit weld",
+    "SKV",
+    "SKV welding",
+    "short preheat"
+   ]
+  },
+  {
+   "id": "gas_pressure_welding",
+   "label": "Gas pressure / arc welding",
+   "class": "Welding",
+   "is_a": "welding",
+   "aliases": [
+    "gas pressure welding",
+    "gas pressure weld",
+    "arc welding",
+    "manual metal arc welding",
+    "MMA welding",
+    "electric arc welding",
+    "enclosed arc welding",
+    "build up welding",
+    "build-up welding"
+   ]
+  },
+  {
+   "id": "welding_plant",
+   "label": "Welding plant",
+   "class": "Machine",
+   "aliases": [
+    "welding plant",
+    "welding plants",
+    "mobile flash butt welding plant",
+    "stationary welding plant",
+    "flash butt welding plant"
+   ]
+  },
+  {
+   "id": "weld_wear",
+   "label": "Dipped weld / weld hump",
+   "class": "Defect",
+   "aliases": [
+    "weld hump",
+    "dipped weld",
+    "dipped welds",
+    "dipped joint",
+    "dipped joints",
+    "weld geometry"
+   ]
+  },
+  {
+   "id": "preheat",
+   "label": "Preheating",
+   "class": "Welding",
+   "part_of": "welding",
+   "aliases": [
+    "preheating",
+    "preheat",
+    "pre-heating",
+    "pre-heat"
+   ]
+  },
+  {
+   "id": "crucible",
+   "label": "Crucible / mould / portion",
+   "class": "Welding",
+   "part_of": "at_welding",
+   "aliases": [
+    "crucible",
+    "crucibles",
+    "mould",
+    "moulds",
+    "welding portion",
+    "welding portions",
+    "thermit portion"
+   ]
+  },
+  {
+   "id": "tamping_machine",
+   "label": "Tamping machine",
+   "class": "Machine",
+   "is_a": "track_machine",
+   "aliases": [
+    "tamping machine",
+    "tamping machines",
+    "tamper",
+    "tampers",
+    "universal tamping machine",
+    "UNIMAT",
+    "duomatic",
+    "tie tamper"
+   ]
+  },
+  {
+   "id": "ballast_cleaning_machine",
+   "label": "Ballast cleaning machine",
+   "class": "Machine",
+   "is_a": "track_machine",
+   "aliases": [
+    "ballast cleaning machine",
+    "ballast cleaning machines",
+    "BCM",
+    "ballast cleaner",
+    "RM-80",
+    "CSM",
+    "cutter bar"
+   ]
+  },
+  {
+   "id": "grinding_machine",
+   "label": "Rail grinding machine",
+   "class": "Machine",
+   "is_a": "track_machine",
+   "aliases": [
+    "rail grinding machine",
+    "rail grinding machines",
+    "grinding machine",
+    "grinding machines",
+    "rail grinder",
+    "rail grinders",
+    "RGM"
+   ]
+  },
+  {
+   "id": "dynamic_stabiliser",
+   "label": "Dynamic track stabiliser",
+   "class": "Machine",
+   "is_a": "track_machine",
+   "aliases": [
+    "dynamic track stabiliser",
+    "dynamic track stabilizer",
+    "DTS",
+    "track stabiliser",
+    "stabiliser",
+    "stabilizer"
+   ]
+  },
+  {
+   "id": "track_machine",
+   "label": "Track machine",
+   "class": "Machine",
+   "aliases": [
+    "track machine",
+    "track machines",
+    "small track machine",
+    "small track machines",
+    "on-track machine",
+    "on track machine",
+    "on-track machines",
+    "heavy track machine",
+    "heavy track machines",
+    "mechanised maintenance",
+    "mechanized maintenance"
+   ]
+  },
+  {
+   "id": "rail_cutter",
+   "label": "Rail cutting / drilling machine",
+   "class": "Machine",
+   "is_a": "track_machine",
+   "aliases": [
+    "abrasive rail cutter",
+    "rail cutter",
+    "rail cutters",
+    "rail cutting machine",
+    "rail drilling machine",
+    "rail drilling machines",
+    "rail drill",
+    "rail drilling",
+    "rail saw"
+   ]
+  },
+  {
+   "id": "trolley",
+   "label": "Trolley / inspection vehicle",
+   "class": "Machine",
+   "aliases": [
+    "trolley",
+    "trolleys",
+    "motor trolley",
+    "motor trolleys",
+    "inspection carriage",
+    "light trolley"
+   ]
+  },
+  {
+   "id": "engine",
+   "label": "Engine (power unit)",
+   "class": "Machine",
+   "part_of": "track_machine",
+   "aliases": [
+    "engine",
+    "engines",
+    "diesel engine"
+   ]
+  },
+  {
+   "id": "hydraulic_system",
+   "label": "Hydraulic system",
+   "class": "Machine",
+   "part_of": "track_machine",
+   "aliases": [
+    "hydraulic system",
+    "hydraulic oil",
+    "hydraulic pump",
+    "hydraulic pumps",
+    "hydraulic circuit",
+    "hydraulics"
+   ]
+  },
+  {
+   "id": "fuel_system",
+   "label": "Fuel system",
+   "class": "Machine",
+   "part_of": "track_machine",
+   "aliases": [
+    "fuel system",
+    "fuel tank",
+    "fuel filter",
+    "fuel filters",
+    "diesel oil",
+    "fuel oil"
+   ]
+  },
+  {
+   "id": "air_system",
+   "label": "Air intake and cooling",
+   "class": "Machine",
+   "part_of": "track_machine",
+   "aliases": [
+    "air cleaner",
+    "air filter",
+    "air induction system",
+    "cooling system",
+    "radiator",
+    "coolant"
+   ]
+  },
+  {
+   "id": "poh",
+   "label": "Periodical overhaul (POH)",
+   "class": "Maintenance activity",
+   "aliases": [
+    "POH",
+    "periodical overhaul",
+    "periodic overhaul",
+    "schedule inspection"
+   ]
+  },
+  {
+   "id": "sse_way",
+   "label": "Senior Section Engineer / P.Way (SSE/P.Way)",
+   "class": "Role",
+   "aliases": [
+    "SSE/Way",
+    "SSE/P.Way",
+    "SSE/P Way",
+    "SSE (P.Way)",
+    "SSE/PWay",
+    "SSE/PW",
+    "SSE (PW)",
+    "SSE (Way)",
+    "senior section engineer",
+    "PWI",
+    "permanent way inspector",
+    "permanent way inspectors",
+    "JE/Way",
+    "JE/P.Way",
+    "JE/PW",
+    "JE (PW)",
+    "JE (P.Way)",
+    "assistant permanent way inspector",
+    "APWI"
+   ]
+  },
+  {
+   "id": "sse_tm",
+   "label": "SSE/JE Track Machine",
+   "class": "Role",
+   "aliases": [
+    "SSE/TM",
+    "SSE (TM)",
+    "JE/TM",
+    "JE (TM)",
+    "SSE/Track Machine",
+    "JE/Track Machine"
+   ]
+  },
+  {
+   "id": "sse_je",
+   "label": "SSE / JE (section engineer)",
+   "class": "Role",
+   "aliases": [
+    "SSE",
+    "JE",
+    "SSE/JE",
+    "junior engineer",
+    "section engineer"
+   ]
+  },
+  {
+   "id": "aen",
+   "label": "Assistant Divisional Engineer (ADEN / AEN)",
+   "class": "Role",
+   "aliases": [
+    "ADEN",
+    "AEN",
+    "assistant divisional engineer",
+    "assistant engineer",
+    "Assistant Executive Engineer"
+   ]
+  },
+  {
+   "id": "den",
+   "label": "Divisional Engineer (DEN / Sr.DEN)",
+   "class": "Role",
+   "aliases": [
+    "DEN",
+    "Sr.DEN",
+    "Sr. DEN",
+    "DEN/Co-ord",
+    "divisional engineer",
+    "senior divisional engineer",
+    "Sr.DEN/Co",
+    "Sr.DEN/C",
+    "Sr. DEN/Co-ord"
+   ]
+  },
+  {
+   "id": "dre",
+   "label": "Divisional Railway Manager (DRM)",
+   "class": "Role",
+   "aliases": [
+    "DRM",
+    "divisional railway manager",
+    "ADRM",
+    "additional divisional railway manager"
+   ]
+  },
+  {
+   "id": "ce",
+   "label": "Chief Engineer / CTE / PCE",
+   "class": "Role",
+   "aliases": [
+    "chief engineer",
+    "chief track engineer",
+    "principal chief engineer",
+    "CTE",
+    "PCE",
+    "CE/TM",
+    "CE/Track",
+    "CE (TM)",
+    "Chief Track Machine Engineer",
+    "CTE/TM"
+   ]
+  },
+  {
+   "id": "gang",
+   "label": "Gang / keyman / mate",
+   "class": "Role",
+   "aliases": [
+    "gang",
+    "gangs",
+    "gang mate",
+    "gang mates",
+    "keyman",
+    "keymen",
+    "gangman",
+    "gangmen",
+    "patrolman",
+    "patrolmen",
+    "trackman",
+    "trackmen",
+    "track man"
+   ]
+  },
+  {
+   "id": "driver",
+   "label": "Machine operator / driver",
+   "class": "Role",
+   "aliases": [
+    "operator",
+    "operators",
+    "machine operator",
+    "machine operators",
+    "machine driver",
+    "loco pilot",
+    "loco pilots",
+    "motorman",
+    "welder",
+    "welders",
+    "technician",
+    "technicians"
+   ]
+  },
+  {
+   "id": "station_master",
+   "label": "Station master",
+   "class": "Role",
+   "aliases": [
+    "station master",
+    "station masters",
+    "station manager",
+    "section controller",
+    "traffic controller"
+   ]
+  },
+  {
+   "id": "rdso",
+   "label": "RDSO",
+   "class": "Role",
+   "aliases": [
+    "RDSO",
+    "Research Designs and Standards Organisation",
+    "Research Designs & Standards Organisation"
+   ]
+  },
+  {
+   "id": "railway_board",
+   "label": "Railway Board",
+   "class": "Role",
+   "aliases": [
+    "Railway Board",
+    "Ministry of Railways"
+   ]
+  },
+  {
+   "id": "crs",
+   "label": "Commissioner of Railway Safety",
+   "class": "Role",
+   "aliases": [
+    "CRS",
+    "commissioner of railway safety",
+    "commissioner of railways safety"
+   ]
+  },
+  {
+   "id": "traffic_block",
+   "label": "Traffic block",
+   "class": "Safety",
+   "aliases": [
+    "traffic block",
+    "traffic blocks",
+    "power block",
+    "line block",
+    "block work",
+    "work under block",
+    "work in block"
+   ]
+  },
+  {
+   "id": "protection",
+   "label": "Protection of track / flagging",
+   "class": "Safety",
+   "aliases": [
+    "flagging",
+    "detonator",
+    "detonators",
+    "fog signal",
+    "fog signals",
+    "hand signal",
+    "hand signals",
+    "danger signal",
+    "danger signals",
+    "banner flag",
+    "banner flags",
+    "protecting the track"
+   ]
+  },
+  {
+   "id": "signal",
+   "label": "Signal",
+   "class": "Safety",
+   "aliases": [
+    "fixed signal",
+    "fixed signals",
+    "home signal",
+    "starter signal",
+    "distant signal",
+    "signalling",
+    "interlocking",
+    "track circuit",
+    "track circuits",
+    "axle counter",
+    "axle counters",
+    "block section",
+    "block sections"
+   ]
+  },
+  {
+   "id": "safety",
+   "label": "Safety",
+   "class": "Safety",
+   "aliases": [
+    "safety",
+    "safe working"
+   ]
+  },
+  {
+   "id": "station",
+   "label": "Station / yard",
+   "class": "Location",
+   "aliases": [
+    "station",
+    "stations",
+    "yard",
+    "yards",
+    "station yard",
+    "railway station",
+    "siding",
+    "sidings",
+    "loop line",
+    "loop lines"
+   ]
+  },
+  {
+   "id": "running_line",
+   "label": "Main / running line",
+   "class": "Location",
+   "aliases": [
+    "main line",
+    "main lines",
+    "running line",
+    "running lines",
+    "single line",
+    "double line",
+    "multiple line",
+    "goods line",
+    "passenger line"
+   ]
+  },
+  {
+   "id": "route_group",
+   "label": "Route / track classification",
+   "class": "Location",
+   "aliases": [
+    "group A",
+    "group B",
+    "group C",
+    "group D",
+    "group E",
+    "group R",
+    "route classification",
+    "high density network",
+    "HDN",
+    "golden quadrilateral"
+   ]
+  },
+  {
+   "id": "tunnel",
+   "label": "Tunnel",
+   "class": "Location",
+   "aliases": [
+    "tunnel",
+    "tunnels"
+   ]
+  },
+  {
+   "id": "depot",
+   "label": "Depot / workshop",
+   "class": "Location",
+   "aliases": [
+    "depot",
+    "depots",
+    "satellite depot",
+    "satellite depots",
+    "workshop",
+    "workshops",
+    "welding depot",
+    "welding depots",
+    "base depot"
+   ]
+  },
+  {
+   "id": "steel",
+   "label": "Steel / rail steel",
+   "class": "Material",
+   "aliases": [
+    "steel",
+    "rail steel",
+    "carbon steel",
+    "manganese steel",
+    "cast manganese steel",
+    "CMS",
+    "high tensile steel",
+    "alloy steel"
+   ]
+  },
+  {
+   "id": "concrete",
+   "label": "Concrete",
+   "class": "Material",
+   "aliases": [
+    "concrete",
+    "cement",
+    "cement concrete"
+   ]
+  },
+  {
+   "id": "timber",
+   "label": "Timber",
+   "class": "Material",
+   "aliases": [
+    "timber",
+    "wood",
+    "wooden",
+    "sal wood",
+    "teak"
+   ]
+  },
+  {
+   "id": "stone",
+   "label": "Stone / aggregate",
+   "class": "Material",
+   "aliases": [
+    "stone chips",
+    "aggregate",
+    "aggregates",
+    "crushed stone",
+    "stone ballast",
+    "blue metal"
+   ]
+  },
+  {
+   "id": "oil",
+   "label": "Oil / grease",
+   "class": "Material",
+   "aliases": [
+    "engine oil",
+    "lube oil",
+    "gear oil",
+    "oil seals",
+    "oil seal"
+   ]
+  },
+  {
+   "id": "weld_material",
+   "label": "Welding consumables",
+   "class": "Material",
+   "aliases": [
+    "welding rod",
+    "welding rods",
+    "electrode",
+    "electrodes",
+    "flux",
+    "welding wire",
+    "welding consumables",
+    "consumables",
+    "consumable"
+   ]
+  },
+  {
+   "id": "manual",
+   "label": "Manual / code / circular",
+   "class": "Safety",
+   "aliases": [
+    "manual",
+    "manuals",
+    "circular",
+    "circulars",
+    "correction slip",
+    "correction slips",
+    "advance correction slip",
+    "ACS"
+   ]
+  },
+  {
+   "id": "track_record",
+   "label": "Records and registers",
+   "class": "Safety",
+   "aliases": [
+    "register",
+    "registers",
+    "track register",
+    "history sheet",
+    "history sheets",
+    "joint register",
+    "failure report",
+    "failure reports"
+   ]
+  },
+  {
+   "id": "tool",
+   "label": "Tools and gauges",
+   "class": "Component",
+   "aliases": [
+    "straight edge",
+    "straight edges",
+    "feeler gauge",
+    "feeler gauges",
+    "spirit level",
+    "spirit levels",
+    "rail tongs",
+    "crow bar",
+    "crow bars",
+    "wrench",
+    "spanner",
+    "spanners"
+   ]
+  }
+ ]
+}

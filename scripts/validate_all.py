@@ -40,6 +40,7 @@ GATES = [
     ("Gate W: Evidence crops for every paragraph", [sys.executable, str(ROOT / "scripts" / "evidence_coverage_report.py"), "--check"]),
     ("Gate X: Unresolved cross-references explained", [sys.executable, str(ROOT / "scripts" / "crossref_diagnose.py"), "--check"]),
     ("Gate Z: Line-by-line coverage of every manual", [sys.executable, str(ROOT / "scripts" / "coverage_audit.py"), "--check"]),
+    ("Gate AA: Entity layer consistent with the text", [sys.executable, str(ROOT / "scripts" / "validate_entities.py")]),
     ("Gate Y: Citation verifier over all answers", [sys.executable, str(ROOT / "scripts" / "verify_answers.py")]),
     ("Gate V: Pilot checklist, six manuals", [sys.executable, str(ROOT / "scripts" / "pilot_checklist.py")]),
 ]

@@ -1,0 +1,971 @@
+{
+ "about": "Hand audit of 120 randomly drawn concept mentions in paragraphs (seed 20261001), read in context by one reviewer (the author of the lexicon, so not independent). correct = the words in the manual do refer to the concept. Taken before the lexicon fixes listed in notes_after.",
+ "sampled": 120,
+ "correct": 115,
+ "notes_after": [
+  "alias 'overhauling' removed from tamping",
+  "bare 'signal(s)' replaced by specific signal names"
+ ],
+ "rows": [
+  {
+   "source": "CLAUSE:IRPWM:CH_05:PARA_511",
+   "start": 704,
+   "end": 713,
+   "entity": "ENT:alignment",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_06:PARA_657",
+   "start": 1418,
+   "end": 1422,
+   "entity": "ENT:rdso",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_08:PARA_806",
+   "start": 815,
+   "end": 820,
+   "entity": "ENT:track",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_23:PARA_2303",
+   "start": 1333,
+   "end": 1339,
+   "entity": "ENT:safety",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_224",
+   "start": 2735,
+   "end": 2742,
+   "entity": "ENT:turnout",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_07:PARA_710",
+   "start": 8048,
+   "end": 8054,
+   "entity": "ENT:track",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_04:PARA_413",
+   "start": 1173,
+   "end": 1178,
+   "entity": "ENT:rail",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_09:PARA_913",
+   "start": 3305,
+   "end": 3320,
+   "entity": "ENT:level_crossing",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:USFD:CH_06:PARA_6_1",
+   "start": 150,
+   "end": 154,
+   "entity": "ENT:rail",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_4_3",
+   "start": 178,
+   "end": 202,
+   "entity": "ENT:usfd",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_304",
+   "start": 785,
+   "end": 795,
+   "entity": "ENT:at_welding",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_229",
+   "start": 29572,
+   "end": 29592,
+   "entity": "ENT:points_crossings",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_328",
+   "start": 4117,
+   "end": 4121,
+   "entity": "ENT:sej",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_04:PARA_403",
+   "start": 69,
+   "end": 75,
+   "entity": "ENT:curve",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1216",
+   "start": 1891,
+   "end": 1900,
+   "entity": "ENT:fuel_system",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_09:PARA_902",
+   "start": 334,
+   "end": 339,
+   "entity": "ENT:depot",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_01:PARA_114",
+   "start": 7015,
+   "end": 7024,
+   "entity": "ENT:gang",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_517",
+   "start": 13684,
+   "end": 13690,
+   "entity": "ENT:speed",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_322",
+   "start": 554,
+   "end": 559,
+   "entity": "ENT:track",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:FBW:CH_08:PARA_8_3",
+   "start": 10417,
+   "end": 10422,
+   "entity": "ENT:rail",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_354",
+   "start": 5080,
+   "end": 5087,
+   "entity": "ENT:sleeper",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_03:PARA_302",
+   "start": 534,
+   "end": 555,
+   "entity": "ENT:rail_cutter",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_08:PARA_843",
+   "start": 300,
+   "end": 305,
+   "entity": "ENT:rail",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_04:PARA_419",
+   "start": 6916,
+   "end": 6923,
+   "entity": "ENT:station",
+   "correct": false,
+   "note": "'station' here is a chainage point in a versine calculation"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_07:PARA_709",
+   "start": 1465,
+   "end": 1470,
+   "entity": "ENT:track",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_04:PARA_405",
+   "start": 788,
+   "end": 792,
+   "entity": "ENT:cant",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_212",
+   "start": 859,
+   "end": 871,
+   "entity": "ENT:lifting",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_06:PARA_612",
+   "start": 472,
+   "end": 479,
+   "entity": "ENT:station",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_06:PARA_604",
+   "start": 2919,
+   "end": 2927,
+   "entity": "ENT:lubrication",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:USFD:CH_09:PARA_9_3",
+   "start": 572,
+   "end": 578,
+   "entity": "ENT:probe",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_09:PARA_913",
+   "start": 1240,
+   "end": 1248,
+   "entity": "ENT:track_record",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:USFD:CH_08:PARA_8_12_3",
+   "start": 528,
+   "end": 534,
+   "entity": "ENT:signal",
+   "correct": false,
+   "note": "'signal' here is an ultrasonic echo"
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1213",
+   "start": 5340,
+   "end": 5351,
+   "entity": "ENT:fuel_system",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_04:PARA_408",
+   "start": 7544,
+   "end": 7552,
+   "entity": "ENT:turnout",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_06:PARA_645",
+   "start": 981,
+   "end": 990,
+   "entity": "ENT:inspection",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:FBW:CH_03:PARA_3_3_3",
+   "start": 77,
+   "end": 82,
+   "entity": "ENT:gauge",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_04:PARA_430",
+   "start": 1560,
+   "end": 1566,
+   "entity": "ENT:driver",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:USFD:CH_08:PARA_8_14",
+   "start": 2748,
+   "end": 2753,
+   "entity": "ENT:track",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_204",
+   "start": 972,
+   "end": 978,
+   "entity": "ENT:tamping_machine",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_05:PARA_525",
+   "start": 646,
+   "end": 652,
+   "entity": "ENT:radius",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1201",
+   "start": 247,
+   "end": 254,
+   "entity": "ENT:engine",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_06:PARA_607",
+   "start": 839,
+   "end": 842,
+   "entity": "ENT:cwr",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_06:PARA_605",
+   "start": 301,
+   "end": 310,
+   "entity": "ENT:fuel_system",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_01:PARA_106",
+   "start": 1897,
+   "end": 1906,
+   "entity": "ENT:track_record",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_354",
+   "start": 1559,
+   "end": 1562,
+   "entity": "ENT:lwr",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_08:PARA_806",
+   "start": 1517,
+   "end": 1522,
+   "entity": "ENT:speed",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_09:PARA_909",
+   "start": 672,
+   "end": 686,
+   "entity": "ENT:level_crossing",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_13:PARA_1305",
+   "start": 1142,
+   "end": 1149,
+   "entity": "ENT:trolley",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_06:PARA_605",
+   "start": 1211,
+   "end": 1222,
+   "entity": "ENT:running_line",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:USFD:CH_10:PARA_10_3_1",
+   "start": 41,
+   "end": 46,
+   "entity": "ENT:probe",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_08:PARA_810",
+   "start": 14342,
+   "end": 14349,
+   "entity": "ENT:tamping",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_01:PARA_106",
+   "start": 13174,
+   "end": 13180,
+   "entity": "ENT:gang",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_01:PARA_104",
+   "start": 690,
+   "end": 693,
+   "entity": "ENT:sse_je",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_09:PARA_910",
+   "start": 2944,
+   "end": 2955,
+   "entity": "ENT:protection",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_229",
+   "start": 9251,
+   "end": 9256,
+   "entity": "ENT:track",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_501",
+   "start": 48,
+   "end": 61,
+   "entity": "ENT:rail_grinding",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_08:PARA_802",
+   "start": 667,
+   "end": 672,
+   "entity": "ENT:track",
+   "correct": false,
+   "note": "'track' inside the tool name 'Hydraulic Track Jack'"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_303",
+   "start": 1396,
+   "end": 1408,
+   "entity": "ENT:rail_head",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_02:PARA_227",
+   "start": 441,
+   "end": 455,
+   "entity": "ENT:bridge",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_9_1",
+   "start": 686,
+   "end": 689,
+   "entity": "ENT:sej",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_518",
+   "start": 2050,
+   "end": 2056,
+   "entity": "ENT:engine",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_11:PARA_1102",
+   "start": 435,
+   "end": 442,
+   "entity": "ENT:trolley",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_08:PARA_854",
+   "start": 844,
+   "end": 850,
+   "entity": "ENT:signal",
+   "correct": false,
+   "note": "'signal' here is a block-instrument bell signal"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_346",
+   "start": 1332,
+   "end": 1348,
+   "entity": "ENT:rail_temperature",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_11:PARA_1119",
+   "start": 1241,
+   "end": 1243,
+   "entity": "ENT:sse_je",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_06:PARA_607",
+   "start": 681,
+   "end": 692,
+   "entity": "ENT:running_line",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_347",
+   "start": 814,
+   "end": 818,
+   "entity": "ENT:rdso",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_04:PARA_414",
+   "start": 88,
+   "end": 98,
+   "entity": "ENT:depot",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_08:PARA_810",
+   "start": 11843,
+   "end": 11858,
+   "entity": "ENT:depot",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_22:PARA_2204",
+   "start": 284,
+   "end": 295,
+   "entity": "ENT:tamping",
+   "correct": false,
+   "note": "'overhauling' of engines is not tamping"
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_06:PARA_620",
+   "start": 3201,
+   "end": 3204,
+   "entity": "ENT:swr",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_01:PARA_106",
+   "start": 8050,
+   "end": 8058,
+   "entity": "ENT:lubrication",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_07:PARA_716",
+   "start": 1375,
+   "end": 1381,
+   "entity": "ENT:engine",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_15:PARA_1507",
+   "start": 193,
+   "end": 197,
+   "entity": "ENT:flaw",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:AT_WELD:CH_06:PARA_6_3",
+   "start": 584,
+   "end": 591,
+   "entity": "ENT:welding",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_07:PARA_712",
+   "start": 1853,
+   "end": 1858,
+   "entity": "ENT:speed",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_213",
+   "start": 373,
+   "end": 378,
+   "entity": "ENT:track",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_05:PARA_521",
+   "start": 284,
+   "end": 289,
+   "entity": "ENT:track",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_13:PARA_1308",
+   "start": 876,
+   "end": 883,
+   "entity": "ENT:tamping",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_516",
+   "start": 19453,
+   "end": 19466,
+   "entity": "ENT:signal",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_224",
+   "start": 6284,
+   "end": 6301,
+   "entity": "ENT:speed_restriction",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_22:PARA_2204",
+   "start": 36,
+   "end": 55,
+   "entity": "ENT:track_machine",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_01:PARA_106",
+   "start": 144,
+   "end": 150,
+   "entity": "ENT:den",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_320",
+   "start": 206,
+   "end": 215,
+   "entity": "ENT:buckling",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_05:PARA_502",
+   "start": 1403,
+   "end": 1407,
+   "entity": "ENT:weld",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_09:PARA_903",
+   "start": 1924,
+   "end": 1938,
+   "entity": "ENT:track_machine",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_06:PARA_612",
+   "start": 3236,
+   "end": 3240,
+   "entity": "ENT:rail",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_224",
+   "start": 8725,
+   "end": 8732,
+   "entity": "ENT:tamping",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_04:PARA_429",
+   "start": 2432,
+   "end": 2440,
+   "entity": "ENT:depot",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_05:PARA_524",
+   "start": 228,
+   "end": 235,
+   "entity": "ENT:alignment",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_02:PARA_204",
+   "start": 1568,
+   "end": 1573,
+   "entity": "ENT:rail",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_04:PARA_405",
+   "start": 542,
+   "end": 546,
+   "entity": "ENT:cant",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_04:PARA_408",
+   "start": 5449,
+   "end": 5456,
+   "entity": "ENT:sleeper",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_04:PARA_417",
+   "start": 273,
+   "end": 280,
+   "entity": "ENT:route_group",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_01:PARA_106",
+   "start": 1857,
+   "end": 1862,
+   "entity": "ENT:track",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_216",
+   "start": 1934,
+   "end": 1946,
+   "entity": "ENT:lifting",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_07:PARA_704",
+   "start": 213,
+   "end": 216,
+   "entity": "ENT:den",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1216",
+   "start": 519,
+   "end": 525,
+   "entity": "ENT:engine",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_04:PARA_412",
+   "start": 583,
+   "end": 592,
+   "entity": "ENT:running_line",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_13:PARA_1308",
+   "start": 184,
+   "end": 197,
+   "entity": "ENT:railway_board",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_02:PARA_229",
+   "start": 1650,
+   "end": 1660,
+   "entity": "ENT:fish_plate",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_08:PARA_819",
+   "start": 1436,
+   "end": 1440,
+   "entity": "ENT:aen",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_06:PARA_653",
+   "start": 964,
+   "end": 969,
+   "entity": "ENT:gang",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_215",
+   "start": 1139,
+   "end": 1144,
+   "entity": "ENT:track",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_12:PARA_1216",
+   "start": 18404,
+   "end": 18415,
+   "entity": "ENT:air_system",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_506",
+   "start": 1874,
+   "end": 1882,
+   "entity": "ENT:rail_grinding",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_01:PARA_116",
+   "start": 1142,
+   "end": 1152,
+   "entity": "ENT:inspection",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_03:PARA_328",
+   "start": 1100,
+   "end": 1105,
+   "entity": "ENT:rail",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_01:PARA_103",
+   "start": 1064,
+   "end": 1074,
+   "entity": "ENT:driver",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:USFD:CH_11:PARA_11_2",
+   "start": 153,
+   "end": 161,
+   "entity": "ENT:crossing",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_505",
+   "start": 3208,
+   "end": 3220,
+   "entity": "ENT:curve",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_03:PARA_307",
+   "start": 4211,
+   "end": 4217,
+   "entity": "ENT:engine",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_08:PARA_802",
+   "start": 491,
+   "end": 504,
+   "entity": "ENT:hydraulic_system",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_20:PARA_2003",
+   "start": 356,
+   "end": 362,
+   "entity": "ENT:manual",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_08:PARA_830",
+   "start": 208,
+   "end": 215,
+   "entity": "ENT:trolley",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:STMM:CH_12:PARA_1206",
+   "start": 1327,
+   "end": 1334,
+   "entity": "ENT:trolley",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:IRPWM:CH_06:PARA_609",
+   "start": 2236,
+   "end": 2243,
+   "entity": "ENT:ballast",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_01:PARA_109",
+   "start": 42,
+   "end": 55,
+   "entity": "ENT:track_machine",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_05:PARA_508",
+   "start": 5985,
+   "end": 5989,
+   "entity": "ENT:rdso",
+   "correct": true,
+   "note": ""
+  },
+  {
+   "source": "CLAUSE:TMM:CH_02:PARA_203",
+   "start": 3479,
+   "end": 3486,
+   "entity": "ENT:tamping",
+   "correct": true,
+   "note": ""
+  }
+ ]
+}
