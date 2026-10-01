@@ -1,6 +1,6 @@
 # Track Manuals Atlas
 
-An offline knowledge base and 3D knowledge graph of six Indian Railways track manuals, with a chat that answers only by quoting the manuals (manual, paragraph and page for every statement). Formerly "RDSO-Drawings"; the repository keeps that name until it is renamed in GitHub settings. This is an independent tool, not an official RDSO product.
+An offline knowledge base and 3D knowledge graph of Indian Railways manuals, starting with six track manuals and built to take more, with a chat that answers only by quoting the manuals (manual, paragraph and page for every statement). Formerly "RDSO-Drawings"; the repository keeps that name until it is renamed in GitHub settings. This is an independent tool, not an official RDSO product.
 
 _Historical prototype title: RDSO Universal Track Infrastructure Digital Twin & Multi-Drawing Assembly Suite._
 
