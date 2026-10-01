@@ -2099,6 +2099,14 @@ Checks: a dialogue test for the utility vehicle question, a sweep over the table
 
 ---
 
+### 37.32 Browse manuals page and shared navigation — 2026-10-01
+
+- `browse.html` (new): manual selector, chapter tree with a filter box, reading view of one paragraph (full text, breadcrumb, previous/next with arrow keys), decimal-manual "Up to" and sub-paragraph links, tables owned by the paragraph, "refers to" and "referred to by" cross-reference links (resolved ones only), "Ask about this paragraph" (opens `chat.html?q=…&manual=…`), "Open page" in the PDF, "Copy link". Deep link: `browse.html#CLAUSE:IRPWM:CH_06:PARA_616`. Same nine themes and Aa panel (`ui/settings.js`) as the chat.
+- `lib/rdso_browse.js`: builds the tree from the search index; `tests/test_browse.py` checks that it rebuilds all 1,172 clauses of the six manuals with text equal to the canonical graph and the expected per-manual counts (421/171/258/192/73/57).
+- `chat.html`: top navigation tabs, `?q=` and `?manual=` parameters, and "Read in context" in the page viewer (opens Browse at that paragraph). `index.html` has a "Browse manuals" link beside "Ask the manuals".
+- Tests: new browser suite `tests/verify_browse_ui.js` (tree, reading view, deep link, next/previous, sub-paragraphs, tables, filter, manual switch, hand-off links, theme change); chat suite gained test 9 (hand-off and "Read in context").
+- Limits: titles of decimal manuals are often the first words of the paragraph, so the heading is omitted when longer than 70 characters; the PDF opens in the browser's own viewer (no highlight) unless an evidence crop exists; verified only in headless Chromium, not on phones or real hardware.
+
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
 
 **Ordering principle:** data truth first, then retrieval, then answers, then learning. Each work package (WP) is one small validated increment: it ends with a gate or test that fails before the change and passes after, a conventional commit, and an updated metrics file. Do not start a WP whose dependency is open.
@@ -2203,8 +2211,8 @@ Not measured: whether it is actually less confusing for an engineer. That needs 
 | Phase | Content | Value | Effort |
 |---|---|---|---|
 | 1 (done) | Simple chat front door, themes, settings, scope, history, saved answers, viewer, palette | high | done |
-| 2 | One application shell with a top bar **Ask · Browse manuals · Drawings · Explore graph · Review**; move `index.html` onto `ui/themes.css`; hide its advanced panels behind an "Expert" switch; first paint under 1.5 s (lazy 3D, see section 37.24) | high | medium |
-| 3 | **Browse manuals:** chapter and paragraph tree, reading view with sub-paragraph navigation, cross-reference links, find in manual, "continues in" links | high | medium |
+| 2 (partly done: shared top bar Ask · Browse manuals · Explore graph on `chat.html`/`browse.html`, link from `index.html`; `index.html` still on its own styling) | One application shell with a top bar **Ask · Browse manuals · Drawings · Explore graph · Review**; move `index.html` onto `ui/themes.css`; hide its advanced panels behind an "Expert" switch; first paint under 1.5 s (lazy 3D, see section 37.24) | high | medium |
+| 3 (done 2026-10-01, §37.32) | **Browse manuals:** chapter and paragraph tree, reading view with sub-paragraph navigation, cross-reference links, find in manual, "continues in" links | high | medium |
 | 4 | **Drawings gallery:** thumbnails, search by drawing number, alteration timeline from the registry, "paragraphs that cite this drawing" | medium | medium |
 | 5 | **Field mode:** installable app (manifest and service worker, offline cache of the index and PDFs), large touch targets, sunlight theme, read-aloud | high for site staff | medium |
 | 6 | **Workspace:** collections of saved answers with notes, export to PDF or Word with citations, printable job cards | medium | medium |

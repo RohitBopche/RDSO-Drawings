@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#f3f5f8">
 <title>RDSO Manuals Assistant</title>
 <link rel="stylesheet" href="./ui/themes.css">
+<link rel="stylesheet" href="./ui/shell.css">
 <script src="./ui/theme.js"></script>
 <style>
   *{box-sizing:border-box}
@@ -133,6 +134,7 @@
     <header class="top">
       <button class="iconbtn" id="sideBtn" title="History and saved answers" aria-label="History and saved answers" aria-expanded="false">☰</button>
       <h1>RDSO Manuals Assistant</h1>
+      <nav class="tabs" aria-label="Pages"><a href="chat.html" aria-current="page">Ask</a><a href="browse.html">Browse manuals</a><a href="index.html">Explore graph</a></nav>
       <label class="muted" for="scope" style="display:none">Search in</label>
       <select id="scope" aria-label="Search in"><option value="">All manuals</option></select>
       <button class="iconbtn" id="newchat" title="Start a new conversation">New</button>
@@ -149,7 +151,7 @@
   </section>
 
   <aside class="viewer" id="viewer" aria-label="Manual page">
-    <header><b id="viewerTitle">Manual page</b><a class="iconbtn" id="viewerOpen" target="_blank" rel="noopener" style="text-decoration:none">Open ↗</a><button class="iconbtn" id="viewerClose" aria-label="Close the page viewer">✕</button></header>
+    <header><b id="viewerTitle">Manual page</b><a class="iconbtn" id="viewerContext" style="text-decoration:none">Read in context</a><a class="iconbtn" id="viewerOpen" target="_blank" rel="noopener" style="text-decoration:none">Open ↗</a><button class="iconbtn" id="viewerClose" aria-label="Close the page viewer">✕</button></header>
     <div class="body"><img id="viewerImg" alt="" hidden><iframe id="viewerFrame" title="Manual page"></iframe></div>
   </aside>
 </div>
@@ -318,6 +320,7 @@
   function openViewer(c) {
     var v = $('viewer'); v.classList.add('open');
     $('viewerTitle').textContent = c.label + ' · page ' + c.page;
+    $('viewerContext').href = c.clause ? 'browse.html#' + encodeURIComponent(c.clause) : 'browse.html';
     var url = pdfUrl(c); $('viewerFrame').src = url; $('viewerOpen').href = url;
     var img = $('viewerImg'); img.hidden = true; img.onload = function () { img.hidden = false; }; img.onerror = function () { img.hidden = true; };
     img.src = 'artifacts/evidence/' + safeName(c.clause) + '.png';
@@ -437,6 +440,9 @@
     statusEl.textContent = 'Ready. Nothing leaves this computer.';
     input.disabled = go.disabled = false; input.focus();
     drawSide(); showEmpty();
+    var qs = new URLSearchParams(location.search), qm = qs.get('manual'), qq = qs.get('q');
+    if (qm && window.RDSOChat.MANUALS[qm]) setScope(qm);
+    if (qq) ask(qq);
   }
   start();
 })();

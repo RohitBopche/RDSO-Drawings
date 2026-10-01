@@ -204,6 +204,15 @@ async function main() {
     console.log(t8);
     if (!t8.side || t8.history < 3 || t8.saved < 1 || !t8.viewerClosed || !t8.sideClosed || t8.focus !== 'q' || t8.cards !== 6) throw new Error('Test 8 failed ' + JSON.stringify(t8));
 
+    console.log("\n--- TEST 9: hand-off from Browse (?q= and manual=) asks the question in that manual; viewer links back to Browse ---");
+    await client.send('Page.navigate', { url: URL_TARGET + '?q=' + encodeURIComponent('Explain IRPWM para 616') + '&manual=IRPWM' });
+    await sleep(3500);
+    const t9 = await ev(`(async () => { await new Promise(r => setTimeout(r, 600)); const bots = document.querySelectorAll('.msg.bot'); const last = bots[bots.length - 1];
+      const out = { n: bots.length, scope: document.getElementById('scope').value, tabs: document.querySelectorAll('.tabs a').length, cites: last ? last.querySelectorAll('.cite').length : 0 };
+      if (out.cites) { last.querySelector('.cite').click(); await new Promise(r => setTimeout(r, 200)); out.ctx = document.getElementById('viewerContext').getAttribute('href'); } return out; })()`);
+    console.log(t9);
+    if (t9.n < 1 || t9.scope !== 'IRPWM' || t9.tabs !== 3 || !/^browse\.html#CLAUSE/.test(t9.ctx || '')) throw new Error('Test 9 failed ' + JSON.stringify(t9));
+
     console.log("\n[SUCCESS] Chat UI verified!");
     client.close();
   } catch (err) {
