@@ -31,6 +31,8 @@ def main() -> int:
     errors = [f"{v['what']}: {v.get('text', '')!r} ({v['why']}) for question {v['q']!r}" for v in real["violations"][:20]]
     if real["answers"] < MIN_ANSWERS:
         errors.append(f"only {real['answers']} answered questions were verified (< {MIN_ANSWERS})")
+    if real.get("relations", 0) < 80:
+        errors.append(f"only {real.get('relations', 0)} relationship answers were verified (< 80)")
     seeded = run({"RDSO_SEED_BAD": "1"})
     caught = [v for v in seeded["violations"] if v["q"] == "seeded"]
     if len(caught) != 1 or "999 Kmph" not in caught[0]["text"]:
@@ -38,7 +40,7 @@ def main() -> int:
     for e in errors:
         print(f"[ERROR] {e}")
     print(f"[SUMMARY] citation verifier: {'FAIL' if errors else 'PASS'}; {real['answers']} answers ({real['refused']} refused), "
-          f"{real['fragments']} fragments, {len(real['violations'])} violations, self-test caught the seeded fabrication")
+          f"{real['fragments']} fragments ({real['relations']} relationship answers), {len(real['violations'])} violations, self-test caught the seeded fabrication")
     return 1 if errors else 0
 
 

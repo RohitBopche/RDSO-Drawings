@@ -90,6 +90,7 @@
   .viewer header b{flex:1;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .viewer .body{flex:1;display:flex;flex-direction:column;min-width:min(46vw,640px);overflow:auto}
   .viewer img{max-width:100%;border-bottom:1px solid var(--line)}
+  ol.rel{padding-left:20px;margin:6px 0}ol.rel li{margin:6px 0}
   .viewer iframe{flex:1;min-height:360px;border:0;background:var(--surface2)}
   /* ---- popovers ---- */
   .pop{position:fixed;z-index:20;right:12px;top:52px;width:min(340px,94vw);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 10px 34px rgba(0,0,0,.28);padding:14px}
@@ -174,6 +175,8 @@
 <script src="./data/search/crossrefs.js"></script>
 <script src="./data/search/tables.js"></script>
 <script src="./data/search/editions.js"></script>
+<script src="./data/search/drawing_cites.js"></script>
+<script src="./lib/rdso_graphq.js"></script>
 <script src="./lib/rdso_chat.js"></script>
 <script>
 (function () {
@@ -268,6 +271,18 @@
       h += '<div>' + esc(r.text) + '</div>';
       if (r.nearest && r.nearest.length) h += '<div class="muted" style="margin-top:6px">Closest topics in the manuals</div><div class="chips">' + r.nearest.map(function (n) { return chip(n.label + ' — ' + n.title.slice(0, 50), 'What does ' + n.alias + ' Para ' + n.para + ' say?'); }).join('') + '</div>';
       h += '<div class="actions"><button type="button" data-fb="down" title="Report this question">👎 Report</button><span class="fbnote"></span></div>';
+    } else if (r.kind === 'relation') {
+      h += '<div class="answer"><div class="lead">' + esc(r.text) + '</div>';
+      if (r.rows && r.rows.length) {
+        h += '<ol class="rel">' + r.rows.map(function (x) {
+          if (r.mode === 'path') return '<li>' + citeBtn(x.from, x.from.label) + ' → ' + citeBtn(x.to, x.to.label) + '<div class="muted">' + (x.back ? 'Printed as a “Back to” note in ' + esc(x.at.label) + ': ' : 'In ' + esc(x.at.label) + ': ') + '“' + esc(x.quote) + '”</div></li>';
+          if (r.mode === 'mentions') return '<li><b>' + esc(x.raw) + '</b> <span class="muted">(' + esc(x.kindName) + (x.status === 'RESOLVED' ? ', page ' + esc(x.page || '?') : x.page ? ', shown as a picture on page ' + esc(x.page) : ', not located') + ')</span>' + (x.quote ? '<div class="muted">“' + esc(x.quote) + '”</div>' : '') + '</li>';
+          if (r.mode === 'drawing') return '<li>' + citeBtn(x.cite, x.cite.label + ' · p.' + x.cite.page) + ' <b>' + esc(x.raw) + '</b><div class="muted">“' + esc(x.quote) + '”</div></li>';
+          return '<li>' + (x.depth > 1 ? '<span class="muted">via ' + esc(x.via.label) + ' → </span>' : '') + citeBtn(x.cite, x.cite.label + ' · p.' + x.cite.page) + '<div class="muted">' + (x.back ? 'Printed as a “Back to” note in ' + esc(x.at.label) + ': ' : 'In ' + esc(x.at.label) + ': ') + '“' + esc(x.quote) + '”</div></li>';
+        }).join('') + '</ol>';
+        if (r.total > r.shown) h += '<div class="muted">Showing ' + r.shown + ' of ' + r.total + '.</div>';
+      }
+      h += '<div class="muted" style="margin-top:6px">Links are the manuals’ own cross-references; nothing is inferred.</div></div>';
     } else if (r.kind === 'more') {
       h += '<pre class="full" style="max-height:none">' + esc(r.text.slice(0, 6000)) + '</pre><div class="meta">' + citeBtn(r.primary) + '</div>';
     } else if (r.kind === 'source') {
@@ -456,7 +471,8 @@
 
   function start() {
     if (!window.RDSOSearch || !window.RDSO_SEARCH_INDEX || !window.RDSOChat) { statusEl.textContent = 'The search index did not load.'; return; }
-    chat = window.RDSOChat.create(window.RDSOSearch.create(window.RDSO_SEARCH_INDEX), { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: window.RDSO_CROSSREFS, tables: window.RDSO_TABLES, editions: window.RDSO_EDITIONS });
+    var eng = window.RDSOSearch.create(window.RDSO_SEARCH_INDEX);
+    chat = window.RDSOChat.create(eng, { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: window.RDSO_CROSSREFS, tables: window.RDSO_TABLES, editions: window.RDSO_EDITIONS, graph: window.RDSOGraphQ.create({ xrefs: window.RDSO_CROSSREFS, clauseText: function (id) { return eng.clauseText(id); }, drawingCites: window.RDSO_DRAWING_CITES }) });
     window.rdsoChat = chat;
     Object.keys(window.RDSOChat.MANUALS).forEach(function (a) { var o = document.createElement('option'); o.value = a; o.textContent = a + ' — ' + window.RDSOChat.MANUALS[a]; $('scope').appendChild(o); });
     statusEl.textContent = 'Ready. Nothing leaves this computer.';

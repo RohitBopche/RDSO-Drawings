@@ -140,6 +140,13 @@ async function main() {
     console.log(t3b);
     if (!/chapter 7/.test(t3b.status || '') || !/Para 7\d\d/.test(t3b.cite)) throw new Error('Test 3b failed ' + JSON.stringify(t3b));
 
+    console.log("\n--- TEST 3c: the cross-reference filter draws every paragraph-to-paragraph reference ---");
+    const t3c = await ev(`(async () => { const w = ms => new Promise(r => setTimeout(r, ms)); const b = document.getElementById('refs'); b.checked = true; b.dispatchEvent(new Event('change')); await w(200);
+      return { on: window.rdsoGraph.state().refs, links: window.rdsoGraph.links.length }; })()`);
+    console.log(t3c);
+    if (!t3c.on || t3c.links < 400) throw new Error('Test 3c failed ' + JSON.stringify(t3c));
+    await ev(`(() => { const b = document.getElementById('refs'); b.checked = false; b.dispatchEvent(new Event('change')); })()`);
+
     console.log("\n--- TEST 4: theme change repaints (dark) ---");
     const t4 = await ev(`(async () => { document.getElementById('settingsBtn').click(); await new Promise(r => setTimeout(r, 100)); document.querySelector('#settings [data-theme="dark"]').click(); await new Promise(r => setTimeout(r, 300)); return getComputedStyle(document.body).backgroundColor; })()`);
     console.log(t4);

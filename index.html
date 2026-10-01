@@ -46,7 +46,7 @@
   #go:disabled{opacity:.5}
   .hint{text-align:center;color:var(--muted);font-size:.78rem;margin-top:-2px}
   #tip{position:fixed;z-index:8;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:3px 8px;font-size:.8rem;box-shadow:var(--shadow);display:none;max-width:280px}
-  @media (max-width:640px){.legend{display:none}#card{top:50px}}
+  @media (max-width:640px){.legend{display:none}#refsBox{display:none}#card{top:50px}}
 </style>
 </head>
 <body>
@@ -54,6 +54,7 @@
 <div class="corner l"><span class="title">RDSO Knowledge Graph</span></div>
 <div class="corner r"><button class="iconbtn" id="fit" title="Show the whole graph">Reset view</button><span id="hostSettings"></span><a class="iconbtn" href="learn.html" title="Practice cards from the manuals">Learn</a><a class="iconbtn" href="expert.html" title="The full expert workbench (drawings, revisions, 3D)">Expert view</a></div>
 <div class="legend" id="legend"></div>
+<label class="legend" id="refsBox" style="top:92px;cursor:pointer"><input type="checkbox" id="refs"> Show all cross-references between paragraphs</label>
 <aside id="card" hidden aria-live="polite"></aside>
 <div id="tip"></div>
 <div id="dock">
@@ -67,6 +68,8 @@
 <script src="./data/search/crossrefs.js"></script>
 <script src="./data/search/tables.js"></script>
 <script src="./data/search/editions.js"></script>
+<script src="./data/search/drawing_cites.js"></script>
+<script src="./lib/rdso_graphq.js"></script>
 <script src="./lib/rdso_chat.js"></script>
 <script src="./lib/rdso_browse.js"></script>
 <script src="./ui/settings.js"></script>
@@ -81,7 +84,8 @@
               STMM: 'manuals/STMM-date  27.05.24.pdf', USFD: 'manuals/usfd_new 24-2-26.pdf', AT_WELD: 'manuals/ATWeld_Manual-2022.pdf',
               FBW: 'manuals/FBW Manual-Reprint 2022- Incorporated up to CS5.pdf' };
   var model = RDSOBrowse.build(RDSO_SEARCH_INDEX), xr = window.RDSO_CROSSREFS || { out: {}, in: {} };
-  var chat = RDSOChat.create(RDSOSearch.create(RDSO_SEARCH_INDEX), { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: xr, tables: window.RDSO_TABLES, editions: window.RDSO_EDITIONS });
+  var eng = RDSOSearch.create(RDSO_SEARCH_INDEX);
+  var chat = RDSOChat.create(eng, { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: xr, tables: window.RDSO_TABLES, editions: window.RDSO_EDITIONS, graph: window.RDSOGraphQ.create({ xrefs: window.RDSO_CROSSREFS, clauseText: function (id) { return eng.clauseText(id); }, drawingCites: window.RDSO_DRAWING_CITES }) });
 
   /* ---- graph: manual -> chapter -> paragraph, laid out radially (deterministic, no simulation) ---- */
   var COLORS = ['#e0592a', '#2a8fe0', '#2aa876', '#a64fd1', '#d19a1f', '#d1446f'];
@@ -111,7 +115,7 @@
 
   /* ---- 3D camera on a 2D canvas: yaw/pitch rotation, perspective, depth ordering, smooth moves ---- */
   var cv = $('g'), ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, sel = null, hot = {}, dirty = true;
-  var cam = { yaw: 0.6, pitch: 0.38, zoom: 0.45, tx: 0, ty: 0, tz: 0 }, goal = null, spin = true, lastTouch = 0, P = {}, order = [];
+  var showRefs = false, cam = { yaw: 0.6, pitch: 0.38, zoom: 0.45, tx: 0, ty: 0, tz: 0 }, goal = null, spin = true, lastTouch = 0, P = {}, order = [];
   var DIST = 2600, TAU = 6.2832;
   function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
   function resize() { dpr = window.devicePixelRatio || 1; W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; dirty = true; }
@@ -147,6 +151,11 @@
     ctx.lineWidth = 1; ctx.strokeStyle = line; ctx.globalAlpha = 0.5; ctx.beginPath();
     edges.forEach(function (e) { var a = P[e[0]], b = P[e[1]]; ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); });
     ctx.stroke(); ctx.globalAlpha = 1;
+    if (showRefs) {   // typed relationship filter: every resolved paragraph-to-paragraph reference, faint
+      ctx.strokeStyle = accent; ctx.lineWidth = 0.7; ctx.globalAlpha = 0.22; ctx.beginPath();
+      links.forEach(function (l) { var a = P[l[0]], b = P[l[1]]; ctx.moveTo(a.x, a.y); ctx.quadraticCurveTo((a.x + b.x) / 2 + (b.y - a.y) * 0.14, (a.y + b.y) / 2 - (b.x - a.x) * 0.14, b.x, b.y); });
+      ctx.stroke(); ctx.globalAlpha = 1;
+    }
     var focus = sel ? [sel.id] : Object.keys(hot);
     ctx.strokeStyle = accent; ctx.lineWidth = 1.6; ctx.globalAlpha = 0.85; ctx.beginPath();
     links.forEach(function (l) { if (focus.indexOf(l[0]) >= 0 || focus.indexOf(l[1]) >= 0) { var a = P[l[0]], b = P[l[1]];
@@ -244,6 +253,11 @@
       if (r.edition) h += '<div class="meta" id="edition">From: ' + esc(r.edition) + (r.amendments && r.amendments.length ? ' · correction-slip marks ' + esc(r.amendments.join(', ')) : '') + '</div>';
       h += '<div class="meta">' + cite(r.primary) + '<span>' + ({ high: 'Strong match', medium: 'Likely match', low: 'Not sure' }[r.confidence] || '') + '</span>' + (r.caveat ? '<span>' + esc(r.caveat) + '</span>' : '') + '</div>';
       if (r.followups && r.followups.length) h += '<div style="margin-top:6px">' + r.followups.slice(0, 3).map(function (f) { return chip(f); }).join('') + '</div>';
+    } else if (r.kind === 'relation') {
+      h += '<div class="lead">' + esc(r.text) + '</div>';
+      if (r.rows && r.rows.length) h += '<ol style="margin:4px 0;padding-left:20px">' + r.rows.slice(0, 8).map(function (x) {
+        var c = x.cite || x.to, from = r.mode === 'path' ? esc(x.from.label) + ' → ' : (x.depth > 1 ? 'via ' + esc(x.via.label) + ' → ' : '');
+        return '<li>' + from + '<a class="chip" href="browse.html#' + encodeURIComponent(c.clause) + '" data-focus="' + esc(c.clause) + '">📄 ' + esc(c.label) + '</a><div class="meta">' + (x.back ? 'Back-to note in ' : 'In ') + esc((x.at || c).label) + ': “' + esc(x.quote) + '”</div></li>'; }).join('') + '</ol>' + (r.rows.length > 8 ? '<div class="meta">…and ' + (r.rows.length - 8) + ' more (ask in the chat page for the full list).</div>' : '');
     } else if (r.kind === 'clarify') h += esc(r.text) + '<div>' + r.options.map(function (o) { return chip(o.name + ' — ' + o.label + ': ' + o.title.slice(0, 50), o.ask); }).join('') + '</div>';
     else if (r.kind === 'no_evidence') h += esc(r.text) + ((r.nearest || []).length ? '<div class="meta" style="margin-top:4px">Closest topics</div><div>' + r.nearest.map(function (n) { return chip(n.label + ' — ' + n.title.slice(0, 50), 'What does ' + n.alias + ' Para ' + n.para + ' say?'); }).join('') + '</div>' : '');
     else { h += esc(r.text || ''); if (r.primary) h += '<div class="meta">' + cite(r.primary) + '</div>'; if (r.related) h += '<div>' + r.related.map(function (n) { return chip(n.label + ' — ' + n.title.slice(0, 50), 'What does ' + n.alias + ' Para ' + n.para + ' say?'); }).join('') + '</div>'; }
@@ -257,6 +271,7 @@
     if (r.primary) ids.push(r.primary.clause);
     (r.related || []).forEach(function (x) { if (x.clause) ids.push(x.clause); });
     (r.alsoSee || []).forEach(function (x) { if (x.cite) ids.push(x.cite.clause); });
+    if (r.kind === 'relation') (r.nodes || []).forEach(function (i) { ids.push(i); });
     hot = {}; ids.forEach(function (i) { if (byId[i]) hot[i] = 1; });
     sel = null; $('card').hidden = true;
     if (ids.length) focusOn(ids.filter(function (i) { return byId[i]; })); dirty = true;
@@ -270,6 +285,7 @@
     if (e.target.id === 'ansX') { $('ans').hidden = true; hot = {}; dirty = true; }
     if (e.target.id === 'cardX') { $('card').hidden = true; sel = null; dirty = true; }
   });
+  $('refs').addEventListener('change', function () { showRefs = this.checked; dirty = true; });
   $('fit').addEventListener('click', function () { sel = null; hot = {}; $('card').hidden = true; $('ans').hidden = true; setScope(''); cam.yaw = 0.6; cam.pitch = 0.38; fit(); });
   document.addEventListener('keydown', function (e) {
     if (e.key === '/' && document.activeElement !== $('q')) { e.preventDefault(); $('q').focus(); }
@@ -281,7 +297,7 @@
   setScope(''); $('q').disabled = $('go').disabled = false;
   var qs = new URLSearchParams(location.search); if (qs.get('manual') && RDSOChat.MANUALS[qs.get('manual')]) setScope(qs.get('manual'));
   if (qs.get('q')) ask(qs.get('q'));
-  window.__graphReady = true; window.rdsoGraph = { nodes: nodes, links: links, edges: edges, ask: ask, select: function (id) { select(byId[id], true); }, state: function () { return { zoom: cam.zoom, yaw: cam.yaw, pitch: cam.pitch, sel: sel && sel.id, hot: Object.keys(hot) }; } };
+  window.__graphReady = true; window.rdsoGraph = { nodes: nodes, links: links, edges: edges, ask: ask, select: function (id) { select(byId[id], true); }, state: function () { return { refs: showRefs, zoom: cam.zoom, yaw: cam.yaw, pitch: cam.pitch, sel: sel && sel.id, hot: Object.keys(hot) }; } };
 })();
 </script>
 </body>

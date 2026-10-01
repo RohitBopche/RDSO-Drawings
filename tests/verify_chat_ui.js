@@ -203,6 +203,15 @@ async function main() {
     console.log(t7b);
     if (!t7b.hiddenAll || !t7b.shown || t7b.options < 10 || !/Para 6\d\d/.test(t7b.ch6) || !/Para 7\d\d/.test(t7b.ch7) || !t7b.hiddenAfter) throw new Error('Test 7b failed ' + JSON.stringify(t7b));
 
+    console.log("\n--- TEST 7c: relationship questions: what refers to a paragraph, the chain between two, where a drawing is cited ---");
+    const t7c = await ev(`(async () => { const w = ms => new Promise(r => setTimeout(r, ms)); const res = {};
+      for (const [k, q] of [['in', 'What refers to IRPWM Para 337?'], ['path', 'How is IRPWM Para 336 connected to IRPWM Para 715?'], ['drawing', 'Where is drawing T-1898 cited?'], ['figs', 'Which figures does IRPWM Para 341 mention?']]) {
+        const i = document.getElementById('q'); i.value = q; document.getElementById('f').dispatchEvent(new Event('submit', { cancelable: true })); await w(400);
+        const bots = document.querySelectorAll('.msg.bot'); const last = bots[bots.length - 1]; res[k] = { items: last.querySelectorAll('ol.rel li').length, quote: (last.querySelector('ol.rel .muted') || {}).innerText || '', lead: (last.querySelector('.lead') || {}).innerText || '' }; }
+      return res; })()`);
+    console.log(t7c);
+    if (t7c.in.items < 5 || !/refer to IRPWM Para 337/.test(t7c.in.lead) || !/“.+”/.test(t7c.in.quote) || t7c.path.items !== 3 || !/connected in 3 steps/.test(t7c.path.lead) || t7c.drawing.items < 1 || t7c.figs.items < 4 || !/mentions \d+ figures/.test(t7c.figs.lead) || !/1898/.test(t7c.drawing.lead + t7c.drawing.quote)) throw new Error('Test 7c failed ' + JSON.stringify(t7c));
+
     console.log("\n--- TEST 8: history, saved answers, copy, keyboard ---");
     const t8 = await ev(`(async () => { const w = ms => new Promise(r => setTimeout(r, ms)); const out = {};
       document.querySelector('[data-act="save"]').click(); await w(100);
