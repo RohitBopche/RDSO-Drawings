@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f3f5f8">
+<title>Practice from the manuals</title>
+<link rel="stylesheet" href="./ui/themes.css">
+<link rel="stylesheet" href="./ui/shell.css">
+<script src="./ui/theme.js"></script>
+<style>
+  *{box-sizing:border-box}
+  html{font-size:var(--fs)}
+  body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.55 var(--font)}
+  button,select{font:inherit;color:inherit}
+  a{color:var(--accent)}
+  .iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 12px;cursor:pointer;min-height:36px;text-decoration:none;color:var(--ink);display:inline-block}
+  .iconbtn:hover,.iconbtn:focus-visible{background:var(--surface2)}
+  .iconbtn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+  .top{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap;position:sticky;top:0;z-index:5}
+  .top h1{margin:0;font-size:1.05rem;font-weight:650;flex:1;white-space:nowrap}
+  main{max-width:820px;margin:0 auto;padding:18px 16px 60px}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;margin-bottom:16px}
+  .panel h2{margin:0 0 8px;font-size:1.05rem}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  select{padding:6px 9px;border:1px solid var(--line);border-radius:9px;background:var(--surface)}
+  .meta{color:var(--muted);font-size:.85rem}
+  .front{font-size:1.15rem;line-height:1.6;margin:10px 0}
+  .blank{display:inline-block;min-width:5.5em;border-bottom:3px solid var(--accent);color:transparent;user-select:none}
+  .ans{background:var(--chip);color:var(--chip-ink);border-radius:6px;padding:1px 7px;font-weight:700}
+  .opts{display:grid;gap:8px;margin:10px 0}
+  .opts button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;cursor:pointer}
+  .opts button:hover:not(:disabled),.opts button:focus-visible{outline:2px solid var(--accent)}
+  .opts button.good{border-color:var(--ok);background:var(--chip);font-weight:700}
+  .opts button.bad{border-color:var(--bad)}
+  .src{margin-top:8px;font-size:.88rem;color:var(--muted)}
+  .bar{height:8px;border-radius:5px;background:var(--surface2);overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--ok)}
+  table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left}
+  .q{border-top:1px solid var(--line);padding:8px 0}.q:first-child{border-top:0}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>RDSO Manuals</h1>
+  <nav class="tabs" aria-label="Pages"><a href="chat.html">Ask</a><a href="browse.html">Browse manuals</a><a href="learn.html" aria-current="page">Learn</a><a href="index.html">Explore graph</a></nav>
+  <span id="hostSettings"></span>
+</header>
+<main>
+  <section class="panel" id="setup">
+    <h2>Practice from the manuals</h2>
+    <p class="meta" style="margin:0 0 10px">Every card is one sentence of one manual paragraph with a measured number hidden. Nothing is written by hand; the answer and its source (manual, paragraph, page) are shown after you answer. Your progress stays in this browser.</p>
+    <div class="row">
+      <label for="manual" class="meta">Manual</label><select id="manual"></select>
+      <button class="iconbtn primary" id="startCards">Practice cards (10)</button>
+      <button class="iconbtn primary" id="startQuiz">Quiz (10 questions)</button>
+    </div>
+    <div id="progress" style="margin-top:12px"></div>
+  </section>
+  <section class="panel" id="session" hidden></section>
+  <section class="panel" id="review">
+    <h2>Questions to review</h2>
+    <p class="meta" style="margin:0 0 8px">From your own use of the chat on this computer: questions it could not answer and answers you marked not helpful. Export them to send for review; they never leave this computer on their own.</p>
+    <div id="queue"></div>
+    <div class="row" style="margin-top:8px"><button class="iconbtn" id="exportQueue">Export these as a file</button></div>
+  </section>
+</main>
+<script src="./data/learning/cards.js"></script>
+<script src="./ui/settings.js"></script>
+<script>
+(function () {
+  'use strict';
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  window.RDSOSettings.mount($('hostSettings'));
+  var CARDS = window.RDSO_CARDS || [], KEY = 'rdso_learn_v1', FB = 'rdso_feedback_v1';
+  var NAMES = { IRPWM: 'Permanent Way Manual', TMM: 'Track Machine Manual', STMM: 'Small Track Machines Manual', USFD: 'Ultrasonic Flaw Detection Manual', AT_WELD: 'Alumino-Thermic Welding Manual', FBW: 'Flash Butt Welding Manual' };
+  function load() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { return {}; } }
+  function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) { /* not persisted */ } }
+  var state = load(); state.box = state.box || {}; state.seen = state.seen || {}; state.quiz = state.quiz || [];
+  var sess = null;
+
+  $('manual').innerHTML = '<option value="">All manuals (' + CARDS.length + ' cards)</option>' + Object.keys(NAMES).map(function (a) {
+    var n = CARDS.filter(function (c) { return c.manual === a; }).length; return n ? '<option value="' + a + '">' + esc(a.replace('_', ' ') + ' — ' + NAMES[a] + ' (' + n + ')') + '</option>' : ''; }).join('');
+
+  function pool() { var m = $('manual').value; return CARDS.filter(function (c) { return !m || c.manual === m; }); }
+  function pick(n) {   // lower Leitner box first, then least seen; ties by a daily-shuffled order so each session differs
+    var day = Math.floor(Date.now() / 864e5), h = function (id) { var x = 0; for (var i = 0; i < id.length; i++) x = (x * 31 + id.charCodeAt(i) + day) % 100003; return x; };
+    return pool().slice().sort(function (a, b) { return (state.box[a.id] || 0) - (state.box[b.id] || 0) || (state.seen[a.id] || 0) - (state.seen[b.id] || 0) || h(a.id) - h(b.id); }).slice(0, n);
+  }
+  function drawProgress() {
+    var known = CARDS.filter(function (c) { return (state.box[c.id] || 0) >= 3; }).length, h = '<div class="meta">Known (answered right three times in a row): ' + known + ' of ' + CARDS.length + '</div><div class="bar"><i style="width:' + (CARDS.length ? 100 * known / CARDS.length : 0).toFixed(1) + '%"></i></div>';
+    h += '<table><tr><th>Manual</th><th>Known</th><th>Cards</th></tr>' + Object.keys(NAMES).map(function (a) { var cs = CARDS.filter(function (c) { return c.manual === a; }); if (!cs.length) return '';
+      return '<tr><td>' + esc(a.replace('_', ' ')) + '</td><td>' + cs.filter(function (c) { return (state.box[c.id] || 0) >= 3; }).length + '</td><td>' + cs.length + '</td></tr>'; }).join('') + '</table>';
+    $('progress').innerHTML = h;
+  }
+  function source(c) { return '<div class="src">Source: ' + esc(c.manual.replace('_', ' ')) + ' Para ' + esc(c.para) + ', page ' + esc(c.page) + (c.chapter ? ' · ' + esc(c.chapter.replace(/^Chapter\s+\d+\s*[—-]\s*/, '')) : '') + ' · <a href="browse.html#' + encodeURIComponent(c.clause) + '">read the paragraph</a></div>'; }
+  function frontHtml(c) { return esc(c.front).replace('_____', '<span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'); }
+  function fullHtml(c) { return esc(c.sentence).replace(esc(c.answer), '<span class="ans">' + esc(c.answer) + '</span>'); }
+  function rate(c, ok) { state.box[c.id] = ok ? Math.min(5, (state.box[c.id] || 0) + 1) : 0; state.seen[c.id] = (state.seen[c.id] || 0) + 1; save(state); }
+
+  function showCard() {
+    var s = sess, c = s.cards[s.i]; if (!c) return done();
+    $('session').innerHTML = '<div class="meta">Card ' + (s.i + 1) + ' of ' + s.cards.length + ' · ' + esc(c.manual.replace('_', ' ')) + ' · ' + esc(c.unit) + '</div><div class="front" id="front">' + frontHtml(c) + '</div>' +
+      '<div class="row" id="ctl"><button class="iconbtn primary" id="reveal">Show the answer</button></div><div id="rev" hidden></div>';
+    $('reveal').addEventListener('click', function () {
+      $('front').innerHTML = fullHtml(c); $('ctl').hidden = true; $('rev').hidden = false;
+      $('rev').innerHTML = '<div>Answer: <span class="ans">' + esc(c.answer) + '</span></div>' + source(c) + '<div class="row" style="margin-top:10px"><button class="iconbtn" id="knew">I knew it</button><button class="iconbtn" id="not">Not yet</button></div>';
+      $('knew').addEventListener('click', function () { rate(c, true); s.ok++; s.i++; showCard(); });
+      $('not').addEventListener('click', function () { rate(c, false); s.i++; showCard(); });
+    });
+  }
+  function showQuiz() {
+    var s = sess, c = s.cards[s.i]; if (!c) return done();
+    $('session').innerHTML = '<div class="meta">Question ' + (s.i + 1) + ' of ' + s.cards.length + ' · ' + esc(c.manual.replace('_', ' ')) + '</div><div class="front">' + frontHtml(c) + '</div>' +
+      '<div class="opts" id="opts">' + c.options.map(function (o, i) { return '<button data-i="' + i + '">' + esc(o) + '</button>'; }).join('') + '</div><div id="rev"></div>';
+    $('opts').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b || b.disabled) return; var i = +b.dataset.i, ok = i === c.correct;
+      [].forEach.call($('opts').children, function (x, k) { x.disabled = true; if (k === c.correct) x.className = 'good'; else if (k === i) x.className = 'bad'; });
+      rate(c, ok); if (ok) s.ok++; else s.wrong.push(c);
+      $('rev').innerHTML = '<div>' + (ok ? 'Correct.' : 'Not this one.') + ' ' + fullHtml(c) + '</div>' + source(c) + '<div class="row" style="margin-top:10px"><button class="iconbtn primary" id="nextq">' + (s.i + 1 < s.cards.length ? 'Next question' : 'See the result') + '</button></div>';
+      $('nextq').addEventListener('click', function () { s.i++; showQuiz(); }); $('nextq').focus();
+    });
+  }
+  function done() {
+    var s = sess, pct = Math.round(100 * s.ok / s.cards.length);
+    $('session').innerHTML = '<h2>Result: ' + s.ok + ' of ' + s.cards.length + ' (' + pct + '%)</h2><p class="meta">This is practice, not an assessment: the options are other values from the same manual, and the cards cover only sentences with one clear number.</p>' +
+      (s.wrong && s.wrong.length ? '<h2 style="font-size:.95rem">To review</h2>' + s.wrong.map(function (c) { return '<div class="q">' + fullHtml(c) + source(c) + '</div>'; }).join('') : '') +
+      '<div class="row" style="margin-top:10px"><button class="iconbtn primary" id="again">Another round</button></div>';
+    $('again').addEventListener('click', function () { start(s.mode); });
+    drawProgress();
+  }
+  function start(mode) {
+    var cards = pick(10); if (!cards.length) return;
+    sess = { mode: mode, cards: cards, i: 0, ok: 0, wrong: [] }; $('session').hidden = false;
+    (mode === 'quiz' ? showQuiz : showCard)(); $('session').scrollIntoView({ block: 'nearest' });
+  }
+  $('startCards').addEventListener('click', function () { start('cards'); });
+  $('startQuiz').addEventListener('click', function () { start('quiz'); });
+  $('manual').addEventListener('change', drawProgress);
+
+  /* ---- review queue from the local chat log ---- */
+  function queue() {
+    var log = []; try { log = JSON.parse(localStorage.getItem(FB) || '[]'); } catch (e) { /* none */ }
+    var seen = {}, out = [];
+    log.forEach(function (r) {
+      var why = r.type === 'query' && (r.status === 'no_evidence') ? 'not answered' : r.type === 'feedback' && r.verdict === 'down' ? 'marked not helpful' : null;
+      if (why && r.query && !seen[r.query]) { seen[r.query] = 1; out.push({ query: r.query, why: why, ts: r.ts }); }
+    });
+    return out;
+  }
+  function drawQueue() {
+    var q = queue();
+    $('queue').innerHTML = q.length ? q.map(function (x) { return '<div class="q">' + esc(x.query) + ' <span class="meta">— ' + esc(x.why) + '</span></div>'; }).join('') : '<div class="meta">Nothing yet. Questions the chat cannot answer, and answers you mark not helpful, will be listed here.</div>';
+    $('exportQueue').disabled = !q.length;
+  }
+  $('exportQueue').addEventListener('click', function () {
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([queue().map(function (x) { return JSON.stringify(x); }).join('\n') + '\n'], { type: 'application/x-ndjson' })); a.download = 'rdso_review_queue.jsonl'; a.click();
+  });
+  drawProgress(); drawQueue();
+  window.__learnReady = true;
+})();
+</script>
+</body>
+</html>

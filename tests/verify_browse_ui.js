@@ -119,7 +119,7 @@ async function main() {
     const t1 = await ev(`({ ready: !!window.__browseReady, manuals: document.getElementById('manual').options.length, chapters: document.querySelectorAll('#tree details').length,
       tabs: document.querySelectorAll('.tabs a').length, cur: document.querySelector('.tabs [aria-current]').innerText })`);
     console.log(t1);
-    if (!t1.ready || t1.manuals !== 6 || t1.chapters < 10 || t1.tabs !== 3 || t1.cur !== 'Browse manuals') throw new Error('Test 1 failed ' + JSON.stringify(t1));
+    if (!t1.ready || t1.manuals !== 6 || t1.chapters < 10 || t1.tabs !== 4 || t1.cur !== 'Browse manuals') throw new Error('Test 1 failed ' + JSON.stringify(t1));
 
     console.log("\n--- TEST 2: open a paragraph from the tree: full text, breadcrumb, deep link ---");
     const t2 = await ev(`(async () => { const d = document.querySelector('#tree details'); d.open = true; const b = d.querySelector('button[data-id]'); b.click(); await new Promise(r => setTimeout(r, 200));

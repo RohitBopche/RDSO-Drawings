@@ -211,7 +211,7 @@ async function main() {
       const out = { n: bots.length, scope: document.getElementById('scope').value, tabs: document.querySelectorAll('.tabs a').length, cites: last ? last.querySelectorAll('.cite').length : 0 };
       if (out.cites) { last.querySelector('.cite').click(); await new Promise(r => setTimeout(r, 200)); out.ctx = document.getElementById('viewerContext').getAttribute('href'); } return out; })()`);
     console.log(t9);
-    if (t9.n < 1 || t9.scope !== 'IRPWM' || t9.tabs !== 3 || !/^browse\.html#CLAUSE/.test(t9.ctx || '')) throw new Error('Test 9 failed ' + JSON.stringify(t9));
+    if (t9.n < 1 || t9.scope !== 'IRPWM' || t9.tabs !== 4 || !/^browse\.html#CLAUSE/.test(t9.ctx || '')) throw new Error('Test 9 failed ' + JSON.stringify(t9));
 
     console.log("\n[SUCCESS] Chat UI verified!");
     client.close();

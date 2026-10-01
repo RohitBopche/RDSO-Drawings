@@ -1,0 +1,88 @@
+{
+ "AT_WELD": {
+  "paragraphs": 73,
+  "cards": 6,
+  "chapters": 9,
+  "chapters_without_cards": [
+   "CH_01",
+   "CH_02",
+   "CH_03",
+   "CH_07",
+   "CH_09"
+  ],
+  "share_of_paragraphs_with_a_card": 0.082
+ },
+ "FBW": {
+  "paragraphs": 57,
+  "cards": 3,
+  "chapters": 9,
+  "chapters_without_cards": [
+   "CH_01",
+   "CH_02",
+   "CH_04",
+   "CH_06",
+   "CH_07",
+   "CH_08",
+   "CH_09"
+  ],
+  "share_of_paragraphs_with_a_card": 0.053
+ },
+ "IRPWM": {
+  "paragraphs": 421,
+  "cards": 61,
+  "chapters": 15,
+  "chapters_without_cards": [
+   "CH_13",
+   "CH_14"
+  ],
+  "share_of_paragraphs_with_a_card": 0.145
+ },
+ "STMM": {
+  "paragraphs": 258,
+  "cards": 21,
+  "chapters": 23,
+  "chapters_without_cards": [
+   "CH_06",
+   "CH_08",
+   "CH_09",
+   "CH_11",
+   "CH_13",
+   "CH_14",
+   "CH_15",
+   "CH_19",
+   "CH_20",
+   "CH_21"
+  ],
+  "share_of_paragraphs_with_a_card": 0.081
+ },
+ "TMM": {
+  "paragraphs": 171,
+  "cards": 28,
+  "chapters": 12,
+  "chapters_without_cards": [
+   "CH_01",
+   "CH_08",
+   "CH_11",
+   "CH_12"
+  ],
+  "share_of_paragraphs_with_a_card": 0.164
+ },
+ "USFD": {
+  "paragraphs": 192,
+  "cards": 11,
+  "chapters": 15,
+  "chapters_without_cards": [
+   "CH_02",
+   "CH_03",
+   "CH_04",
+   "CH_05",
+   "CH_07",
+   "CH_10",
+   "CH_12",
+   "CH_13",
+   "CH_14",
+   "CH_15"
+  ],
+  "share_of_paragraphs_with_a_card": 0.057
+ }
+}
