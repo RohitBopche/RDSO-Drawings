@@ -2146,6 +2146,13 @@ Checks: a dialogue test for the utility vehicle question, a sweep over the table
 - Tried and dropped: answering a multi-part question part by part (each part searched on its own and its sentences added). On the 20 questions only 3 had an explicit split, and the added parts cited unrelated paragraphs (Para 721, Para 405), so it added noise and was reverted rather than shipped.
 - Graded state of the 20 (my reading): 9 fully answered, 9 partial, 2 wrong.
 
+### 37.38 Tables preferred for quantity questions — 2026-10-01
+
+- Finding from the 20 real questions: R16 (temporary speed restriction with slotted fishplates) was answered from Para 337 although the numbers (30, 20, 50 km/h) are in the speed-restriction table of Para 354, which scored 71.0 against 71.9. Rule added: for a quantity question, a table passage that scores at least 90% of the best prose passage and matches at least two of the question's words is used as the answer, shown as the table's matching rows.
+- Tables owned by the cited paragraph: up to two are now shown (those scoring at least 60% of the best), with words of the question that name a table's columns counting double. R2 (vertical wear 13.00 and 8.00 mm, loss of section 7% and 6%) now shows both tables.
+- Effect on the 20 (my grading): fully answered 11 (R1, R2, R4, R5, R8, R10, R11, R12, R13, R16, R17), partial 8, wrong 1 (R19 clarifies between three welding manuals). Key numbers shown 40 of 59 (was 30 before section 37.37, 19 before 37.35). The same rule moved "what is a switch expansion joint" to IRPWM Para 225 (a better paragraph than Para 350).
+- Still partial: R3 (depth below the rail table where lateral wear is measured), R6 (formation widths are in a sketch annexure), R7, R9, R14 (extra shoulder ballast of 600 mm), R15 (single-gap SEJ), R18 (the table shown is the gauge limits, not acceleration), R20.
+
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
 
 **Ordering principle:** data truth first, then retrieval, then answers, then learning. Each work package (WP) is one small validated increment: it ends with a gate or test that fails before the change and passes after, a conventional commit, and an updated metrics file. Do not start a WP whose dependency is open.
