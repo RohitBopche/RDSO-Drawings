@@ -163,6 +163,13 @@ def main() -> int:
                 in_refs[t].append(x["source"])
     js = "(typeof window!=='undefined'?window:globalThis).RDSO_CROSSREFS=" + json.dumps({"out": out_refs, "in": in_refs}, separators=(",", ":"), sort_keys=True) + ";\n"
     (ROOT / "data" / "search" / "crossrefs.js").write_text(js, encoding="utf-8")
+    # edition of each manual, for the "which edition does this answer come from" line (from the source registry, never typed by hand)
+    editions = {}
+    for line in (KG / "raw" / "source_registry.jsonl").read_text(encoding="utf-8").splitlines():
+        reg = json.loads(line)
+        if reg.get("category") == "MANUAL":
+            editions[reg["id"].split(":")[1]] = {"title": reg["title"], "edition": reg.get("edition_or_revision") or ""}
+    (ROOT / "data" / "search" / "editions.js").write_text("(typeof window!=='undefined'?window:globalThis).RDSO_EDITIONS=" + json.dumps(editions, separators=(",", ":"), sort_keys=True) + ";\n", encoding="utf-8")
     return 0
 
 

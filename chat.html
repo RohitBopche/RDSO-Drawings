@@ -172,6 +172,7 @@
 <script src="./data/search/clause_extras.js"></script>
 <script src="./data/search/crossrefs.js"></script>
 <script src="./data/search/tables.js"></script>
+<script src="./data/search/editions.js"></script>
 <script src="./lib/rdso_chat.js"></script>
 <script>
 (function () {
@@ -244,6 +245,7 @@
         h += '<div class="muted" style="margin-top:6px">Table in this paragraph (page ' + esc(O.page) + ')</div><table class="tb"><thead><tr>' + O.columns.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
              O.rows.map(function (row) { return '<tr>' + row.cells.map(function (c, i) { return '<td' + (row.hit[i] ? ' class="hit"' : '') + '>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>';
       });
+      if (r.edition) h += '<div class="muted" id="edition" style="margin-top:6px">From: ' + esc(r.edition) + (r.amendments && r.amendments.length ? ' · this paragraph carries correction-slip marks ' + esc(r.amendments.join(', ')) + ' (amended text)' : '') + '</div>';
       h += '<div class="meta">' + citeBtn(r.primary) + '<span class="conf"><span class="dot ' + cf[1] + '"></span>' + cf[0] + '</span></div>';
       h += '<div class="actions"><button type="button" data-act="copy">Copy</button><button type="button" data-act="save">☆ Save</button>' +
            '<button type="button" data-fb="up" title="Helpful">👍</button><button type="button" data-fb="down" title="Not helpful">👎</button><span class="fbnote"></span></div>';
@@ -438,7 +440,7 @@
 
   function start() {
     if (!window.RDSOSearch || !window.RDSO_SEARCH_INDEX || !window.RDSOChat) { statusEl.textContent = 'The search index did not load.'; return; }
-    chat = window.RDSOChat.create(window.RDSOSearch.create(window.RDSO_SEARCH_INDEX), { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: window.RDSO_CROSSREFS, tables: window.RDSO_TABLES });
+    chat = window.RDSOChat.create(window.RDSOSearch.create(window.RDSO_SEARCH_INDEX), { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: window.RDSO_CROSSREFS, tables: window.RDSO_TABLES, editions: window.RDSO_EDITIONS });
     window.rdsoChat = chat;
     Object.keys(window.RDSOChat.MANUALS).forEach(function (a) { var o = document.createElement('option'); o.value = a; o.textContent = a + ' — ' + window.RDSOChat.MANUALS[a]; $('scope').appendChild(o); });
     statusEl.textContent = 'Ready. Nothing leaves this computer.';

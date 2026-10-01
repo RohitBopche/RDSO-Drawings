@@ -130,6 +130,8 @@ async function main() {
     const t2 = await submit('How is casual renewal of a defective or fractured rail carried out?');
     console.log(t2);
     await client.captureScreenshot('chat_answer.png');
+    const ed = await ev(`(document.getElementById('edition') || {}).innerText || ''`);
+    if (!/Permanent Way Manual, 2024 \(ACS 1-14\)/.test(ed)) throw new Error('Test 2 failed: no edition line: ' + ed);
     if (!/Para 616/.test(t2.citeLabel) || !t2.dot || t2.chips < 1 || await ev(`!!document.querySelector('.hero')`)) throw new Error('Test 2 failed ' + JSON.stringify(t2));
     const v = await ev(`(async () => { document.querySelector('.msg.bot .cite').click(); await new Promise(r => setTimeout(r, 300));
       return { open: document.getElementById('viewer').classList.contains('open'), src: document.getElementById('viewerFrame').src, title: document.getElementById('viewerTitle').innerText }; })()`);

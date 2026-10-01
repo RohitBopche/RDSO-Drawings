@@ -66,6 +66,7 @@
 <script src="./data/search/clause_extras.js"></script>
 <script src="./data/search/crossrefs.js"></script>
 <script src="./data/search/tables.js"></script>
+<script src="./data/search/editions.js"></script>
 <script src="./lib/rdso_chat.js"></script>
 <script src="./lib/rdso_browse.js"></script>
 <script src="./ui/settings.js"></script>
@@ -80,7 +81,7 @@
               STMM: 'manuals/STMM-date  27.05.24.pdf', USFD: 'manuals/usfd_new 24-2-26.pdf', AT_WELD: 'manuals/ATWeld_Manual-2022.pdf',
               FBW: 'manuals/FBW Manual-Reprint 2022- Incorporated up to CS5.pdf' };
   var model = RDSOBrowse.build(RDSO_SEARCH_INDEX), xr = window.RDSO_CROSSREFS || { out: {}, in: {} };
-  var chat = RDSOChat.create(RDSOSearch.create(RDSO_SEARCH_INDEX), { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: xr, tables: window.RDSO_TABLES });
+  var chat = RDSOChat.create(RDSOSearch.create(RDSO_SEARCH_INDEX), { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: xr, tables: window.RDSO_TABLES, editions: window.RDSO_EDITIONS });
 
   /* ---- graph: manual -> chapter -> paragraph, laid out radially (deterministic, no simulation) ---- */
   var COLORS = ['#e0592a', '#2a8fe0', '#2aa876', '#a64fd1', '#d19a1f', '#d1446f'];
@@ -240,6 +241,7 @@
       if (r.table) h += '<table><thead><tr>' + r.table.columns.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' + r.table.rows.map(function (w) { return '<tr>' + w.cells.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>';
       else h += '<ul>' + r.points.map(function (p) { return '<li>' + hl(p.text, q) + '</li>'; }).join('') + '</ul>';
       (r.ownedTables || []).forEach(function (O) { h += '<div class="meta" style="margin-top:4px">Table in this paragraph (page ' + esc(O.page) + ')</div><table><thead><tr>' + O.columns.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' + O.rows.map(function (w) { return '<tr>' + w.cells.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>'; });
+      if (r.edition) h += '<div class="meta" id="edition">From: ' + esc(r.edition) + (r.amendments && r.amendments.length ? ' · correction-slip marks ' + esc(r.amendments.join(', ')) : '') + '</div>';
       h += '<div class="meta">' + cite(r.primary) + '<span>' + ({ high: 'Strong match', medium: 'Likely match', low: 'Not sure' }[r.confidence] || '') + '</span>' + (r.caveat ? '<span>' + esc(r.caveat) + '</span>' : '') + '</div>';
       if (r.followups && r.followups.length) h += '<div style="margin-top:6px">' + r.followups.slice(0, 3).map(function (f) { return chip(f); }).join('') + '</div>';
     } else if (r.kind === 'clarify') h += esc(r.text) + '<div>' + r.options.map(function (o) { return chip(o.name + ' — ' + o.label + ': ' + o.title.slice(0, 50), o.ask); }).join('') + '</div>';
