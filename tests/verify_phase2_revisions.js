@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { chromePath: chromePath, chromeFlags, artifactDir: envArtifactDir, waitForDevtools } = require('./browser_env');
-const targetUrl = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
+const targetUrl = 'file:///' + path.resolve(__dirname, '..', 'expert.html').replace(/\\/g, '/');
 const artifactDir = envArtifactDir;
 if (!fs.existsSync(artifactDir)) { try { fs.mkdirSync(artifactDir, { recursive: true }); } catch (e) {} }
 const tempProfile = require('./browser_env').freshProfile('chrome_kg_phase2_profile');
@@ -104,7 +104,7 @@ async function run() {
             mobile: false
         });
 
-        console.log('[*] Navigating to index.html...');
+        console.log('[*] Navigating to expert.html...');
         await client.send('Page.navigate', { url: targetUrl });
         await sleep(3500);
 

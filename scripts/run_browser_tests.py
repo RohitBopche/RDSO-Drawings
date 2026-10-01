@@ -21,7 +21,7 @@ SUITES = [
     "verify_phase1_milestone1", "verify_phase2_revisions", "verify_phase3_graph",
     "verify_phase4_workflows", "verify_question_interface", "verify_learning_system",
     "verify_node_panel_upgrade", "verify_kg_interlinking", "verify_kg_app",
-    "verify_kg_manuals", "verify_knowledge_universes", "test_inspect_alt11", "verify_retrieval_ui", "verify_review_packet", "verify_chat_ui", "verify_browse_ui",
+    "verify_kg_manuals", "verify_knowledge_universes", "test_inspect_alt11", "verify_retrieval_ui", "verify_review_packet", "verify_chat_ui", "verify_browse_ui", "verify_graph_ui",
 ]
 # verify_semantic_intelligence.js needs a hand-started Chrome and a hard-coded path; not automated.
 

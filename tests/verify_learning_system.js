@@ -15,7 +15,7 @@ const path = require('path');
 
 const { chromePath: CHROME_PATH, chromeFlags, artifactDir: envArtifactDir, waitForDevtools } = require('./browser_env');
 const PORT = 9245;
-const URL_TARGET = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
+const URL_TARGET = 'file:///' + path.resolve(__dirname, '..', 'expert.html').replace(/\\/g, '/');
 const ARTIFACTS_DIR = envArtifactDir;
 
 function sleep(ms) {

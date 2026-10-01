@@ -33,6 +33,6 @@ def test_evidence_without_region_is_skipped(tmp_path):
 
 
 def test_viewer_wires_the_crop_and_falls_back_to_the_pdf():
-    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    html = (ROOT / "expert.html").read_text(encoding="utf-8")
     assert "manual-pdf-evidence-img" in html and "artifacts/evidence/" in html
     assert "cropImg.onerror" in html                            # no crop rendered -> plain PDF page as before

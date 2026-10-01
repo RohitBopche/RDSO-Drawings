@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { chromePath: chromePath, chromeFlags, artifactDir: envArtifactDir } = require('./browser_env');
-const targetUrl = 'file:///' + path.resolve(__dirname, '..', 'index.html').replace(/\\/g, '/');
+const targetUrl = 'file:///' + path.resolve(__dirname, '..', 'expert.html').replace(/\\/g, '/');
 const artifactDir = envArtifactDir;
 const tempProfile = require('./browser_env').freshProfile('chrome_kg_manuals_profile');
 

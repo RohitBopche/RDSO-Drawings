@@ -2107,6 +2107,14 @@ Checks: a dialogue test for the utility vehicle question, a sweep over the table
 - Tests: new browser suite `tests/verify_browse_ui.js` (tree, reading view, deep link, next/previous, sub-paragraphs, tables, filter, manual switch, hand-off links, theme change); chat suite gained test 9 (hand-off and "Read in context").
 - Limits: titles of decimal manuals are often the first words of the paragraph, so the heading is omitted when longer than 70 characters; the PDF opens in the browser's own viewer (no highlight) unless an evidence crop exists; verified only in headless Chromium, not on phones or real hardware.
 
+### 37.33 Simple home page: graph and chat box only — 2026-10-01
+
+- User feedback: the old `index.html` (domains, timelines, 3D cosmos, many panels, floating buttons overlapping each other) was too complicated; wanted only the knowledge graph and a chat box at the bottom centre.
+- `index.html` is now exactly that: a full-screen 2D graph (6 manuals, their chapters and 1,172 paragraphs, 1,259 nodes; resolved paragraph-to-paragraph references drawn when a node is selected or an answer highlights it) and a chat box centred at the bottom. Click a dot for a small card (text, "Ask about this", "Read in context", "Open page"); a question answers in a card above the box and lights up and zooms to the cited paragraphs. Pan, scroll to zoom, "Reset view", themes via "Aa".
+- The previous full application is unchanged as `expert.html` (reachable through "Expert view" on the new page; it has a "Simple view" link back). All older browser suites and tests now point at `expert.html`.
+- New browser suite `tests/verify_graph_ui.js`. Layout is a deterministic radial layout (no force simulation); the graph shows the manuals only, not drawings or the 5,714-entity cosmos, which stay in the expert view.
+- Verified in headless Chromium only. 21 gates, 257 pytest, 17/17 browser suites pass.
+
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
 
 **Ordering principle:** data truth first, then retrieval, then answers, then learning. Each work package (WP) is one small validated increment: it ends with a gate or test that fails before the change and passes after, a conventional commit, and an updated metrics file. Do not start a WP whose dependency is open.

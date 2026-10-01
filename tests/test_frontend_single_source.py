@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_index_html_has_no_legacy_manuals_view():
-    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    html = (ROOT / "expert.html").read_text(encoding="utf-8")
     assert "RDSO_MANUALS_KNOWLEDGE" not in html
     assert not (ROOT / "data" / "rdso_manuals_knowledge.json").exists()
 
@@ -19,6 +19,6 @@ def test_export_bundle_does_not_emit_legacy_view():
 
 
 def test_clause_card_reads_canonical_text_field():
-    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    html = (ROOT / "expert.html").read_text(encoding="utf-8")
     assert re.search(r"const verbatim = data\.text \|\|", html)
     assert "data.tolerance_texts" in html and "data.roles" in html

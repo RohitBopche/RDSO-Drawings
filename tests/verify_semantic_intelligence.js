@@ -6,7 +6,7 @@ const WebSocket = require('ws');
 const http = require('http');
 
 const CHROME_PORT = 9222;
-const PAGE_URL = 'file:///F:/git/RDSO-Drawings/index.html';
+const PAGE_URL = 'file:///F:/git/RDSO-Drawings/expert.html';
 const results = [];
 
 function log(msg) { console.log(`  [CDP] ${msg}`); }

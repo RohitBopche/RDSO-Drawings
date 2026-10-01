@@ -45,7 +45,7 @@ def test_paragraph_number_query_is_always_answered():
 
 
 def test_no_active_curated_answer_claims_verified():
-    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    html = (ROOT / "expert.html").read_text(encoding="utf-8")
     a = html.index("const CANONICAL_QA_DATABASE = [")
     b = html.index("function detectQuestionIntent")
     assert 'status: "VERIFIED"' not in html[a:b]

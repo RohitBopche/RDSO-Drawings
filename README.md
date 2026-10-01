@@ -186,7 +186,8 @@ F:\git\RDSO-Drawings\
 ├── docs/                       # Blueprints & documentation
 │   └── RDSO_Knowledge_Graph_Improvement_Blueprint.md
 ├── lib/                        # Offline vendor libraries (Three.js, OrbitControls.js)
-├── index.html                  # Main Studio web application (kept at root for 1-click opening)
+├── index.html                  # Simple home page: knowledge graph + chat box (open this)
+├── expert.html                 # Full expert workbench (drawings, revisions, 3D)
 └── README.md                   # Complete system documentation
 ```
 
