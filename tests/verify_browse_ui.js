@@ -147,8 +147,14 @@ async function main() {
     console.log(t4b);
     if (t4b.tables < 1 || t4b.rows < 3) throw new Error('Test 4b failed ' + JSON.stringify(t4b));
 
+    console.log("\n--- TEST 4c: a paragraph that mentions figures shown only as pictures lists the page of each ---");
+    await client.send('Page.navigate', { url: URL_TARGET + '#CLAUSE:IRPWM:CH_03:PARA_341' }); await sleep(2500);
+    const t4c = await ev(`({ box: !!document.getElementById('xloc'), links: [...document.querySelectorAll('#xloc a')].map(a => a.getAttribute('href')).slice(0, 3) })`);
+    console.log(t4c);
+    if (!t4c.box || !t4c.links.length || !t4c.links.every(h => /#page=\d+$/.test(h))) throw new Error('Test 4c failed ' + JSON.stringify(t4c));
+
     console.log("\n--- TEST 5: filter, manual switch, hand-off links to the chat ---");
-    const t5 = await ev(`(async () => { const f = document.getElementById('filter'); f.value = '4.1'; f.dispatchEvent(new Event('input')); await new Promise(r => setTimeout(r, 100));
+    const t5 = await ev(`(async () => { const m0 = document.getElementById('manual'); m0.value = 'AT_WELD'; m0.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 150)); const f = document.getElementById('filter'); f.value = '4.1'; f.dispatchEvent(new Event('input')); await new Promise(r => setTimeout(r, 100));
       const hit = document.querySelectorAll('#tree button[data-id]').length; f.value = ''; f.dispatchEvent(new Event('input'));
       const m = document.getElementById('manual'); m.value = 'FBW'; m.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 200));
       return { hit, fbw: document.getElementById('ptitle').innerText, ask: document.getElementById('askAbout').getAttribute('href'), page: document.getElementById('openPage').getAttribute('href') }; })()`);

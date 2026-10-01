@@ -37,6 +37,8 @@ GATES = [
     ("Gate S: Measurements", [sys.executable, str(ROOT / "scripts" / "validate_measurements.py")]),
     ("Gate T: Drawing registry", [sys.executable, str(ROOT / "scripts" / "validate_drawings.py")]),
     ("Gate U: Drawing links", [sys.executable, str(ROOT / "scripts" / "validate_drawing_links.py")]),
+    ("Gate W: Evidence crops for every paragraph", [sys.executable, str(ROOT / "scripts" / "evidence_coverage_report.py"), "--check"]),
+    ("Gate X: Unresolved cross-references explained", [sys.executable, str(ROOT / "scripts" / "crossref_diagnose.py"), "--check"]),
     ("Gate V: Pilot checklist, six manuals", [sys.executable, str(ROOT / "scripts" / "pilot_checklist.py")]),
 ]
 

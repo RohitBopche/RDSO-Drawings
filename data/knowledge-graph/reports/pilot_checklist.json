@@ -38,7 +38,7 @@
   },
   "xrefs": {
    "status": "PASS",
-   "detail": "5 ambiguous, 169 external, 47 not_found, 606 resolved"
+   "detail": "5 ambiguous, 170 external, 44 not_found, 608 resolved"
   },
   "flagged": {
    "status": "PASS",
@@ -53,8 +53,8 @@
    "detail": "146 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "PASS",
-   "detail": "rebuild_all leaves data/ unchanged"
+   "status": "SKIP",
+   "detail": "run with --rebuild, or see the CI rebuild step"
   }
  },
  "TMM": {
@@ -96,7 +96,7 @@
   },
   "xrefs": {
    "status": "PASS",
-   "detail": "6 ambiguous, 7 external, 53 not_found, 312 resolved"
+   "detail": "7 ambiguous, 7 external, 52 not_found, 312 resolved"
   },
   "flagged": {
    "status": "PASS",
@@ -111,8 +111,8 @@
    "detail": "59 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "PASS",
-   "detail": "rebuild_all leaves data/ unchanged"
+   "status": "SKIP",
+   "detail": "run with --rebuild, or see the CI rebuild step"
   }
  },
  "STMM": {
@@ -169,8 +169,8 @@
    "detail": "37 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "PASS",
-   "detail": "rebuild_all leaves data/ unchanged"
+   "status": "SKIP",
+   "detail": "run with --rebuild, or see the CI rebuild step"
   }
  },
  "USFD": {
@@ -227,8 +227,8 @@
    "detail": "52 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "PASS",
-   "detail": "rebuild_all leaves data/ unchanged"
+   "status": "SKIP",
+   "detail": "run with --rebuild, or see the CI rebuild step"
   }
  },
  "AT_WELD": {
@@ -285,8 +285,8 @@
    "detail": "27 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "PASS",
-   "detail": "rebuild_all leaves data/ unchanged"
+   "status": "SKIP",
+   "detail": "run with --rebuild, or see the CI rebuild step"
   }
  },
  "FBW": {
@@ -343,8 +343,8 @@
    "detail": "29 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "PASS",
-   "detail": "rebuild_all leaves data/ unchanged"
+   "status": "SKIP",
+   "detail": "run with --rebuild, or see the CI rebuild step"
   }
  }
 }

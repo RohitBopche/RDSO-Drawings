@@ -155,7 +155,7 @@ def extract(nodes: list[dict], deleted: dict[str, list[str]]) -> list[dict]:
                    "kind": "back_ref" if info.get("back") and kind == "para" else kind,
                    "target_kind": kind, "number": info["number"], "subref": info.get("subref", ""),
                    "scope": alias, "scope_name": None, "status": "NOT_FOUND", "targets": []}
-            scope, name = scope_after(text, end, alias) if kind == "para" else (alias, None)
+            scope, name = scope_after(text, end, alias) if kind in ("para", "annexure", "table", "figure") else (alias, None)
             rec["scope"], rec["scope_name"] = scope, name
             if kind in ("standard", "drawing") or scope == "EXTERNAL":
                 rec["status"] = "EXTERNAL"
@@ -168,7 +168,7 @@ def extract(nodes: list[dict], deleted: dict[str, list[str]]) -> list[dict]:
                 elif key in T["section"]:
                     rec["status"], rec["targets"] = "RESOLVED", [T["section"][key]]
             elif kind in ("annexure", "table", "figure"):
-                hits = T[{"annexure": "annex", "table": "table", "figure": "figure"}[kind]].get((alias, norm_key(info["number"])), [])
+                hits = T[{"annexure": "annex", "table": "table", "figure": "figure"}[kind]].get((scope, norm_key(info["number"])), [])
                 hits = sorted({i: pg for pg, i in hits}.items(), key=lambda t: (t[1], t[0]))   # one entry per target node
                 if len(hits) > 1:
                     chapter = cid.split(":")[2]
