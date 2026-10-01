@@ -87,17 +87,19 @@
   var nodes = [], byId = {}, edges = [];
   function add(n) { nodes.push(n); byId[n.id] = n; return n; }
   var M = model.manuals.length;
+  function fib(i, n) { var y = n > 1 ? 1 - 2 * i / (n - 1) : 0, r = Math.sqrt(Math.max(0, 1 - y * y)), t = i * 2.39996323; return [Math.cos(t) * r, y, Math.sin(t) * r]; }   // point on a unit sphere
   model.manuals.forEach(function (m, mi) {
-    var a = mi / M * Math.PI * 2 - Math.PI / 2, R = 900;
-    var mn = add({ id: 'M:' + m.alias, kind: 'manual', label: m.alias.replace('_', ' '), sub: m.name, x: Math.cos(a) * R, y: Math.sin(a) * R, r: 15, color: COLORS[mi], alias: m.alias, a: a });
+    var a = mi / M * Math.PI * 2 - Math.PI / 2, R = 1000, my = (mi % 2 ? 1 : -1) * 170;
+    var mn = add({ id: 'M:' + m.alias, kind: 'manual', label: m.alias.replace('_', ' '), sub: m.name, x: Math.cos(a) * R, y: my, z: Math.sin(a) * R, r: 15, color: COLORS[mi], alias: m.alias });
     var nc = m.chapters.length;
     m.chapters.forEach(function (ch, ci) {
-      var ca = a + (ci - (nc - 1) / 2) / nc * Math.PI * 1.55 + (ci % 2 ? 0.03 : -0.03), CR = 270 + (ci % 2) * 40;
-      var cn = add({ id: 'H:' + m.alias + ':' + ch.num, kind: 'chapter', label: 'Ch. ' + ch.num, sub: ch.title, x: mn.x + Math.cos(ca) * CR * 1.1, y: mn.y + Math.sin(ca) * CR * 1.1, r: 7.5, color: COLORS[mi], alias: m.alias });
+      var d = fib(ci, nc), CR = 300 + 90 * Math.sqrt(nc / 15);
+      var cn = add({ id: 'H:' + m.alias + ':' + ch.num, kind: 'chapter', label: 'Ch. ' + ch.num, sub: ch.title, x: mn.x + d[0] * CR, y: mn.y + d[1] * CR, z: mn.z + d[2] * CR, r: 7.5, color: COLORS[mi], alias: m.alias });
       edges.push([mn.id, cn.id, 0]);
-      ch.clauses.forEach(function (c, k) {   // golden-angle spiral around the chapter
-        var rr = 14 + 7.2 * Math.sqrt(k + 1), t = k * 2.39996;
-        var pn = add({ id: c.id, kind: 'clause', label: c.alias.replace('_', ' ') + ' ' + c.para, sub: c.title, x: cn.x + Math.cos(t) * rr, y: cn.y + Math.sin(t) * rr, r: 2.6, color: COLORS[mi], alias: m.alias });
+      var n = ch.clauses.length, rr = 18 + 9 * Math.cbrt(n);
+      ch.clauses.forEach(function (c, k) {
+        var e = fib(k, n);
+        var pn = add({ id: c.id, kind: 'clause', label: c.alias.replace('_', ' ') + ' ' + c.para, sub: c.title, x: cn.x + e[0] * rr, y: cn.y + e[1] * rr, z: cn.z + e[2] * rr, r: 2.6, color: COLORS[mi], alias: m.alias });
         edges.push([cn.id, pn.id, 0]);
       });
     });
@@ -106,69 +108,101 @@
   Object.keys(xr.out).forEach(function (src) { var seen = {}; xr.out[src].forEach(function (e) { if (e[2] === 'RESOLVED') e[3].forEach(function (t) { if (byId[src] && byId[t] && t !== src && !seen[t]) { seen[t] = 1; links.push([src, t]); } }); }); });
   $('legend').innerHTML = model.manuals.map(function (m, i) { return '<i style="background:' + COLORS[i] + '"></i>' + esc(m.alias.replace('_', ' ')); }).join('') + ' · big dot = manual, medium = chapter, small = paragraph';
 
-  /* ---- canvas, pan and zoom ---- */
-  var cv = $('g'), ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, scale = 0.5, ox = 0, oy = 0, sel = null, hot = {}, hover = null, dirty = true;
+  /* ---- 3D camera on a 2D canvas: yaw/pitch rotation, perspective, depth ordering, smooth moves ---- */
+  var cv = $('g'), ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, sel = null, hot = {}, dirty = true;
+  var cam = { yaw: 0.6, pitch: 0.38, zoom: 0.45, tx: 0, ty: 0, tz: 0 }, goal = null, spin = true, lastTouch = 0, P = {}, order = [];
+  var DIST = 2600, TAU = 6.2832;
   function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
   function resize() { dpr = window.devicePixelRatio || 1; W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; dirty = true; }
-  function fit() {
-    var x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; nodes.forEach(function (n) { x0 = Math.min(x0, n.x); x1 = Math.max(x1, n.x); y0 = Math.min(y0, n.y); y1 = Math.max(y1, n.y); });
-    var aw = W - 40, ah = H - 150; scale = Math.max(0.1, Math.min(aw / (x1 - x0 + 60), ah / (y1 - y0 + 60)));
-    ox = W / 2 - (x0 + x1) / 2 * scale; oy = 56 + ah / 2 - (y0 + y1) / 2 * scale; dirty = true;
+  function bounds(list) {
+    var c = [0, 0, 0], r = 0; list.forEach(function (n) { c[0] += n.x; c[1] += n.y; c[2] += n.z; }); c = c.map(function (v) { return v / list.length; });
+    list.forEach(function (n) { r = Math.max(r, Math.hypot(n.x - c[0], n.y - c[1], n.z - c[2])); }); return { c: c, r: r };
   }
-  function sx(x) { return x * scale + ox; } function sy(y) { return y * scale + oy; }
+  function flyTo(list, keepAngles) {
+    var b = bounds(list), extent = Math.max(90, b.r + 70), avail = Math.min(W * 0.7, H - 400) / 2;
+    goal = { tx: b.c[0], ty: b.c[1], tz: b.c[2], zoom: Math.max(0.12, Math.min(8, avail / extent)) };
+    if (!keepAngles) { goal.yaw = cam.yaw; goal.pitch = cam.pitch; }
+    dirty = true;
+  }
+  function fit() { spin = true; flyTo(nodes, true); goal.zoom = Math.min(W * 0.46, H * 0.4) / 1500 * 1.0; }
+  function project() {
+    var cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw), cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+    order.length = 0;
+    nodes.forEach(function (n) {
+      var x = n.x - cam.tx, y = n.y - cam.ty, z = n.z - cam.tz;
+      var x1 = x * cy - z * sy, z1 = x * sy + z * cy, y1 = y * cp - z1 * sp, z2 = y * sp + z1 * cp;
+      var f = DIST / (DIST + z2), k = cam.zoom * f, q = P[n.id] || (P[n.id] = {});
+      q.x = W / 2 + x1 * k; q.y = (H - 130) / 2 + 40 + y1 * k; q.f = f; q.z = z2; q.k = k; order.push(n);
+    });
+    order.sort(function (a, b) { return P[b.id].z - P[a.id].z; });
+  }
+  function depthA(q) { return Math.max(0.22, Math.min(1, 1.12 - (q.z + 1500) / 3200)); }
   function draw() {
-    dirty = false;
+    dirty = false; project();
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
-    var line = css('--line'), ink = css('--ink'), muted = css('--muted'), accent = css('--accent'), bg = css('--surface');
-    ctx.lineWidth = 1; ctx.strokeStyle = line; ctx.globalAlpha = 0.55; ctx.beginPath();
-    edges.forEach(function (e) { var a = byId[e[0]], b = byId[e[1]]; ctx.moveTo(sx(a.x), sy(a.y)); ctx.lineTo(sx(b.x), sy(b.y)); });
+    var line = css('--line'), ink = css('--ink'), accent = css('--accent'), bg = css('--surface');
+    // soft vignette so the cloud reads as a space rather than a flat plane
+    var g = ctx.createRadialGradient(W / 2, H / 2, 40, W / 2, H / 2, Math.max(W, H) * 0.7); g.addColorStop(0, 'rgba(128,128,128,0)'); g.addColorStop(1, 'rgba(128,128,128,0.16)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.lineWidth = 1; ctx.strokeStyle = line; ctx.globalAlpha = 0.5; ctx.beginPath();
+    edges.forEach(function (e) { var a = P[e[0]], b = P[e[1]]; ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); });
     ctx.stroke(); ctx.globalAlpha = 1;
     var focus = sel ? [sel.id] : Object.keys(hot);
-    ctx.strokeStyle = accent; ctx.lineWidth = 1.4; ctx.globalAlpha = 0.8; ctx.beginPath();
-    links.forEach(function (l) { if (focus.indexOf(l[0]) >= 0 || focus.indexOf(l[1]) >= 0) { var a = byId[l[0]], b = byId[l[1]], x1 = sx(a.x), y1 = sy(a.y), x2 = sx(b.x), y2 = sy(b.y);
-      ctx.moveTo(x1, y1); ctx.quadraticCurveTo((x1 + x2) / 2 + (y2 - y1) * 0.12, (y1 + y2) / 2 - (x2 - x1) * 0.12, x2, y2); } });
+    ctx.strokeStyle = accent; ctx.lineWidth = 1.6; ctx.globalAlpha = 0.85; ctx.beginPath();
+    links.forEach(function (l) { if (focus.indexOf(l[0]) >= 0 || focus.indexOf(l[1]) >= 0) { var a = P[l[0]], b = P[l[1]];
+      ctx.moveTo(a.x, a.y); ctx.quadraticCurveTo((a.x + b.x) / 2 + (b.y - a.y) * 0.14, (a.y + b.y) / 2 - (b.x - a.x) * 0.14, b.x, b.y); } });
     ctx.stroke(); ctx.globalAlpha = 1;
     var anyHot = Object.keys(hot).length > 0;
-    nodes.forEach(function (n) {
-      var x = sx(n.x), y = sy(n.y); if (x < -20 || y < -20 || x > W + 20 || y > H + 20) return;
-      var r = Math.max(n.kind === 'clause' ? 1.6 : 3, n.r * Math.pow(scale, 0.55) * 1.3), isHot = hot[n.id] || (sel && sel.id === n.id);
-      ctx.globalAlpha = anyHot && !isHot && n.kind === 'clause' ? 0.25 : 1;
-      ctx.fillStyle = n.color; ctx.beginPath(); ctx.arc(x, y, isHot ? r + 3 : r, 0, 6.2832); ctx.fill();
-      if (isHot) { ctx.lineWidth = 2.5; ctx.strokeStyle = ink; ctx.stroke(); }
-      ctx.globalAlpha = 1;
+    order.forEach(function (n) {   // far to near
+      var q = P[n.id]; if (q.x < -30 || q.y < -30 || q.x > W + 30 || q.y > H + 30) return;
+      var isHot = hot[n.id] || (sel && sel.id === n.id), r = Math.max(n.kind === 'clause' ? 1.5 : 3, n.r * q.k * 1.15 * Math.pow(cam.zoom, -0.25));
+      ctx.globalAlpha = (anyHot && !isHot && n.kind === 'clause' ? 0.2 : 1) * depthA(q);
+      ctx.fillStyle = n.color; ctx.beginPath(); ctx.arc(q.x, q.y, isHot ? r + 3 : r, 0, TAU); ctx.fill();
+      if (r > 3.2) { ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.beginPath(); ctx.arc(q.x - r * 0.3, q.y - r * 0.33, r * 0.38, 0, TAU); ctx.fill(); }
+      if (isHot) { ctx.lineWidth = 2.5; ctx.strokeStyle = ink; ctx.beginPath(); ctx.arc(q.x, q.y, r + 3, 0, TAU); ctx.stroke(); }
     });
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    nodes.forEach(function (n) {
-      var show = n.kind === 'manual' || (n.kind === 'chapter' && scale > 0.55) || (n.kind === 'clause' && (scale > 2.2 || hot[n.id] || (sel && sel.id === n.id)));
-      if (!show) return; var x = sx(n.x), y = sy(n.y); if (x < 0 || y < 0 || x > W || y > H) return;
-      var fs = n.kind === 'manual' ? 15 : 11; ctx.font = (n.kind === 'manual' ? '700 ' : '500 ') + fs + 'px system-ui,sans-serif';
-      var dy = n.kind === 'manual' ? n.r * Math.pow(scale, 0.55) * 1.3 + 12 : 14;
-      ctx.lineWidth = 3; ctx.strokeStyle = bg; ctx.strokeText(n.label, x, y + dy); ctx.fillStyle = ink; ctx.fillText(n.label, x, y + dy);
+    ctx.globalAlpha = 1; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    order.forEach(function (n) {
+      var q = P[n.id], zoomed = cam.zoom * q.f;
+      var show = n.kind === 'manual' || (n.kind === 'chapter' && zoomed > 0.5) || (n.kind === 'clause' && (zoomed > 2.4 || hot[n.id] || (sel && sel.id === n.id)));
+      if (!show || q.x < 0 || q.y < 0 || q.x > W || q.y > H) return;
+      var fs = (n.kind === 'manual' ? 15 : 11) * Math.max(0.8, Math.min(1.25, q.f)); ctx.font = (n.kind === 'manual' ? '700 ' : '500 ') + fs.toFixed(1) + 'px system-ui,sans-serif';
+      var dy = (n.kind === 'manual' ? n.r * q.k * 1.15 * Math.pow(cam.zoom, -0.25) + 12 : 14);
+      ctx.globalAlpha = Math.max(0.5, depthA(q)); ctx.lineWidth = 3; ctx.strokeStyle = bg; ctx.strokeText(n.label, q.x, q.y + dy); ctx.fillStyle = ink; ctx.fillText(n.label, q.x, q.y + dy); ctx.globalAlpha = 1;
     });
   }
-  function loop() { if (dirty) draw(); requestAnimationFrame(loop); }
+  function step() {
+    if (goal) {   // ease the camera toward its goal
+      var done = true;
+      ['tx', 'ty', 'tz', 'zoom'].forEach(function (k) { var d = goal[k] - cam[k]; if (Math.abs(d) > (k === 'zoom' ? 0.002 : 0.6)) { cam[k] += d * 0.14; done = false; } else cam[k] = goal[k]; });
+      if (done) goal = null; dirty = true;
+    } else if (spin && !drag && !sel && !Object.keys(hot).length && !document.hidden) { cam.yaw += 0.0016; dirty = true; }
+  }
+  function loop() { step(); if (dirty) draw(); requestAnimationFrame(loop); }
   function pick(px, py) {
-    var best = null, bd = 1e9;
-    nodes.forEach(function (n) { var dx = sx(n.x) - px, dy = sy(n.y) - py, d = dx * dx + dy * dy, rr = Math.max(7, n.r * Math.pow(scale, 0.55) * 1.3 + 4); if (d < rr * rr && d < bd && (n.kind !== 'clause' || scale > 0.35)) { bd = d; best = n; } });
+    var best = null, bz = 1e9;
+    nodes.forEach(function (n) { var q = P[n.id]; if (!q) return; var dx = q.x - px, dy = q.y - py, rr = Math.max(6, n.r * q.k * 1.15 * Math.pow(cam.zoom, -0.25) + 3);
+      if (dx * dx + dy * dy < rr * rr && q.z < bz && (n.kind !== 'clause' || cam.zoom * q.f > 0.3)) { bz = q.z; best = n; } });
     return best;
   }
   var drag = null, moved = 0;
-  cv.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, ox: ox, oy: oy }; moved = 0; cv.setPointerCapture(e.pointerId); cv.classList.add('drag'); });
+  cv.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  cv.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, y: e.clientY, yaw: cam.yaw, pitch: cam.pitch, tx: cam.tx, ty: cam.ty, tz: cam.tz, pan: e.shiftKey || e.button === 2 }; moved = 0; goal = null; spin = false; cv.setPointerCapture(e.pointerId); cv.classList.add('drag'); });
   cv.addEventListener('pointermove', function (e) {
-    if (drag) { var dx = e.clientX - drag.x, dy = e.clientY - drag.y; moved = Math.max(moved, Math.abs(dx) + Math.abs(dy)); ox = drag.ox + dx; oy = drag.oy + dy; dirty = true; return; }
+    if (drag) {
+      var dx = e.clientX - drag.x, dy = e.clientY - drag.y; moved = Math.max(moved, Math.abs(dx) + Math.abs(dy));
+      if (drag.pan) {   // move the look-at point in the screen plane
+        var k = 1 / cam.zoom, cy = Math.cos(drag.yaw), sy = Math.sin(drag.yaw), cp = Math.cos(drag.pitch), sp = Math.sin(drag.pitch);
+        cam.tx = drag.tx - (dx * cy - dy * sp * sy) * k; cam.ty = drag.ty - dy * cp * k; cam.tz = drag.tz - (-dx * sy - dy * sp * cy) * k;
+      } else { cam.yaw = drag.yaw + dx * 0.006; cam.pitch = Math.max(-1.45, Math.min(1.45, drag.pitch + dy * 0.006)); }
+      dirty = true; return;
+    }
     var n = pick(e.clientX, e.clientY), tip = $('tip');
     if (n) { tip.style.display = 'block'; tip.style.left = Math.min(e.clientX + 14, W - 290) + 'px'; tip.style.top = e.clientY + 14 + 'px'; tip.innerHTML = '<b>' + esc(n.label) + '</b>' + (n.sub ? '<br>' + esc(String(n.sub).slice(0, 90)) : ''); } else tip.style.display = 'none';
   });
-  cv.addEventListener('pointerup', function (e) { cv.classList.remove('drag'); if (drag && moved < 5) { var n = pick(e.clientX, e.clientY); if (n) select(n, true); else { sel = null; $('card').hidden = true; dirty = true; } } drag = null; });
+  cv.addEventListener('pointerup', function (e) { cv.classList.remove('drag'); if (drag && moved < 5) { project(); var n = pick(e.clientX, e.clientY); if (n) select(n, true); else { sel = null; $('card').hidden = true; dirty = true; } } drag = null; });
   cv.addEventListener('pointerleave', function () { $('tip').style.display = 'none'; });
-  cv.addEventListener('wheel', function (e) { e.preventDefault(); zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0015)); }, { passive: false });
-  function zoomAt(px, py, k) { var ns = Math.max(0.12, Math.min(14, scale * k)); k = ns / scale; ox = px - (px - ox) * k; oy = py - (py - oy) * k; scale = ns; dirty = true; }
-  function focusOn(ids) {
-    var ns = ids.map(function (i) { return byId[i]; }).filter(Boolean); if (!ns.length) return;
-    var x0 = Math.min.apply(null, ns.map(function (n) { return n.x; })), x1 = Math.max.apply(null, ns.map(function (n) { return n.x; })), y0 = Math.min.apply(null, ns.map(function (n) { return n.y; })), y1 = Math.max.apply(null, ns.map(function (n) { return n.y; }));
-    var w = Math.max(160, x1 - x0 + 160), h = Math.max(160, y1 - y0 + 160);
-    scale = Math.min(6, Math.min(W * 0.6 / w, (H - 300) / h)); ox = W * 0.42 - (x0 + x1) / 2 * scale; oy = (H - 220) / 2 + 30 - (y0 + y1) / 2 * scale; dirty = true;
-  }
+  cv.addEventListener('wheel', function (e) { e.preventDefault(); goal = null; cam.zoom = Math.max(0.1, Math.min(14, cam.zoom * Math.exp(-e.deltaY * 0.0015))); dirty = true; }, { passive: false });
+  function focusOn(ids) { var ns = ids.map(function (i) { return byId[i]; }).filter(Boolean); if (ns.length) { spin = false; flyTo(ns, false); } }
 
   /* ---- node card ---- */
   function select(n, zoom) {
@@ -224,7 +258,7 @@
     sel = null; $('card').hidden = true;
     if (ids.length) focusOn(ids.filter(function (i) { return byId[i]; })); dirty = true;
   }
-  function setScope(a) { scope = a || ''; chat.setScope(scope); $('q').placeholder = scope ? 'Ask a question about ' + scope.replace('_', ' ') + ' only…' : 'Ask a question about the manuals…'; $('status').textContent = scope ? 'Searching only in ' + scope.replace('_', ' ') + ' (click empty space then “Ask only this manual” again to change)' : 'Nothing leaves this computer. Click a dot to read it; scroll to zoom; drag to move.'; }
+  function setScope(a) { scope = a || ''; chat.setScope(scope); $('q').placeholder = scope ? 'Ask a question about ' + scope.replace('_', ' ') + ' only…' : 'Ask a question about the manuals…'; $('status').textContent = scope ? 'Searching only in ' + scope.replace('_', ' ') + ' (click empty space then “Ask only this manual” again to change)' : 'Nothing leaves this computer. Click a dot to read it; drag to rotate, scroll to zoom, Shift+drag to move.'; }
   $('f').addEventListener('submit', function (e) { e.preventDefault(); ask($('q').value); });
   document.addEventListener('click', function (e) {
     var a = e.target.closest('[data-ask]'); if (a) { ask(a.dataset.ask); return; }
@@ -233,18 +267,18 @@
     if (e.target.id === 'ansX') { $('ans').hidden = true; hot = {}; dirty = true; }
     if (e.target.id === 'cardX') { $('card').hidden = true; sel = null; dirty = true; }
   });
-  $('fit').addEventListener('click', function () { sel = null; hot = {}; $('card').hidden = true; $('ans').hidden = true; setScope(''); fit(); });
+  $('fit').addEventListener('click', function () { sel = null; hot = {}; $('card').hidden = true; $('ans').hidden = true; setScope(''); cam.yaw = 0.6; cam.pitch = 0.38; fit(); });
   document.addEventListener('keydown', function (e) {
     if (e.key === '/' && document.activeElement !== $('q')) { e.preventDefault(); $('q').focus(); }
     else if (e.key === 'Escape') { $('card').hidden = true; $('ans').hidden = true; sel = null; hot = {}; dirty = true; }
   });
   new MutationObserver(function () { dirty = true; }).observe(document.documentElement, { attributes: true });
   window.addEventListener('resize', function () { resize(); });
-  resize(); fit(); loop();
+  resize(); fit(); cam.zoom = goal.zoom; cam.tx = goal.tx; cam.ty = goal.ty; cam.tz = goal.tz; goal = null; loop();
   setScope(''); $('q').disabled = $('go').disabled = false;
   var qs = new URLSearchParams(location.search); if (qs.get('manual') && RDSOChat.MANUALS[qs.get('manual')]) setScope(qs.get('manual'));
   if (qs.get('q')) ask(qs.get('q'));
-  window.__graphReady = true; window.rdsoGraph = { nodes: nodes, links: links, edges: edges, ask: ask, select: function (id) { select(byId[id], true); }, state: function () { return { scale: scale, sel: sel && sel.id, hot: Object.keys(hot) }; } };
+  window.__graphReady = true; window.rdsoGraph = { nodes: nodes, links: links, edges: edges, ask: ask, select: function (id) { select(byId[id], true); }, state: function () { return { zoom: cam.zoom, yaw: cam.yaw, pitch: cam.pitch, sel: sel && sel.id, hot: Object.keys(hot) }; } };
 })();
 </script>
 </body>

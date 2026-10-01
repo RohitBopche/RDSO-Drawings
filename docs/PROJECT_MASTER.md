@@ -2113,6 +2113,7 @@ Checks: a dialogue test for the utility vehicle question, a sweep over the table
 - `index.html` is now exactly that: a full-screen 2D graph (6 manuals, their chapters and 1,172 paragraphs, 1,259 nodes; resolved paragraph-to-paragraph references drawn when a node is selected or an answer highlights it) and a chat box centred at the bottom. Click a dot for a small card (text, "Ask about this", "Read in context", "Open page"); a question answers in a card above the box and lights up and zooms to the cited paragraphs. Pan, scroll to zoom, "Reset view", themes via "Aa".
 - The previous full application is unchanged as `expert.html` (reachable through "Expert view" on the new page; it has a "Simple view" link back). All older browser suites and tests now point at `expert.html`.
 - New browser suite `tests/verify_graph_ui.js`. Layout is a deterministic radial layout (no force simulation); the graph shows the manuals only, not drawings or the 5,714-entity cosmos, which stay in the expert view.
+- Follow-up: the graph is now 3D (own perspective projection on the 2D canvas, no WebGL): paragraphs sit on small spheres around their chapter, chapters on a sphere around their manual, manuals on a ring at alternating heights; drag rotates, wheel zooms, Shift+drag pans, the camera eases to cited paragraphs, slow auto-rotation until the first interaction, depth fades and shaded dots.
 - Verified in headless Chromium only. 21 gates, 257 pytest, 17/17 browser suites pass.
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
