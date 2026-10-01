@@ -1,4 +1,8 @@
-# RDSO Universal Track Infrastructure Digital Twin & Multi-Drawing Assembly Suite
+# Track Manuals Atlas
+
+An offline knowledge base and 3D knowledge graph of six Indian Railways track manuals, with a chat that answers only by quoting the manuals (manual, paragraph and page for every statement). Formerly "RDSO-Drawings"; the repository keeps that name until it is renamed in GitHub settings. This is an independent tool, not an official RDSO product.
+
+_Historical prototype title: RDSO Universal Track Infrastructure Digital Twin & Multi-Drawing Assembly Suite._
 
 **Developed for:** Track Analytical Cell, Bhusawal Division, Central Railway, Indian Railways  
 **System Classification:** Offline 3D Engineering Digital Twin, Modular Component Assembly Suite & Continuous Learning Knowledge Graph

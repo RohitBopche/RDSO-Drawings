@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unified Validation CLI for the RDSO Knowledge Graph publication gates."""
+"""Unified Validation CLI for the Track Manuals Atlas publication gates."""
 
 from __future__ import annotations
 

@@ -1,4 +1,6 @@
-# RDSO Drawings — Master Project Specification
+# Track Manuals Atlas — Master Project Specification
+
+> Renamed on 2026-10-01 from "RDSO-Drawings" (the repository and some file paths, ids and older sections still use the old name). The old name described the first prototype, a viewer for RDSO drawings; the project is now an offline knowledge base and graph of six track manuals, and the issuing body's name is not part of the product name, so the name does not suggest an official RDSO product.
 
 **Status:** Canonical project document  
 **Purpose:** Single source of project direction, architecture, implementation roadmap, data contracts, UX requirements, validation gates, and agent handoff rules.  
@@ -9,7 +11,7 @@
 
 ## 1. Executive Direction
 
-RDSO-Drawings is evolving from a drawing/PDF visualization prototype into an **offline-first Railway Engineering Knowledge System**.
+Track Manuals Atlas (formerly RDSO-Drawings) is evolving from a drawing/PDF visualization prototype into an **offline-first Railway Engineering Knowledge System**.
 
 The product combines:
 

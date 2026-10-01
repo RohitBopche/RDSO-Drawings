@@ -1,4 +1,4 @@
-"""Shared utilities for RDSO Knowledge Graph validation scripts."""
+"""Shared utilities for Track Manuals Atlas validation scripts."""
 
 from __future__ import annotations
 
