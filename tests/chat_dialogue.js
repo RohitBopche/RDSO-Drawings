@@ -2,9 +2,9 @@
 const path = require('path');
 const root = path.resolve(__dirname, '..');
 const S = require(path.join(root, 'lib/rdso_search.js')), C = require(path.join(root, 'lib/rdso_chat.js'));
-require(path.join(root, 'data/search/search_index.js')); require(path.join(root, 'data/search/clause_extras.js')); require(path.join(root, 'data/search/crossrefs.js'));
+require(path.join(root, 'data/search/search_index.js')); require(path.join(root, 'data/search/clause_extras.js')); require(path.join(root, 'data/search/crossrefs.js')); require(path.join(root, 'data/search/tables.js'));
 const engine = S.create(globalThis.RDSO_SEARCH_INDEX);
-const mk = () => C.create(engine, { extras: globalThis.RDSO_CLAUSE_EXTRAS, xrefs: globalThis.RDSO_CROSSREFS });
+const mk = () => C.create(engine, { extras: globalThis.RDSO_CLAUSE_EXTRAS, xrefs: globalThis.RDSO_CROSSREFS, tables: globalThis.RDSO_TABLES });
 const norm = t => String(t).replace(/\s+/g, ' ').replace(/…$/, '').trim();
 const out = { scenarios: {}, grounding: { checked: 0, violations: [] } };
 
@@ -47,4 +47,13 @@ out.probe = JSON.parse(fs.readFileSync(path.join(root, 'eval/chat_probe.json'), 
   if (it.text_regex && !new RegExp(it.text_regex, 'i').test(text + ' ' + (r.primary ? r.primary.text : ''))) fail.push('text');
   return { q: it.q, fail };
 });
+{ const r = mk().ask('what is the speed of utility track vehicle');
+  out.table = r.table ? { columns: r.table.columns, rows: r.table.rows.map(w => w.cells), hit: r.table.rows.map(w => w.hit), page: r.table.page } : null; }
+{ // every cell shown comes from the stored table
+  const bad = []; let n = 0;
+  qs.filter(q => q.category === 'blind_table').concat(pick.slice(0, 60), [{ question: 'what is the speed of utility track vehicle' }, { question: 'standard height of new 60 kg rail' }]).forEach(q => { const r = mk().ask(q.question); if (r.kind !== 'answer' || !r.table) return; n++;
+    const T = globalThis.RDSO_TABLES[r.table.id], flat = T.r.map(row => row.map(c => (c || '').replace(/\n/g, '; ')));
+    r.table.rows.forEach(w => { if (!flat.some(row => w.cells.every(c => row.includes(c)))) bad.push({ q: q.question, cells: w.cells.slice(0, 3) }); }); });
+  out.tablecheck = { tables_shown: n, bad };
+}
 console.log(JSON.stringify(out));

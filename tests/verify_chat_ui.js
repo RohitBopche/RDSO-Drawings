@@ -143,6 +143,14 @@ async function main() {
     console.log(t4a.text.slice(0, 100), '|', t4b.text.slice(0, 100));
     if (!/That answer comes from .+ Para \S+, page \d+/.test(t4a.text) || !/could not find/.test(t4b.text)) throw new Error('Test 4 failed');
 
+    console.log("\n--- TEST 4b: a table answer is shown as a table with headers and highlighted cells ---");
+    const t4c = await client.eval(`(async () => { const i = document.getElementById('q'); i.value = 'what is the speed of utility track vehicle';
+      document.getElementById('f').dispatchEvent(new Event('submit', { cancelable: true })); await new Promise(r => setTimeout(r, 400));
+      const bots = document.querySelectorAll('.msg.bot'); const last = bots[bots.length - 1]; const tb = last.querySelector('table.tb');
+      return { has: !!tb, heads: tb ? [...tb.querySelectorAll('th')].map(x => x.innerText).join('|') : '', hit: last.querySelectorAll('td.hit').length, text: tb ? tb.querySelector('tbody').innerText : '' }; })()`);
+    console.log(t4c); await client.captureScreenshot('chat_table.png');
+    if (!t4c.has || !/Name of the Machine/.test(t4c.heads) || t4c.hit < 1 || !/Utility Track Vehicle/.test(t4c.text)) throw new Error('Test 4b failed ' + JSON.stringify(t4c));
+
     console.log("\n--- TEST 5: feedback is stored locally and exportable; HTML in a question is not executed ---");
     const t5 = await client.eval(`(async () => { localStorage.removeItem('rdso_feedback_v1'); await (async () => { const i = document.getElementById('q'); i.value = '<img src=x onerror=window.__pwn=1> rail gap';
       document.getElementById('f').dispatchEvent(new Event('submit', { cancelable: true })); await new Promise(r => setTimeout(r, 300)); })();

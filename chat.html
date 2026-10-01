@@ -30,6 +30,9 @@
   .chip:hover{border-color:var(--accent);color:var(--accent)}
   details{margin-top:6px}summary{cursor:pointer;color:var(--accent);font-size:13px}
   pre.full{white-space:pre-wrap;font:12.5px/1.45 ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;max-height:260px;overflow:auto}
+  table.tb{border-collapse:collapse;margin:6px 0;font-size:13px;display:block;overflow-x:auto;max-width:100%}
+  table.tb th,table.tb td{border:1px solid var(--line);padding:3px 8px;text-align:left;vertical-align:top}
+  table.tb th{background:var(--bg);font-weight:600}table.tb td.hit{background:var(--chip);font-weight:600}
   .vals{margin:4px 0 0 18px;padding:0;font-size:13px}
   .caveat{margin-top:6px;font-size:12.5px;color:var(--warn)}
   .fb{margin-top:6px;font-size:12px;color:var(--muted)}.fb button{border:0;background:none;cursor:pointer;font-size:15px;padding:0 4px}
@@ -58,6 +61,7 @@
 <script src="./data/search/search_index.js"></script>
 <script src="./data/search/clause_extras.js"></script>
 <script src="./data/search/crossrefs.js"></script>
+<script src="./data/search/tables.js"></script>
 <script src="./lib/rdso_chat.js"></script>
 <script>
 (function () {
@@ -95,8 +99,18 @@
       h += '<span class="badge ' + esc(r.confidence) + '">' + ({ high: 'strong match', medium: 'probable match', low: 'weak match' }[r.confidence] || '') + '</span>';
       if (r.interpreted) h += '<span class="muted">understood as: ' + esc(r.interpreted) + '</span>';
       if (r.lead) h += '<div>' + esc(r.lead) + '</div>';
-      h += r.primary.isTable ? '<div class="muted">rows copied from a table:</div>' : '';
-      h += '<ul class="pts">' + r.points.map(function (p) { return '<li>' + esc(p.text) + citeHtml(p.cite) + '</li>'; }).join('') + '</ul>';
+      if (r.table) {
+        var T = r.table;
+        h += '<div class="muted">From a table' + (T.caption ? ' (' + esc(T.caption.slice(0, 80)) + ')' : '') + (T.truncatedColumns ? ', matching columns only' : '') + ':</div>' +
+             '<table class="tb"><thead><tr>' + T.columns.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+             T.rows.map(function (row) { return '<tr>' + row.cells.map(function (c, i) { return '<td' + (row.hit[i] ? ' class="hit"' : '') + '>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') +
+             '</tbody></table>' + citeHtml(r.primary) +
+             '<details><summary>Show the whole table (' + T.totalRows + ' rows' + (T.totalRows > 60 ? ', first 60' : '') + ')</summary><table class="tb"><thead><tr>' +
+             T.full.columns.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+             T.full.rows.map(function (row) { return '<tr>' + row.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></details>';
+      } else {
+        h += '<ul class="pts">' + r.points.map(function (p) { return '<li>' + esc(p.text) + citeHtml(p.cite) + '</li>'; }).join('') + '</ul>';
+      }
       if (r.values && r.values.length) h += '<div class="muted">Values in those sentences (machine-extracted):</div><ul class="vals">' + r.values.map(function (v) {
         return '<li>' + (v.quantity ? '<b>' + esc(v.quantity) + '</b>: ' : '') + esc(v.text) + '</li>'; }).join('') + '</ul>';
       if (r.alsoSee && r.alsoSee.length) h += '<div class="muted" style="margin-top:6px">Also relevant:</div><ul class="pts">' + r.alsoSee.map(function (p) { return '<li>' + esc(p.text) + citeHtml(p.cite) + '</li>'; }).join('') + '</ul>';
@@ -162,7 +176,7 @@
 
   function start() {
     if (!window.RDSOSearch || !window.RDSO_SEARCH_INDEX || !window.RDSOChat) { statusEl.textContent = 'The search index did not load.'; return; }
-    chat = window.RDSOChat.create(window.RDSOSearch.create(window.RDSO_SEARCH_INDEX), { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: window.RDSO_CROSSREFS });
+    chat = window.RDSOChat.create(window.RDSOSearch.create(window.RDSO_SEARCH_INDEX), { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: window.RDSO_CROSSREFS, tables: window.RDSO_TABLES });
     window.rdsoChat = chat;
     statusEl.textContent = 'Ready. Nothing leaves this computer.';
     input.disabled = go.disabled = false; input.focus();

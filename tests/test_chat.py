@@ -62,3 +62,16 @@ def test_every_statement_shown_is_copied_from_the_cited_passage(run):
 def test_probe_questions_still_get_the_expected_reply(run):
     bad = [p for p in run["probe"] if p["fail"]]
     assert bad == [], bad
+
+
+def test_table_answers_show_the_matching_row_under_its_headers(run):
+    t = run["table"]
+    assert t and "Name of the Machine" in t["columns"] and any("Speed" in c for c in t["columns"])
+    flat = [c for row in t["rows"] for c in row]
+    assert any("Utility Track Vehicle" in c for c in flat) and "50" in flat and "60" in flat
+    assert any(any(h) for h in t["hit"])
+
+
+def test_every_table_cell_shown_exists_in_the_stored_table(run):
+    assert run["tablecheck"]["tables_shown"] >= 5
+    assert run["tablecheck"]["bad"] == [], run["tablecheck"]["bad"][:2]

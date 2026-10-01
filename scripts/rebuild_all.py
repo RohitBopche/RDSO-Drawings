@@ -26,6 +26,7 @@ STEPS = [
     "extract_measurements.py",     # structured values from clause text and table cells
     "drawing_registry.py",         # drawing identity from file names + committed OCR (scripts/ocr_drawings.py)
     "drawing_links.py",            # clause -> drawing citations (needs the registry)
+    "build_table_data.py",         # browser file: tables with headers for the chat
     "build_clause_extras.py",      # browser file: measurements + held drawings per clause
     "ingest_reviews.py",           # no arguments: only refreshes reports/review_accuracy.json from recorded reviews
     "build_search_index.py",
