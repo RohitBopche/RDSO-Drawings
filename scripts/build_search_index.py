@@ -154,15 +154,22 @@ def main() -> int:
     in_refs: dict[str, list] = {}
     located = {i["ref_id"]: i["pages"] for i in json.loads((KG / "reports" / "crossref_unresolved.json").read_text(encoding="utf-8"))["items"] if i["pages"]}
     for x in refs:
-        row = [" ".join(x["raw"].split()), x["target_kind"], x["status"], x["targets"], x["scope_name"] or ""]
-        if x["ref_id"] in located:
-            row.append(located[x["ref_id"]][:4])     # unresolved figure / table / annexure: the page(s) where its caption is
+        row = [" ".join(x["raw"].split()), x["target_kind"], x["status"], x["targets"], x["scope_name"] or "",
+               located[x["ref_id"]][:4] if x["ref_id"] in located else [],      # unresolved figure / table / annexure: the page(s) where its caption is
+               x["start"], x["end"],                                           # where the reference sits in the source paragraph (for quoting it)
+               1 if x["kind"] == "back_ref" else 0]                            # "(Back to Para N)" note: N refers to this paragraph, not the reverse
         out_refs.setdefault(x["source"], []).append(row)
         for t in x["targets"]:
             if t != x["source"] and x["source"] not in in_refs.setdefault(t, []):
                 in_refs[t].append(x["source"])
     js = "(typeof window!=='undefined'?window:globalThis).RDSO_CROSSREFS=" + json.dumps({"out": out_refs, "in": in_refs}, separators=(",", ":"), sort_keys=True) + ";\n"
     (ROOT / "data" / "search" / "crossrefs.js").write_text(js, encoding="utf-8")
+    # drawing numbers cited in the manuals: number -> [paragraph, start, end, sheet held?]
+    cites: dict[str, list] = {}
+    for line in (KG / "canonical" / "drawing_links.jsonl").read_text(encoding="utf-8").splitlines():
+        d = json.loads(line)
+        cites.setdefault(d["number"], []).append([d["clause"], d["start"], d["end"], 1 if d["sheets"] else 0])
+    (ROOT / "data" / "search" / "drawing_cites.js").write_text("(typeof window!=='undefined'?window:globalThis).RDSO_DRAWING_CITES=" + json.dumps(cites, separators=(",", ":"), sort_keys=True) + ";\n", encoding="utf-8")
     # edition of each manual, for the "which edition does this answer come from" line (from the source registry, never typed by hand)
     editions = {}
     for line in (KG / "raw" / "source_registry.jsonl").read_text(encoding="utf-8").splitlines():
