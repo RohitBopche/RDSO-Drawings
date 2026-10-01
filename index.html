@@ -239,6 +239,7 @@
       if (r.lead) h += '<div class="lead">' + esc(r.lead) + '</div>';
       if (r.table) h += '<table><thead><tr>' + r.table.columns.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' + r.table.rows.map(function (w) { return '<tr>' + w.cells.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>';
       else h += '<ul>' + r.points.map(function (p) { return '<li>' + hl(p.text, q) + '</li>'; }).join('') + '</ul>';
+      if (r.ownedTable) h += '<div class="meta" style="margin-top:4px">Table in this paragraph (page ' + esc(r.ownedTable.page) + ')</div><table><thead><tr>' + r.ownedTable.columns.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' + r.ownedTable.rows.map(function (w) { return '<tr>' + w.cells.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>';
       h += '<div class="meta">' + cite(r.primary) + '<span>' + ({ high: 'Strong match', medium: 'Likely match', low: 'Not sure' }[r.confidence] || '') + '</span>' + (r.caveat ? '<span>' + esc(r.caveat) + '</span>' : '') + '</div>';
       if (r.followups && r.followups.length) h += '<div style="margin-top:6px">' + r.followups.slice(0, 3).map(function (f) { return chip(f); }).join('') + '</div>';
     } else if (r.kind === 'clarify') h += esc(r.text) + '<div>' + r.options.map(function (o) { return chip(o.name + ' — ' + o.label + ': ' + o.title.slice(0, 50), o.ask); }).join('') + '</div>';
