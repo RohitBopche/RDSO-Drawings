@@ -1,0 +1,50 @@
+/* RDSO shared themes. One set of CSS variables per theme; pages use only the variables.
+   Contrast is checked by tests/test_ui_themes.py (WCAG AA for text and links, AAA for the high-contrast theme). */
+:root, :root[data-theme="light"] {
+  --bg:#f3f5f8; --surface:#ffffff; --surface2:#eef1f5; --ink:#1b1f24; --muted:#4b5563; --line:#cfd6de;
+  --accent:#0a5ec2; --accent-ink:#ffffff; --user:#0a5ec2; --user-ink:#ffffff;
+  --ok:#17692f; --warn:#8a5a00; --bad:#b4232d; --chip:#e4eefb; --chip-ink:#0a4fa0; --mark:#fff1a8; --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 14px rgba(0,0,0,.05);
+}
+:root[data-theme="dark"] {
+  --bg:#0d1117; --surface:#161b22; --surface2:#1f2630; --ink:#e6edf3; --muted:#9aa4af; --line:#2f3844;
+  --accent:#58a6ff; --accent-ink:#06121f; --user:#1f6feb; --user-ink:#ffffff;
+  --ok:#3fb950; --warn:#e3b341; --bad:#ff7b72; --chip:#12263f; --chip-ink:#8cc4ff; --mark:#5a4a00; --shadow:0 1px 3px rgba(0,0,0,.5);
+}
+:root[data-theme="solarized-light"] {
+  --bg:#fdf6e3; --surface:#fffbee; --surface2:#eee8d5; --ink:#3a4a50; --muted:#4f6269; --line:#d8d0b8;
+  --accent:#1f64a8; --accent-ink:#fdf6e3; --user:#1f64a8; --user-ink:#fdf6e3;
+  --ok:#5b6b00; --warn:#8a5a00; --bad:#b52b27; --chip:#eee8d5; --chip-ink:#1b5a96; --mark:#f6e58d; --shadow:0 1px 3px rgba(88,110,117,.15);
+}
+:root[data-theme="solarized-dark"] {
+  --bg:#002b36; --surface:#073642; --surface2:#0b4452; --ink:#d2dcdc; --muted:#a3b1b1; --line:#1d5564;
+  --accent:#56b6f4; --accent-ink:#002b36; --user:#268bd2; --user-ink:#00212b;
+  --ok:#9aaa1a; --warn:#d8a31f; --bad:#f58a82; --chip:#0b4452; --chip-ink:#7cc4f2; --mark:#6b5a00; --shadow:0 1px 3px rgba(0,0,0,.5);
+}
+:root[data-theme="paper"] {
+  --bg:#f1e9d6; --surface:#f9f3e4; --surface2:#e9dfc5; --ink:#2e2417; --muted:#5d4d36; --line:#cbbd9c;
+  --accent:#8a3b12; --accent-ink:#fbf4e4; --user:#8a3b12; --user-ink:#fbf4e4;
+  --ok:#3d6b1c; --warn:#7d5200; --bad:#a3231b; --chip:#eadfc3; --chip-ink:#7a3410; --mark:#f3d98a; --shadow:0 1px 3px rgba(60,40,10,.15);
+}
+:root[data-theme="nord"] {
+  --bg:#2e3440; --surface:#3b4252; --surface2:#434c5e; --ink:#eceff4; --muted:#c0c8d6; --line:#586175;
+  --accent:#92c8d8; --accent-ink:#1f2530; --user:#4c6e9a; --user-ink:#ffffff;
+  --ok:#a3be8c; --warn:#ebcb8b; --bad:#f7a3ab; --chip:#434c5e; --chip-ink:#9bd1e0; --mark:#6b5d2a; --shadow:0 1px 3px rgba(0,0,0,.4);
+}
+:root[data-theme="signal"] {
+  --bg:#0a1620; --surface:#10222f; --surface2:#16303f; --ink:#f1f5f8; --muted:#a9b9c6; --line:#27465a;
+  --accent:#ffb000; --accent-ink:#201400; --user:#d99100; --user-ink:#1a1100;
+  --ok:#35d07f; --warn:#ffb000; --bad:#ff6b6b; --chip:#16303f; --chip-ink:#ffc94d; --mark:#6b5200; --shadow:0 1px 3px rgba(0,0,0,.6);
+}
+:root[data-theme="contrast"] {
+  --bg:#000000; --surface:#000000; --surface2:#141414; --ink:#ffffff; --muted:#e0e0e0; --line:#ffffff;
+  --accent:#ffe000; --accent-ink:#000000; --user:#ffe000; --user-ink:#000000;
+  --ok:#5dff8f; --warn:#ffe000; --bad:#ff8a8a; --chip:#1a1a1a; --chip-ink:#ffe000; --mark:#4d4400; --shadow:none;
+}
+/* text size, density, reading font: set on <html> by ui/theme.js */
+:root { --fs:16px; --gap:12px; --radius:14px; --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+:root[data-size="s"] { --fs:14px } :root[data-size="l"] { --fs:18px } :root[data-size="xl"] { --fs:20px }
+:root[data-density="compact"] { --gap:7px; --radius:10px }
+:root[data-font="serif"] { --font:Georgia,"Times New Roman",serif }
+:root[data-font="readable"] { --font:Verdana,Tahoma,"Trebuchet MS",sans-serif }
+:root[data-font="mono"] { --font:ui-monospace,Menlo,Consolas,monospace }
+@media (prefers-reduced-motion:reduce) { * { animation:none !important; transition:none !important; scroll-behavior:auto !important } }

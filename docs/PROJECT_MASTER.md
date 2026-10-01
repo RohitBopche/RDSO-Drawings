@@ -2176,3 +2176,60 @@ An engineer can type a natural-language question offline and receive, in under 2
 3. **Grounded answers (P6.1):** promote the extractive card to the only answer path, retire the 13 curated answers into regression questions (they still show hard-coded `VERIFIED`), add sentence-level extraction of the answering span with per-claim citation, conflict and revision flags, and a refusal rule tuned on the independent set.
 4. **Feedback loop (P7.2, P7.3):** local log of queries, clicks and thumbs; zero-result and low-coverage queries into the review queue; accepted corrections become eval questions.
 5. **Then** P5.2 (embeddings, only if step 1 justifies it), ~~table extraction, P2.3 measurements~~ (done, Sprint E), and rolling the remaining checks to drawings.
+
+---
+
+## 39. Interface and experience upgrade plan (2026-10-01)
+
+### 39.1 Why the interface felt confusing
+
+The main page (`index.html`) was built as a research console: a 3D graph that opens first, several drawers and tabs, and vocabulary from the data model ("universes", "nodes", "evidence"). There is no single obvious first action, the answer area is one panel among many, and the first screen takes seconds to appear. The chat page added later was simpler but had little structure: no way to choose a manual, no history, no visual choice, and every answer had the same weight whether it was strong or doubtful. Nothing here was measured with users; this diagnosis is a design judgement.
+
+Principles for the rework: one obvious task on the first screen (ask a question); the evidence always one click away and never hidden; advanced material behind "Details" or an Expert mode; plain words; everything works offline; readable for everyone by default (tested contrast, size and spacing controls, keyboard use).
+
+### 39.2 Done in this sprint (Phase 1): a simple front door, `chat.html`
+
+- **Nine themes** from one shared stylesheet (`ui/themes.css`, preferences in `ui/theme.js`): Match my device, Light, Dark, Solarized light, Solarized dark, Paper, Nord, Signal (night, amber) and High contrast. Every theme is checked by `tests/test_ui_themes.py` against WCAG contrast for the colour pairs the pages use (4.5:1 for text and links, 7:1 for High contrast). The two Solarized themes are Solarized-inspired and adjusted for contrast, because the original palette fails the 4.5:1 rule for body text.
+- **Appearance panel (Aa):** theme swatches, four text sizes, comfortable or compact spacing, four reading fonts (standard, easy to read, serif, mono), reset. Choices are kept on this computer.
+- **Simple answer card:** the answer first (the question's own words highlighted), one source button and a plain-word confidence ("Strong match", "Likely match", "Not sure"; shown with a dot and a word, never colour alone), then Copy (with the source), Save, thumbs; everything else (values, sub-paragraphs, drawings, other relevant text, full paragraph, whole table) under "Details"; the next questions under "Ask next".
+- **Page viewer** beside the answer: the source button opens the manual at the cited page (and the highlighted crop when it has been rendered) without leaving the page; a full-screen sheet on phones.
+- **Search in one manual** (strict, from a drop-down or the command palette), history and saved answers in a side panel (kept locally, clearable), a **command palette** (Ctrl+K: switch theme or manual, jump to a paragraph by typing "IRPWM 429", new chat, print), keyboard shortcuts ("/" to type, Esc to close panels, Up arrow to recall the last question), a clean **print** layout, an empty state with six topic cards, and a link from the old main page ("Ask the manuals").
+- Tested by the 15th browser suite (themes, size, palette, strict scope, history and saved answers, keyboard, table answers, local feedback, escaping) and the contrast tests.
+
+Not measured: whether it is actually less confusing for an engineer. That needs 3 to 5 people using it for twenty minutes (see 39.5).
+
+### 39.3 Phased plan
+
+| Phase | Content | Value | Effort |
+|---|---|---|---|
+| 1 (done) | Simple chat front door, themes, settings, scope, history, saved answers, viewer, palette | high | done |
+| 2 | One application shell with a top bar **Ask · Browse manuals · Drawings · Explore graph · Review**; move `index.html` onto `ui/themes.css`; hide its advanced panels behind an "Expert" switch; first paint under 1.5 s (lazy 3D, see section 37.24) | high | medium |
+| 3 | **Browse manuals:** chapter and paragraph tree, reading view with sub-paragraph navigation, cross-reference links, find in manual, "continues in" links | high | medium |
+| 4 | **Drawings gallery:** thumbnails, search by drawing number, alteration timeline from the registry, "paragraphs that cite this drawing" | medium | medium |
+| 5 | **Field mode:** installable app (manifest and service worker, offline cache of the index and PDFs), large touch targets, sunlight theme, read-aloud | high for site staff | medium |
+| 6 | **Workspace:** collections of saved answers with notes, export to PDF or Word with citations, printable job cards | medium | medium |
+| 7 | **Review and learning in the app:** answer review packets, accept or reject suggested synonyms, feedback inbox (replacing the file round trip) | medium | medium |
+
+### 39.4 Out-of-the-box options (not requested explicitly; each needs a decision)
+
+1. **Show it on the page:** hovering a citation shows a thumbnail of the page with the exact sentence highlighted; the viewer highlights the sentence itself (the line regions already exist; needs a vendored PDF renderer for pages without a pre-rendered crop).
+2. **Compare across manuals:** the same question answered side by side for each manual (strict scope already exists); useful where TMM, STMM and IRPWM overlap.
+3. **Checklist mode:** a procedural paragraph ((a), (b), (i) steps) turned into tick-off steps with a printable job card; every step is the manual's own sentence.
+4. **Calculators from the manuals' own formulas** (versine and radius, cant and speed, rail temperature limits, breathing length), unit-checked and each citing its paragraph. Deterministic, so safe; limited to formulas the manuals state.
+5. **Glossary cards:** hover an abbreviation (SEJ, LWR, USFD) for its expansion, from the synonym file the engine already uses.
+6. **What changed:** per paragraph, the correction slips and the version history ("ACS 14 changed this on ...").
+7. **Why this answer:** which words matched, which other paragraphs were close, why it is "Likely" and not "Strong".
+8. **Hands-free:** dictation and read-aloud for gloved use (read-aloud works offline with installed voices; dictation often needs a network and would be offered only where it works offline).
+9. **More comfort themes:** automatic night mode by time, a sunlight (maximum contrast) mode for outdoor screens, a colour-blind-safe palette option, a custom accent colour.
+10. **Guided start for new users:** "Not sure how to ask?" topic wizard (manual, topic, ready-made questions).
+11. **Hindi and Marathi interface labels and transliterated terms** (for example "rail", "patri") added to the synonyms; honest limit: the manuals are English, so questions can be understood only as far as the vocabulary mapping goes, and answers stay in English.
+12. **Pinned paragraphs and daily lists** for a gang or an inspection round; QR-free (file-path based) because the tool is offline.
+13. **Polish:** loading skeletons, subtle motion respecting the reduced-motion setting, answer reveal, haptic feedback on phones.
+
+### 39.5 How we will know it is better
+
+Before and after for any phase: (a) five people from the target group each ask five real questions without instructions; record time to first useful answer, rephrasings per question and what they could not find; (b) a short usability questionnaire (SUS) at the end; (c) thumbs ratio and the share of questions with no answer from the exported feedback log; (d) automated checks stay green: contrast for every theme, keyboard operation, first-paint time. Accessibility checks to add: automated landmarks and label checks in the browser suite, and one session with a screen reader.
+
+### 39.6 Needed from you
+
+Pick three ideas from 39.4; name three to five people who can try the assistant for twenty minutes and what devices they use (phone, tablet, office PC), which decides whether Phase 5 comes before Phase 2; say whether Hindi support matters now.
