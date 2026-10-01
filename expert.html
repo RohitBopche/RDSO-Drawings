@@ -3166,7 +3166,7 @@
         <div class="provenance-details">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
             <span style="font-weight: 700; color: #fff;" id="prov-dwg-title">RDSO/T-6155</span>
-            <span class="confidence-badge">✓ 100% VERIFIED</span>
+            <span class="confidence-badge">Machine-extracted</span>
           </div>
           <div style="color: var(--text-muted); font-size: 9.5px;" id="prov-meta-line">Rev: ALT 13 | Region: General Notes</div>
           <div style="color: var(--accent-cyan); font-size: 9px; cursor: pointer; margin-top: 2px;" onclick="openFullscreenActiveBlueprint()">🔍 Inspect Source Crop</div>
@@ -5838,7 +5838,7 @@
                   🏛️ ${data.domain ? data.domain.toUpperCase() : 'CANONICAL'} ENTITY
                 </span>
                 <span style="background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.3); color: var(--accent-green); padding: 2px 6px; border-radius: 4px; font-weight: 600;">
-                  ✓ VERIFIED DATA
+                  MACHINE-EXTRACTED DATA
                 </span>
               </div>
 
@@ -7366,7 +7366,7 @@
           </div>
           <div class="drawing-meta-item">
             <div class="drawing-meta-label">Verification Status</div>
-            <div class="drawing-meta-value" style="color: var(--accent-green);">VERIFIED (GATE D)</div>
+            <div class="drawing-meta-value" style="color: var(--accent-green);">Evidence-linked (Gate D); not human-reviewed</div>
           </div>
           <div class="drawing-meta-item">
             <div class="drawing-meta-label">Extraction Method</div>
@@ -8170,444 +8170,7 @@
       COMPONENT_LOOKUP: { label: "Component Detail", color: "#00f0ff", icon: "🧱" }
     };
 
-    const CANONICAL_QA_DATABASE = [
-      {
-        id: "qa_destressing_temperature",
-        retired: true, // answered from the manuals by retrieval; see scripts/audit_curated_answers.py
-        intent: "SPECIFICATION_GOVERNANCE",
-        keywords: [
-          "destressing temperature", "destressing temp", "de-stressing temperature", "destressing",
-          "td temperature", "range of destressing temperature", "destressing of lwr", "thermal forces in lwr",
-          "destressing without rail tensors", "destressing with rail tensors", "mean rail temperature tm",
-          "lwr destressing", "stress-free temperature", "sft"
-        ],
-        question: "What is the destressing temperature range (td) for LWR/CWR track?",
-        statement: `Destressing temperature (**td**) and thermal forces in Continuous / Long Welded Rails (LWR/CWR) are mandated by **IRPWM 2024 Chapter 3 (Paras 333, 335, 338, 339, 340, 341 & 347)**:
-
-1. **Standard Destressing Temperature Window (td) per Zone (Para 335)**:
-   The range of destressing temperature (**td** or **t0**) shall be within statutory limits based on Mean Annual Rail Temperature (**tm**):
-   • **Temperature Zones I, II, and III (All rail sections 52 kg / 60 kg)**:
-     **tm to (tm + 5°C)**
-   • **Temperature Zone IV (52 kg/m & heavier sections)**:
-     **(tm + 5°C) to (tm + 10°C)**
-
-2. **Permitted Reduced Destressing Range (Para 335)**:
-   Laying of LWR on wider base sleepers with 60 kg rail and sleeper density of 1660 nos./km permits a reduced de-stressing temperature range for superior track buckling resistance.
-
-3. **Supervision & Traffic Block Protocol (Para 339)**:
-   • The work of de-stressing must strictly be executed during a **traffic block** under the personal supervision of **JE / SSE / P.Way**.
-   • Mobile temperature thermometers must be positioned along the rail during the entire operation.
-
-4. **Destressing With vs. Without Rail Tensors (Paras 340 & 341)**:
-   • **Without Rail Tensors (Natural td)**: Allowed only when ambient rail temperature falls naturally within the specified **td** range during the work window.
-   • **With Rail Tensors (Hydraulic Tensor)**: Compulsory when rail temperature is below **td**. The tensor pulls the rail to the calculated extension: **L = α · L0 · (td - tp)**, where α = 1.152 × 10⁻⁵ / °C.
-
-5. **Stress-Free Temperature (SFT) & Maintenance Limits (Para 347)**:
-   In ideal conditions, stress-free temperature equals destressing temperature. Abnormal SEJ gaps (exceeding Annexure 3/9) or rail creep > 20 mm mandate immediate investigation by ADEN and re-destressing.`,
-        params: [
-          { name: "Destressing Temp (Zones I-III)", nominal: "tm to (tm + 5°C)", limit: "tm to tm+5°C", unit: "°C", risk: "Under-destressing causes high tensile winter fractures; over-destressing induces severe summer buckling", remedy: "Perform tensor-controlled destressing within specified td range" },
-          { name: "Destressing Temp (Zone IV)", nominal: "tm + 5°C to tm + 10°C", limit: "tm+5 to tm+10°C", unit: "°C", risk: "Severe track buckling under high temperature range in Zone IV", remedy: "Maintain 1660 sleeper density and consolidate ballast shoulder" },
-          { name: "Supervisory Level", nominal: "JE / SSE / P.Way", limit: "Personal Supervision", unit: "Mandatory", risk: "Unauthorized or uncalibrated destressing causes major track geometry derailments", remedy: "Conduct work under traffic block supervised by JE/SSE/P.Way" },
-          { name: "Thermal Expansion Coeff (α)", nominal: "1.152 × 10⁻⁵ / °C", limit: "Standard Rail Steel", unit: "per °C", risk: "Incorrect extension calculation causes residual compressive or tensile stresses", remedy: "Calculate tensor stroke strictly per L = α · L0 · (td - tp)" }
-        ],
-        traversal: [
-          { id: "CLAUSE:IRPWM:CH_03:PARA_335", label: "IRPWM Para 335: Thermal Forces & Destressing Temp (td)", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_03:PARA_339", label: "IRPWM Para 339: De-stressing Operation of LWR", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_03:PARA_341", label: "IRPWM Para 341: De-stressing with Rail Tensors", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_03:PARA_347", label: "IRPWM Para 347: Destressing during Maintenance & SFT", universe: "manuals" },
-          { id: "CHAPTER:IRPWM:CH_03", label: "IRPWM Chapter 3: Welded Rails (LWR/CWR)", universe: "manuals" },
-          { id: "CHAPTER:STMM:CH_09", label: "STMM Chapter 9: 70t Hydraulic Rail Tensor", universe: "manuals" }
-        ],
-        primaryNodeId: "CLAUSE:IRPWM:CH_03:PARA_335",
-        provenance: {
-          doc: "Indian Railways Permanent Way Manual (IRPWM 2024 ACS-14)",
-          edition: "2024 Canonical Regulatory Core",
-          chapter: "Chapter 3: Installation and Maintenance of Welded Rails",
-          clause: "Paras 333, 335, 338, 339, 340, 341 & 347",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.99
-        },
-        conflictNote: null,
-        workflow: { label: "Open Chapter 3 in Manuals TOC", tab: "manuals" }
-      },
-      {
-        id: "qa_keyman_duties_greasing",
-        retired: true, // answered from the manuals by retrieval; see scripts/audit_curated_answers.py
-        intent: "REGULATORY_DUTY_AND_MAINTENANCE",
-        keywords: [
-          "duties of keyman and greasing", "keyman and greasing", "duties of keyman", "keyman duties",
-          "keyman greasing", "keyman joggled fish plate", "keyman joggled", "keyman fish bolts",
-          "keyman lubrication", "keyman inspection of joggled fish plates", "greasing by keyman"
-        ],
-        question: "What are the duties of Keyman regarding track inspection, joggled fish plates, and greasing?",
-        statement: `Keyman duties and track greasing provisions are governed by **IRPWM 2024 (ACS 1-14) Para 116, 619, and 620**, alongside **USFD Manual Para 8.10**:
-
-1. **Daily Beat Inspection (Para 116)**:
-   While walking the beat daily, the Keyman must examine all track fittings and specifically look for defects such as:
-   • **Loose fish bolts** and **loose bolts on joggled fish plates**
-   • **Switch Expansion Joints (SEJ)** fittings and slide chairs
-   • Fittings in switches & crossings, girder bridges, and open top culverts
-   • Broken or notched sleepers, broken plates or tie bars.
-
-2. **Immediate Tightening & Defect Reporting (Para 116)**:
-   • The Keyman must tighten any loose fish bolts or joggled fish plate bolts found during the inspection.
-   • If fittings repeatedly work loose even after repeated attention, he must immediately report the matter to the **Gang Mate** and **JE/SSE/P.Way**.
-   • For severe defects (broken rail, cracked weld, or missing fittings), he must protect the line at once as per rules and report to the Station Master.
-
-3. **Special Watch on USFD-Marked Welds & Joggled Joints (Para 116(2) & USFD 8.10)**:
-   • The Keyman must keep a special daily watch on rails and welds marked for observation by the USFD testing team.
-   • Where joggled fish plates are clamped over defective welds (DFWR/DFWO) with 2 clamps, ensure clamps and bolts remain fully tightened and lubricated.
-
-4. **Periodic Joint Greasing & Lubrication Protocol (Para 619 & 620)**:
-   • All fish-plated joints and joggled fish plates must undergo systematic **annual dismantling and lubrication**.
-   • **Surface Preparation**: Fishing surfaces of rails and fishplates must be thoroughly scraped with wire brushes to remove rust, scale, and caked grease, cleaned with kerosene oil, and wiped dry.
-   • **Approved Lubricant**: Plumbago / Graphite grease conforming strictly to **IS:408** must be uniformly applied to fishing contact angles. Fish bolts and nuts must be oiled with black oil.
-   • **Fastener Care**: Fishplates must NEVER be hammered onto rails; bolts must be tightened uniformly from inside to outside.`,
-        params: [
-          { name: "Beat Inspection Schedule", nominal: "Daily (100% Beat)", limit: "Mandatory Daily Walk", unit: "Daily", risk: "Unobserved loose fittings cause joint collapse or track geometry distortion", remedy: "Cover full beat daily as per Para 116" },
-          { name: "Fish Bolt & Clamp Attention", nominal: "Immediate Tightening", limit: "Zero Loose Bolts", unit: "Torque", risk: "Loose bolts on joggled fishplates over rail flaws risk dynamic weld separation", remedy: "Tighten on sight; report persistent loose bolts" },
-          { name: "Joint Greasing Frequency", nominal: "Once a Year (Annual)", limit: "Pre-Summer / Pre-Winter", unit: "Annual", risk: "Unlubricated joints seize, freeze thermal expansion, and cause track buckling", remedy: "Execute complete joint dismantling & greasing per Para 619" },
-          { name: "Approved Lubricant", nominal: "Graphite Grease", limit: "IS:408 Mandatory", unit: "Standard", risk: "Substandard grease cakes, accelerating joint wear and seized expansion", remedy: "Use only IS:408 compliant plumbago/graphite grease" },
-          { name: "Defective Weld Clamping", nominal: "2 Clamps Minimum", limit: "Tight Clamped (30 km/h)", unit: "Clamps", risk: "Unprotected defective weld causes catastrophic rail break under train load", remedy: "Maintain joggled fishplates with 2 tight clamps per USFD 8.10" }
-        ],
-        traversal: [
-          { id: "role_keyman", label: "Keyman (Track Maintainer)", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_01:PARA_116", label: "IRPWM Para 116: Duties of Keyman", universe: "manuals" },
-          { id: "comp_joggled_fish_plate", label: "Joggled Fish Plate (Weld Protection)", universe: "manuals" },
-          { id: "comp_fish_bolt", label: "Fish Bolt & Nut", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_06:PARA_619", label: "IRPWM Para 619: Lubrication of Rail Joints", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_06:PARA_620", label: "IRPWM Para 620: Maintenance of Rail Joints", universe: "manuals" },
-          { id: "act_greasing_lubrication", label: "Greasing & Lubrication SOP", universe: "manuals" },
-          { id: "mat_graphite_grease", label: "Graphite Grease (IS:408)", universe: "manuals" }
-        ],
-        primaryNodeId: "CLAUSE:IRPWM:CH_01:PARA_116",
-        provenance: {
-          doc: "Indian Railways Permanent Way Manual (IRPWM 2024 ACS-14) & USFD Manual",
-          edition: "2024-2026 Canonical Regulatory Core",
-          chapter: "Chapter 1 (Duties of Keyman) & Chapter 6 (Rail Joint Greasing)",
-          clause: "Paras 116, 619, 620, 206 & USFD Para 8.10",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.99
-        },
-        conflictNote: null,
-        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
-      },
-      {
-        id: "qa_tongue_wear",
-        retired: true, // answered from the manuals by retrieval; see scripts/audit_curated_answers.py
-        intent: "TOLERANCE_INQUIRY",
-        keywords: ["wear", "tongue rail", "permissible", "vertical wear", "lateral wear", "limit"],
-        question: "What is the permissible wear for 60kg tongue rails?",
-        statement: "Maximum permissible vertical wear on 60kg tongue rails is 6.0 mm; maximum lateral wear is 8.0 mm per IRPWM 2024 Para 429 and IRS:T-10.",
-        params: [
-          { name: "Max Vertical Wear", nominal: "0.0 mm (New)", limit: "6.0 mm", unit: "mm", risk: "Wheel flange climb risk over tongue rail", remedy: "Recondition by in-situ welding or replace switch rail" },
-          { name: "Max Lateral Wear", nominal: "0.0 mm (New)", limit: "8.0 mm", unit: "mm", risk: "Loss of rail wheel guidance at turnout entry", remedy: "Replace tongue rail with Thick-Web ZU-1-60 profile" }
-        ],
-        traversal: [
-          { id: "drg_6155", label: "RDSO/T-6155 (Drawing)", universe: "drawings" },
-          { id: "comp_tonguerail_lh", label: "Tongue Rail LH (Component)", universe: "drawings" },
-          { id: "std_irs_t10", label: "IRS:T-10 (Standard)", universe: "drawings" },
-          { id: "DOC:IRPWM:2024:ACS14", label: "IRPWM 2024 Para 429 (Statutory Clause)", universe: "manuals" }
-        ],
-        primaryNodeId: "comp_tonguerail_lh",
-        provenance: {
-          doc: "Indian Railways Permanent Way Manual (IRPWM)",
-          edition: "2024 Edition with ACS-14",
-          chapter: "Chapter 4: Track Structure on Curves & Turnouts",
-          clause: "Para 429(3)",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.98
-        },
-        conflictNote: null,
-        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
-      },
-      {
-        id: "qa_switch_throw",
-        intent: "TOLERANCE_INQUIRY",
-        keywords: ["throw", "toe", "switch opening", "stroke", "opening at toe", "clearance at toe"],
-        question: "What is the standard switch throw at the toe of curved switch?",
-        statement: "Standard switch opening at the toe of switch is 160 mm (-0 mm, +3 mm), giving an operating tolerance window of 160.0 to 163.0 mm per RDSO/T-6155 Note 12.",
-        params: [
-          { name: "Switch Opening at Toe", nominal: "160.0 mm", limit: "160.0 – 163.0 mm", unit: "mm", risk: "Under-throw (<160mm) risks facing point splitting; over-throw (>163mm) strains point motor", remedy: "Adjust drive rod stroke on point machine (S-3454)" }
-        ],
-        traversal: [
-          { id: "drg_6155", label: "RDSO/T-6155 (Drawing)", universe: "drawings" },
-          { id: "note_6155_12", label: "Note 12 (Directives)", universe: "drawings" },
-          { id: "comp_detailb", label: "Detail 'B' Flat Tie Bar", universe: "drawings" },
-          { id: "DOC:IRPWM:2024:ACS14", label: "IRPWM Para 429 (Clause)", universe: "manuals" }
-        ],
-        primaryNodeId: "comp_detailb",
-        provenance: {
-          doc: "RDSO/T-6155",
-          edition: "Alt 13 (Latest)",
-          chapter: "Title Block & Engineering Notes",
-          clause: "Note 12",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.99
-        },
-        conflictNote: "Alt 11 vs Alt 12 note: Alt 11 set 160 mm strictly; Alt 12 amended tolerance window to +3 mm to prevent point machine motor burnouts under heavy vibration.",
-        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
-      },
-      {
-        id: "qa_check_rail",
-        retired: true, // answered from the manuals by retrieval; see scripts/audit_curated_answers.py
-        intent: "TOLERANCE_INQUIRY",
-        keywords: ["check rail", "clearance", "crossing clearance", "41", "45", "flange clearance"],
-        question: "What is the check rail clearance limit for 1:12 BG turnouts?",
-        statement: "Check rail clearance at the crossing nose must be maintained between 41.0 mm and 45.0 mm per IRPWM Para 429 and IRS:T-10.",
-        params: [
-          { name: "Check Rail Clearance", nominal: "43.0 mm", limit: "41.0 – 45.0 mm", unit: "mm", risk: "Clearance <41 mm risks wheel flange striking nose; >45 mm permits unguided wheel climb", remedy: "Adjust check rail packing washers or replace check rail blocks" }
-        ],
-        traversal: [
-          { id: "drg_6155", label: "RDSO/T-6155 (Turnout)", universe: "drawings" },
-          { id: "comp_cms_crossing", label: "CMS Crossing 1:12", universe: "drawings" },
-          { id: "std_irs_t10", label: "IRS:T-10", universe: "drawings" },
-          { id: "DOC:IRPWM:2024:ACS14", label: "IRPWM Para 429", universe: "manuals" }
-        ],
-        primaryNodeId: "comp_cms_crossing",
-        provenance: {
-          doc: "IRPWM 2024 / IRS:T-10",
-          edition: "2024 Edition",
-          chapter: "Chapter 4: Turnout Geometry",
-          clause: "Para 429 & Note 14",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.99
-        },
-        conflictNote: null,
-        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
-      },
-      {
-        id: "qa_rubber_pad_spec",
-        intent: "SPECIFICATION_GOVERNANCE",
-        keywords: ["rubber pad", "grsp", "composite", "specification", "governs", "standard", "pad"],
-        question: "Which IRS specification governs sleeper rubber pads?",
-        statement: "Grooved Rubber Sole Pads (GRSP 6mm & 10mm composite) are governed by IRS:T-46:2020 and layout standard RDSO/T-6154.",
-        params: [
-          { name: "GRSP Pad Thickness", nominal: "10.0 mm Composite", limit: "±0.5 mm", unit: "mm", risk: "Pad crushing leads to PSC sleeper rail seat attrition", remedy: "Renew with IRS:T-46 high-damping rubber pads" }
-        ],
-        traversal: [
-          { id: "drg_6154", label: "RDSO/T-6154 (Layout)", universe: "drawings" },
-          { id: "comp_grsp", label: "10 mm GRSP Pad (comp_grsp)", universe: "drawings" },
-          { id: "std_irs_t10", label: "IRS:T-10 (Standard)", universe: "drawings" }
-        ],
-        primaryNodeId: "comp_grsp",
-        provenance: {
-          doc: "IRS:T-46:2020",
-          edition: "2020 Edition",
-          chapter: "Elastomeric Pad Specifications",
-          clause: "Clause 4.1 & Table 2",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.97
-        },
-        conflictNote: null,
-        workflow: { label: "View Drawing Overview", tab: "overview" }
-      },
-      {
-        id: "qa_erc_mkv_toe_load",
-        intent: "SPECIFICATION_GOVERNANCE",
-        keywords: ["erc", "toe load", "elastic rail clip", "clip", "fastener", "kg", "mkv", "mk-v"],
-        question: "What is the toe load standard for ERC Mk-V fasteners?",
-        statement: "ERC Mk-V High-Toe-Load Elastic Rail Clips require a nominal toe clamping load of 1200 to 1500 kg (minimum 1200 kg in service) governed by IRS:T-12:2009 / RDSO/T-5919.",
-        params: [
-          { name: "Toe Clamping Load", nominal: "1250 kg", limit: ">= 1200 kg", unit: "kg", risk: "Sub-standard toe load permits rail creep, track gauge spread, and rail rollover under 25t axle load", remedy: "Replace fatigued clips with new ERC Mk-V and renew GFN-66 liners" }
-        ],
-        traversal: [
-          { id: "drg_6155", label: "RDSO/T-6155", universe: "drawings" },
-          { id: "fastener_erc_mkv", label: "ERC Mk-V (Fastener)", universe: "drawings" },
-          { id: "std_irs_t10", label: "IRS:T-10", universe: "drawings" },
-          { id: "DOC:IRPWM:2024:ACS14", label: "IRPWM Para 429", universe: "manuals" }
-        ],
-        primaryNodeId: "fastener_erc_mkv",
-        provenance: {
-          doc: "IRS:T-12:2009 / RDSO/T-5919",
-          edition: "2009 Edition",
-          chapter: "Elastic Fastenings",
-          clause: "Specification IRS:T-12",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.98
-        },
-        conflictNote: null,
-        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
-      },
-      {
-        id: "qa_usfd_testing",
-        intent: "INSPECTION_PROCEDURE",
-        keywords: ["usfd", "ultrasonic", "scan", "testing", "flaw", "inspection", "probe", "frequency"],
-        question: "What is the USFD testing protocol for curved switches?",
-        statement: "USFD testing mandates 3-Zone ultrasonic scanning of machined tongue rails (Zone 1: head, Zone 2: web, Zone 3: foot) using 70° and 0° normal probes every 3 months or 10 GMT per USFD Manual 2026 Chapter 10.",
-        params: [
-          { name: "USFD Frequency", nominal: "3 Months / 10 GMT", limit: "Mandatory Periodic", unit: "GMT/M", risk: "Undetected internal fatigue fracture in machined web triggers sudden switch break under traffic", remedy: "Immediate joggled fishplating with emergency clamps per USFD protocol" }
-        ],
-        traversal: [
-          { id: "comp_tonguerail_lh", label: "Tongue Rail LH", universe: "drawings" },
-          { id: "DOC:USFD:2026:ACS4", label: "USFD Manual 2026", universe: "manuals" },
-          { id: "FAIL:TRACK:BOLT_HOLE_STAR_CRACK", label: "Star Crack (Defect)", universe: "manuals" }
-        ],
-        primaryNodeId: "doc_usfd_2026",
-        provenance: {
-          doc: "Indian Railways Manual for Ultrasonic Testing of Rails and Welds (USFD)",
-          edition: "2026 Edition with ACS-4",
-          chapter: "Chapter 10: Testing of Points & Crossings",
-          clause: "Clause 10.3 & Annexure 10/1",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.96
-        },
-        conflictNote: null,
-        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
-      },
-      {
-        id: "qa_alt11_changes",
-        intent: "REVISION_COMPARISON",
-        keywords: ["alt 11", "alteration 11", "changed in alt 11", "revision 11", "alt11", "difference"],
-        question: "What was changed in Alt 11 for T-6155?",
-        statement: "Alteration 11 (2018) introduced 222 mm drop for Detail 'B' Flat Tie Bars, standardized HTS 25x310 mm fishbolts with split pins, and mandated 10% LIST-A depot spares buffer under Note 28.",
-        params: [
-          { name: "Detail 'B' Drop", nominal: "222.0 mm", limit: "Exact", unit: "mm", risk: "Insufficient tie bar drop causes ballast collision during tamping operations", remedy: "Verify Detail 'B' stamp on tie bar forged body" },
-          { name: "LIST-A Spares Buffer", nominal: "10%", limit: "Statutory Mandate", unit: "%", risk: "Stockouts during emergency turnout renewal", remedy: "Maintain 10% buffer in divisional track depot" }
-        ],
-        traversal: [
-          { id: "drg_6155", label: "RDSO/T-6155", universe: "drawings" },
-          { id: "rev_6155_alt11", label: "Alteration 11 (2018)", universe: "drawings" },
-          { id: "comp_detailb", label: "Detail 'B' Flat Tie Bar", universe: "drawings" },
-          { id: "spare_bolt_25x310", label: "Fishbolt 25x310 mm", universe: "drawings" }
-        ],
-        primaryNodeId: "rev_6155_alt11",
-        provenance: {
-          doc: "RDSO/T-6155 Alteration Ledger",
-          edition: "Alteration 11",
-          chapter: "Revision Table",
-          clause: "Alt 11 Entry",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.99
-        },
-        conflictNote: "Supersession note: Alt 11 replaced previous straight tie bar designs with the 222 mm cranked drop to clear heavy mechanized tamping machine tines.",
-        workflow: { label: "Open Revisions & Diff", tab: "revisions" }
-      },
-      {
-        id: "qa_lista_procurement",
-        intent: "BOM_PROCUREMENT",
-        keywords: ["buffer", "list-a", "procurement", "spares buffer", "sets", "how many spares", "order"],
-        question: "How are LIST-A spares calculated for 10 turnout sets?",
-        statement: "Under Note 28 mandate, 10% wear buffer is added to LIST-A components: 10 sets require 20 base Detail 'B' bars + ceil(20 * 0.10) = 2 buffer, totaling 22 units.",
-        params: [
-          { name: "Detail 'B' Tie Bars", nominal: "20 Base", limit: "+2 Buffer = 22 Total", unit: "Nos", risk: "Depot deficit", remedy: "Requisition per Note 28 formula" },
-          { name: "HTS Bolts 25x310", nominal: "240 Base", limit: "+24 Buffer = 264 Total", unit: "Nos", risk: "Fastener shortfall", remedy: "Include 10% bolt buffer in tender" }
-        ],
-        traversal: [
-          { id: "drg_6155", label: "RDSO/T-6155", universe: "drawings" },
-          { id: "note_6155_28", label: "Note 28 (Spares Buffer)", universe: "drawings" },
-          { id: "comp_detailb", label: "Detail 'B' Tie Bar", universe: "drawings" }
-        ],
-        primaryNodeId: "comp_detailb",
-        provenance: {
-          doc: "RDSO/T-6155",
-          edition: "Alt 13",
-          chapter: "Engineering Notes",
-          clause: "Note 28",
-          status: "DERIVED",
-          confidence: 0.98
-        },
-        conflictNote: null,
-        workflow: { label: "Open Spares & BOM Calculator", tab: "procurement" }
-      },
-      {
-        id: "qa_star_crack_mitigation",
-        intent: "FAILURE_MITIGATION",
-        keywords: ["star crack", "bolt hole", "mitigation", "fracture", "failure mode", "crack", "bolt"],
-        question: "What are the mitigations for bolt hole star cracks?",
-        statement: "Immediate remedial action requires clamping joggled fishplates over the affected bolt hole, imposing 30 km/h speed restriction, and scheduling rail renewal within 48 hours per USFD Chapter 10.",
-        params: [
-          { name: "Speed Restriction", nominal: "30 km/h", limit: "Maximum Speed", unit: "km/h", risk: "Dynamic axle impact causes complete switch web fracture", remedy: "Install joggled fishplate with 4 G-clamps immediately" },
-          { name: "Renewal Window", nominal: "Within 48 Hours", limit: "Strict Maximum", unit: "Hours", risk: "Derailment risk", remedy: "Replace tongue rail" }
-        ],
-        traversal: [
-          { id: "FAIL:TRACK:BOLT_HOLE_STAR_CRACK", label: "Star Crack (Defect)", universe: "manuals" },
-          { id: "comp_detailb", label: "Detail 'B' Hole Location", universe: "drawings" },
-          { id: "DOC:USFD:2026:ACS4", label: "USFD Chapter 10", universe: "manuals" }
-        ],
-        primaryNodeId: "FAIL:TRACK:BOLT_HOLE_STAR_CRACK",
-        provenance: {
-          doc: "USFD Manual 2026",
-          edition: "2026 Edition with ACS-4",
-          chapter: "Chapter 10: Classification of Rail Defects",
-          clause: "Para 10.4",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.95
-        },
-        conflictNote: null,
-        workflow: { label: "Open Risks & SOPs", tab: "risks" }
-      },
-      {
-        id: "qa_greasing_provisions",
-        retired: true, // answered from the manuals by retrieval; see scripts/audit_curated_answers.py
-        intent: "INSPECTION_PROCEDURE",
-        keywords: ["provisions", "greasing", "joggled", "fish plates", "fish plate", "lubrication", "greasing of joggled fish plates", "joggled fishplate greasing"],
-        question: "What are the provisions of greasing of joggled fish plates?",
-        statement: "Provisions for greasing and maintenance of joggled fish plates & rail joints (governed by IRPWM Paras 619, 620, 206, 2243, 307, 349 and USFD Para 8.10) mandate:\n\n1. Surface Cleaning (Para 619): All fishing surfaces of rails and joggled fishplates must be thoroughly scraped with wire brushes to remove rust, scale, and caked grease, cleaned with kerosene oil, and wiped dry before greasing.\n2. Approved Lubricant (Para 619): Plumbago / Graphite grease conforming strictly to IS:408 must be uniformly applied to fishing contact angles and fishbolt threads.\n3. Annual Schedule (Para 619): Mandatory annual joint dismantling and lubrication schedule. In temperature-extreme sections, work must be completed before summer/winter extremes.\n4. Fastener Torque & Care (Para 620): Fishplates must NEVER be hammered onto rail fishing surfaces. Fish bolts must be tightened uniformly from inside pairs to outside pairs with specified box spanners.\n5. Clamping & Speed Restrictions (Paras 307, 349, 618 & USFD 8.10): Joggled fishplates (RDSO/T-5849 for 60kg, T-5848 for 52kg, EDO/T-2246 for 75mm gap) with a minimum of 2 tight clamps must be maintained over un-tested/defective AT welds (DFWR/DFWO) and rail fractures allowing 30 km/h restricted speed until permanent renewal.",
-        params: [
-          { name: "Approved Lubricant", nominal: "Graphite Grease", limit: "IS:408 Mandatory", unit: "Standard", risk: "Substandard grease cakes, seizes joints, and causes seasonal track buckling or bolt shearing", remedy: "Procure and apply only IS:408 plumbago grease" },
-          { name: "Cleaning SOP", nominal: "Wire Brush + Kerosene", limit: "100% Rust/Dirt Removal", unit: "SOP", risk: "Greasing over grit/scale accelerates fretting wear on fishing contact angles", remedy: "Scrape to bare metal and wipe dry before grease application" },
-          { name: "Joggled Fishplate Clamps", nominal: "2 Clamps Minimum", limit: "Tight Clamping", unit: "Nos", risk: "Loose clamp causes weld fracture under dynamic train passage", remedy: "Keyman daily beat inspection to verify tightness" },
-          { name: "Emergency Speed Restriction", nominal: "30 km/h", limit: "Maximum Speed", unit: "km/h", risk: "Unrestricted train passage over clamped rail fracture causes derailment", remedy: "Impose 30 km/h caution order until permanent weld renewal" }
-        ],
-        traversal: [
-          { id: "act_greasing_lubrication", label: "Greasing & Lubrication SOP", universe: "manuals" },
-          { id: "comp_joggled_fish_plate", label: "Joggled Fish Plate", universe: "manuals" },
-          { id: "comp_fish_plate", label: "Fish Plate (Rail Joint)", universe: "manuals" },
-          { id: "comp_fish_bolt", label: "Fish Bolt & Nut", universe: "manuals" },
-          { id: "mat_graphite_grease", label: "Graphite Grease (IS:408)", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_06:PARA_619", label: "IRPWM Para 619 (Joint Lubrication)", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_06:PARA_620", label: "IRPWM Para 620 (Joint Maintenance)", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_03:PARA_307", label: "IRPWM Para 307 (AT Weld Protection)", universe: "manuals" },
-          { id: "CLAUSE:USFD:CH_08:PARA_8_10", label: "USFD Para 8.10 (AT Weld Protection)", universe: "manuals" }
-        ],
-        primaryNodeId: "act_greasing_lubrication",
-        provenance: {
-          doc: "Indian Railways Permanent Way Manual (IRPWM) & USFD Manual",
-          edition: "2024 / 2026 Edition",
-          chapter: "Chapter 6: Track Maintenance & Rail Joints",
-          clause: "Paras 619, 620, 206, 307, 349 & USFD 8.10",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.99
-        },
-        conflictNote: null,
-        workflow: { label: "Open Field Inspection Checklist", tab: "inspection" }
-      },
-      {
-        id: "qa_greasing_mention",
-        retired: true, // answered from the manuals by retrieval; see scripts/audit_curated_answers.py
-        intent: "INSPECTION_PROCEDURE",
-        keywords: ["in which", "greasing is mentioned", "where is greasing", "which clauses", "greasing mentioned", "lubrication mentioned", "in which greasing"],
-        question: "In which clauses is greasing mentioned?",
-        statement: "Greasing and lubrication provisions are specified across 70 clauses in 6 statutory Indian Railways manuals, governing 5 key track subsystems:\n\n1. Rail Joints & Fishplates (IRPWM Ch 6):\n   • Para 619: Lubrication of Rail Joints — Annual wire brushing, kerosene cleaning, graphite grease to IS:408.\n   • Para 620: Maintenance of Rail Joints — Oiling of fishbolts, uniform tightening, prohibition of hammering fishplates.\n   • Para 116: Duties of Keyman — Daily beat patrol inspection and oiling/greasing of joints.\n\n2. Joggled Fish Plates & Weld Protection (IRPWM & USFD):\n   • Para 206 & 2243: Standard Joggled Fishplates (RDSO/T-5849 60kg, T-5848 52kg, EDO/T-2246 75mm gap).\n   • Para 307 & USFD Para 8.10: Mandatory joggled fishplate clamping with 2 clamps over un-tested/defective AT welds.\n   • Para 349 & 618: Emergency clamping of fractured rails allowing 30 km/h restricted train movement.\n\n3. Curves & Gauge Face (IRPWM Ch 4):\n   • Para 424: Lubrication of Outer Rail on Curves — Side-wear mitigation using track-mounted lubricators.\n\n4. Switches & Slide Chairs (IRPWM Ch 4 & STMM):\n   • Para 429(2): Lubrication of slide chairs under switch tongue rails for friction-free point motor operation.\n\n5. Switch Expansion Joints (SEJ) & Ultrasonic Testing (IRPWM Ch 3 & USFD):\n   • Para 322: SEJ slide chair greasing for free thermal expansion of LWR.\n   • USFD Para 8.2.4 & 9.3: Grease/oil couplants for ultrasonic rail flaw detection probes.",
-        params: [
-          { name: "Total Mention Clauses", nominal: "70 Clauses", limit: "Corpus-Wide", unit: "Clauses", risk: "Skipping mandatory lubrication causes joint locking, buckling, or tongue rail chipping", remedy: "Execute lubrication per annual schedule" },
-          { name: "Governing Manuals", nominal: "6 Statutory Manuals", limit: "IRPWM, USFD, ATW, FBW, TMM, STMM", unit: "Manuals", risk: "Cross-jurisdictional non-compliance", remedy: "Follow subsystem-specific SOP" },
-          { name: "Key Rail Joint Clauses", nominal: "Para 619, 620, 116", limit: "Mandatory Annual / Daily", unit: "Paras", risk: "Joint seizure & bolt shearing", remedy: "Wire brush + IS:408 graphite grease" },
-          { name: "Emergency Protection", nominal: "Para 206, 307, 349", limit: "Joggled Fishplates + 2 Clamps", unit: "Paras", risk: "Weld fracture under traffic", remedy: "Clamp joggled fishplates at 30 km/h" }
-        ],
-        traversal: [
-          { id: "act_greasing_lubrication", label: "Greasing & Lubrication SOP", universe: "manuals" },
-          { id: "comp_fish_plate", label: "Fish Plate (Rail Joint)", universe: "manuals" },
-          { id: "comp_joggled_fish_plate", label: "Joggled Fish Plate", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_06:PARA_619", label: "IRPWM Para 619 (Joint Lubrication)", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_06:PARA_620", label: "IRPWM Para 620 (Joint Maintenance)", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_04:PARA_424", label: "IRPWM Para 424 (Curve Lubrication)", universe: "manuals" },
-          { id: "CLAUSE:IRPWM:CH_01:PARA_116", label: "IRPWM Para 116 (Keyman Duties)", universe: "manuals" }
-        ],
-        primaryNodeId: "act_greasing_lubrication",
-        provenance: {
-          doc: "Indian Railways Codes & Manuals Knowledge Core",
-          edition: "2024-2026 Authoritative Corpus",
-          chapter: "Multiple Chapters (Rail Joints, Curves, Switches, Welds, SEJs)",
-          clause: "70 Statutory Clauses (IRPWM Paras 619, 620, 116, 424; USFD 8.10)",
-          status: "CURATED_UNREVIEWED",
-          confidence: 0.99
-        },
-        conflictNote: null,
-        workflow: { label: "Open Codes & Manuals", tab: "manuals" }
-      }
-    ];
+    const CANONICAL_QA_DATABASE = [];   // no hand-written answers: every answer is retrieved from the manuals (see eval/retired_curated_answers.json)
 
     function detectQuestionIntent(query) {
       if (!query || typeof query !== "string") {
@@ -8830,7 +8393,7 @@
             edition: "Canonical Core v1",
             chapter: d.type || "Engineering Asset",
             clause: d.id,
-            status: "VERIFIED",
+            status: String(d.verification_status || "machine_extracted").toUpperCase(),
             confidence: 0.88
           },
           conflictNote: null,
@@ -9304,7 +8867,7 @@
         const domainEl = document.getElementById('drawer-domain');
         if (titleEl) titleEl.innerText = ans.question;
         if (domainEl) {
-          domainEl.innerText = `${ans.intentLabel || 'SPECIFICATION'} · VERIFIED QA`;
+          domainEl.innerText = `${ans.intentLabel || 'SPECIFICATION'} · FROM THE MANUALS`;
           domainEl.style.color = ans.intentColor || 'var(--accent-cyan)';
         }
         if (ans.traversal && ans.traversal.length > 0) {
@@ -11515,7 +11078,7 @@
             const domainEl = document.getElementById('drawer-domain');
             if (titleEl) titleEl.innerText = ans.question;
             if (domainEl) {
-              domainEl.innerText = `${ans.intentLabel || 'SPECIFICATION'} · VERIFIED QA`;
+              domainEl.innerText = `${ans.intentLabel || 'SPECIFICATION'} · FROM THE MANUALS`;
               domainEl.style.color = ans.intentColor || 'var(--accent-cyan)';
             }
             if (ans.traversal && ans.traversal.length > 0) {

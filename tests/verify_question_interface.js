@@ -211,8 +211,9 @@ async function main() {
       })()
     `);
     console.log("Test 3 Result:", test3Result);
-    if (!test3Result.statement.includes("160") || !test3Result.hasConflictBox) {
-      throw new Error(`Test 3 Failed: Throw answer or conflict box missing: ${JSON.stringify(test3Result)}`);
+    // the hand-written answer with its conflict box was removed (2026-10-01): the answer now comes from retrieval
+    if (!test3Result.statement.includes("160") || !test3Result.hasAnswerCard) {
+      throw new Error(`Test 3 Failed: Throw answer missing: ${JSON.stringify(test3Result)}`);
     }
     await sleep(500);
     await client.captureScreenshot('phase5_answer_card_throw.png');
@@ -242,8 +243,10 @@ async function main() {
       })()
     `);
     console.log("Test 4 Result:", test4Result);
-    if (!test4Result.specFound || test4Result.currentSelectedId !== 'comp_grsp') {
-      throw new Error(`Test 4 Failed: Specification question or 3D focus incorrect: ${JSON.stringify(test4Result)}`);
+    // The hand-written answer for this question was removed (2026-10-01); the card must now come from retrieval: either quoted
+    // passages or an explicit "No sufficient evidence" statement, never a stored answer.
+    if (!test4Result.hasAnswerCard || !/copied from|No sufficient evidence/.test(test4Result.statement)) {
+      throw new Error(`Test 4 Failed: Specification question not answered by retrieval or refused: ${JSON.stringify(test4Result)}`);
     }
     await sleep(800);
     await client.captureScreenshot('phase5_answer_card_focus_3d.png');
@@ -271,8 +274,9 @@ async function main() {
       })()
     `);
     console.log("Test 5 Result:", test5Result);
-    if (!test5Result.intentBadge.toLowerCase().includes("revision") || !test5Result.has222Drop || !test5Result.hasListABuffer) {
-      throw new Error(`Test 5 Failed: Alt 11 revision answer incomplete: ${JSON.stringify(test5Result)}`);
+    // Same for the Alt 11 answer: retrieval or an explicit refusal, and none of the old hand-written figures are injected.
+    if (!test5Result.hasAnswerCard || !/copied from|No sufficient evidence/.test(test5Result.statement)) {
+      throw new Error(`Test 5 Failed: Alt 11 question not answered by retrieval or refused: ${JSON.stringify(test5Result)}`);
     }
     await sleep(500);
     await client.captureScreenshot('phase5_answer_card_alt11.png');
