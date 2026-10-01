@@ -37,6 +37,7 @@ GATES = [
     ("Gate S: Measurements", [sys.executable, str(ROOT / "scripts" / "validate_measurements.py")]),
     ("Gate T: Drawing registry", [sys.executable, str(ROOT / "scripts" / "validate_drawings.py")]),
     ("Gate U: Drawing links", [sys.executable, str(ROOT / "scripts" / "validate_drawing_links.py")]),
+    ("Gate V: Pilot checklist, six manuals", [sys.executable, str(ROOT / "scripts" / "pilot_checklist.py")]),
 ]
 
 

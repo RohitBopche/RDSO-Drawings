@@ -1,0 +1,350 @@
+{
+ "IRPWM": {
+  "pages": {
+   "status": "PASS",
+   "detail": "530/530 pages, hash matches"
+  },
+  "hierarchy": {
+   "status": "PASS",
+   "detail": "15 chapters, 421 paragraphs, 0 without a chapter"
+  },
+  "order": {
+   "status": "PASS",
+   "detail": "chapters 1 to 15"
+  },
+  "provisions": {
+   "status": "PASS",
+   "detail": "421/421 with text, 0 short"
+  },
+  "pages_resolve": {
+   "status": "PASS",
+   "detail": "421/421 paragraphs have an existing page"
+  },
+  "search": {
+   "status": "PASS",
+   "detail": "140/140 found first by number"
+  },
+  "nl": {
+   "status": "PASS",
+   "detail": "recall@5 83/84 = 0.99 (author-drafted questions)"
+  },
+  "citations": {
+   "status": "PASS",
+   "detail": "421/421 resolve, 421 with a region"
+  },
+  "opens": {
+   "status": "PASS",
+   "detail": "manuals/IRPWM 2024 Corrected Up To ACS - 14 (29-07-2026)-1.pdf present, pages in range"
+  },
+  "xrefs": {
+   "status": "PASS",
+   "detail": "5 ambiguous, 169 external, 47 not_found, 606 resolved"
+  },
+  "flagged": {
+   "status": "PASS",
+   "detail": "421/421 carry a status, 0 claim review without a record"
+  },
+  "no_answer": {
+   "status": "PASS",
+   "detail": "4/4 off-topic questions refused"
+  },
+  "regression": {
+   "status": "PASS",
+   "detail": "146 evaluation questions with a gold paragraph in this manual"
+  },
+  "determinism": {
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
+  }
+ },
+ "TMM": {
+  "pages": {
+   "status": "PASS",
+   "detail": "458/458 pages, hash matches"
+  },
+  "hierarchy": {
+   "status": "PASS",
+   "detail": "12 chapters, 171 paragraphs, 0 without a chapter"
+  },
+  "order": {
+   "status": "PASS",
+   "detail": "chapters 1 to 12"
+  },
+  "provisions": {
+   "status": "PASS",
+   "detail": "171/171 with text, 0 short"
+  },
+  "pages_resolve": {
+   "status": "PASS",
+   "detail": "171/171 paragraphs have an existing page"
+  },
+  "search": {
+   "status": "PASS",
+   "detail": "57/57 found first by number"
+  },
+  "nl": {
+   "status": "PASS",
+   "detail": "recall@5 22/22 = 1.00 (author-drafted questions)"
+  },
+  "citations": {
+   "status": "PASS",
+   "detail": "171/171 resolve, 171 with a region"
+  },
+  "opens": {
+   "status": "PASS",
+   "detail": "manuals/INDIAN RAILWAYS TRACK MACHINE MANUAL (INCORPORATED UPTO ACS 10)_FINAL.pdf present, pages in range"
+  },
+  "xrefs": {
+   "status": "PASS",
+   "detail": "6 ambiguous, 7 external, 53 not_found, 312 resolved"
+  },
+  "flagged": {
+   "status": "PASS",
+   "detail": "171/171 carry a status, 0 claim review without a record"
+  },
+  "no_answer": {
+   "status": "PASS",
+   "detail": "4/4 off-topic questions refused"
+  },
+  "regression": {
+   "status": "PASS",
+   "detail": "59 evaluation questions with a gold paragraph in this manual"
+  },
+  "determinism": {
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
+  }
+ },
+ "STMM": {
+  "pages": {
+   "status": "PASS",
+   "detail": "222/222 pages, hash matches"
+  },
+  "hierarchy": {
+   "status": "PASS",
+   "detail": "23 chapters, 258 paragraphs, 0 without a chapter"
+  },
+  "order": {
+   "status": "PASS",
+   "detail": "chapters 1 to 23"
+  },
+  "provisions": {
+   "status": "PASS",
+   "detail": "258/258 with text, 14 short"
+  },
+  "pages_resolve": {
+   "status": "PASS",
+   "detail": "258/258 paragraphs have an existing page"
+  },
+  "search": {
+   "status": "PASS",
+   "detail": "86/86 found first by number"
+  },
+  "nl": {
+   "status": "PASS",
+   "detail": "recall@5 25/25 = 1.00 (author-drafted questions)"
+  },
+  "citations": {
+   "status": "PASS",
+   "detail": "258/258 resolve, 258 with a region"
+  },
+  "opens": {
+   "status": "PASS",
+   "detail": "manuals/STMM-date  27.05.24.pdf present, pages in range"
+  },
+  "xrefs": {
+   "status": "PASS",
+   "detail": "0 ambiguous, 20 external, 3 not_found, 52 resolved"
+  },
+  "flagged": {
+   "status": "PASS",
+   "detail": "258/258 carry a status, 0 claim review without a record"
+  },
+  "no_answer": {
+   "status": "PASS",
+   "detail": "4/4 off-topic questions refused"
+  },
+  "regression": {
+   "status": "PASS",
+   "detail": "37 evaluation questions with a gold paragraph in this manual"
+  },
+  "determinism": {
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
+  }
+ },
+ "USFD": {
+  "pages": {
+   "status": "PASS",
+   "detail": "157/157 pages, hash matches"
+  },
+  "hierarchy": {
+   "status": "PASS",
+   "detail": "15 chapters, 192 paragraphs, 0 without a chapter"
+  },
+  "order": {
+   "status": "PASS",
+   "detail": "chapters 1 to 15"
+  },
+  "provisions": {
+   "status": "PASS",
+   "detail": "192/192 with text, 0 short"
+  },
+  "pages_resolve": {
+   "status": "PASS",
+   "detail": "192/192 paragraphs have an existing page"
+  },
+  "search": {
+   "status": "PASS",
+   "detail": "64/64 found first by number"
+  },
+  "nl": {
+   "status": "PASS",
+   "detail": "recall@5 21/23 = 0.91 (author-drafted questions)"
+  },
+  "citations": {
+   "status": "PASS",
+   "detail": "192/192 resolve, 192 with a region"
+  },
+  "opens": {
+   "status": "PASS",
+   "detail": "manuals/usfd_new 24-2-26.pdf present, pages in range"
+  },
+  "xrefs": {
+   "status": "PASS",
+   "detail": "2 ambiguous, 11 external, 30 not_found, 116 resolved"
+  },
+  "flagged": {
+   "status": "PASS",
+   "detail": "192/192 carry a status, 0 claim review without a record"
+  },
+  "no_answer": {
+   "status": "PASS",
+   "detail": "4/4 off-topic questions refused"
+  },
+  "regression": {
+   "status": "PASS",
+   "detail": "52 evaluation questions with a gold paragraph in this manual"
+  },
+  "determinism": {
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
+  }
+ },
+ "AT_WELD": {
+  "pages": {
+   "status": "PASS",
+   "detail": "49/49 pages, hash matches"
+  },
+  "hierarchy": {
+   "status": "PASS",
+   "detail": "9 chapters, 73 paragraphs, 0 without a chapter"
+  },
+  "order": {
+   "status": "PASS",
+   "detail": "chapters 1 to 9"
+  },
+  "provisions": {
+   "status": "PASS",
+   "detail": "73/73 with text, 0 short"
+  },
+  "pages_resolve": {
+   "status": "PASS",
+   "detail": "73/73 paragraphs have an existing page"
+  },
+  "search": {
+   "status": "PASS",
+   "detail": "25/25 found first by number"
+  },
+  "nl": {
+   "status": "PASS",
+   "detail": "recall@5 15/15 = 1.00 (author-drafted questions)"
+  },
+  "citations": {
+   "status": "PASS",
+   "detail": "73/73 resolve, 73 with a region"
+  },
+  "opens": {
+   "status": "PASS",
+   "detail": "manuals/ATWeld_Manual-2022.pdf present, pages in range"
+  },
+  "xrefs": {
+   "status": "PASS",
+   "detail": "0 ambiguous, 24 external, 3 not_found, 45 resolved"
+  },
+  "flagged": {
+   "status": "PASS",
+   "detail": "73/73 carry a status, 0 claim review without a record"
+  },
+  "no_answer": {
+   "status": "PASS",
+   "detail": "4/4 off-topic questions refused"
+  },
+  "regression": {
+   "status": "PASS",
+   "detail": "27 evaluation questions with a gold paragraph in this manual"
+  },
+  "determinism": {
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
+  }
+ },
+ "FBW": {
+  "pages": {
+   "status": "PASS",
+   "detail": "69/69 pages, hash matches"
+  },
+  "hierarchy": {
+   "status": "PASS",
+   "detail": "9 chapters, 57 paragraphs, 0 without a chapter"
+  },
+  "order": {
+   "status": "PASS",
+   "detail": "chapters 1 to 9"
+  },
+  "provisions": {
+   "status": "PASS",
+   "detail": "57/57 with text, 0 short"
+  },
+  "pages_resolve": {
+   "status": "PASS",
+   "detail": "57/57 paragraphs have an existing page"
+  },
+  "search": {
+   "status": "PASS",
+   "detail": "19/19 found first by number"
+  },
+  "nl": {
+   "status": "PASS",
+   "detail": "recall@5 16/18 = 0.89 (author-drafted questions)"
+  },
+  "citations": {
+   "status": "PASS",
+   "detail": "57/57 resolve, 57 with a region"
+  },
+  "opens": {
+   "status": "PASS",
+   "detail": "manuals/FBW Manual-Reprint 2022- Incorporated up to CS5.pdf present, pages in range"
+  },
+  "xrefs": {
+   "status": "PASS",
+   "detail": "6 ambiguous, 2 external, 9 not_found, 39 resolved"
+  },
+  "flagged": {
+   "status": "PASS",
+   "detail": "57/57 carry a status, 0 claim review without a record"
+  },
+  "no_answer": {
+   "status": "PASS",
+   "detail": "4/4 off-topic questions refused"
+  },
+  "regression": {
+   "status": "PASS",
+   "detail": "29 evaluation questions with a gold paragraph in this manual"
+  },
+  "determinism": {
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
+  }
+ }
+}
