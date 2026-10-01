@@ -34,7 +34,17 @@ pick.forEach(q => {
     if (!hay.includes(norm(p.text).replace(/\s*\.\.\.$/, '')) && !p.cite.clause) out.grounding.violations.push({ q: q.question, text: p.text });
     else if (!hay.includes(norm(p.text))) out.grounding.violations.push({ q: q.question, label, text: p.text.slice(0, 120) });
   };
-  r.points.forEach(p => check(p, 'point')); (r.alsoSee || []).forEach(p => check(p, 'also'));
+  r.points.forEach(p => { check(p, 'point'); if (p.text.split(' ').length < 4 && !/^(Para|\d)/.test(p.text)) out.grounding.violations.push({ q: q.question, label: 'stub', text: p.text }); }); (r.alsoSee || []).forEach(p => check(p, 'also'));
   if (!r.primary || !r.primary.page) out.grounding.violations.push({ q: q.question, text: 'missing citation' });
+});
+out.probe = JSON.parse(fs.readFileSync(path.join(root, 'eval/chat_probe.json'), 'utf8')).items.map(it => {
+  const r = mk().ask(it.q), text = (r.points || []).map(p => p.text).join(' ');
+  const fail = [];
+  if (r.kind !== it.kind) fail.push('kind ' + r.kind);
+  if (it.primary && (!r.primary || r.primary.label !== it.primary)) fail.push('primary ' + (r.primary && r.primary.label));
+  if (it.primary_in && (!r.primary || !it.primary_in.includes(r.primary.label))) fail.push('primary ' + (r.primary && r.primary.label));
+  if (it.alias && (!r.primary || r.primary.alias !== it.alias)) fail.push('alias ' + (r.primary && r.primary.alias));
+  if (it.text_regex && !new RegExp(it.text_regex, 'i').test(text + ' ' + (r.primary ? r.primary.text : ''))) fail.push('text');
+  return { q: it.q, fail };
 });
 console.log(JSON.stringify(out));

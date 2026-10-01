@@ -57,3 +57,8 @@ def test_every_statement_shown_is_copied_from_the_cited_passage(run):
     g = run["grounding"]
     assert g["checked"] >= 100
     assert g["violations"] == [], g["violations"][:3]
+
+
+def test_probe_questions_still_get_the_expected_reply(run):
+    bad = [p for p in run["probe"] if p["fail"]]
+    assert bad == [], bad

@@ -2078,6 +2078,19 @@ Checks: 8 pytest dialogue tests (greeting, cited answer, commands, follow-up, re
 
 Limits, stated plainly: it answers only what the manuals state in words the search can match; it does not calculate, compare two values or combine facts from two paragraphs into a new sentence; unusual phrasing or a question whose answer is in a table the parser flattened can miss (weak matches are labelled); follow-up handling is rule-based and can misjudge (it shows its reading so the user can correct it); quality on real engineer questions is still unmeasured (the real-question packet is the next step); conversation state lasts only while the page is open.
 
+### 37.30 Chat quality round 1 (self-probing) — 2026-09-30
+
+I asked the assistant 30 practitioner questions of my own (not from the evaluation set) and read the answers. This is the author reading the author's system, so it finds defect classes but cannot measure accuracy. Findings and fixes:
+
+1. **Questions refused that the manuals could answer** ("permissible gap after aluminothermic welding": 28% coverage). The refusal rule counted a question word as present only if that exact stem occurs in the passage, so a spelling the manuals do not use ("aluminothermic" versus "alumino-thermic" or "thermit") made the question look unsupported even though the synonym rule retrieved the right passages. **Fixed in the engine:** a question word counts as covered when the passage has it or what the synonym rules say it stands for. Retrieval evaluation unchanged (dev and test, including refusals of 20/20 and 10/12 out-of-scope); that question is now answered from AT_WELD Para 4.1.1.1 with the 25 mm gap.
+2. **Answers that were only a heading or stub** ("11.4.1 Equipment:", "and 4/4(B).", "(Back to Para 717)"). **Fixed in the chat:** a sentence is shown only if it has at least five words of content and is not a heading, list marker or back-reference; when the best paragraph has nothing informative the next candidate is used; the same rule applies to "also relevant".
+3. **Hand-made graph notes surfaced as sources** ("What does DRAWINGS Para defect_cms_batter say?"): the search index also holds unsourced graph nodes. **Fixed:** the chat uses only the six manuals as sources and follow-up suggestions.
+4. Value lists showed rail sizes as values ("60 kg"): values without a quantity label in kg are no longer listed.
+
+Still failing in my probe, not fixed: "how often should rails be tested by ultrasonic flaw detector" (low confidence; the testing-frequency table is not retrieved), "what is the standard gauge in broad gauge track" (answers from level-crossing indicators, not the 1676 mm statement), "duties of the PWI" (answers from the AT welding manual; the manuals say SSE/P.Way, and "PWI" occurs 4 times), "what is the purpose of a check rail" (no paragraph defines it; the answer is unrelated and labelled medium), "destressing temperature for LWR" (right paragraph, wrong sentence), "how long should the weld cool before traffic" and "how many gangs are needed for a ballast cleaning machine" (refused, the answers may simply not be in the manuals). These are the class of failure that real user questions will show; each can be treated with reviewed synonyms or better sentence choice once people supply examples.
+
+`eval/chat_probe.json` (9 items, author-written) is a regression probe, run by `tests/test_chat.py` together with the grounding sweep, which now also fails on stub sentences. State: 21 gates, 244 pytest, 15 browser suites, all passing.
+
 ---
 
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)

@@ -1,0 +1,14 @@
+{
+  "_note": "Regression probe for the chat assistant, written by the author (not independent). Each item says what a correct reply must satisfy; it is meant to catch regressions, not to estimate accuracy.",
+  "items": [
+    {"q": "How is casual renewal of a defective or fractured rail carried out?", "kind": "answer", "primary": "IRPWM Para 616"},
+    {"q": "Who has the authority to order a material train?", "kind": "answer", "primary": "IRPWM Para 847"},
+    {"q": "how to measure versine on a curve", "kind": "answer", "primary_in": ["IRPWM Para 401", "IRPWM Para 402"]},
+    {"q": "what is the permissible gap after aluminothermic welding", "kind": "answer", "alias": "AT_WELD"},
+    {"q": "what is the tolerance in gauge", "kind": "answer", "alias": "IRPWM", "text_regex": "gauge"},
+    {"q": "what is the maximum speed for a patrolman walking", "kind": "answer", "primary": "IRPWM Para 1004", "text_regex": "3 Kmph"},
+    {"q": "What does Para 13.1 of USFD say?", "kind": "answer", "primary": "USFD Para 13.1"},
+    {"q": "What is the recipe for butter chicken?", "kind": "no_evidence"},
+    {"q": "Who won the cricket world cup in 2011?", "kind": "no_evidence"}
+  ]
+}
