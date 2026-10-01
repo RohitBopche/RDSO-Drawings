@@ -140,6 +140,15 @@ def main() -> int:
                 rows.append({"id": f"{n['id']}#0", "clause": n["id"], "alias": "DRAWINGS", "doc": "RDSO drawings",
                              "chapter": n["type"].title(), "para": n["id"], "title": n["label"], "page": 0,
                              "type": n["type"], "text": body})
+    # annexures and appendices: units cut from the page text by scripts/build_annexures.py, searchable like paragraphs (kind "annexure")
+    ap = KG / "canonical" / "annexures.jsonl"
+    if ap.exists():
+        for a in (json.loads(l) for l in ap.read_text(encoding="utf-8").splitlines() if l.strip()):
+            ch = chapters.get(a["chapter"] or "")
+            title = f"{a['label']} {a['title']} {ch['label'] if ch else ''}".strip()
+            for k, piece in enumerate(chunks(a["text"])):
+                rows.append({"id": f"{a['id']}#{k}", "clause": a["id"], "alias": a["manual"], "doc": docs.get(next((d for d in docs if d.split(":")[1] == a["manual"]), ""), {}).get("label", a["manual"]),
+                             "chapter": ch["label"] if ch else "", "para": a["label"], "title": title, "page": a["page"], "type": "CLAUSE", "kind": "annexure", "text": piece})
     rows += table_passages(by_id, chapters)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
@@ -152,12 +161,15 @@ def main() -> int:
     refs = [json.loads(l) for l in (KG / "canonical" / "crossrefs.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
     out_refs: dict[str, list] = {}
     in_refs: dict[str, list] = {}
-    located = {i["ref_id"]: i["pages"] for i in json.loads((KG / "reports" / "crossref_unresolved.json").read_text(encoding="utf-8"))["items"] if i["pages"]}
+    unresolved = json.loads((KG / "reports" / "crossref_unresolved.json").read_text(encoding="utf-8"))["items"]
+    located = {i["ref_id"]: i["pages"] for i in unresolved if i["pages"]}
+    annex_of = {i["ref_id"]: i["annex"] for i in unresolved if i.get("annex")}
     for x in refs:
         row = [" ".join(x["raw"].split()), x["target_kind"], x["status"], x["targets"], x["scope_name"] or "",
                located[x["ref_id"]][:4] if x["ref_id"] in located else [],      # unresolved figure / table / annexure: the page(s) where its caption is
                x["start"], x["end"],                                           # where the reference sits in the source paragraph (for quoting it)
-               1 if x["kind"] == "back_ref" else 0]                            # "(Back to Para N)" note: N refers to this paragraph, not the reverse
+               1 if x["kind"] == "back_ref" else 0,                            # "(Back to Para N)" note: N refers to this paragraph, not the reverse
+               annex_of.get(x["ref_id"], "")]                                  # the annexure unit that holds a referred-to annexure, when it has no graph node
         out_refs.setdefault(x["source"], []).append(row)
         for t in x["targets"]:
             if t != x["source"] and x["source"] not in in_refs.setdefault(t, []):

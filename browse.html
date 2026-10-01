@@ -83,9 +83,10 @@
   Object.keys(window.RDSO_TABLES || {}).forEach(function (id) { var t = RDSO_TABLES[id]; (tablesByClause[t.k] = tablesByClause[t.k] || []).push(t); });
   var cur = null;
 
-  $('manual').innerHTML = model.manuals.map(function (m) { return '<option value="' + m.alias + '">' + esc(m.alias.replace('_', ' ') + ' — ' + m.name + ' (' + m.count + ')') + '</option>'; }).join('');
+  $('manual').innerHTML = model.manuals.map(function (m) { return '<option value="' + m.alias + '">' + esc(m.alias.replace('_', ' ') + ' — ' + m.name + ' (' + m.count + ' paragraphs, ' + m.annexCount + ' annexures)') + '</option>'; }).join('');
 
-  function label(c) { return c.alias.replace('_', ' ') + ' ' + (model.manuals.filter(function (m) { return m.alias === c.alias; })[0].decimal ? '' : 'para ') + c.para; }
+  function label(c) {
+    if (c.annex) return c.alias.replace('_', ' ') + ' ' + c.label; return c.alias.replace('_', ' ') + ' ' + (model.manuals.filter(function (m) { return m.alias === c.alias; })[0].decimal ? '' : 'para ') + c.para; }
   function drawTree(openId) {
     var m = model.manuals.filter(function (x) { return x.alias === $('manual').value; })[0], f = $('filter').value.toLowerCase().trim();
     $('tree').innerHTML = m.chapters.map(function (ch) {
@@ -95,6 +96,9 @@
       return '<details' + open + '><summary>Ch. ' + ch.num + ' ' + esc(ch.title) + '</summary><ul class="plist">' + cl.map(function (c) {
         return '<li><button data-id="' + esc(c.id) + '"' + (c.id === openId ? ' aria-current="true"' : '') + '>' + esc(c.para) + ' <span class="t">' + esc(c.title.slice(0, 70)) + '</span></button></li>'; }).join('') + '</ul></details>';
     }).join('') || '<div class="empty">Nothing matches.</div>';
+    var an = (m.annexes || []).filter(function (a) { return !f || (a.label + ' ' + a.title).toLowerCase().indexOf(f) >= 0; });
+    if (an.length) $('tree').innerHTML += '<details' + (f || (openId && an.some(function (a) { return a.id === openId; })) ? ' open' : '') + '><summary>Annexures and appendices (' + an.length + ')</summary><ul class="plist">' + an.map(function (a) {
+      return '<li><button data-id="' + esc(a.id) + '"' + (a.id === openId ? ' aria-current="true"' : '') + '>' + esc(a.label.replace(/^Annexure /, 'Ann. ')) + ' <span class="t">' + esc(a.title.slice(0, 64)) + '</span></button></li>'; }).join('') + '</ul></details>';
   }
   function chip(id) { var c = model.byId[id]; return c ? '<button class="lnk" data-id="' + esc(id) + '">' + esc(label(c)) + (c.title ? ' — ' + esc(c.title.slice(0, 60)) : '') + '</button>' : ''; }
   function tableHtml(t) {
@@ -105,6 +109,16 @@
     var c = model.byId[id]; if (!c) return;
     cur = c;
     $('manual').value = c.alias; drawTree(id);
+    if (c.annex) {
+      var aurl = encodeURI(PDF[c.alias] || '') + '#page=' + (c.page || 1);
+      $('main').innerHTML = '<article class="read"><div class="crumb">' + esc(c.alias.replace('_', ' ')) + ' › ' + (c.chapterNum ? 'Chapter ' + c.chapterNum + ' › ' : '') + 'Annexure or appendix</div><h2 id="ptitle">' + esc(label(c)) + (c.title ? ' — ' + esc(c.title.slice(0, 90)) : '') + '</h2>' +
+        '<div class="meta" style="color:var(--muted);font-size:.85rem;margin-bottom:6px">Text of the page' + (c.pageEnd && c.pageEnd !== c.page ? 's' : '') + ' starting at page ' + (c.page || '') + ', as printed in the manual (forms and tables appear as lines of text).</div>' +
+        '<div class="text" id="ptext">' + esc(c.text) + '</div><div class="acts"><a class="iconbtn" id="askAbout" href="chat.html?q=' + encodeURIComponent('Explain ' + label(c)) + '&manual=' + c.alias + '">Ask about this annexure</a>' +
+        '<a class="iconbtn" id="openPage" target="_blank" rel="noopener" href="' + esc(aurl) + '">Open page ' + (c.page || '') + ' ↗</a><button class="iconbtn" id="copyLink">Copy link</button></div>' +
+        '<div class="pn"><button class="iconbtn" id="prev"' + (c.prev ? ' data-id="' + esc(c.prev) + '"' : ' disabled') + '>← Previous</button><button class="iconbtn" id="next"' + (c.next ? ' data-id="' + esc(c.next) + '"' : ' disabled') + '>Next →</button></div></article>';
+      $('main').scrollTop = 0; document.title = label(c) + ' · Browse'; if (!noHash && location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+      return;
+    }
     var par = RDSOBrowse.parentPara(c.alias, c.para), parId = par ? model.manuals.filter(function (m) { return m.alias === c.alias; })[0].chapters.reduce(function (a, ch) { return a || (ch.clauses.filter(function (x) { return x.para === par; })[0] || {}).id; }, null) : null;
     var ex = extras[id] || {}, subs = (ex.s || []).map(function (s) { var sid = s[1]; return model.byId[sid] ? chip(sid) : ''; }).filter(Boolean);
     var outs = [], seen = {};
@@ -122,7 +136,7 @@
       (tablesByClause[id] || []).map(tableHtml).join('') +
       (outs.length ? '<div class="box" id="xout"><h3>This paragraph refers to</h3><ul>' + outs.map(function (t) { return '<li>' + chip(t) + '</li>'; }).join('') + '</ul></div>' : '') +
       (located.length ? '<div class="box" id="xloc"><h3>Figures, tables and annexures mentioned (shown only on the page)</h3><ul>' + located.map(function (e) {
-        return '<li>' + esc(e[0]) + ' — <a target="_blank" rel="noopener" href="' + esc(encodeURI(PDF[c.alias] || '') + '#page=' + e[5][0]) + '">page ' + e[5][0] + (e[5].length > 1 ? ' (also ' + e[5].slice(1).join(', ') + ')' : '') + ' ↗</a></li>'; }).join('') + '</ul></div>' : '') +
+        return '<li>' + esc(e[0]) + (e[9] && model.byId[e[9]] ? ' — <button class="lnk" data-id="' + esc(e[9]) + '">open the annexure</button> · ' : ' — ') + '<a target="_blank" rel="noopener" href="' + esc(encodeURI(PDF[c.alias] || '') + '#page=' + e[5][0]) + '">page ' + e[5][0] + (e[5].length > 1 ? ' (also ' + e[5].slice(1).join(', ') + ')' : '') + ' ↗</a></li>'; }).join('') + '</ul></div>' : '') +
       (ins.length ? '<div class="box" id="xin"><h3>Referred to by</h3><ul>' + ins.slice(0, 30).map(function (t) { return '<li>' + chip(t) + '</li>'; }).join('') + '</ul></div>' : '') +
       '<div class="pn"><button class="iconbtn" id="prev"' + (c.prev ? ' data-id="' + esc(c.prev) + '"' : ' disabled') + '>← Previous</button><button class="iconbtn" id="next"' + (c.next ? ' data-id="' + esc(c.next) + '"' : ' disabled') + '>Next →</button></div></article>';
     $('main').scrollTop = 0;

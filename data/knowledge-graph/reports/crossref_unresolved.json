@@ -2,8 +2,8 @@
  "summary": {
   "total": 161,
   "by_reason": {
-   "ANNEXURE_HEADING_ON_PAGE": 1,
-   "ANNEXURE_NOT_IN_TEXT": 8,
+   "ANNEXURE_NOT_IN_TEXT": 5,
+   "ANNEXURE_UNIT_HELD": 4,
    "FIGURE_CAPTION_ON_PAGE": 103,
    "FIGURE_NOT_IN_TEXT": 10,
    "PARA_NOT_IN_MANUAL": 9,
@@ -46,8 +46,11 @@
    "raw": "Annexure - 2/2A",
    "kind": "annexure",
    "status": "NOT_FOUND",
-   "pages": [],
-   "reason": "ANNEXURE_NOT_IN_TEXT"
+   "pages": [
+    72
+   ],
+   "reason": "ANNEXURE_UNIT_HELD",
+   "annex": "ANNEX:IRPWM:2_2_A"
   },
   {
    "ref_id": "XREF:00075",
@@ -55,8 +58,11 @@
    "raw": "Annexure - 2/2A",
    "kind": "annexure",
    "status": "NOT_FOUND",
-   "pages": [],
-   "reason": "ANNEXURE_NOT_IN_TEXT"
+   "pages": [
+    72
+   ],
+   "reason": "ANNEXURE_UNIT_HELD",
+   "annex": "ANNEX:IRPWM:2_2_A"
   },
   {
    "ref_id": "XREF:00076",
@@ -64,8 +70,11 @@
    "raw": "Annexure - 2/2A",
    "kind": "annexure",
    "status": "NOT_FOUND",
-   "pages": [],
-   "reason": "ANNEXURE_NOT_IN_TEXT"
+   "pages": [
+    72
+   ],
+   "reason": "ANNEXURE_UNIT_HELD",
+   "annex": "ANNEX:IRPWM:2_2_A"
   },
   {
    "ref_id": "XREF:00171",
@@ -558,10 +567,10 @@
    "kind": "annexure",
    "status": "NOT_FOUND",
    "pages": [
-    10,
     78
    ],
-   "reason": "ANNEXURE_HEADING_ON_PAGE"
+   "reason": "ANNEXURE_UNIT_HELD",
+   "annex": "ANNEX:USFD:IIB"
   },
   {
    "ref_id": "XREF:00850",

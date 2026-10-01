@@ -5,6 +5,7 @@ For every NOT_FOUND or AMBIGUOUS reference this finds the reason and, where the 
 
     FIGURE_CAPTION_ON_PAGE   a line "Fig. 3.8 ..." exists in the manual's page text, but the figure is a picture, not a node
     FIGURE_NOT_IN_TEXT       no caption line anywhere in the manual (picture without extractable caption, or a misprint)
+    ANNEXURE_UNIT_HELD       the annexure is held as a unit (scripts/build_annexures.py) and can be opened in Browse; no node exists for it in the paragraph graph
     ANNEXURE_HEADING_ON_PAGE an "Annexure ..." heading line exists in the page text, but no annexure node was made
     ANNEXURE_NOT_IN_TEXT     no such heading line in the manual
     TABLE_CAPTION_ON_PAGE / TABLE_NOT_IN_TEXT          same for tables
@@ -53,6 +54,11 @@ def diagnose() -> list[dict]:
         docs.setdefault(p["document_id"], []).append((p["page_number"], p.get("text_content") or ""))
     registry_ids = {r["id"] for r in read_jsonl(KG / "raw" / "source_registry.jsonl")}
     doc_of = {a: next((d for d in registry_ids if d.startswith(f"DOC:{a}:")), None) for a in ALIASES}
+    ap = KG / "canonical" / "annexures.jsonl"
+    units = {}
+    if ap.exists():
+        for a in read_jsonl(ap):
+            units.setdefault((a["manual"], re.sub(r"[\s\-–()]", "", a["number"]).upper()), a)
     cache: dict[tuple, list[int]] = {}
     out = []
     for r in refs:
@@ -67,6 +73,9 @@ def diagnose() -> list[dict]:
             rec["candidates"] = r.get("candidates", [])
         elif kind == "para":
             rec["reason"] = "PARA_NOT_IN_MANUAL"
+        elif kind == "annexure" and (r["scope"] if r["scope"] in ALIASES else alias, re.sub(r"[\s\-–()]", "", str(r["number"])).upper()) in units:
+            u = units[(r["scope"] if r["scope"] in ALIASES else alias, re.sub(r"[\s\-–()]", "", str(r["number"])).upper())]
+            rec["reason"], rec["pages"], rec["annex"] = "ANNEXURE_UNIT_HELD", [u["page"]], u["id"]
         elif kind in ("figure", "annexure", "table"):
             key = (alias, kind, num)
             if key not in cache:

@@ -153,6 +153,12 @@ async function main() {
     console.log(t4c);
     if (!t4c.box || !t4c.links.length || !t4c.links.every(h => /#page=\d+$/.test(h))) throw new Error('Test 4c failed ' + JSON.stringify(t4c));
 
+    console.log("\n--- TEST 4d: annexures and appendices are listed and readable ---");
+    await client.send('Page.navigate', { url: URL_TARGET + '#ANNEX:IRPWM:3_17' }); await sleep(2500);
+    const t4d = await ev(`({ title: (document.getElementById('ptitle') || {}).innerText || '', len: (document.getElementById('ptext') || {}).innerText ? document.getElementById('ptext').innerText.length : 0, group: [...document.querySelectorAll('#tree summary')].map(x => x.innerText).filter(x => /Annexures/.test(x)), page: (document.getElementById('openPage') || {}).getAttribute ? document.getElementById('openPage').getAttribute('href') : '' })`);
+    console.log(t4d);
+    if (!/IRPWM Annexure 3\/17/.test(t4d.title) || t4d.len < 1000 || !t4d.group.length || !/#page=167$/.test(t4d.page)) throw new Error('Test 4d failed ' + JSON.stringify(t4d));
+
     console.log("\n--- TEST 5: filter, manual switch, hand-off links to the chat ---");
     const t5 = await ev(`(async () => { const m0 = document.getElementById('manual'); m0.value = 'AT_WELD'; m0.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 150)); const f = document.getElementById('filter'); f.value = '4.1'; f.dispatchEvent(new Event('input')); await new Promise(r => setTimeout(r, 100));
       const hit = document.querySelectorAll('#tree button[data-id]').length; f.value = ''; f.dispatchEvent(new Event('input'));

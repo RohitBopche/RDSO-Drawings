@@ -2202,6 +2202,30 @@ Checks: a dialogue test for the utility vehicle question, a sweep over the table
 - **Not done, with reason:** failure analysis, procurement and BOM, inspection mode and typed filters over component relationships need entity extraction that does not exist (only the hand-made drawing nodes); building it from prose would be new extraction work with its own review. The shortest chain is shortest in references, not the most meaningful one. Links only exist where a reference was resolved (141 NOT_FOUND figures and 9 missing paragraph numbers are not in the graph).
 - **Which relationship questions engineers ask** is still unknown; these five were chosen because the manuals' own data supports them. The 50 to 100 real questions would show which others matter.
 
+### 37.45 Coverage audit: is every aspect of the manuals in the knowledge base? — 2026-10-01
+
+**Question raised:** "there are more than 1000 paras in IRPWM alone, check whether every aspect of the manuals is covered."
+
+**Findings.**
+- IRPWM has 421 numbered paragraphs. The ">1000" count is sub-paragraph markers ((a), (i), 1) ...), which stay inside their paragraph's text. They are not separate paragraphs.
+- The audit did find real gaps: annexures, appendices, forms and proformas, front matter (contents, preface, correction slips) and continuation text were not in the knowledge base. Earlier "P1/P2 closed" statements were premature on this point.
+
+**Fix.**
+- `scripts/build_annexures.py` creates 219 units in `canonical/annexures.jsonl` (IRPWM 85, TMM 84, STMM 5, USFD 14, AT_WELD 12, FBW 19). 20 are loose-text runs and 6 are front matter. Text is verbatim page text.
+- Units are indexed (`kind:"annexure"`), browsable (Annexures group in Browse), citable ("IRPWM Annexure 3/17") and linked from cross-references (`ANNEXURE_UNIT_HELD`).
+- Retrieval demotes annexure passages (annexW 0.6, frontW 0.25) unless the question names an annexure, form, proforma or contents.
+- `scripts/coverage_audit.py` audits line by line (lines of 20 chars or more). Uncovered share now: IRPWM 0.1%, TMM 0.0%, STMM 0.1%, USFD 0.3%, AT_WELD 1.0%, FBW 0.2%.
+- Gate Z checks that the audit report is current. Pilot checklist has a 15th criterion, "coverage" (uncovered share at most 1.5%). Result: 90/90.
+
+**Verification.** 272 pytest, 18/18 browser suites, gates A-Z pass, citation verifier 367 answers with 0 violations. Rebuild is deterministic (checked after staging). Retrieval: dev R@1/5 0.838/0.976, test 0.891/0.993, real 19/20 first and 20/20 top-5.
+
+**Honest limits.**
+- Pictures and drawings without text are not interpreted.
+- Lines under 20 chars are ignored by the audit.
+- Annexure units are page-text blobs with coarse titles (28+ untitled); forms and tables appear as lines.
+- 5 annexure references are still NOT_FOUND.
+- Demotion factors were tuned on author-made sets.
+
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
 
 **Ordering principle:** data truth first, then retrieval, then answers, then learning. Each work package (WP) is one small validated increment: it ends with a gate or test that fails before the change and passes after, a conventional commit, and an updated metrics file. Do not start a WP whose dependency is open.

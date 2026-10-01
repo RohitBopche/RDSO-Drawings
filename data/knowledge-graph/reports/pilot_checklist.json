@@ -16,6 +16,10 @@
    "status": "PASS",
    "detail": "421/421 with text, 0 short"
   },
+  "coverage": {
+   "status": "PASS",
+   "detail": "14421/14432 lines in the knowledge base, 0.1% not"
+  },
   "pages_resolve": {
    "status": "PASS",
    "detail": "421/421 paragraphs have an existing page"
@@ -53,8 +57,8 @@
    "detail": "146 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "SKIP",
-   "detail": "run with --rebuild, or see the CI rebuild step"
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
   }
  },
  "TMM": {
@@ -73,6 +77,10 @@
   "provisions": {
    "status": "PASS",
    "detail": "171/171 with text, 0 short"
+  },
+  "coverage": {
+   "status": "PASS",
+   "detail": "10275/10277 lines in the knowledge base, 0.0% not"
   },
   "pages_resolve": {
    "status": "PASS",
@@ -111,8 +119,8 @@
    "detail": "59 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "SKIP",
-   "detail": "run with --rebuild, or see the CI rebuild step"
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
   }
  },
  "STMM": {
@@ -131,6 +139,10 @@
   "provisions": {
    "status": "PASS",
    "detail": "258/258 with text, 14 short"
+  },
+  "coverage": {
+   "status": "PASS",
+   "detail": "5035/5038 lines in the knowledge base, 0.1% not"
   },
   "pages_resolve": {
    "status": "PASS",
@@ -169,8 +181,8 @@
    "detail": "37 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "SKIP",
-   "detail": "run with --rebuild, or see the CI rebuild step"
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
   }
  },
  "USFD": {
@@ -189,6 +201,10 @@
   "provisions": {
    "status": "PASS",
    "detail": "192/192 with text, 0 short"
+  },
+  "coverage": {
+   "status": "PASS",
+   "detail": "2273/2280 lines in the knowledge base, 0.3% not"
   },
   "pages_resolve": {
    "status": "PASS",
@@ -227,8 +243,8 @@
    "detail": "52 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "SKIP",
-   "detail": "run with --rebuild, or see the CI rebuild step"
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
   }
  },
  "AT_WELD": {
@@ -247,6 +263,10 @@
   "provisions": {
    "status": "PASS",
    "detail": "73/73 with text, 0 short"
+  },
+  "coverage": {
+   "status": "PASS",
+   "detail": "1080/1091 lines in the knowledge base, 1.0% not"
   },
   "pages_resolve": {
    "status": "PASS",
@@ -285,8 +305,8 @@
    "detail": "27 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "SKIP",
-   "detail": "run with --rebuild, or see the CI rebuild step"
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
   }
  },
  "FBW": {
@@ -305,6 +325,10 @@
   "provisions": {
    "status": "PASS",
    "detail": "57/57 with text, 0 short"
+  },
+  "coverage": {
+   "status": "PASS",
+   "detail": "1215/1218 lines in the knowledge base, 0.2% not"
   },
   "pages_resolve": {
    "status": "PASS",
@@ -343,8 +367,8 @@
    "detail": "29 evaluation questions with a gold paragraph in this manual"
   },
   "determinism": {
-   "status": "SKIP",
-   "detail": "run with --rebuild, or see the CI rebuild step"
+   "status": "PASS",
+   "detail": "rebuild_all leaves data/ unchanged"
   }
  }
 }

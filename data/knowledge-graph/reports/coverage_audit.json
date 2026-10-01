@@ -1,0 +1,302 @@
+{
+ "IRPWM": {
+  "pages": 530,
+  "lines_checked": 14432,
+  "by_class": {
+   "BOILERPLATE": 8,
+   "COVERED": 14409,
+   "TABLE": 4,
+   "UNCOVERED": 11
+  },
+  "uncovered_share": 0.0008,
+  "worst_pages": [
+   {
+    "page": 424,
+    "uncovered_lines": 2,
+    "examples": [
+     "Annexure – 8/9 (Para 837(5))",
+     "PROTECTION OF TROLLEY ON LINE"
+    ]
+   },
+   {
+    "page": 53,
+    "uncovered_lines": 1,
+    "examples": [
+     "Duties of Gang Mate, Keyman, Patrolman, Gateman and Track"
+    ]
+   },
+   {
+    "page": 106,
+    "uncovered_lines": 1,
+    "examples": [
+     "Annexure - 3/7 (Para 321)"
+    ]
+   },
+   {
+    "page": 359,
+    "uncovered_lines": 1,
+    "examples": [
+     "Annexure - 6/2 (Para 653)"
+    ]
+   },
+   {
+    "page": 362,
+    "uncovered_lines": 1,
+    "examples": [
+     "Annexure - 6/4 (Para 657)"
+    ]
+   },
+   {
+    "page": 365,
+    "uncovered_lines": 1,
+    "examples": [
+     "Annexure - 6/7(Para 657)"
+    ]
+   },
+   {
+    "page": 366,
+    "uncovered_lines": 1,
+    "examples": [
+     "Annexure - 6/8 (Para 665)"
+    ]
+   },
+   {
+    "page": 387,
+    "uncovered_lines": 1,
+    "examples": [
+     "Chapter No 3, Part D pertaining to provisions on LWR."
+    ]
+   },
+   {
+    "page": 423,
+    "uncovered_lines": 1,
+    "examples": [
+     "Annexure – 8/8 (Para 837(4))"
+    ]
+   },
+   {
+    "page": 503,
+    "uncovered_lines": 1,
+    "examples": [
+     "Annexure - 11/2 Para 1116"
+    ]
+   }
+  ]
+ },
+ "TMM": {
+  "pages": 458,
+  "lines_checked": 10277,
+  "by_class": {
+   "COVERED": 10275,
+   "UNCOVERED": 2
+  },
+  "uncovered_share": 0.0002,
+  "worst_pages": [
+   {
+    "page": 294,
+    "uncovered_lines": 2,
+    "examples": [
+     "XI. Observations/Remarks of Inspecting Officials(6 pages desirable)",
+     "XII. Observations/Remarks of Inspecting Supervisors (16 pages desirable)"
+    ]
+   }
+  ]
+ },
+ "STMM": {
+  "pages": 222,
+  "lines_checked": 5038,
+  "by_class": {
+   "COVERED": 5035,
+   "UNCOVERED": 3
+  },
+  "uncovered_share": 0.0006,
+  "worst_pages": [
+   {
+    "page": 20,
+    "uncovered_lines": 1,
+    "examples": [
+     "Organizational Structure, Duties and Inspections"
+    ]
+   },
+   {
+    "page": 115,
+    "uncovered_lines": 1,
+    "examples": [
+     "1008Requirement of manpower: One (skilled)person."
+    ]
+   },
+   {
+    "page": 136,
+    "uncovered_lines": 1,
+    "examples": [
+     "Box Type Gauge cum Level (BG) with Spirit Level"
+    ]
+   }
+  ]
+ },
+ "USFD": {
+  "pages": 157,
+  "lines_checked": 2280,
+  "by_class": {
+   "COVERED": 2272,
+   "TABLE": 1,
+   "UNCOVERED": 7
+  },
+  "uncovered_share": 0.0031,
+  "worst_pages": [
+   {
+    "page": 21,
+    "uncovered_lines": 1,
+    "examples": [
+     "3.1.1 Total Life of USFD machine is approximately 8 years."
+    ]
+   },
+   {
+    "page": 22,
+    "uncovered_lines": 1,
+    "examples": [
+     "Specification of rail testers"
+    ]
+   },
+   {
+    "page": 48,
+    "uncovered_lines": 1,
+    "examples": [
+     "Periodic testing of welds in service"
+    ]
+   },
+   {
+    "page": 50,
+    "uncovered_lines": 1,
+    "examples": [
+     "8.15 Frequency of testing of welded joints"
+    ]
+   },
+   {
+    "page": 56,
+    "uncovered_lines": 1,
+    "examples": [
+     "Testing of weld at rail web and flange"
+    ]
+   },
+   {
+    "page": 65,
+    "uncovered_lines": 1,
+    "examples": [
+     "11.9.4 Sensitivity setting procedure and test procedure:"
+    ]
+   },
+   {
+    "page": 70,
+    "uncovered_lines": 1,
+    "examples": [
+     "Chapter 14                                    ACS - 2"
+    ]
+   }
+  ]
+ },
+ "AT_WELD": {
+  "pages": 49,
+  "lines_checked": 1091,
+  "by_class": {
+   "COVERED": 1078,
+   "TABLE": 2,
+   "UNCOVERED": 11
+  },
+  "uncovered_share": 0.0101,
+  "worst_pages": [
+   {
+    "page": 11,
+    "uncovered_lines": 2,
+    "examples": [
+     "4.1.2      Training and certification of welders :",
+     "4.2      Portion for welding"
+    ]
+   },
+   {
+    "page": 13,
+    "uncovered_lines": 2,
+    "examples": [
+     "4.6       Preliminary work prior to welding",
+     "4.7         Alignment of rail ends before welding"
+    ]
+   },
+   {
+    "page": 14,
+    "uncovered_lines": 2,
+    "examples": [
+     "4.8         Fixing of mould",
+     "4.9        Preheating"
+    ]
+   },
+   {
+    "page": 7,
+    "uncovered_lines": 1,
+    "examples": [
+     "1.         Introduction"
+    ]
+   },
+   {
+    "page": 10,
+    "uncovered_lines": 1,
+    "examples": [
+     "4.       Execution of joints at site"
+    ]
+   },
+   {
+    "page": 17,
+    "uncovered_lines": 1,
+    "examples": [
+     "5.        Operations subsequent to welding"
+    ]
+   },
+   {
+    "page": 18,
+    "uncovered_lines": 1,
+    "examples": [
+     "TRACEABILITY OF WELDS:"
+    ]
+   },
+   {
+    "page": 42,
+    "uncovered_lines": 1,
+    "examples": [
+     "examined the welding technique and satisfies the requirements of Clause 4 by"
+    ]
+   }
+  ]
+ },
+ "FBW": {
+  "pages": 69,
+  "lines_checked": 1218,
+  "by_class": {
+   "COVERED": 1214,
+   "TABLE": 1,
+   "UNCOVERED": 3
+  },
+  "uncovered_share": 0.0025,
+  "worst_pages": [
+   {
+    "page": 7,
+    "uncovered_lines": 1,
+    "examples": [
+     "SELECTION OF RAILS TO BE WELDED"
+    ]
+   },
+   {
+    "page": 14,
+    "uncovered_lines": 1,
+    "examples": [
+     "5.6 Procedure for Standardization of Welding Parameters"
+    ]
+   },
+   {
+    "page": 17,
+    "uncovered_lines": 1,
+    "examples": [
+     "Approval of other rail profiles or grades."
+    ]
+   }
+  ]
+ }
+}

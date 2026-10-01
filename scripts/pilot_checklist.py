@@ -33,6 +33,7 @@ CRITERIA = [
     ("hierarchy", "Hierarchy represented"),
     ("order", "Chapter order deterministic (contiguous numbering)"),
     ("provisions", "Provisions preserved (text present, few stubs)"),
+    ("coverage", "Whole manual covered (paragraphs, annexures, front matter; line audit)"),
     ("pages_resolve", "Source pages resolvable"),
     ("search", "Full-text search works (every paragraph found by its number)"),
     ("nl", "Natural-language queries retrieve evidence"),
@@ -73,6 +74,7 @@ def main() -> int:
     if rp.exists():
         reviews = {t for r in read_jsonl(rp) for t in r.get("target_ids", [])}
     metrics = json.loads((KG / "reports" / "metrics.json").read_text(encoding="utf-8"))["manual_clauses"]
+    cov = json.loads((KG / "reports" / "coverage_audit.json").read_text(encoding="utf-8"))
     probes = probe()
     questions = read_jsonl(ROOT / "eval" / "questions.jsonl")
     det = None
@@ -102,6 +104,8 @@ def main() -> int:
         with_text = sum(1 for c in clauses.values() if (c.get("text") or "").strip())
         short = m.get("short_clauses", 0)
         put("provisions", with_text == len(clauses) and len(clauses) > 0 and short <= SHORT_MAX * len(clauses), f"{with_text}/{len(clauses)} with text, {short} short")
+        ca = cov.get(alias, {})
+        put("coverage", bool(ca) and ca.get("uncovered_share", 1) <= 0.015, f"{ca.get('lines_checked', 0) - ca.get('by_class', {}).get('UNCOVERED', 0)}/{ca.get('lines_checked', 0)} lines in the knowledge base, {ca.get('uncovered_share', 1) * 100:.1f}% not")
         bad_page = [i for i, c in clauses.items() if not (1 <= int(c.get("page") or 0) <= (reg.get("page_count") or 0))]
         put("pages_resolve", not bad_page, f"{len(clauses) - len(bad_page)}/{len(clauses)} paragraphs have an existing page")
         pr = probes[alias]

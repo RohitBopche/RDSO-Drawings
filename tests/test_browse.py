@@ -21,7 +21,12 @@ def test_browse_model_reproduces_all_clauses():
     """
     out = subprocess.run(["node", "-e", js], cwd=ROOT, capture_output=True, text=True, check=True).stdout
     got = json.loads(out)
-    assert set(got["texts"]) == set(nodes)
+    clause_ids = {i for i in got["texts"] if i.startswith("CLAUSE:")}
+    assert clause_ids == set(nodes)                                    # every paragraph, no more
+    annex = {i for i in got["texts"] if i.startswith("ANNEX:")}
+    units = [json.loads(l) for l in (ROOT / "data/knowledge-graph/canonical/annexures.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
+    assert annex == {u["id"] for u in units}                           # every annexure, appendix, loose-text run and front matter unit
+    assert all(" ".join(got["texts"][u["id"]].split()) == " ".join(u["text"].split()) for u in units)
     bad = [i for i in nodes if " ".join(got["texts"][i].split()) != " ".join((nodes[i].get("text") or "").split())]
     assert not bad, bad[:5]
     assert dict(got["counts"]) == {"IRPWM": 421, "TMM": 171, "STMM": 258, "USFD": 192, "AT_WELD": 73, "FBW": 57}
