@@ -176,6 +176,8 @@
 <script src="./data/search/tables.js"></script>
 <script src="./data/search/editions.js"></script>
 <script src="./data/search/drawing_cites.js"></script>
+<script src="./data/search/entities.js"></script>
+<script src="./lib/rdso_entities.js"></script>
 <script src="./lib/rdso_graphq.js"></script>
 <script src="./lib/rdso_chat.js"></script>
 <script>
@@ -277,12 +279,12 @@
         h += '<ol class="rel">' + r.rows.map(function (x) {
           if (r.mode === 'path') return '<li>' + citeBtn(x.from, x.from.label) + ' → ' + citeBtn(x.to, x.to.label) + '<div class="muted">' + (x.back ? 'Printed as a “Back to” note in ' + esc(x.at.label) + ': ' : 'In ' + esc(x.at.label) + ': ') + '“' + esc(x.quote) + '”</div></li>';
           if (r.mode === 'mentions') return '<li><b>' + esc(x.raw) + '</b> <span class="muted">(' + esc(x.kindName) + (x.status === 'RESOLVED' ? ', page ' + esc(x.page || '?') : x.page ? ', shown as a picture on page ' + esc(x.page) : ', not located') + ')</span>' + (x.quote ? '<div class="muted">“' + esc(x.quote) + '”</div>' : '') + '</li>';
-          if (r.mode === 'drawing') return '<li>' + citeBtn(x.cite, x.cite.label + ' · p.' + x.cite.page) + ' <b>' + esc(x.raw) + '</b><div class="muted">“' + esc(x.quote) + '”</div></li>';
+          if (r.mode === 'drawing' || r.mode === 'concept') return '<li>' + citeBtn(x.cite, x.cite.label + ' · p.' + x.cite.page) + ' <b>' + esc(x.raw) + '</b><div class="muted">“' + esc(x.quote) + '”</div></li>';
           return '<li>' + (x.depth > 1 ? '<span class="muted">via ' + esc(x.via.label) + ' → </span>' : '') + citeBtn(x.cite, x.cite.label + ' · p.' + x.cite.page) + '<div class="muted">' + (x.back ? 'Printed as a “Back to” note in ' + esc(x.at.label) + ': ' : 'In ' + esc(x.at.label) + ': ') + '“' + esc(x.quote) + '”</div></li>';
         }).join('') + '</ol>';
         if (r.total > r.shown) h += '<div class="muted">Showing ' + r.shown + ' of ' + r.total + '.</div>';
       }
-      h += '<div class="muted" style="margin-top:6px">Links are the manuals’ own cross-references; nothing is inferred.</div></div>';
+      h += '<div class="muted" style="margin-top:6px">' + esc(r.note || 'Links are the manuals’ own cross-references; nothing is inferred.') + '</div></div>';
     } else if (r.kind === 'more') {
       h += '<pre class="full" style="max-height:none">' + esc(r.text.slice(0, 6000)) + '</pre><div class="meta">' + citeBtn(r.primary) + '</div>';
     } else if (r.kind === 'source') {
@@ -472,7 +474,7 @@
   function start() {
     if (!window.RDSOSearch || !window.RDSO_SEARCH_INDEX || !window.RDSOChat) { statusEl.textContent = 'The search index did not load.'; return; }
     var eng = window.RDSOSearch.create(window.RDSO_SEARCH_INDEX);
-    chat = window.RDSOChat.create(eng, { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: window.RDSO_CROSSREFS, tables: window.RDSO_TABLES, editions: window.RDSO_EDITIONS, graph: window.RDSOGraphQ.create({ xrefs: window.RDSO_CROSSREFS, clauseText: function (id) { return eng.clauseText(id); }, drawingCites: window.RDSO_DRAWING_CITES }) });
+    chat = window.RDSOChat.create(eng, { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: window.RDSO_CROSSREFS, tables: window.RDSO_TABLES, editions: window.RDSO_EDITIONS, entities: window.RDSOEntities.create(window.RDSO_ENTITIES), graph: window.RDSOGraphQ.create({ xrefs: window.RDSO_CROSSREFS, clauseText: function (id) { return eng.clauseText(id); }, drawingCites: window.RDSO_DRAWING_CITES }) });
     window.rdsoChat = chat;
     Object.keys(window.RDSOChat.MANUALS).forEach(function (a) { var o = document.createElement('option'); o.value = a; o.textContent = a + ' — ' + window.RDSOChat.MANUALS[a]; $('scope').appendChild(o); });
     statusEl.textContent = 'Ready. Nothing leaves this computer.';

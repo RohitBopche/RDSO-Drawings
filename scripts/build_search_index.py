@@ -189,6 +189,27 @@ def main() -> int:
         if reg.get("category") == "MANUAL":
             editions[reg["id"].split(":")[1]] = {"title": reg["title"], "edition": reg.get("edition_or_revision") or ""}
     (ROOT / "data" / "search" / "editions.js").write_text("(typeof window!=='undefined'?window:globalThis).RDSO_EDITIONS=" + json.dumps(editions, separators=(",", ":"), sort_keys=True) + ";\n", encoding="utf-8")
+    # concept layer: entities, where each is named (first mention per paragraph), related concepts, limits (see scripts/build_entities.py)
+    ld = lambda n: [json.loads(l) for l in (KG / "canonical" / n).read_text(encoding="utf-8").splitlines() if l.strip()]
+    ents, ments, rels, lims = ld("entities.jsonl"), ld("entity_mentions.jsonl"), ld("entity_relations.jsonl"), ld("entity_limits.jsonl")
+    srcs = sorted({m["source"] for m in ments} | {l["source"] for l in lims})
+    sx = {sid: i for i, sid in enumerate(srcs)}
+    occ: dict[str, list] = {}
+    for m in sorted(ments, key=lambda m: (not m["source"].startswith("CLAUSE:"), m["source"].endswith(":front"), m["source"], m["start"])):      # paragraphs first, contents pages last
+        row = occ.setdefault(m["entity"][4:], [])
+        if not row or row[-1][0] != sx[m["source"]]:
+            row.append([sx[m["source"]], m["start"], m["end"]])
+    limits: dict[str, list] = {}
+    for l in lims:
+        limits.setdefault(l["entity"][4:], []).append([sx[l["source"]], l["at"][0], l["at"][1], l["raw"], l["quantity"], l["lo"], l["hi"], l["unit"]])
+    related = []
+    for r in rels:
+        if r["type"] == "DISCUSSED_WITH":
+            related.append([r["from"][4:], r["to"][4:], r["support"], r["from_paragraphs"], r["to_paragraphs"], [[sx[e["source"]], e["sentence"][0], e["sentence"][0] + 1] for e in r["examples"]]])
+    taxo = [[r["type"], r["from"][4:], r["to"][4:]] for r in rels if r["basis"] == "curated"]
+    ent_js = {"s": srcs, "c": {e["id"][4:]: {"l": e["label"], "k": e["class"], "a": e["aliases"], "n": e["mentions"], "p": e["paragraphs"], "m": e["by_manual"]} for e in ents},
+              "occ": occ, "limits": limits, "rel": related, "tax": taxo}
+    (ROOT / "data" / "search" / "entities.js").write_text("(typeof window!=='undefined'?window:globalThis).RDSO_ENTITIES=" + json.dumps(ent_js, separators=(",", ":"), sort_keys=True, ensure_ascii=False) + ";\n", encoding="utf-8")
     return 0
 
 

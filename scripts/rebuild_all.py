@@ -27,6 +27,7 @@ STEPS = [
     "drawing_registry.py",         # drawing identity from file names + committed OCR (scripts/ocr_drawings.py)
     "drawing_links.py",            # clause -> drawing citations (needs the registry)
     "build_annexures.py",          # annexure and appendix units cut from the page text (coverage layer)
+    "build_entities.py",           # concepts named in the text, taxonomy, co-mention links, limits per concept
     "build_learning.py",           # practice cards: one manual sentence each with a measured value hidden
     "build_table_data.py",         # browser file: tables with headers for the chat
     "build_clause_extras.py",      # browser file: measurements + held drawings per clause

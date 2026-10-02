@@ -2226,6 +2226,26 @@ Checks: a dialogue test for the utility vehicle question, a sweep over the table
 - 5 annexure references are still NOT_FOUND.
 - Demotion factors were tuned on author-made sets.
 
+### 37.46 Entity layer (Step 3 of the knowledge-graph review): concepts, taxonomy, co-mention links, limits — 2026-10-01
+
+**Why.** The review of the project against the eight knowledge-graph steps found the ontology step weakest: of 4,862 nodes only about 30 were engineering things, and about 30 of 7,343 edges were domain relationships. The graph was a document-structure and cross-reference graph.
+
+**What was built.**
+- `data/ontology/concepts.json`: a curated lexicon of 130 concepts (rail and its parts, sleepers and fastenings, switches and crossings, welded track, geometry, defects, test methods, welding processes, maintenance activities, track machines, roles, safety, locations, materials) with aliases and curated `is_a` / `part_of` links. Add a concept by adding a row and rebuilding.
+- `scripts/build_entities.py` (rebuild step) finds every named concept in the paragraph and annexure text and writes four files in `canonical/`: `entities.jsonl`, `entity_mentions.jsonl` (about 35,700 mentions, each with a character span), `entity_relations.jsonl` (48 curated IS_A/PART_OF links and about 1,900 DISCUSSED_WITH links: two concepts in one sentence in at least 3 paragraphs, with example sentences) and `entity_limits.jsonl` (about 9,000 measured values that sit in a sentence naming a concept).
+- Contents pages (front matter) are excluded from co-mention links and from examples.
+- Browser file `data/search/entities.js` and `lib/rdso_entities.js`; the chat answers four kinds of concept question as quoted sentences with manual, paragraph and page: where a concept is named, what it is related to, its kinds and parts, and the values printed beside it. An ordinary question is never taken over: concept answers need an explicit pattern ("types of", "related to", "which paragraphs mention", "list all the values given for").
+- Gate AA (`scripts/validate_entities.py`): lexicon matches the file, every mention span reads as one of its concept's aliases, counts add up, every relation endpoint exists, every example sentence names both concepts, every limit sits in a sentence naming its concept, at least 35 concepts found in every manual (found now: IRPWM 124, TMM 119, STMM 89, USFD 84, AT_WELD 62, FBW 56). The citation verifier (Gate Y) now also asks every concept four questions and checks each quoted sentence against its paragraph.
+
+**Measured precision.** A hand audit of 120 random paragraph mentions (`eval/entity_precision_audit.json`) found 115 correct (95.8%). The five errors were generic words used in another sense ("station" as a chainage point, "signal" as an ultrasonic echo, "overhauling" of engines, "track" inside "Hydraulic Track Jack"). Two lexicon rows were fixed afterwards (bare "signal" replaced by specific signal names; "overhauling" removed); the fix was not re-audited.
+
+**Honest limits.**
+- The audit has one reviewer, who also wrote the lexicon, so it is not independent. Recall is not measured: a concept written in a way the aliases do not cover is missed.
+- The taxonomy and the choice of concepts come from my reading of track engineering, not from the manuals; only the mentions are from the text.
+- DISCUSSED_WITH means "named in the same sentence", not that one causes, requires or limits the other. A value found beside a concept is not always a limit on it.
+- There are still no typed domain relations such as "defect is detected by method" or "role is responsible for activity" extracted from sentences; that needs sentence-level extraction with its own labelled test set. The synonym question about PWI and JE/SSE/P.Way is still open: the lexicon groups them under one Role concept.
+- The 3D graph view does not yet show concepts.
+
 ## 38. Plan for Remaining Work (post P0-R.1/R.2)
 
 **Ordering principle:** data truth first, then retrieval, then answers, then learning. Each work package (WP) is one small validated increment: it ends with a gate or test that fails before the change and passes after, a conventional commit, and an updated metrics file. Do not start a WP whose dependency is open.

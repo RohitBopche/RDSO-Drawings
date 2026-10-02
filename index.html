@@ -69,6 +69,8 @@
 <script src="./data/search/tables.js"></script>
 <script src="./data/search/editions.js"></script>
 <script src="./data/search/drawing_cites.js"></script>
+<script src="./data/search/entities.js"></script>
+<script src="./lib/rdso_entities.js"></script>
 <script src="./lib/rdso_graphq.js"></script>
 <script src="./lib/rdso_chat.js"></script>
 <script src="./lib/rdso_browse.js"></script>
@@ -85,7 +87,7 @@
               FBW: 'manuals/FBW Manual-Reprint 2022- Incorporated up to CS5.pdf' };
   var model = RDSOBrowse.build(RDSO_SEARCH_INDEX), xr = window.RDSO_CROSSREFS || { out: {}, in: {} };
   var eng = RDSOSearch.create(RDSO_SEARCH_INDEX);
-  var chat = RDSOChat.create(eng, { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: xr, tables: window.RDSO_TABLES, editions: window.RDSO_EDITIONS, graph: window.RDSOGraphQ.create({ xrefs: window.RDSO_CROSSREFS, clauseText: function (id) { return eng.clauseText(id); }, drawingCites: window.RDSO_DRAWING_CITES }) });
+  var chat = RDSOChat.create(eng, { extras: window.RDSO_CLAUSE_EXTRAS, xrefs: xr, tables: window.RDSO_TABLES, editions: window.RDSO_EDITIONS, entities: window.RDSOEntities.create(window.RDSO_ENTITIES), graph: window.RDSOGraphQ.create({ xrefs: window.RDSO_CROSSREFS, clauseText: function (id) { return eng.clauseText(id); }, drawingCites: window.RDSO_DRAWING_CITES }) });
 
   /* ---- graph: manual -> chapter -> paragraph, laid out radially (deterministic, no simulation) ---- */
   var COLORS = ['#e0592a', '#2a8fe0', '#2aa876', '#a64fd1', '#d19a1f', '#d1446f'];
